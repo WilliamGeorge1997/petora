@@ -28,15 +28,10 @@ trait UploaderHelper
     {
         if (!$filename) return false;
 
-        $path = "uploads/{$module}/{$filename}";
+        $path = public_path("uploads/{$module}/{$filename}");
 
-        if (Storage::disk('public')->exists($path)) {
-            return Storage::disk('public')->delete($path);
-        }
-        
-        // Fallback for paths that might be directly in public/
-        if (file_exists(public_path($path))) {
-            return unlink(public_path($path));
+        if (file_exists($path)) {
+            return unlink($path);
         }
         
         return false;

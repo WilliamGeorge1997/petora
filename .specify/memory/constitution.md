@@ -441,6 +441,10 @@ Two patterns are used depending on the model's image needs — decided per featu
   }
   ```
 - Returned in API Resource directly by accessing `$this->image`
+- **CRITICAL**: When deleting the image using `deleteImage()`, you MUST pass the raw filename, not the full URL. Use Eloquent's `getRawOriginal()` to bypass the accessor:
+  ```php
+  $this->deleteImage($model->getRawOriginal('image'), 'module_name');
+  ```
 
 **Pattern B — Separate images table** (e.g., Product, Community Post):
 - A dedicated `{model}_images` table (e.g., `product_images`) with columns: `id`, `{model}_id`, `path`, `sort_order`, `created_at`

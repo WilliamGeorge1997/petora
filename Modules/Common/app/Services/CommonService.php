@@ -22,8 +22,8 @@ class CommonService
         foreach ($data as $key => $datum) {
             if ($datum instanceof UploadedFile) {
                 $old_setting = Setting::where('key', $key)->first();
-                if ($old_setting && $old_setting->value) {
-                    $this->deleteImage($old_setting->value, 'setting');
+                if ($old_setting && $old_setting->getRawOriginal('value')) {
+                    $this->deleteImage($old_setting->getRawOriginal('value'), 'setting');
                 }
 
                 $imageName = $this->uploadImage($datum, 'setting');

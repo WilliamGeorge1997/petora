@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html class="loading" lang="{{ app()->getLocale() }}" data-textdirection="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+<!-- BEGIN: Head-->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
+    <meta name="description" content="Petora Admin Panel">
+    <meta name="keywords" content="Petora">
+    <meta name="author" content="Icon Tech Digital Solution">
+    <title>Petora</title>
+    @include('common::includes.css')
+    @stack('css')
+</head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
+
+<body class="vertical-layout vertical-menu-modern navbar-floating footer-static" data-open="click"
+    data-menu="vertical-menu-modern" data-col="" data-framework="laravel"
+    data-asset-path="{{ asset('admin/') }}">
+
+
+    @include('common::includes.navbar')
+
+
+    @include('common::includes.sidebar')
+
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                @if (session('success'))
+                    <x-common::alert type="success" :message="session('success')" />
+                @endif
+                @if (session('error'))
+                    <x-common::alert type="danger" :message="session('error')" />
+                @endif
+                
+                @yield('content')
+
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+    @include('common::includes.footer')
+
+</body>
+<!-- END: Body-->
+@include('common::includes.js')
+@stack('scripts')
+</html>

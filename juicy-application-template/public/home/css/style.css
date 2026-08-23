@@ -1,0 +1,648 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
+/* Poppins */
+@font-face {
+    font-family: 'Poppins';
+    src: url('../assets/fonts/Poppins-Regular.ttf');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../assets/fonts/Poppins-Medium.ttf');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../assets/fonts/Poppins-SemiBold.ttf');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../assets/fonts/Poppins-Bold.ttf');
+    font-weight: 700;
+    font-display: swap;
+}
+
+/* Oswald */
+@font-face {
+    font-family: 'Oswald';
+    src: url('../assets/fonts/Oswald-VariableFont_wght.ttf');
+    font-weight: 400;
+    font-display: swap;
+}
+
+/* Montserrat for Arabic */
+/* @font-face {
+    font-family: 'Montserrat';
+    src: url('../assets/fonts/Montserrat-Arabic\ Light\ 300.otf');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../assets/fonts/Montserrat-Arabic Regular 400.otf');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../assets/fonts/Montserrat-Arabic Medium 500.otf');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../assets/fonts/Montserrat-Arabic SemiBold 600.otf');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../assets/fonts/Montserrat-Arabic Bold 700.otf');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../assets/fonts/Montserrat-Arabic ExtraBold 800.otf');
+    font-weight: 800;
+    font-display: swap;
+} */
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('../assets/fonts/IBMPlexSansArabic-Light.ttf');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('../assets/fonts/IBMPlexSansArabic-Regular.ttf');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('../assets/fonts/IBMPlexSansArabic-Medium.ttf');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('../assets/fonts/IBMPlexSansArabic-SemiBold.ttf');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('../assets/fonts/IBMPlexSansArabic-Bold.ttf');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('../assets/fonts/IBMPlexSansArabic-Bold.ttf');
+    font-weight: 800;
+    font-display: swap;
+}
+
+
+/* General */
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Oswald', sans-serif;
+}
+
+/* Arabic Language Styles - excluding FontAwesome icons */
+[dir="rtl"] body,
+[dir="rtl"] p,
+[dir="rtl"] div:not([class*="fa-"]),
+[dir="rtl"] a,
+[dir="rtl"] button,
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] label,
+[dir="rtl"] li {
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 0.9rem;
+
+}
+
+[dir="rtl"] h1 {
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+[dir="rtl"] h2 {
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+[dir="rtl"] h3 {
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+[dir="rtl"] h4 {
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+[dir="rtl"] h5 {
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+
+}
+
+[dir="rtl"] h6 {
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+[dir="rtl"] span:not([class*="fa-"]) {
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+:root {
+    --primary-color: #f68914d3;
+    --primary-color-solid: #f68914;
+    --primary-rgb: 246, 137, 20;
+}
+
+.primary-color {
+    color: var(--primary-color)
+}
+
+section {
+    margin: 3.125rem 0 3.125rem 0;
+}
+
+.btn-custom {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--primary-color);
+    --bs-btn-border-color: var(--primary-color);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #e67a0a;
+    --bs-btn-hover-border-color: #d97309;
+    --bs-btn-focus-shadow-rgb: 246, 137, 20;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #d97309;
+    --bs-btn-active-border-color: #cc6c08;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: var(--primary-color);
+    --bs-btn-disabled-border-color: var(--primary-color);
+}
+
+/* Outline Custom Button */
+.btn-custom-outline {
+    --bs-btn-color: var(--primary-color);
+    --bs-btn-border-color: var(--primary-color);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--primary-color);
+    --bs-btn-hover-border-color: var(--primary-color);
+    --bs-btn-focus-shadow-rgb: 246, 137, 20;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #d97309;
+    --bs-btn-active-border-color: #cc6c08;
+    --bs-btn-disabled-color: var(--primary-color);
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: var(--primary-color);
+}
+
+.bg-custom {
+    background-color: rgba(var(--primary-rgb), var(--bs-bg-opacity, 1)) !important;
+}
+
+.text-custom {
+    color: rgba(var(--primary-rgb), var(--bs-text-opacity, 1)) !important;
+}
+
+/* General */
+
+
+
+/* Navbar */
+.navbar {
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand,
+.nav-link {
+    -webkit-transition: color 0.3s ease;
+    -o-transition: color 0.3s ease;
+    transition: color 0.3s ease;
+}
+
+.nav-link {
+    color: white;
+    font-weight: bold;
+}
+
+[dir="rtl"] .nav-link {
+    font-weight: 300;
+}
+
+.nav-link.show,
+.nav-link:active,
+.nav-link:focus,
+.nav-link:hover,
+.active {
+    color: var(--primary-color) !important;
+}
+
+.navbar-toggler {
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+/* Navbar */
+
+
+
+/* Hero Section */
+#home {
+    background: url('../assets/images/hero-bg.webp') no-repeat center center;
+    background-size: cover;
+}
+
+#home::before {
+    content: '';
+    background-color: black;
+    opacity: 0.7;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+}
+
+/* Hero Section */
+
+/* Slider Section */
+#slider a {
+    color: #111 !important;
+}
+
+#slider a:hover span.branch-title {
+    color: var(--primary-color);
+}
+
+.header-stats-row {
+    max-width: 37.5rem;
+}
+
+.slider-logo-box {
+    height: 100px;
+    width: 100px;
+}
+
+.slider-logo-img {
+    max-height: 90px;
+    max-width: 90px;
+    object-fit: contain;
+    display: block;
+    margin: auto;
+}
+
+.slider-logo-placeholder {
+    height: 90px;
+    width: 90px;
+}
+
+.slider-branch-title {
+    min-height: 2.5em;
+}
+
+
+/* Slider Section */
+
+/* Features Section */
+.hover-lift {
+    -webkit-transition: -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
+    transition: -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
+    -o-transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    -webkit-transform: translateY(-0.625rem);
+    -ms-transform: translateY(-0.625rem);
+    transform: translateY(-0.625rem);
+    -webkit-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+/* Features Section */
+
+/* How It Works Section */
+.step-circle {
+    width: 6.25rem;
+    height: 6.25rem;
+    border-radius: 50%;
+    background: -o-linear-gradient(315deg, var(--primary-color), #ff9d42);
+    background: linear-gradient(135deg, var(--primary-color), #ff9d42);
+    color: white;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-shadow: 0 0.625rem 1.875rem rgba(246, 137, 20, 0.3);
+    box-shadow: 0 0.625rem 1.875rem rgba(246, 137, 20, 0.3);
+    -webkit-transition: -webkit-transform 0.3s ease;
+    transition: -webkit-transform 0.3s ease;
+    -o-transition: transform 0.3s ease;
+    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+}
+
+.step-circle:hover {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.step-badge {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 1rem;
+    border-radius: 3.125rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* How It Works Section */
+
+
+/* Contact Section */
+[dir="rtl"] input[type="email"]::placeholder {
+    text-align: right;
+    direction: rtl;
+}
+
+.map-embed {
+    position: relative;
+    width: 100%;
+    padding-top: 71.4286%;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.map-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 .25rem rgba(246, 137, 20, 0.25);
+}
+
+/* Modal close button focus ring */
+.btn-close {
+    --bs-btn-close-focus-shadow: 0 0 0 .25rem rgba(var(--primary-rgb), 0.25);
+}
+
+/* Contact Section */
+
+
+/* Footer */
+.quick-link {
+    color: white;
+    text-decoration: none;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.quick-link:hover {
+    color: var(--primary-color);
+    -webkit-transform: translateX(0.625rem);
+    -ms-transform: translateX(0.625rem);
+    transform: translateX(0.625rem);
+}
+
+[dir="rtl"] .quick-link:hover {
+    -webkit-transform: translateX(-0.625rem);
+    -ms-transform: translateX(-0.625rem);
+    transform: translateX(-0.625rem);
+}
+
+/* Footer */
+
+/* Themes Section */
+.bg-gradient {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #fff8f0 100%);
+}
+
+.theme-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, #ffffff 0%, #fffbf7 100%);
+}
+
+.theme-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(246, 137, 20, 0.2) !important;
+}
+
+.theme-card .theme-phone-mockup {
+    position: relative;
+    width: 100%;
+    flex: 1 1 auto;
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+.theme-card .theme-phone-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.theme-card .theme-action-buttons {
+    flex-wrap: wrap;
+}
+
+.theme-card .theme-btn-chat {
+    background-color: #25D366;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.theme-card .theme-btn-chat:hover {
+    background-color: #1da851;
+    transform: translateY(-2px);
+}
+
+.theme-card .theme-btn-link {
+    background-color: #e9ecef;
+    border: none;
+    color: #212529;
+    transition: all 0.3s ease;
+}
+
+.theme-card .theme-btn-link:hover {
+    background-color: #dee2e6;
+    color: #212529;
+    transform: translateY(-2px);
+}
+
+.theme-card .theme-btn-qr {
+    background-color: var(--primary-color-solid);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.theme-card .theme-btn-qr:hover {
+    background-color: #e67a0a;
+    transform: translateY(-2px);
+}
+
+.theme-card-clickable {
+    cursor: pointer;
+}
+
+.theme-modal-img {
+    max-height: 85vh;
+    width: auto;
+    object-fit: contain;
+}
+
+.theme-badge {
+    display: inline-block;
+    padding: 0.25em 0.7em;
+    font-size: 0.9em;
+    font-weight: 600;
+    border-radius: 2em;
+    background: var(--primary-color, #ff9d42);
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    border: 2px solid #fff3cd;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+}
+
+
+.theme-badge span {
+    margin-left: 0.2em;
+    font-size: 0.85em;
+    opacity: 0.85;
+}
+
+
+.bg-blur-circle {
+    position: absolute;
+    background: var(--primary-color);
+    border-radius: 50%;
+}
+
+.bg-blur-circle-1 {
+    top: 10%;
+    left: 5%;
+    width: 100px;
+    height: 100px;
+    filter: blur(40px);
+}
+
+.bg-blur-circle-2 {
+    top: 60%;
+    right: 10%;
+    width: 150px;
+    height: 150px;
+    filter: blur(60px);
+}
+
+
+.tooltip {
+    max-width: none !important;
+}
+
+.tooltip-inner {
+    max-width: none !important;
+    padding: 0.5rem !important;
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.tooltip-inner img {
+    max-width: 300px;
+    height: auto;
+    display: block;
+    border-radius: 0.25rem;
+}
+
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+    border-bottom-color: #fff;
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: #fff;
+}
+
+.tooltip.bs-tooltip-start .tooltip-arrow::before {
+    border-left-color: #fff;
+}
+
+.tooltip.bs-tooltip-end .tooltip-arrow::before {
+    border-right-color: #fff;
+}

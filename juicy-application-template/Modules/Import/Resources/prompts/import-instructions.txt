@@ -1,0 +1,45 @@
+MODE: MIRROR ONLY — You are a scanner, not a menu designer.
+
+Task: Convert the ATTACHED menu (image/PDF I uploaded in this conversation) into JSON for QMenu admin.
+Output: ONLY raw JSON. No markdown. No branch_id. Same keys as the template I pasted above.
+
+=== MIRROR RULES (mandatory) ===
+1. Categories = printed section headings that are real menu sections (meals, drinks, etc.) — one JSON category per heading. Translate to ar/en; do NOT rename or merge sections. Addon/sauce sections go in "addons", not here (see rules 7–14).
+2. Products = ONLY items printed UNDER that section on the menu. Never move a product to another category.
+3. Order = top-to-bottom on the menu (sort_order 1, 2, 3… within each section).
+4. Subcategories = ONLY if the menu shows a visible sub-heading inside a section (max one level). If the menu is flat, subcategories must be [].
+5. Prices = only prices shown. Sizes = only if the menu shows multiple sizes/prices for that line. product price = lowest size price.
+6. Missing/unclear text → omit that item. Never guess.
+
+=== ADDONS / SAUCES vs REAL CATEGORIES ===
+7. Decide EACH section by its heading and items — NOT by position on the menu (first, middle, or last does not matter).
+8. REAL CATEGORY → "categories": main food/drink sections (burgers, pizza, meals, drinks, desserts, combos, etc.). Items = full menu products (meals, drinks, dishes).
+9. ADDON/SAUCE SECTION → "addons": optional extras only (toppings, extra cheese, dips, sauce choices). Heading often says Addons, Add-on, Extras, Toppings, Sauces, Sauce, Dips, الاضافات, الإضافات, اضافات, صلصات, صوص — or items are clearly small paid add-ons, not standalone meals.
+10. When unsure: if items look like extras to customize an order (not a full dish/drink), use "addons"; if they are normal menu items customers order as-is, use "categories".
+11. Each addon/sauce section → one object in "addons" (exact printed heading as title ar/en). Each line under it = one "values" entry (title ar/en + price), NOT a product.
+12. If one printed section has visible sub-headings, each sub-heading = one addon group with its own "values".
+13. multi_select: true unless the menu clearly shows single choice only.
+14. If the menu has no addon/sauce sections, "addons": [].
+
+=== FORBIDDEN ===
+- Inventing categories (e.g. "Main", "Sides", "Popular") not on the menu
+- Grouping by food type (burgers together, drinks together) if the menu layout differs
+- Moving items between sections
+- Adding products not on the menu
+- Combining or splitting sections
+- Putting addon/sauce sections inside "categories", or putting real food/drink sections inside "addons"
+
+=== JSON ===
+Root: {"categories":[...], "addons":[...]}. Bilingual title/description/allergens for products. Addon groups: title + values (title + price). No sides.
+
+=== SELF-CHECK before answering ===
+List mentally: every printed section is either a real category (with products) OR an addon group (with values) — never both; headings and items match the attachment; position on the page does not decide addon vs category. If not, fix before output.
+
+Extract ONLY from my attached menu file in this conversation.
+
+=== IF OUTPUT WAS WRONG (send this in a follow-up message) ===
+MIRROR FIX: Last JSON did NOT mirror the menu. Rebuild from scratch using ONLY the attachment.
+- Exact section headings (same count, translated ar/en).
+- Each product under the section where it is PRINTED on the menu.
+- Addon/sauce sections (by heading/content) → "addons" only; real meal/drink sections → "categories" only.
+- Optional: bullet list per section first, then corrected JSON only. No inventing or reorganizing.

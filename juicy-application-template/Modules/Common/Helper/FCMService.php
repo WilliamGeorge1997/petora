@@ -1,0 +1,68 @@
+<?php
+
+namespace Modules\Common\Helper;
+
+use Throwable;
+use Kreait\Firebase\Factory;
+use Illuminate\Support\Facades\Log;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
+
+class FCMService
+{
+    protected $messaging;
+
+    public function __construct()
+    {
+        $path = env('FCM_CREDENTIALS_PATH', 'public/juicydesigns-ff418-firebase-adminsdk-fbsvc-90629fd0b5.json');
+        $serviceAccountPath = base_path($path);
+        $firebase = (new Factory)
+            ->withServiceAccount($serviceAccountPath)
+            ->createMessaging();
+        $this->messaging = $firebase;
+    }
+
+    /**
+     * Send a FCM notification to the given tokens.
+     *
+     * @param array $tokens
+     * @param string $body
+     * @param string $title
+     * @param array $payload
+     * @param string|null $image
+     * @return void
+     */
+    public function sendNotification(array $data, array $tokens)
+    {
+        if (count($tokens) == 0) {
+            Log::notice('no tokens');
+            return;
+        }
+        $payload['title'] = $data['title'];
+        $payload['description'] = $data['description'];
+        $payload['image'] = $data['image'] ?? null;
+
+        $notification = Notification::create($data['title'], $data['description'], $payload['image']);
+        $message = CloudMessage::new()->withNotification($notification)->withData($payload);
+        $report = null;
+        try {
+            $report = $this->messaging->sendMulticast($message, $tokens);
+            Log::notice('fcm', ['res Successful sends: ' => $report->successes()->count() . PHP_EOL]);
+            Log::notice('fcm unknown targets', ['res from fcm : ' => $report->unknownTokens()]);
+            Log::notice('fcm invalid targets', ['res from fcm : ' => $report->invalidTokens()]);
+            if ($report->hasFailures()) {
+                Log::error('fcm error', ['res Failed sends: ' => $report->failures()->getItems()]);
+            }
+        } catch (Throwable $th) {
+            Log::error('FCM response', ['response_error' => $th->getMessage()]);
+
+            if ($report) {
+                Log::error('fcm error', ['res Failed sends: ' => $report->failures()->count() . PHP_EOL]);
+                if ($report->hasFailures()) {
+                    Log::error('fcm error', ['res Failed sends: ' => $report->failures()->getItems()]);
+                }
+            }
+            throw $th;
+        }
+    }
+}

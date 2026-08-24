@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Query\Builder;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Modules\Common\Models\Setting;
+
 
 if (!function_exists('allStatusCode')) {
     function allStatusCode()

@@ -9,6 +9,21 @@
             </ul>
         </div>
         <ul class="nav navbar-nav align-items-center ms-auto">
+            <li class="nav-item dropdown dropdown-language">
+                <a class="nav-link dropdown-toggle" id="dropdown-flag" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="flag-icon {{ app()->getLocale() == 'ar' ? 'flag-icon-sa' : 'flag-icon-us' }}"></i>
+                    <span class="selected-language">{{ app()->getLocale() == 'ar' ? 'العربية' : 'English' }}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-flag">
+                    <a class="dropdown-item" href="{{ route('admin.lang.switch', 'en') }}" data-language="en">
+                        <i class="flag-icon flag-icon-us"></i> English
+                    </a>
+                    <a class="dropdown-item" href="{{ route('admin.lang.switch', 'ar') }}" data-language="ar">
+                        <i class="flag-icon flag-icon-sa"></i> العربية
+                    </a>
+                </div>
+            </li>
+
             <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
                         data-feather="moon"></i></a></li>
 
@@ -33,7 +48,7 @@
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="me-50" data-feather="power"></i> Logout
                     </a>
-                    <form id="logout-form" action="#" method="POST" class="d-none">
+                    <form id="logout-form" action="{{ route('admin.logout') }}" method="GET" class="d-none">
                         @csrf
                     </form>
                 </div>

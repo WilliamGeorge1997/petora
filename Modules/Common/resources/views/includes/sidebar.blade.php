@@ -1,13 +1,12 @@
 @php
-    $route = Route::currentRouteName();
-    $admin = auth('admin')->user();
+    $appName = config('app.name', 'Petora');
 @endphp
 <!-- BEGIN: Main Menu-->
 <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
         <ul class="nav navbar-nav flex-row">
             <li class="nav-item me-auto">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
                     <span class="brand-logo">
                         <svg viewBox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
@@ -29,12 +28,25 @@
                                         <path class="text-primary" id="Path"
                                             d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z"
                                             style="fill:currentColor"></path>
+                                        <path id="Path1"
+                                            d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z"
+                                            fill="url(#linearGradient-1)" opacity="0.2"></path>
+                                        <polygon id="Path-2" fill="#000000" opacity="0.049999997"
+                                            points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325">
+                                        </polygon>
+                                        <polygon id="Path-21" fill="#000000" opacity="0.099999994"
+                                            points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338">
+                                        </polygon>
+                                        <polygon id="Path-3" fill="url(#linearGradient-2)" opacity="0.099999994"
+                                            points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288">
+                                        </polygon>
                                     </g>
                                 </g>
                             </g>
                         </svg>
                     </span>
-                    <h2 class="brand-text">Petora</h2>
+
+                    <h2 class="brand-text">{{ $appName }}</h2>
                 </a>
             </li>
             <li class="nav-item nav-toggle">
@@ -49,23 +61,31 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            <li class="{{ $route == 'admin.dashboard' ? 'active' : '' }}">
-                <a class="d-flex align-items-center" href="#">
+            <li class="nav-item {{ Route::is('admin.dashboard') ? 'active' : '' }}">
+                <a class="d-flex align-items-center" href="{{ route('admin.dashboard') }}">
                     <i data-feather="home"></i>
                     <span class="menu-item text-truncate">{{ __('common::sidebar.dashboard') }}</span>
                 </a>
             </li>
-
-            <li class="navigation-header"><span>{{ __('common::sidebar.apps_and_pages') }}</span><i
-                    data-feather="more-horizontal"></i></li>
-
-            <li class="nav-item {{ $route == 'admin.settings.index' ? 'active' : '' }}">
-                <a class="d-flex align-items-center" href="{{ route('admin.settings.index') }}">
-                    <i data-feather="settings"></i>
-                    <span class="menu-title text-truncate">{{ __('common::sidebar.general_settings') }}</span>
-                </a>
+            <li class="navigation-header">
+                <span>{{ __('common::sidebar.apps_and_pages') }}</span>
+                <i data-feather="more-horizontal"></i>
             </li>
 
+            <li class="nav-item {{ Route::is('admin.admins.*', 'admin.users.*') ? 'sidebar-group-active open' : '' }}">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="users"></i>
+                    <span class="menu-title text-truncate">{{ __('common::sidebar.user_management') }}</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="nav-item {{ Route::is('admin.admins.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.admins.index') }}">
+                            <i data-feather="user-check"></i>
+                            <span class="menu-item text-truncate">{{ __('common::sidebar.admins') }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>

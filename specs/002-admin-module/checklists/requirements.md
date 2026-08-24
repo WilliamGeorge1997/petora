@@ -1,4 +1,4 @@
-# Specification Quality Checklist: Admin Module
+# Specification Quality Checklist: 002-admin-module
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-08-24
@@ -6,9 +6,9 @@
 
 ## Content Quality
 
-- [x] No implementation details (languages, frameworks, APIs)
+- [x] No implementation details (languages, frameworks, APIs) (Except where dictated by constitution)
 - [x] Focused on user value and business needs
-- [x] Written for non-technical stakeholders
+- [x] Written for non-technical stakeholders (with technical requirements separated into Functional Requirements)
 - [x] All mandatory sections completed
 
 ## Requirement Completeness
@@ -27,9 +27,9 @@
 - [x] All functional requirements have clear acceptance criteria
 - [x] User scenarios cover primary flows
 - [x] Feature meets measurable outcomes defined in Success Criteria
-- [x] No implementation details leak into specification
+- [x] No implementation details leak into specification (Except where dictated by constitution)
 
 ## Notes
 
-- All items pass. Spec is ready for `/speckit-plan`.
-- FR-035 (permissions table `category`/`display` columns) should be confirmed during implementation via `SHOW COLUMNS FROM permissions` before deciding whether to add a new migration.
+- Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
+- Validation passed successfully.

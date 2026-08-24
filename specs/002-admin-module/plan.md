@@ -4,49 +4,28 @@
 
 **Input**: Feature specification from `specs/002-admin-module/spec.md`
 
----
-
 ## Summary
 
-Build the Admin Module for the Petora backend dashboard. This module delivers session-based admin authentication (login/logout/profile), admin user CRUD with role assignment, and role & permission management — mirroring the Juicy reference application but ported to nwidart v13 / Laravel 13 / PHP 8.5 / Sanctum / spatie/laravel-permission v8.
-
-The module uses the existing `Modules/Admin/` scaffold. New PHP classes (Model, DTO, Services, FormRequests, Policy) are created via `php artisan module:make-*` commands. The auth config is patched to point to the new model path. 46 permissions across 12 modules are seeded, along with a default `Super Admin` role and admin account.
-
----
+Build the Admin Module for the Petora backend dashboard. This module delivers session-based admin authentication (login/logout/profile), admin user CRUD with role assignment, and role & permission management — mirroring the Juicy reference application but ported to nwidart v13 / Laravel 13 / PHP 8.5 / Sanctum / spatie/laravel-permission v8 as dictated by the Petora Constitution.
 
 ## Technical Context
 
-**Language/Version**: PHP 8.5 — constructor property promotion, enums, named arguments, match expressions
+**Language/Version**: PHP 8.5
 
 **Primary Dependencies**:
-- `laravel/framework` v13.26.1 (Sanctum bundled)
+- `laravel/framework` v13.x
 - `nwidart/laravel-modules` v13
-- `spatie/laravel-permission` v8.3.0
-- `spatie/laravel-activitylog` v5.1.0
-- `intervention/image` v4.3 (via `Illuminate\Support\Facades\Image`)
+- `spatie/laravel-permission` v8
+- `spatie/laravel-activitylog` v5
+- `intervention/image` v4 (built-in wrapper)
 
-**Storage**: MySQL / MariaDB — `admins` table (new), `permissions` table (existing, already has `category`/`display` columns), `roles` table (Spatie-managed)
+**Storage**: MySQL / MariaDB (Admins, Roles, Permissions)
 
-**Testing**: None required per constitution Principle V
+**Testing**: None required (per Constitution)
 
-**Target Platform**: Web server (Blade dashboard), `/admin/*` routes
+**Target Platform**: Web server (Blade dashboard)
 
-**Project Type**: Laravel modular web application (nwidart v13 module)
-
-**Performance Goals**: Standard dashboard — 50 records per page default pagination
-
-**Constraints**:
-- No npm / No Vite — assets served statically from `public/`
-- No Pint formatting
-- No tests
-- No new top-level directories
-- No new Composer packages
-- All PHP files created via `php artisan module:make-*` commands only
-- `HasMiddleware` interface pattern (not constructor middleware)
-
-**Scale/Scope**: Single Admin module, ~20 files total
-
----
+**Project Type**: Laravel Modular Application (nwidart)
 
 ## Constitution Check
 
@@ -54,162 +33,57 @@ The module uses the existing `Modules/Admin/` scaffold. New PHP classes (Model, 
 
 | Principle | Status | Notes |
 |---|---|---|
-| I. Modular-First — all code in `Modules/Admin/` | ✅ PASS | No root `app/` code created |
-| II. Services–DTOs–Controller Layering | ✅ PASS | AdminService + RoleService, thin controllers, AdminDto |
-| III. Common Module as Shared Kernel | ✅ PASS | Views extend `common::layouts.master`; no duplication |
-| IV. API Response Contract (`success()`/`failure()`) | ✅ PASS | Web routes use redirects; no API JSON responses in this module |
-| IVb. Validation in FormRequests Only | ✅ PASS | 6 FormRequest classes, zero inline validation |
-| V. No Tests | ✅ PASS | No test files created |
-| VI. Bilingual ar/en | ✅ PASS | Lang files for en/ and ar/ registered in ServiceProvider |
-| VII. Permissions & Activity Logging | ✅ PASS | Spatie roles, `HasRoles`, `LogsActivity` on Admin model; 46 permissions seeded |
-| VIII. Auth via Sanctum | ✅ PASS | `HasApiTokens` on model; admin web guard uses session (correct for dashboard) |
-| IX. Engineering Standards (SOLID, DRY, KISS) | ✅ PASS | Services handle all logic, controllers are thin, DTOs bridge layers |
-| X. Dashboard Auth via Policies & Gates | ✅ PASS | `AdminPolicy` created; `Gate::policy()` registered in ServiceProvider |
-
-**Re-check after Phase 1**: All gates remain green. No violations detected.
-
----
+| I. Modular-First | ✅ PASS | All code inside `Modules/Admin/` |
+| II. Services–DTOs–Controllers | ✅ PASS | AdminService, RoleService, AdminDto |
+| III. Common Module | ✅ PASS | Relies on `common::layouts.master` |
+| IVb. Validation in FormRequests | ✅ PASS | Strict `FormRequest` validation for all input |
+| V. No Tests | ✅ PASS | No test generation |
+| VII. Permissions | ✅ PASS | Uses Spatie with Petora `category` and `display` columns |
+| VIII. Auth | ✅ PASS | Sanctum interface on model, Web session for login |
+| IX. Engineering Standards | ✅ PASS | `HasMiddleware` used for controllers (Laravel 13) |
 
 ## Project Structure
 
 ### Documentation (this feature)
 
-```
+```text
 specs/002-admin-module/
-├── plan.md              ← this file
-├── research.md          ← Phase 0 output
-├── data-model.md        ← Phase 1 output
-├── quickstart.md        ← Phase 1 output
-└── tasks.md             ← Phase 2 output (generated by /speckit-tasks)
+├── plan.md              # This file
+├── research.md          # Phase 0 output
+├── data-model.md        # Phase 1 output
+├── quickstart.md        # Phase 1 output
+└── tasks.md             # Phase 2 output (via /speckit-tasks)
 ```
 
 ### Source Code
 
-```
+```text
 Modules/Admin/
 ├── app/
-│   ├── DTOs/
-│   │   └── AdminDto.php                          [NEW]
+│   ├── DTOs/AdminDto.php
 │   ├── Http/
-│   │   ├── Controllers/
-│   │   │   └── Admin/
-│   │   │       ├── AdminAuthController.php        [NEW]
-│   │   │       ├── AdminController.php            [REPLACE stub]
-│   │   │       └── RoleController.php             [NEW]
-│   │   └── Requests/
-│   │       ├── LoginRequest.php                   [NEW]
-│   │       ├── UpdateProfileRequest.php           [NEW]
-│   │       ├── StoreAdminRequest.php              [NEW]
-│   │       ├── UpdateAdminRequest.php             [NEW]
-│   │       ├── StoreRoleRequest.php               [NEW]
-│   │       └── UpdateRoleRequest.php              [NEW]
-│   ├── Models/
-│   │   └── Admin.php                             [NEW]
-│   ├── Policies/
-│   │   └── AdminPolicy.php                       [NEW]
-│   ├── Providers/
-│   │   └── AdminServiceProvider.php              [MODIFY — add lang + Gate::policy()]
+│   │   ├── Controllers/Admin/
+│   │   │   ├── AdminAuthController.php
+│   │   │   ├── AdminController.php
+│   │   │   └── RoleController.php
+│   │   └── Requests/ (LoginRequest, UpdateProfileRequest, StoreAdminRequest, UpdateAdminRequest, StoreRoleRequest, UpdateRoleRequest)
+│   ├── Models/Admin.php
+│   ├── Policies/AdminPolicy.php
 │   └── Services/
-│       ├── AdminService.php                      [NEW]
-│       └── RoleService.php                       [NEW]
+│       ├── AdminService.php
+│       └── RoleService.php
 ├── database/
-│   ├── migrations/
-│   │   └── xxxx_create_admins_table.php          [NEW]
-│   └── seeders/
-│       └── AdminDatabaseSeeder.php               [NEW]
+│   ├── migrations/xxxx_create_admins_table.php
+│   └── seeders/AdminDatabaseSeeder.php
 ├── resources/
-│   ├── lang/
-│   │   ├── en/
-│   │   │   └── admin.php                         [NEW]
-│   │   └── ar/
-│   │       └── admin.php                         [NEW]
-│   └── views/
-│       └── admin/
-│           ├── login.blade.php                   [NEW]
-│           ├── dashboard.blade.php               [NEW]
-│           ├── edit-profile.blade.php            [NEW]
-│           ├── admins/
-│           │   ├── index.blade.php               [NEW]
-│           │   ├── create.blade.php              [NEW]
-│           │   └── edit.blade.php                [NEW]
-│           └── roles/
-│               ├── index.blade.php               [NEW]
-│               └── edit.blade.php                [NEW]
-└── routes/
-    └── web.php                                   [REPLACE — fill with all routes]
-
-config/auth.php                                   [MODIFY — update admins provider model path]
-database/seeders/DatabaseSeeder.php               [MODIFY — register AdminDatabaseSeeder]
+│   ├── lang/{en,ar}/admin.php
+│   └── views/admin/
+│       ├── login.blade.php
+│       ├── dashboard.blade.php
+│       ├── edit-profile.blade.php
+│       ├── admins/ (index, create, edit)
+│       └── roles/ (index, edit)
+└── routes/web.php
 ```
 
-**Structure Decision**: Single nwidart v13 module structure. Controllers placed in `Admin/` subdirectory inside `Controllers/` to match constitution convention (splits `Api/` and `Admin/` subdirectories). No `Api/` subdirectory in this module — admin is web-only.
-
----
-
-## Implementation Phases (for /speckit-tasks)
-
-### Phase A — Foundation (Database + Model)
-1. Create admins table migration
-2. Create Admin model (with all traits, accessor, serializeDate, scopeActive)
-3. Update `config/auth.php` provider model path
-4. Create AdminDatabaseSeeder (permissions + roles + default admin)
-5. Register AdminDatabaseSeeder in `database/seeders/DatabaseSeeder.php`
-6. Run `php artisan migrate` + `php artisan db:seed`
-
-### Phase B — Business Logic (DTO + Services)
-7. Create AdminDto (constructor property promotion, toArray())
-8. Create AdminService (all 7 standard methods, Image facade for uploads)
-9. Create RoleService (findAll, findAllPermission, findById, save, update, delete)
-
-### Phase C — HTTP Layer (FormRequests + Controllers)
-10. Create LoginRequest FormRequest
-11. Create UpdateProfileRequest FormRequest
-12. Create StoreAdminRequest FormRequest
-13. Create UpdateAdminRequest FormRequest
-14. Create StoreRoleRequest FormRequest
-15. Create UpdateRoleRequest FormRequest
-16. Create AdminPolicy + register in AdminServiceProvider
-17. Create AdminAuthController (showLoginForm, login, logout, editProfile, updateProfile)
-18. Create AdminController (index, create, store, show, edit, update, activate, destroy) — uses HasMiddleware
-19. Create RoleController (index, store, edit, update, destroy) — uses HasMiddleware
-
-### Phase D — Routes
-20. Fill `Modules/Admin/routes/web.php` (auth routes + resource routes)
-
-### Phase E — Lang Files
-21. Create `resources/lang/en/admin.php` with all label keys
-22. Create `resources/lang/ar/admin.php` with Arabic translations
-23. Register lang loading in AdminServiceProvider::boot()
-
-### Phase F — Blade Views
-24. Create `admin/login.blade.php` (login form, no master layout)
-25. Create `admin/dashboard.blade.php` (extends master, welcome stub)
-26. Create `admin/edit-profile.blade.php` (extends master, profile form)
-27. Create `admin/admins/index.blade.php` (data table, activate badge, actions)
-28. Create `admin/admins/create.blade.php` (create form with role dropdown)
-29. Create `admin/admins/edit.blade.php` (edit form with role dropdown)
-30. Create `admin/roles/index.blade.php` (roles table + inline create form + permission matrix)
-31. Create `admin/roles/edit.blade.php` (edit form with permission checkboxes)
-
----
-
-## Complexity Tracking
-
-No constitution violations. All gates pass. No complexity justification required.
-
----
-
-## Key Design Decisions
-
-| Decision | Choice | Rationale |
-|---|---|---|
-| Controller subdirectory | `Controllers/Admin/` | Constitution: split Api/ and Admin/ controllers |
-| Auth style | Session-based (`auth:admin` guard, session driver) | Dashboard; no Sanctum tokens needed for web |
-| Middleware pattern | `HasMiddleware` interface on controller class | Constitution Principle (Laravel 13 pattern) |
-| Image upload | `Illuminate\Support\Facades\Image` at 70% quality | Constitution VII |
-| Old image deletion | `$model->getRawOriginal('image')` bypasses accessor | Constitution: critical rule in image strategy |
-| Role assignment | Single role per admin via `assignRole()` / `syncRoles()` | Juicy pattern; UI has single role dropdown |
-| Permission grouping | `Permission::all()->groupBy('category')` | Constitution: UI groups by category column |
-| Seeder registration | `DatabaseSeeder::call([AdminDatabaseSeeder::class])` | Constitution: register in root seeder |
-| Lang registration | `loadTranslationsFrom()` in ServiceProvider::boot() | nwidart v13 docs — lang files NOT autoloaded |
-| Login view | Does NOT extend master layout | Login page has its own standalone design |
+**Structure Decision**: A standard nwidart module matching the Juicy backend pattern but refactored to Laravel 13 strict boundaries. Controllers utilize `HasMiddleware`, services handle business logic, and Blade templates handle UI rendering grouped into `admin/admins` and `admin/roles`.

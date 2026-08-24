@@ -1,3 +1,11 @@
+# Strict Execution Mode (NON-NEGOTIABLE)
+- NEVER innovate, predict, or suggest improvements. 
+- When asked to copy from a template (like `juicy-application-template`), you MUST copy the HTML, Blade directives, CSS classes, Javascript, and PHP logic EXACTLY 1:1. 
+- Do NOT "modernize" old code (e.g., do not upgrade JWT to Sanctum, do not change Traits to FormRequests unless explicitly told).
+- Do NOT attempt to integrate with new layouts (like `x-common` components) if it requires changing the reference template's UI.
+- If a referenced model or relation is missing, mock it or leave the code commented out. Do not delete the logic.
+- Act as a strict code-typist: implement exactly what is asked.
+
 <laravel-boost-guidelines>
 === foundation rules ===
 

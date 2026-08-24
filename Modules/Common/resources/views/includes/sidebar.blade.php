@@ -17,8 +17,8 @@
                                     <stop stop-color="#000000" offset="0%"></stop>
                                     <stop stop-color="#FFFFFF" offset="100%"></stop>
                                 </linearGradient>
-                                <linearGradient id="linearGradient-2" x1="64.0437835%" y1="46.3276743%"
-                                    x2="37.373316%" y2="100%">
+                                <linearGradient id="linearGradient-2" x1="64.0437835%" y1="46.3276743%" x2="37.373316%"
+                                    y2="100%">
                                     <stop stop-color="#EEEEEE" stop-opacity="0" offset="0%"></stop>
                                     <stop stop-color="#FFFFFF" offset="100%"></stop>
                                 </linearGradient>
@@ -40,7 +40,8 @@
             <li class="nav-item nav-toggle">
                 <a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse">
                     <i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i>
-                    <i class="d-none d-xl-block collapse-toggle-icon font-medium-4 text-primary" data-feather="disc" data-ticon="disc"></i>
+                    <i class="d-none d-xl-block collapse-toggle-icon font-medium-4 text-primary" data-feather="disc"
+                        data-ticon="disc"></i>
                 </a>
             </li>
         </ul>
@@ -55,7 +56,8 @@
                 </a>
             </li>
 
-            <li class="navigation-header"><span>{{ __('common::sidebar.apps_and_pages') }}</span><i data-feather="more-horizontal"></i></li>
+            <li class="navigation-header"><span>{{ __('common::sidebar.apps_and_pages') }}</span><i
+                    data-feather="more-horizontal"></i></li>
 
             <li class="nav-item {{ $route == 'admin.settings.index' ? 'active' : '' }}">
                 <a class="d-flex align-items-center" href="{{ route('admin.settings.index') }}">

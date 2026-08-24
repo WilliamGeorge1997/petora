@@ -9,13 +9,11 @@ use Illuminate\Routing\Controllers\Middleware;
 
 class CommonController implements HasMiddleware
 {
-    /**
-     * Get the middleware that should be assigned to the controller.
-     */
     public static function middleware(): array
     {
         return [
             'auth:admin',
+            'role:Super Admin',
             new Middleware('permission:Index-setting', only: ['index']),
             new Middleware('permission:Edit-setting', only: ['store'])
         ];

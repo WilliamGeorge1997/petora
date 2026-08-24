@@ -3,37 +3,38 @@
 namespace Modules\Common\Helpers;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 trait UploaderHelper
 {
-    public function uploadImage(UploadedFile $file, string $module): string
-    {
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        $path = "uploads/{$module}";
+    protected string $disk = 'public';
 
-        if (!file_exists(public_path($path))) {
-            mkdir(public_path($path), 0755, true);
-        }
+    protected function storage()
+    {
+        return Storage::disk($this->disk);
+    }
+
+    public function uploadImage(UploadedFile $file, string $dir, int $quality = 70): string
+    {
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        $path = "uploads/{$dir}";
 
         Image::fromUpload($file)
-            ->quality(70)
-            ->storePubliclyAs($path, $filename, 'public');
+            ->quality($quality)
+            ->storePubliclyAs($path, $fileName, $this->disk);
 
-        return $filename;
+        return $fileName;
     }
-    
-    public function deleteImage(?string $filename, string $module): bool
+
+    public function deleteImage(string $fileName, string $dir): bool
     {
-        if (!$filename) return false;
+        $file = "uploads/{$dir}/{$fileName}";
 
-        $path = public_path("uploads/{$module}/{$filename}");
-
-        if (file_exists($path)) {
-            return unlink($path);
+        if ($this->storage()->exists($file)) {
+            return $this->storage()->delete($file);
         }
-        
+
         return false;
     }
 }

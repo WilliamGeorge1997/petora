@@ -1,3 +1,6 @@
+@php
+    $appName = config('app.name');
+@endphp
 <!DOCTYPE html>
 <html class="loading" lang="{{ app()->getLocale() }}" data-textdirection="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <!-- BEGIN: Head-->
@@ -6,12 +9,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
-    <meta name="description" content="Petora Admin Panel">
-    <meta name="keywords" content="Petora">
-    <meta name="author" content="Icon Tech Digital Solution">
-    <title>Petora</title>
+    <meta name="description" content="{{ $appName }} Admin Panel">
+    <meta name="keywords" content="{{ $appName }}">
+    <meta name="author" content="Icon Tech Digital Solutions">
+    <title>{{ $appName }} - @yield('title')</title>
     @include('common::includes.css')
-    @stack('css')
 </head>
 <!-- END: Head-->
 
@@ -58,5 +60,4 @@
 </body>
 <!-- END: Body-->
 @include('common::includes.js')
-@stack('scripts')
 </html>

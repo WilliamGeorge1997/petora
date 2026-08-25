@@ -7,4 +7,6 @@ return [
     'admins' => 'Admins',
     'clients' => 'Clients',
     'general_settings' => 'General Settings',
+    'store_management' => 'Store Management',
+    'companies' => 'Companies',
 ];

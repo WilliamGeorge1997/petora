@@ -52,9 +52,4 @@ class AdminDto
             'clinic_id' => $this->clinic_id,
         ], fn($value) => $value !== null);
     }
-
-    public function dataFromRequest(): array
-    {
-        return $this->toArray();
-    }
 }

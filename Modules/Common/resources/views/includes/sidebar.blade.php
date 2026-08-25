@@ -86,6 +86,21 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-item {{ Route::is('admin.company.*') ? 'sidebar-group-active open' : '' }}">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="briefcase"></i>
+                    <span class="menu-title text-truncate">{{ __('common::sidebar.store_management') }}</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="nav-item {{ Route::is('admin.company.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.company.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('common::sidebar.companies') }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>

@@ -14,7 +14,7 @@
     <meta name="author" content="{{ $appName }}">
     <title>Login Page - {{ $appName }}</title>
     <link rel="apple-touch-icon" href="{{ asset('admin/images/ico/apple-icon-120.png') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin/images/ico/favicon.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin/images/ico/favicon.ico') }}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
         rel="stylesheet">
 
@@ -27,12 +27,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/bootstrap-extended.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/colors.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/components.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/themes/dark-layout.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/themes/bordered-layout.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/themes/semi-dark-layout.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/themes/dark-layout.css') }}"> --}}
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/themes/bordered-layout.css') }}"> --}}
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/themes/semi-dark-layout.css') }}"> --}}
 
     <!-- BEGIN: Page CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/core/menu/menu-types/vertical-menu.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/core/menu/menu-types/vertical-menu.css') }}"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/plugins/forms/form-validation.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css-rtl/pages/authentication.css') }}">
     <!-- END: Page CSS-->
@@ -141,7 +141,7 @@
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
-    <script src="{{ asset('admin/js/core/app-menu.js') }}"></script>
+    {{-- <script src="{{ asset('admin/js/core/app-menu.js') }}"></script> --}}
     <script src="{{ asset('admin/js/core/app.js') }}"></script>
     <!-- END: Theme JS-->
 

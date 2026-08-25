@@ -13,9 +13,7 @@ class AdminService
 {
     use UploaderHelper;
 
-    public function __construct(
-        private Admin $model = new Admin(),
-    ) {}
+    public function __construct(private Admin $model) {}
 
     public function findAll(array $data = [], array $relations = []): Collection|LengthAwarePaginator
     {
@@ -28,7 +26,7 @@ class AdminService
         return $this->model->with($relations)->findOrFail($id);
     }
 
-    public function findBy(string $key, string $value, array $data,  array $relations = []): Collection
+    public function findBy(string $key, mixed $value, array $data,  array $relations = []): Collection
     {
         $query = $this->model->query()->with($relations)->where($key, $value);
         return getCaseCollection($query, $data);

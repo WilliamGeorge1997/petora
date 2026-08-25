@@ -1,4 +1,6 @@
 {
     "Common": true,
-    "Admin": true
+    "Admin": true,
+    "Company": true,
+    "Store": true
 }

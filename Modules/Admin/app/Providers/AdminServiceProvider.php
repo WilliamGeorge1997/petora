@@ -18,16 +18,6 @@ class AdminServiceProvider extends ModuleServiceProvider
     protected string $nameLower = 'admin';
 
     /**
-     * The module name.
-     */
-    protected string $moduleName = 'Admin';
-
-    /**
-     * The module name in lowercase.
-     */
-    protected string $moduleNameLower = 'admin';
-
-    /**
      * Command classes to register.
      *
      * @var string[]
@@ -59,14 +49,9 @@ class AdminServiceProvider extends ModuleServiceProvider
      */
     protected function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/' . $this->moduleNameLower);
+        $langPath = module_path($this->name, 'lang');
 
-        if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
-            $this->loadJsonTranslationsFrom($langPath);
-        } else {
-            $this->loadTranslationsFrom(module_path($this->moduleName, 'lang'), $this->moduleNameLower);
-            $this->loadJsonTranslationsFrom(module_path($this->moduleName, 'lang'));
-        }
+        $this->loadTranslationsFrom($langPath, $this->nameLower);
+        $this->loadJsonTranslationsFrom($langPath);
     }
 }

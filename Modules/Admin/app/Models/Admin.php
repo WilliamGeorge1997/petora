@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Models;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -40,7 +41,7 @@ class Admin extends Authenticatable
     }
 
     //Scopes
-    public function scopeActive($query)
+    public function scopeActive(Builder $query)
     {
         return $query->where('is_active', 1);
     }

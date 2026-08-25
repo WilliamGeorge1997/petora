@@ -3,7 +3,7 @@
 <!-- BEGIN Vendor JS-->
 
 <!-- BEGIN: Page Vendor JS-->
-<script src="{{ asset('admin/vendors/js/extensions/toastr.min.js') }}"></script>
+{{-- <script src="{{ asset('admin/vendors/js/extensions/toastr.min.js') }}"></script> --}}
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->

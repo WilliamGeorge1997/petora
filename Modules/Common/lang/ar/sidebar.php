@@ -7,4 +7,6 @@ return [
     'admins' => 'المديرين',
     'clients' => 'المستخدمين',
     'general_settings' => 'الاعدادات العامة',
+    'store_management' => 'إدارة المتاجر',
+    'companies' => 'الشركات',
 ];

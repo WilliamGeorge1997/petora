@@ -1,19 +1,19 @@
 @extends('common::layouts.master')
 
 @section('css')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/responsive.bootstrap5.min.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/buttons.bootstrap5.min.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('admin/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('admin/css-rtl/plugins/extensions/ext-component-sweet-alerts.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/forms/select/select2.min.css') }}">
+    {{-- <link rel="stylesheet" type="text/css"
+        href="{{ asset('admin/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css') }}"> --}}
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/pickers/flatpickr/flatpickr.min.css') }}"> --}}
+    {{-- <link rel="stylesheet" type="text/css"
+        href="{{ asset('admin/css-rtl/plugins/extensions/ext-component-sweet-alerts.css') }}"> --}}
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/forms/select/select2.min.css') }}"> --}}
 @endsection
 @section('content')
     <div class="content-header row">
@@ -70,7 +70,7 @@
 
 @section('js')
     @include('common::includes.datatable')
-    <script>
+    {{-- <script>
         var select = $('.select2');
 
         select.each(function() {
@@ -82,7 +82,7 @@
                 dropdownParent: $this.parent()
             });
         });
-    </script>
+    </script> --}}
 
     @if (session('created'))
         <script>
@@ -481,12 +481,12 @@
             }
 
             // Flat Date picker
-            if (dt_date_table.length) {
-                dt_date_table.flatpickr({
-                    monthSelectorType: 'static',
-                    dateFormat: 'm/d/Y'
-                });
-            }
+            // if (dt_date_table.length) {
+            //     dt_date_table.flatpickr({
+            //         monthSelectorType: 'static',
+            //         dateFormat: 'm/d/Y'
+            //     });
+            // }
 
             // Delete Record
             $('.datatables-basic tbody').on('click', '.delete-record', function() {

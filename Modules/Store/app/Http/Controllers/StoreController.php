@@ -2,55 +2,86 @@
 
 namespace Modules\Store\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Modules\Admin\Enums\AdminRole;
+use Modules\Store\DTOs\StoreDto;
+use Modules\Store\Http\Requests\StoreRequest;
+use Modules\Store\Models\Store;
+use Modules\Store\Services\StoreService;
+use Illuminate\Support\Facades\Gate;
+use Modules\Store\ViewModels\StoreViewModel;
 
-class StoreController extends Controller
+class StoreController implements HasMiddleware
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private StoreService $storeService) {}
+
+    public static function middleware(): array
     {
-        return view('store::index');
+        return [
+            'auth:admin',
+            new Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update']),
+            new Middleware('permission:Index-store|Create-store|Edit-store|Delete-store', only: ['index', 'store']),
+            new Middleware('permission:Create-store', only: ['create', 'store']),
+            new Middleware('permission:Edit-store', only: ['edit', 'update', 'activate']),
+            new Middleware('permission:Delete-store', only: ['destroy']),
+        ];
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function index(Request $request): View|JsonResponse
+    {
+        $data = $request->merge(['paginated' => 50])->all();
+        $stores = $this->storeService->findAll($data);
+        if ($request->ajax()) {
+            return success(true, __('store::message.fetched'), $stores->items());
+        }
+        return view('store::stores.index', compact('stores'));
+    }
+
     public function create()
     {
-        return view('store::create');
+        $viewModel = new StoreViewModel();
+        return view('store::stores.create', compact('viewModel'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function store(StoreRequest $request)
     {
-        return view('store::show');
+        $dto = StoreDto::fromRequest($request);
+        $this->storeService->save($dto);
+        return to_route('admin.store.index')->with('success', __('store::message.created'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function edit(Store $store)
     {
-        return view('store::edit');
+        Gate::authorize('update', $store);
+        $viewModel = new StoreViewModel();
+        return view('store::stores.edit', compact('viewModel', 'store'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
+    public function update(StoreRequest $request, Store $store)
+    {
+        Gate::authorize('update', $store);
+        $dto = StoreDto::fromRequest($request);
+        $this->storeService->update($store, $dto);
+        return to_route('admin.store.index')->with('success', __('store::message.updated'));
+    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+    public function destroy(Store $store)
+    {
+        $this->storeService->delete($store);
+        return success(true, __('store::message.deleted'));
+    }
+
+    public function activate(Store $store)
+    {
+        $store = $this->storeService->activate($store);
+        return success(
+            true,
+            $store->is_active ?  __('store::message.activated') :  __('store::message.deactivated'),
+            $store
+        );
+    }
 }

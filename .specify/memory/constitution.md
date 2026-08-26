@@ -1,33 +1,8 @@
 <!-- Sync Impact Report
-Version change: 1.5.0 → 1.5.1 (PATCH)
-Fixed:
-  - FCMService/SmsService naming kept (not renamed to Helper suffix) — matches Juicy Helper/ folder pattern
-  - success()/failure() param order corrected to match Juicy: (bool $status, string $message, $data, string $status_string)
-  - Images: keep original extension, reduce quality to 70% (no webp conversion)
-  - SmsService deferred to future — no SMS provider currently
-Last Amended: 2026-08-23
--->
-  - nwidart v13 app/ folder structure (DTOs/, Services/ inside app/)
-  - Folder naming: DTO→DTOs, Service→Services
-  - Common module: FCMService/SmsService moved to Helpers/
-  - Response envelope: msg→message
-  - Principle V (Tests): removed, not required currently
-  - Added Principle IX: Engineering Standards (SOLID, DRY, KISS)
-  - Added Principle X: Policy & Gates for dashboard authorization
-  - Added: locale column on authenticatable user models
-  - Added: Laravel built-in image intervention wrapper usage
-  - Added: No npm/vite — assets served from public/ via Blade partials
-  - Added: nwidart commands only for file creation
-  - Added: No code comments rule
-  - Added: No Pint
-  - Added: Always read Laravel docs
-  - Added: Reference skills and AGENTS.md
-  - Added: Ask user when unsure about Flutter/backend split
-  - Added: Lang loading via nwidart docs
-  - Added: Websocket future decision note (Pusher vs Reverb)
-  - Added: Default dashboard pagination 50 per page
-  - Added: File storage naming mirrors Juicy project
-Last Amended: 2026-08-23
+Version change: 1.6.0 → 1.7.0 (MINOR)
+Modified:
+  - Updated Principle XI: Changed Canonical Structure from Company to Store, and added rule for ViewModels
+Last Amended: 2026-08-26
 -->
 
 # Petora Backend Constitution
@@ -257,6 +232,22 @@ Admin Panel (Blade dashboard) authorization MUST use **Laravel Policies and Gate
 - Use `$this->authorize('index', Product::class)` in Admin controllers
 - Register policies in the module's `ServiceProvider` via `Gate::policy()`
 - API controllers may use `$request->user()->can()` directly without a Policy class if simpler
+
+### XI. The Store Module as the Canonical Structure (NON-NEGOTIABLE)
+
+Any new module created MUST strictly mirror the file structure, conventions, and implementation patterns of the **Store** module. It serves as the locked blueprint for all future module development.
+
+Specifically, when creating a new module, you MUST replicate the presence and structure of the following files:
+1. **Model** (`Modules/{Name}/app/Models/`)
+2. **Migration** (`Modules/{Name}/database/migrations/`)
+3. **Controllers** (`Modules/{Name}/app/Http/Controllers/`) - Both Admin and Api if applicable.
+4. **Service** (`Modules/{Name}/app/Services/`)
+5. **DTO** (`Modules/{Name}/app/DTOs/`)
+6. **Custom Request (FormRequest)** (`Modules/{Name}/app/Http/Requests/`)
+7. **Blade Views** (`Modules/{Name}/resources/views/{name}/`): MUST have exactly 3 core views: `index.blade.php`, `edit.blade.php`, and `create.blade.php`.
+8. **Translations** (`Modules/{Name}/lang/en/general.php` and `Modules/{Name}/lang/ar/general.php`): Translation files and their exact locations must be maintained.
+9. **ServiceProvider** (`Modules/{Name}/app/Providers/{Name}ServiceProvider.php`): MUST manually register and load the translation files according to the nwidart v13 language docs pattern.
+10. **ViewModels** (`Modules/{Name}/app/ViewModels/`): A ViewModel should ONLY be applied if the current module needs to view/access a model from another module. Do not create ViewModels by default otherwise.
 
 ---
 
@@ -647,4 +638,4 @@ This constitution supersedes all other development practices for the Petora Back
 - All AI agents MUST read this constitution before writing any code.
 - The Boost MCP `record-rule` tool MUST be used to record convention decisions into `.ai/rules/`.
 
-**Version**: 1.5.1 | **Ratified**: 2026-08-23 | **Last Amended**: 2026-08-23
+**Version**: 1.7.0 | **Ratified**: 2026-08-23 | **Last Amended**: 2026-08-26

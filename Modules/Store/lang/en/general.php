@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'create_store' => 'Create a new store',
+    'edit_store'   => 'Edit store data',
+    'actions'        => 'Actions',
+    'date'           => 'Date',
+    'status'         => 'Status',
+    'create'         => 'Create',
+    'update'         => 'Update',
+    'main_data'      => 'Main Data',
+    'activate'       => 'Activate',
+    'deactivate'     => 'Deactivate',
+    'delete'         => 'Delete',
+    'cancel'         => 'Cancel',
+    'sure_delete'    => 'Are you sure you want to delete the store?',
+    'cant_revert'    => 'You will not be able to revert this!',
+    'yes_delete'     => 'Yes, delete it!',
+    'success'        => 'Success!',
+    'id'             => 'ID',
+    'done'          => 'Well Done!',
+    'select_status' => 'Select status',
+    'home'          => 'Home',
+    'stores'     => 'stores',
+    'search'        => 'Search',
+    'reset'         => 'Reset',
+];

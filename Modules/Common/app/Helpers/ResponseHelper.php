@@ -64,12 +64,12 @@ if (!function_exists('fail')) {
 }
 
 if (!function_exists('getCaseCollection')) {
-    function getCaseCollection(Builder $builder, array $data)
+    function getCaseCollection(Builder $builder, array $data, array $columns = ['*'])
     {
         if ($data['paginated'] ?? null) {
-            return $builder->paginate($data['paginated'] ?? 20);
+            return $builder->paginate($data['paginated'] ?? 20, $columns);
         }
-        return $builder->get();
+        return $builder->get($columns);
     }
 }
 

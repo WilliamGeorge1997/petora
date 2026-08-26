@@ -32,12 +32,12 @@ class CompanyController implements HasMiddleware
 
     public function index(Request $request): View|JsonResponse
     {
+        $data = $request->merge(['paginated' => 50])->all();
+        $companies = $this->companyService->findAll($data);
         if ($request->ajax()) {
-            $data = $request->merge(['paginated' => 50])->all();
-            $companies = $this->companyService->findAll($data);
             return success(true, __('company::message.fetched'), $companies->items());
         }
-        return view('company::companies.index');
+        return view('company::companies.index', compact('companies'));
     }
 
     public function create()

@@ -2,8 +2,11 @@
 
 namespace Modules\Company\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Store\Models\Store;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
@@ -14,13 +17,14 @@ class Company extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'phone',
         'address',
         'image',
         'is_active',
     ];
 
-    public array $translatable = ['title', 'address'];
+    public array $translatable = ['title', 'description', 'address'];
 
     protected $casts = [
         'is_active' => 'boolean',
@@ -44,7 +48,7 @@ class Company extends Model
     }
 
     //Scopes
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
@@ -64,4 +68,8 @@ class Company extends Model
     }
 
     //Relations
+    public function stores(): HasMany
+    {
+        return $this->hasMany(Store::class);
+    }
 }

@@ -18,5 +18,10 @@ return [
     'yes_delete'     => 'نعم، احذفها!',
     'success'        => 'نجاح!',
     'id'             => 'ID',
-    'done' => 'احسنت!'
+    'done'          => 'احسنت!',
+    'select_status' => 'اختر الحالة',
+    'home'          => 'الرئيسية',
+    'companies'     => 'الشركات',
+    'search'        => 'بحث',
+    'reset'         => 'إعادة تعيين',
 ];

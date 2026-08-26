@@ -3,6 +3,7 @@
 namespace Modules\Company\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Company\DTOs\CompanyDto;
@@ -17,7 +18,14 @@ class CompanyService
 
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
     {
-        $query = $this->model::query()->with($relations)->latest();
+        $query = $this->model::query()->with($relations)
+            ->when($data['title'] ?? null, function (Builder $query) use ($data) {
+                return $query->whereJsonContainsLocales('title', ['en', 'ar'], "%{$data['title']}%", 'LIKE');
+            })
+            ->when(isset($data['is_active']) && $data['is_active'] !== '', function (Builder $query) use ($data) {
+                return $query->where('is_active', (bool) $data['is_active']);
+            })
+            ->latest('id');
         return getCaseCollection($query, $data);
     }
 
@@ -32,13 +40,19 @@ class CompanyService
         return getCaseCollection($query, $data);
     }
 
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): Collection
+    {
+        $query = $this->model::query()->active()->with($relations);
+        return getCaseCollection($query, $data, $columns);
+    }
+
     public function save(CompanyDto $dto): Company
     {
         $data = $dto->toArray();
         if ($dto->image) {
             $data['image'] = $this->uploadImage($dto->image, 'company');
         }
-        
+
         return $this->model::create($data);
     }
 

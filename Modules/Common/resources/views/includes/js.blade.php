@@ -24,4 +24,36 @@
     })
 </script>
 
+<script>
+    function successAlert(message, title = '{{ __('common::general.done') }}') {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: 'success',
+            customClass: {
+                confirmButton: 'btn btn-primary'
+            },
+            buttonsStyling: false
+        });
+    }
+
+    function errorAlert(message = '{{ __('common::general.error') }}', title = '{{ __('common::general.error') }}') {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: 'error',
+            customClass: {
+                confirmButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        });
+    }
+</script>
+
+@if (session('success'))
+    <script>
+        successAlert('{{ session('success') }}');
+    </script>
+@endif
+
 @yield('js')

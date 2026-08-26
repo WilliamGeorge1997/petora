@@ -8,5 +8,6 @@ return [
     'clients' => 'Clients',
     'general_settings' => 'General Settings',
     'store_management' => 'Store Management',
+    'product_management' => 'Product Management',
     'companies' => 'Companies',
 ];

@@ -43,4 +43,12 @@ class StoreServiceProvider extends ModuleServiceProvider
     // {
     //     $schedule->command('inspire')->hourly();
     // }
+
+    protected function registerTranslations(): void
+    {
+        $langPath = module_path($this->name, 'lang');
+
+        $this->loadTranslationsFrom($langPath, $this->nameLower);
+        $this->loadJsonTranslationsFrom($langPath);
+    }
 }

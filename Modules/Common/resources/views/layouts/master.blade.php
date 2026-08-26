@@ -1,8 +1,10 @@
 @php
     $appName = config('app.name');
+    $locale = app()->getLocale();
 @endphp
 <!DOCTYPE html>
-<html class="loading" lang="{{ app()->getLocale() }}" data-textdirection="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+<html class="loading" lang="{{ $locale }}" data-textdirection="{{ $locale == 'ar' ? 'rtl' : 'ltr' }}"
+    dir="{{ $locale == 'ar' ? 'rtl' : 'ltr' }}">
 <!-- BEGIN: Head-->
 
 <head>
@@ -20,8 +22,7 @@
 <!-- BEGIN: Body-->
 
 <body class="vertical-layout vertical-menu-modern navbar-floating footer-static" data-open="click"
-    data-menu="vertical-menu-modern" data-col="" data-framework="laravel"
-    data-asset-path="{{ asset('admin/') }}">
+    data-menu="vertical-menu-modern" data-col="" data-framework="laravel" data-asset-path="{{ asset('admin/') }}">
 
 
     @include('common::includes.navbar')
@@ -44,7 +45,7 @@
                 @if (session('error'))
                     <x-common::alert type="danger" :message="session('error')" />
                 @endif
-                
+
                 @yield('content')
 
             </div>
@@ -60,4 +61,5 @@
 </body>
 <!-- END: Body-->
 @include('common::includes.js')
+
 </html>

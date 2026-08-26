@@ -87,7 +87,8 @@
                 </ul>
             </li>
 
-            <li class="nav-item {{ Route::is('admin.company.*') ? 'sidebar-group-active open' : '' }}">
+            <li
+                class="nav-item {{ Route::is('admin.company.*', 'admin.store.*') ? 'sidebar-group-active open' : '' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="briefcase"></i>
                     <span class="menu-title text-truncate">{{ __('common::sidebar.store_management') }}</span>
@@ -97,6 +98,34 @@
                         <a class="d-flex align-items-center" href="{{ route('admin.company.index') }}">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate">{{ __('common::sidebar.companies') }}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ Route::is('admin.store.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.store.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('store::general.stores') }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item {{ Route::is('admin.clinic.*') ? 'active' : '' }}">
+                <a class="d-flex align-items-center" href="{{ route('admin.clinic.index') }}">
+                    <i data-feather="activity"></i>
+                    <span class="menu-item text-truncate">{{ __('clinic::general.clinics') }}</span>
+                </a>
+            </li>
+
+            <li class="nav-item {{ Route::is('admin.category.*') ? 'sidebar-group-active open' : '' }}">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="grid"></i>
+                    <span class="menu-title text-truncate">{{ __('common::sidebar.product_management') }}</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="nav-item {{ Route::is('admin.category.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.category.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('category::general.categories') }}</span>
                         </a>
                     </li>
                 </ul>

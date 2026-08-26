@@ -18,5 +18,10 @@ return [
     'yes_delete'     => 'Yes, delete it!',
     'success'        => 'Success!',
     'id'             => 'ID',
-    'done' => 'Well Done!'
+    'done'          => 'Well Done!',
+    'select_status' => 'Select status',
+    'home'          => 'Home',
+    'companies'     => 'Companies',
+    'search'        => 'Search',
+    'reset'         => 'Reset',
 ];

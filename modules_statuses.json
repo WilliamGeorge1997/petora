@@ -2,5 +2,7 @@
     "Common": true,
     "Admin": true,
     "Company": true,
-    "Store": true
+    "Store": true,
+    "Clinic": true,
+    "Category": true
 }

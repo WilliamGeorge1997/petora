@@ -4,6 +4,8 @@
 - Do NOT attempt to integrate with new layouts (like `x-common` components) if it requires changing the reference template's UI.
 - If a referenced model or relation is missing, mock it or leave the code commented out. Do not delete the logic.
 - Act as a strict code-typist: implement exactly what is asked.
+- **Canonical Structure:** Any new module MUST strictly mirror the **Store** module's structure (Model, Migration, Controller, Service, DTO, CustomRequest, index/edit/create blades, translation files/locations, and translation loading in ServiceProvider).
+- **ViewModels:** A ViewModel should ONLY be applied if the current module needs to view/access a model from another module. Do not add ViewModels by default.
 
 <laravel-boost-guidelines>
 === foundation rules ===

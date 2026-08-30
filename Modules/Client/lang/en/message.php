@@ -1,0 +1,41 @@
+<?php
+
+return [
+    'fetched' => 'Data fetched successfully.',
+    'created' => 'Client created successfully.',
+    'updated' => 'Client updated successfully.',
+    'deleted' => 'Client deleted successfully.',
+    'activated' => 'Client activated successfully.',
+    'deactivated' => 'Client deactivated successfully.',
+    
+    'registered' => 'Client Registered Successfully',
+    'unauthorized' => 'Unauthorized',
+    'not_active' => 'Your account is not active. Please complete the verification process to continue.',
+    'already_active' => 'Account is already active, no need to verify',
+    'wrong_otp' => 'Wrong OTP',
+    'otp_sent' => 'Message Sent, please check your phone',
+    'valid_otp' => 'Valid OTP',
+    'password_changed' => 'Password Changed Successfully',
+    'logged_user' => 'Logged User',
+    'logged_out' => 'Successfully logged out',
+    'authenticated' => 'Logged in successfully',
+
+    'name_required'   => 'Name is required.',
+    'name_string'     => 'The name must be a string.',
+    'phone_required'  => 'Phone number is required.',
+    'phone_string'    => 'The phone number must be a string.',
+    'phone_unique'    => 'The phone number has already been taken.',
+    'phone_not_found' => 'The provided phone number was not found.',
+    'email_string'    => 'The email must be a string.',
+    'email_email'     => 'The email must be a valid email address.',
+    'email_unique'    => 'The email has already been taken.',
+    'password_required'  => 'Password is required.',
+    'password_string'    => 'The password must be a string.',
+    'password_confirmed' => 'The password confirmation does not match.',
+    'otp_required'       => 'The OTP is required.',
+    'otp_numeric'        => 'The OTP must be a number.',
+    
+    'image_invalid'     => 'The uploaded file must be an image.',
+    'image_mimes'       => 'The image must be a file of type: jpeg, png, jpg, gif, svg.',
+    'image_max'         => 'The image must not be greater than 2048 kilobytes.',
+];

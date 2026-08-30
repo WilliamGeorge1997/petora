@@ -49,6 +49,11 @@ class AdminDatabaseSeeder extends Seeder
             ['Edit-role', 'Roles', 'Edit'],
             ['Delete-role', 'Roles', 'Delete'],
 
+            ['Index-country', 'Country', 'Index'],
+            ['Create-country', 'Country', 'Create'],
+            ['Edit-country', 'Country', 'Edit'],
+            ['Delete-country', 'Country', 'Delete'],
+
             ['Index-client', 'Client', 'Index'],
             ['Create-client', 'Client', 'Create'],
             ['Edit-client', 'Client', 'Edit'],

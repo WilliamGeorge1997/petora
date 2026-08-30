@@ -53,12 +53,12 @@ if (!function_exists('success')) {
 }
 
 if (!function_exists('fail')) {
-    function fail(bool $status, string $message, $data = null, string $status_string = 'bad_request'): JsonResponse
+    function fail(bool $status, string $message, mixed $errors = null, string $status_string = 'bad_request'): JsonResponse
     {
         return response()->json([
             'status' => $status,
             'message' => $message,
-            'data' => $data,
+            'errors' => $errors,
         ], getStatusCode($status_string));
     }
 }

@@ -4,5 +4,7 @@
     "Company": true,
     "Store": true,
     "Clinic": true,
-    "Category": true
+    "Category": true,
+    "Client": true,
+    "Country": true
 }

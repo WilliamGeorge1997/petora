@@ -33,6 +33,11 @@ class ClinicService
         return $this->model::with($relations)->findOrFail($id);
     }
 
+    protected function resolveModel(int|Clinic $clinicOrId): Clinic
+    {
+        return $clinicOrId instanceof Clinic ? $clinicOrId : $this->findById($clinicOrId);
+    }
+
     public function findBy(string $column, mixed $value, array $data, array $relations = []): Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
@@ -55,8 +60,9 @@ class ClinicService
         return $this->model::create($data);
     }
 
-    public function update(Clinic $clinic, ClinicDto $dto): Clinic
+    public function update(int|Clinic $clinicOrId, ClinicDto $dto): Clinic
     {
+        $clinic = $this->resolveModel($clinicOrId);
         $data = $dto->toArray();
         if ($dto->image) {
             if ($clinic->image) $this->deleteImage($clinic->image, 'clinic');
@@ -68,14 +74,16 @@ class ClinicService
         return $clinic;
     }
 
-    public function delete(Clinic $clinic): bool
+    public function delete(int|Clinic $clinicOrId): bool
     {
+        $clinic = $this->resolveModel($clinicOrId);
         if ($clinic->image) $this->deleteImage($clinic->image, 'clinic');
         return $clinic->delete();
     }
 
-    public function activate(Clinic $clinic): Clinic
+    public function activate(int|Clinic $clinicOrId): Clinic
     {
+        $clinic = $this->resolveModel($clinicOrId);
         $clinic->update(['is_active' => !$clinic->is_active]);
         return $clinic;
     }

@@ -1,6 +1,8 @@
 <?php
 
 use Modules\Admin\Models\Admin;
+use Modules\Client\Models\Client;
+
 
 return [
 
@@ -76,7 +78,7 @@ return [
         ],
         'clients' => [
             'driver' => 'eloquent',
-            // 'model' => Client::class,
+            'model' => Client::class,
         ],
         'drivers' => [
             'driver' => 'eloquent',

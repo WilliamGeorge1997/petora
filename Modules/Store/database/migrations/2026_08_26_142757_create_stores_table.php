@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('image')->nullable();
             $table->foreignIdFor(Company::class)->index()->constrained()->cascadeOnDelete();
-            $table->decimal('lat', 10, 7)->nullable();
-            $table->decimal('long', 10, 7)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

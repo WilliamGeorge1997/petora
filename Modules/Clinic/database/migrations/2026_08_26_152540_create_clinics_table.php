@@ -18,8 +18,8 @@ return new class extends Migration
             $table->json('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('image')->nullable();
-            $table->decimal('lat', 10, 7)->nullable();
-            $table->decimal('long', 10, 7)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

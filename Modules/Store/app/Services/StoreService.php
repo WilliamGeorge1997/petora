@@ -33,6 +33,11 @@ class StoreService
         return $this->model::with($relations)->findOrFail($id);
     }
 
+    protected function resolveModel(int|Store $storeOrId): Store
+    {
+        return $storeOrId instanceof Store ? $storeOrId : $this->findById($storeOrId);
+    }
+
     public function findBy(string $column, mixed $value, array $data, array $relations = []): Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
@@ -55,8 +60,9 @@ class StoreService
         return $this->model::create($data);
     }
 
-    public function update(Store $store, StoreDto $dto): Store
+    public function update(int|Store $storeOrId, StoreDto $dto): Store
     {
+        $store = $this->resolveModel($storeOrId);
         $data = $dto->toArray();
         if ($dto->image) {
             if ($store->image) $this->deleteImage($store->image, 'store');
@@ -68,14 +74,16 @@ class StoreService
         return $store;
     }
 
-    public function delete(Store $store): bool
+    public function delete(int|Store $storeOrId): bool
     {
+        $store = $this->resolveModel($storeOrId);
         if ($store->image) $this->deleteImage($store->image, 'store');
         return $store->delete();
     }
 
-    public function activate(Store $store): Store
+    public function activate(int|Store $storeOrId): Store
     {
+        $store = $this->resolveModel($storeOrId);
         $store->update(['is_active' => !$store->is_active]);
         return $store;
     }

@@ -34,6 +34,11 @@ class CompanyService
         return $this->model::with($relations)->findOrFail($id);
     }
 
+    protected function resolveModel(int|Company $companyOrId): Company
+    {
+        return $companyOrId instanceof Company ? $companyOrId : $this->findById($companyOrId);
+    }
+
     public function findBy(string $column, mixed $value, array $data, array $relations = []): Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
@@ -56,8 +61,9 @@ class CompanyService
         return $this->model::create($data);
     }
 
-    public function update(Company $company, CompanyDto $dto): Company
+    public function update(int|Company $companyOrId, CompanyDto $dto): Company
     {
+        $company = $this->resolveModel($companyOrId);
         $data = $dto->toArray();
         if ($dto->image) {
             if ($company->image) $this->deleteImage($company->image, 'company');
@@ -69,14 +75,16 @@ class CompanyService
         return $company;
     }
 
-    public function delete(Company $company): bool
+    public function delete(int|Company $companyOrId): bool
     {
+        $company = $this->resolveModel($companyOrId);
         if ($company->image) $this->deleteImage($company->image, 'company');
         return $company->delete();
     }
 
-    public function activate(Company $company): Company
+    public function activate(int|Company $companyOrId): Company
     {
+        $company = $this->resolveModel($companyOrId);
         $company->update(['is_active' => !$company->is_active]);
         return $company;
     }

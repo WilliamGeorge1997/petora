@@ -22,8 +22,11 @@ class StoreRequest extends FormRequest
             'address_ar' => ['nullable', 'string'],
             'phone'      => ['nullable', 'string'],
             'image'      => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:2048'],
-            'lat'        => ['nullable', 'string'],
-            'long'       => ['nullable', 'string'],
+            'country_id' => ['nullable', 'integer', 'exists:countries,id'],
+            'city_id'    => ['nullable', 'integer', 'exists:cities,id'],
+            'zone_id'    => ['nullable', 'integer', 'exists:zones,id'],
+            'latitude'   => ['nullable', 'numeric'],
+            'longitude'  => ['nullable', 'numeric'],
         ];
     }
 
@@ -48,8 +51,11 @@ class StoreRequest extends FormRequest
             'address_ar' => __('store::attribute.address_ar'),
             'phone'      => __('store::attribute.phone'),
             'image'      => __('store::attribute.image'),
-            'lat'        => __('store::attribute.lat'),
-            'long'       => __('store::attribute.long'),
+            'country_id' => __('store::attribute.country_id'),
+            'city_id'    => __('store::attribute.city_id'),
+            'zone_id'    => __('store::attribute.zone_id'),
+            'latitude'   => __('store::attribute.latitude'),
+            'longitude'  => __('store::attribute.longitude'),
         ];
     }
 
@@ -79,8 +85,17 @@ class StoreRequest extends FormRequest
             'image.mimes'       => __('store::message.image_mimes'),
             'image.max'         => __('store::message.image_max'),
 
-            'lat.string'        => __('store::message.lat_string'),
-            'long.string'       => __('store::message.long_string'),
+            'country_id.integer' => __('store::message.country_id_integer'),
+            'country_id.exists'  => __('store::message.country_id_exists'),
+
+            'city_id.integer' => __('store::message.city_id_integer'),
+            'city_id.exists'  => __('store::message.city_id_exists'),
+
+            'zone_id.integer' => __('store::message.zone_id_integer'),
+            'zone_id.exists'  => __('store::message.zone_id_exists'),
+
+            'latitude.numeric'   => __('store::message.latitude_numeric'),
+            'longitude.numeric'  => __('store::message.longitude_numeric'),
         ];
     }
 }

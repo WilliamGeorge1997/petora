@@ -2,33 +2,27 @@
 
 namespace Modules\Country\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Country\DTOs\CityDto;
 use Modules\Country\Http\Requests\CityRequest;
 use Modules\Country\Models\City;
-use Modules\Country\Models\Country;
 use Modules\Country\Services\CityService;
+use Modules\Country\ViewModels\CityViewModel;
 use Illuminate\Support\Facades\Gate;
 
-class CityController implements HasMiddleware
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-country|Create-country|Edit-country|Delete-country', only: ['index', 'store'])]
+#[Middleware('permission:Create-country', only: ['create', 'store'])]
+#[Middleware('permission:Edit-country', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-country', only: ['destroy'])]
+class CityController extends Controller
 {
     public function __construct(private CityService $cityService) {}
-
-    public static function middleware(): array
-    {
-        return [
-            'auth:admin',
-            new Middleware('permission:Index-country|Create-country|Edit-country|Delete-country', only: ['index', 'store']),
-            new Middleware('permission:Create-country', only: ['create', 'store']),
-            new Middleware('permission:Edit-country', only: ['edit', 'update', 'activate']),
-            new Middleware('permission:Delete-country', only: ['destroy']),
-        ];
-    }
 
     public function index(Request $request): View|JsonResponse
     {
@@ -42,8 +36,8 @@ class CityController implements HasMiddleware
 
     public function create()
     {
-        $countries = Country::active()->get();
-        return view('country::city.create', compact('countries'));
+        $viewModel = new CityViewModel();
+        return view('country::city.create', compact('viewModel'));
     }
 
     public function store(CityRequest $request)
@@ -56,8 +50,8 @@ class CityController implements HasMiddleware
     public function edit(City $city)
     {
         Gate::authorize('update', $city);
-        $countries = Country::active()->get();
-        return view('country::city.edit', compact('city', 'countries'));
+        $viewModel = new CityViewModel();
+        return view('country::city.edit', compact('city', 'viewModel'));
     }
 
     public function update(CityRequest $request, City $city)
@@ -82,5 +76,11 @@ class CityController implements HasMiddleware
             $city->is_active ?  __('country::message.activated') :  __('country::message.deactivated'),
             $city
         );
+    }
+
+    public function ajax(Request $request)
+    {
+        $cities = $this->cityService->findBy($request->column, $request->value, $request->all());
+        return success(true, __('country::message.fetched'), $cities);
     }
 }

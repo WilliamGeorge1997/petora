@@ -19,7 +19,7 @@ return [
     'home' => 'الرئيسية',
     'actions' => 'العمليات',
     'search' => 'بحث',
-    'reset' => 'إعادة ضبط',
+    'reset' => 'إعادة تعيين',
     'create' => 'إضافة',
     'update' => 'تحديث',
     'delete' => 'حذف',
@@ -27,6 +27,9 @@ return [
     'cant_revert' => 'لا يمكنك التراجع عن هذا الإجراء.',
     'yes_delete' => 'نعم، احذف',
     'cancel' => 'إلغاء',
+    'select_status' => 'اختر الحالة',
     'select_country' => 'اختر الدولة',
     'select_city' => 'اختر المدينة',
+    'active' => 'مفعل',
+    'inactive' => 'غير مفعل',
 ];

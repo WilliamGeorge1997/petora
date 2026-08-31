@@ -15,31 +15,37 @@ readonly class StoreDto
         public ?array $address = null,
         public ?array $description = null,
         public ?UploadedFile $image = null,
-        public ?string $lat = null,
-        public ?string $long = null,
+        public ?int $countryId = null,
+        public ?int $cityId = null,
+        public ?int $zoneId = null,
+        public ?string $latitude = null,
+        public ?string $longitude = null,
     ) {}
 
     public static function fromRequest(StoreRequest $request): self
     {
         return new self(
-            companyId: $request->input('company_id'),
+            companyId: $request->validated('company_id'),
             title: [
-                'en' => $request->input('title_en'),
-                'ar' => $request->input('title_ar'),
+                'en' => $request->validated('title_en'),
+                'ar' => $request->validated('title_ar'),
             ],
             isActive: $request->boolean('is_active'),
-            phone: $request->input('phone'),
-            address: ($request->input('address_en') || $request->input('address_ar')) ? [
-                'en' => $request->input('address_en'),
-                'ar' => $request->input('address_ar'),
+            phone: $request->validated('phone'),
+            address: ($request->validated('address_en') || $request->validated('address_ar')) ? [
+                'en' => $request->validated('address_en'),
+                'ar' => $request->validated('address_ar'),
             ] : null,
-            description: ($request->input('description_en') || $request->input('description_ar')) ? [
-                'en' => $request->input('description_en'),
-                'ar' => $request->input('description_ar'),
+            description: ($request->validated('description_en') || $request->validated('description_ar')) ? [
+                'en' => $request->validated('description_en'),
+                'ar' => $request->validated('description_ar'),
             ] : null,
             image: $request->hasFile('image') ? $request->file('image') : null,
-            lat: $request->input('lat'),
-            long: $request->input('long'),
+            countryId: $request->validated('country_id'),
+            cityId: $request->validated('city_id'),
+            zoneId: $request->validated('zone_id'),
+            latitude: $request->validated('latitude'),
+            longitude: $request->validated('longitude'),
         );
     }
 
@@ -53,8 +59,11 @@ readonly class StoreDto
             'description' => $this->description,
             'is_active' => $this->isActive,
             'image' => $this->image,
-            'lat' => $this->lat,
-            'long' => $this->long,
+            'country_id' => $this->countryId,
+            'city_id' => $this->cityId,
+            'zone_id' => $this->zoneId,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
         ];
 
         if (is_null($this->image)) {

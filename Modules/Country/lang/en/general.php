@@ -27,6 +27,9 @@ return [
     'cant_revert' => 'You cannot revert this action.',
     'yes_delete' => 'Yes, Delete',
     'cancel' => 'Cancel',
+    'select_status' => 'Select Status',
     'select_country' => 'Select Country',
     'select_city' => 'Select City',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
 ];

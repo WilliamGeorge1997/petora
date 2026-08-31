@@ -2,11 +2,11 @@
 
 namespace Modules\Category\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Category\DTOs\CategoryDto;
 use Modules\Category\Http\Requests\CategoryRequest;
@@ -14,21 +14,16 @@ use Modules\Category\Models\Category;
 use Modules\Category\Services\CategoryService;
 use Illuminate\Support\Facades\Gate;
 
-class CategoryController implements HasMiddleware
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-category|Create-category|Edit-category|Delete-category', only: ['index', 'store'])]
+#[Middleware('permission:Create-category', only: ['create', 'store'])]
+#[Middleware('permission:Edit-category', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-category', only: ['destroy'])]
+class CategoryController extends Controller
 {
     public function __construct(private CategoryService $categoryService) {}
 
-    public static function middleware(): array
-    {
-        return [
-            'auth:admin',
-            new Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update']),
-            new Middleware('permission:Index-category|Create-category|Edit-category|Delete-category', only: ['index', 'store']),
-            new Middleware('permission:Create-category', only: ['create', 'store']),
-            new Middleware('permission:Edit-category', only: ['edit', 'update', 'activate']),
-            new Middleware('permission:Delete-category', only: ['destroy']),
-        ];
-    }
+
 
     public function index(Request $request): View|JsonResponse
     {

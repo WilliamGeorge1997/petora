@@ -21,8 +21,11 @@ class ClinicRequest extends FormRequest
             'address_ar' => ['nullable', 'string'],
             'phone'      => ['nullable', 'string'],
             'image'      => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:2048'],
-            'lat'        => ['nullable', 'string'],
-            'long'       => ['nullable', 'string'],
+            'country_id' => ['nullable', 'integer', 'exists:countries,id'],
+            'city_id'    => ['nullable', 'integer', 'exists:cities,id'],
+            'zone_id'    => ['nullable', 'integer', 'exists:zones,id'],
+            'latitude'   => ['nullable', 'numeric'],
+            'longitude'  => ['nullable', 'numeric'],
         ];
     }
 
@@ -46,8 +49,11 @@ class ClinicRequest extends FormRequest
             'address_ar' => __('clinic::attribute.address_ar'),
             'phone'      => __('clinic::attribute.phone'),
             'image'      => __('clinic::attribute.image'),
-            'lat'        => __('clinic::attribute.lat'),
-            'long'       => __('clinic::attribute.long'),
+            'country_id' => __('clinic::attribute.country_id'),
+            'city_id'    => __('clinic::attribute.city_id'),
+            'zone_id'    => __('clinic::attribute.zone_id'),
+            'latitude'   => __('clinic::attribute.latitude'),
+            'longitude'  => __('clinic::attribute.longitude'),
         ];
     }
 
@@ -73,8 +79,17 @@ class ClinicRequest extends FormRequest
             'image.mimes'       => __('clinic::message.image_mimes'),
             'image.max'         => __('clinic::message.image_max'),
 
-            'lat.string'        => __('clinic::message.lat_string'),
-            'long.string'       => __('clinic::message.long_string'),
+            'country_id.integer' => __('clinic::message.country_id_integer'),
+            'country_id.exists'  => __('clinic::message.country_id_exists'),
+
+            'city_id.integer' => __('clinic::message.city_id_integer'),
+            'city_id.exists'  => __('clinic::message.city_id_exists'),
+
+            'zone_id.integer' => __('clinic::message.zone_id_integer'),
+            'zone_id.exists'  => __('clinic::message.zone_id_exists'),
+
+            'latitude.numeric'   => __('clinic::message.latitude_numeric'),
+            'longitude.numeric'  => __('clinic::message.longitude_numeric'),
         ];
     }
 }

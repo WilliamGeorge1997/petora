@@ -43,9 +43,17 @@
             <form>
                 <div class="row g-2">
                     <div class="col-md-4">
-                        <label class="form-label">{{ __('country::general.search') }}</label>
-                        <input type="text" name="search" class="form-control"
-                            placeholder="{{ __('country::general.search') }}" value="{{ request('search') }}">
+                        <label class="form-label">{{ __('country::attribute.title') }}</label>
+                        <input type="text" name="title" class="form-control"
+                            placeholder="{{ __('country::attribute.title') }}" value="{{ request('title') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">{{ __('country::attribute.is_active') }}</label>
+                        <select name="is_active" class="form-select">
+                            <option value="">{{ __('country::general.select_status') }}</option>
+                            <option value="1" {{ request('is_active') === '1' ? 'selected' : '' }}>{{ __('country::general.active') }}</option>
+                            <option value="0" {{ request('is_active') === '0' ? 'selected' : '' }}>{{ __('country::general.inactive') }}</option>
+                        </select>
                     </div>
                     <div class="col-md-4 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary me-1">{{ __('country::general.search') }}</button>
@@ -68,8 +76,7 @@
                                 <th></th>
                                 <th></th>
                                 <th>{{ __('country::attribute.id') }}</th>
-                                <th>{{ __('country::attribute.title_en') }}</th>
-                                <th>{{ __('country::attribute.title_ar') }}</th>
+                                <th>{{ __('country::attribute.title') }}</th>
                                 <th>{{ __('country::attribute.is_active') }}</th>
                                 <th></th>
                             </tr>
@@ -90,11 +97,13 @@
             'use strict';
             var token = $('meta[name="csrf-token"]').attr('content');
             var url = new URL(window.location.href);
-            var page = url.searchParams.get("page")
-            var search = url.searchParams.get("search")
+            var page = url.searchParams.get("page");
+            var title = url.searchParams.get("title");
+            var is_active = url.searchParams.get("is_active");
             var ajaxRequest = "countries?";
             if (page != null) ajaxRequest += "page=" + page + '&';
-            if (search != null) ajaxRequest += "search=" + search + '&';
+            if (title != null) ajaxRequest += "title=" + encodeURIComponent(title) + '&';
+            if (is_active != null) ajaxRequest += "is_active=" + is_active + '&';
             var dt_basic_table = $('.datatables-basic'),
                 dt_date_table = $('.dt-date');
             if (dt_basic_table.length) {
@@ -110,9 +119,6 @@
                         {
                             data: 'id'
                         }, // used for sorting so will hide this column
-                        {
-                            data: 'title'
-                        },
                         {
                             data: 'title'
                         },
@@ -153,19 +159,12 @@
                             visible: false
                         },
                         {
-                            // Title EN
+                            // Title
                             targets: 3,
                             responsivePriority: 4,
                             render: function(data, type, full, meta) {
-                                return data.en;
-                            }
-                        },
-                        {
-                            // Title AR
-                            targets: 4,
-                            responsivePriority: 4,
-                            render: function(data, type, full, meta) {
-                                return data.ar;
+                                var locale = '{{ $locale }}';
+                                return data[locale] ?? data['ar'] ?? data;
                             }
                         },
                         {
@@ -244,7 +243,8 @@
                             display: $.fn.dataTable.Responsive.display.modal({
                                 header: function(row) {
                                     var data = row.data();
-                                    return 'Details of ' + data['title']['en'];
+                                    var locale = '{{ $locale }}';
+                                    return 'Details of ' + (data['title'][locale] ?? data['title']['ar'] ?? data['title']);
                                 }
                             }),
                             type: 'column',

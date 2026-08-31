@@ -50,9 +50,9 @@
                     <div class="col-md-3">
                         <label class="form-label">{{ __('clinic::attribute.is_active') }}</label>
                         <select name="is_active" class="form-select">
-                            <option value="">{{ __('clinic::general.select_status') ?? 'الكل' }}</option>
-                            <option value="1" {{ request('is_active') === '1' ? 'selected' : '' }}>مفعل</option>
-                            <option value="0" {{ request('is_active') === '0' ? 'selected' : '' }}>غير مفعل</option>
+                            <option value="">{{ __('clinic::general.select_status') }}</option>
+                            <option value="1" {{ request('is_active') === '1' ? 'selected' : '' }}>{{ __('clinic::general.active') }}</option>
+                            <option value="0" {{ request('is_active') === '0' ? 'selected' : '' }}>{{ __('clinic::general.inactive') }}</option>
                         </select>
                     </div>
                     <div class="col-md-4 d-flex align-items-end">
@@ -172,32 +172,22 @@
                             targets: 3,
                             responsivePriority: 4,
                             render: function(data, type, full, meta) {
-                                console.log(data);
-
                                 var $user_img = full['image'],
-                                    $name = data.{{ $locale }};
+                                    $name = data['{{ $locale }}'] ?? data['ar'] ?? data;
                                 if ($user_img) {
-                                    // $user_img = window.location.origin+'/uploads/package/'+$user_img;
-                                    // For Avatar image
                                     var $output =
                                         '<img src="' + $user_img +
                                         '" alt="Avatar" width="32" height="32">';
                                 } else {
-                                    // For Avatar badge
                                     var stateNum = full['is_active'];
                                     var states = ['info', 'primary'];
                                     var $state = states[stateNum],
-                                        // $name = full['name'],
                                         $initials = $name.match(/\b\w/g) || [];
-                                    $initials = (($initials.shift() || '') + ($initials.pop() ||
-                                        '')).toUpperCase();
-                                    $output = '<span class="avatar-content">' + $initials +
-                                        '</span>';
+                                    $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+                                    $output = '<span class="avatar-content">' + $initials + '</span>';
                                 }
 
-                                var colorClass = $user_img === null ? ' bg-light-' + $state + ' ' :
-                                    '';
-                                // Creates full output for row
+                                var colorClass = $user_img === '' ? ' bg-light-' + $state + ' ' : '';
                                 var $row_output =
                                     '<div class="d-flex justify-content-left align-items-center">' +
                                     '<div class="avatar ' +
@@ -270,18 +260,13 @@
                     lengthMenu: [7, 10, 25, 50, 75, 100],
                     bPaginate: false,
                     buttons: [
-                        @can('Create-package')
+                        @can('Create-clinic')
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
                                 }) + '{{ __('clinic::general.create_clinic') }}',
                                 className: 'create-new btn btn-primary',
-                                // attr: {
-                                //     'data-bs-toggle': 'modal',
-                                //     'data-bs-target': '#modals-slide-in'
-                                // },
                                 action: function(e, dt, node, config) {
-                                    //This will send the page to the location specified
                                     window.location.href = './clinics/create';
                                 },
                                 init: function(api, node, config) {
@@ -295,14 +280,15 @@
                             display: $.fn.dataTable.Responsive.display.modal({
                                 header: function(row) {
                                     var data = row.data();
-                                    return 'Details of ' + data['title'];
+                                    var locale = '{{ $locale }}';
+                                    return 'Details of ' + (data['title'][locale] ?? data['title']['ar'] ?? data['title']);
                                 }
                             }),
                             type: 'column',
                             renderer: function(api, rowIdx, columns) {
                                 var data = $.map(columns, function(col, i) {
                                     return col.title !==
-                                        '' // ? Do not show row in modal popup if title is blank (for check box)
+                                        ''
                                         ?
                                         '<tr data-dt-row="' +
                                         col.rowIdx +
@@ -327,7 +313,6 @@
                     },
                     language: {
                         paginate: {
-                            // remove previous & next text from pagination
                             previous: '&nbsp;',
                             next: '&nbsp;'
                         }

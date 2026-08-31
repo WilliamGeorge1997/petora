@@ -7,13 +7,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Country\DTOs\ZoneDto;
 use Modules\Country\Http\Requests\ZoneRequest;
-use Modules\Country\Models\City;
 use Modules\Country\Models\Zone;
 use Modules\Country\Services\ZoneService;
-use Illuminate\Support\Facades\Gate;
+use Modules\Country\ViewModels\ZoneViewModel;
 
 class ZoneController implements HasMiddleware
 {
@@ -42,8 +42,8 @@ class ZoneController implements HasMiddleware
 
     public function create()
     {
-        $cities = City::active()->get();
-        return view('country::zone.create', compact('cities'));
+        $viewModel = new ZoneViewModel();
+        return view('country::zone.create', compact('viewModel'));
     }
 
     public function store(ZoneRequest $request)
@@ -56,8 +56,8 @@ class ZoneController implements HasMiddleware
     public function edit(Zone $zone)
     {
         Gate::authorize('update', $zone);
-        $cities = City::active()->get();
-        return view('country::zone.edit', compact('zone', 'cities'));
+        $viewModel = new ZoneViewModel();
+        return view('country::zone.edit', compact('zone', 'viewModel'));
     }
 
     public function update(ZoneRequest $request, Zone $zone)
@@ -82,5 +82,11 @@ class ZoneController implements HasMiddleware
             $zone->is_active ?  __('country::message.activated') :  __('country::message.deactivated'),
             $zone
         );
+    }
+
+    public function ajax(Request $request)
+    {
+        $zones = $this->zoneService->findBy($request->column, $request->value, $request->all());
+        return success(true, __('country::message.fetched'), $zones);
     }
 }

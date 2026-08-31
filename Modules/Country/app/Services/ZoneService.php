@@ -13,7 +13,7 @@ class ZoneService
 {
     use UploaderHelper;
 
-    public function __construct(private Zone $model) {}
+    protected string $model = Zone::class;
 
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
     {
@@ -33,23 +33,35 @@ class ZoneService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-    protected function resolveModel(int|Zone $zoneOrId): Zone
-    {
-        return $zoneOrId instanceof Zone ? $zoneOrId : $this->findById($zoneOrId);
-    }
-
-    public function findBy(string $column, mixed $value, array $data, array $relations = []): Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']): Collection
+    public function findByConditions(array $conditions, array $data = [], array $relations = []): LengthAwarePaginator|Collection
+    {
+        $query = $this->model::query()->with($relations);
+
+        foreach ($conditions as $column => $value) {
+            $query->where($column, $value);
+        }
+
+        return getCaseCollection($query, $data);
+    }
+
+    protected function resolveModel(int|Zone $zoneOrId): Zone
+    {
+        return $zoneOrId instanceof Zone ? $zoneOrId : $this->findById($zoneOrId);
+    }
+
+
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);
     }
-    
+
     public function save(ZoneDto $dto): Zone
     {
         $data = $dto->toArray();

@@ -2,28 +2,22 @@
 
 namespace Modules\Admin\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Modules\Admin\DTOs\AdminDto;
 use Modules\Admin\Services\AdminService;
 use Modules\Admin\Services\RoleService;
 use Modules\Admin\ViewModel\AdminViewModel;
 
-class AdminController implements HasMiddleware
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-admin|Create-admin|Edit-admin|Delete-admin', only: ['index', 'store'])]
+#[Middleware('permission:Create-admin', only: ['create', 'store'])]
+#[Middleware('permission:Edit-admin', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-admin', only: ['destroy'])]
+class AdminController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            'auth:admin',
-            new Middleware('permission:Index-admin|Create-admin|Edit-admin|Delete-admin', only: ['index', 'store']),
-            new Middleware('permission:Create-admin', only: ['create', 'store']),
-            new Middleware('permission:Edit-admin', only: ['edit', 'update', 'activate']),
-            new Middleware('permission:Delete-admin', only: ['destroy']),
-        ];
-    }
-
     public function __construct(private AdminService $adminService) {}
 
     /**

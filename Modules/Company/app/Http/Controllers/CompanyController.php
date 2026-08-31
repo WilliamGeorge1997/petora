@@ -2,11 +2,11 @@
 
 namespace Modules\Company\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Company\DTOs\CompanyDto;
 use Modules\Company\Http\Requests\CompanyRequest;
@@ -14,21 +14,14 @@ use Modules\Company\Models\Company;
 use Modules\Company\Services\CompanyService;
 use Illuminate\Support\Facades\Gate;
 
-class CompanyController implements HasMiddleware
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-company|Create-company|Edit-company|Delete-company', only: ['index', 'store'])]
+#[Middleware('permission:Create-company', only: ['create', 'store'])]
+#[Middleware('permission:Edit-company', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-company', only: ['destroy'])]
+class CompanyController extends Controller
 {
     public function __construct(private CompanyService $companyService) {}
-
-    public static function middleware(): array
-    {
-        return [
-            'auth:admin',
-            new Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update']),
-            new Middleware('permission:Index-company|Create-company|Edit-company|Delete-company', only: ['index', 'store']),
-            new Middleware('permission:Create-company', only: ['create', 'store']),
-            new Middleware('permission:Edit-company', only: ['edit', 'update', 'activate']),
-            new Middleware('permission:Delete-company', only: ['destroy']),
-        ];
-    }
 
     public function index(Request $request): View|JsonResponse
     {

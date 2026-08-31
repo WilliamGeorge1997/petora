@@ -465,3 +465,8 @@ textarea.form-control {
   flex-direction: column;
   gap: 10px;
 }
+
+.map-picker-container {
+  height: 320px;
+  width: 100%;
+}

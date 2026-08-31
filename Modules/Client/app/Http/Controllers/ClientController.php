@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Client\DTOs\ClientDto;
 use Modules\Client\Http\Requests\ClientRequest;
@@ -15,21 +14,14 @@ use Modules\Client\Models\Client;
 use Modules\Client\Services\ClientService;
 use Illuminate\Support\Facades\Gate;
 
-class ClientController extends Controller implements HasMiddleware
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-client|Create-client|Edit-client|Delete-client', only: ['index', 'store'])]
+#[Middleware('permission:Create-client', only: ['create', 'store'])]
+#[Middleware('permission:Edit-client', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-client', only: ['destroy'])]
+class ClientController extends Controller
 {
     public function __construct(private ClientService $clientService) {}
-
-    public static function middleware(): array
-    {
-        return [
-            'auth:admin',
-            new Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update']),
-            new Middleware('permission:Index-client|Create-client|Edit-client|Delete-client', only: ['index', 'store']),
-            new Middleware('permission:Create-client', only: ['create', 'store']),
-            new Middleware('permission:Edit-client', only: ['edit', 'update', 'activate']),
-            new Middleware('permission:Delete-client', only: ['destroy']),
-        ];
-    }
 
     public function index(Request $request): View|JsonResponse
     {

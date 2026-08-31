@@ -2,6 +2,10 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
+@endsection
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
@@ -35,25 +39,6 @@
                             </div>
                         </div>
 
-                        {{-- Description ar --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="description_ar">{{ __('clinic::attribute.description_ar') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="file-text"></i></span>
-                                        <textarea class="form-control" name="description_ar" placeholder="{{ __('clinic::attribute.description_ar') }}">{{ $clinic->getTranslation('description', 'ar', false) }}</textarea>
-                                        @error('description_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         {{-- Title en --}}
                         <div class="col-12">
                             <div class="mb-1 row">
@@ -68,6 +53,25 @@
                                             value="{{ $clinic->getTranslation('title', 'en') }}" class="form-control"
                                             name="title_en" placeholder="{{ __('clinic::attribute.title_en') }}" required />
                                         @error('title_en')
+                                            <p class="alert alert-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Description ar --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="description_ar">{{ __('clinic::attribute.description_ar') }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="file-text"></i></span>
+                                        <textarea class="form-control" name="description_ar" placeholder="{{ __('clinic::attribute.description_ar') }}">{{ $clinic->getTranslation('description', 'ar', false) }}</textarea>
+                                        @error('description_ar')
                                             <p class="alert alert-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -152,30 +156,6 @@
                             </div>
                         </div>
 
-                        {{-- Company --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="company_id">{{ __('clinic::attribute.company_id') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <select class="form-select" name="company_id" id="company_id" required>
-                                        <option value="">{{ __('clinic::attribute.select_company') }}</option>
-                                        @foreach ($viewModel->companies() as $company)
-                                            <option value="{{ $company->id }}"
-                                                {{ $clinic->company_id == $company->id ? 'selected' : '' }}>
-                                                {{ $company->getTranslation('title', $locale) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('company_id')
-                                        <p class="alert alert-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
                         {{-- Image --}}
                         <div class="col-12">
                             <div class="mb-1 row align-items-center">
@@ -194,57 +174,150 @@
                                     </div>
                                 </div>
                                 @if ($clinic->image != null)
-                                    <div class="col-sm-3">
-                                        <div class="images-container  d-flex flex-row flex-wrap"
-                                            style="display: flex !important;margin-right:25%">
-
-                                            <div class="image-container position-relative"
-                                                style="width: 100px; height: 100px;margin: 2px 7px;margin-top:10px">
-                                                <img style="width: 100%; height: 100%" src="{{ asset($clinic->image) }}">
-                                            </div>
+                                    <div class="col-sm-3 text-center">
+                                        <div class="d-flex justify-content-center align-items-center mt-1">
+                                            <img class="img-fluid rounded border" width="100" height="100" src="{{ asset($clinic->image) }}" alt="{{ $clinic->getTranslation('title', $locale) }}">
                                         </div>
                                     </div>
                                 @endif
                             </div>
                         </div>
 
-                        {{-- Lat --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="lat">{{ __('clinic::attribute.lat') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <input type="text" id="lat" value="{{ $clinic->lat }}"
-                                            class="form-control" name="lat"
-                                            placeholder="{{ __('clinic::attribute.lat') }}" required />
-                                        @error('lat')
-                                            <p class="alert alert-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Long --}}
+                        {{-- Country --}}
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="long">{{ __('clinic::attribute.long') }}</label>
+                                        for="country_id">{{ __('clinic::attribute.country_id') ?? 'الدولة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-select select2" name="country_id" id="country_id" required
+                                        data-fetch-url="{{ route('admin.ajax.cities') }}"
+                                        data-ajax-col="country_id"
+                                        data-ajax-target="#city_id"
+                                        data-ajax-child="#zone_id">
+                                        <option value="">{{ __('clinic::attribute.select_country') ?? 'اختر الدولة' }}</option>
+                                        @foreach ($viewModel->countries() as $country)
+                                            <option value="{{ $country->id }}"
+                                                {{ $clinic->country_id == $country->id ? 'selected' : '' }}>
+                                                {{ $country->getTranslation('title', $locale) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('country_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- City --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="city_id">{{ __('clinic::attribute.city_id') ?? 'المدينة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-select select2" name="city_id" id="city_id" required
+                                        data-fetch-url="{{ route('admin.ajax.zones') }}"
+                                        data-ajax-col="city_id"
+                                        data-ajax-target="#zone_id">
+                                        <option value="">{{ __('clinic::attribute.select_city') ?? 'اختر المدينة' }}</option>
+                                        @if($clinic->city_id)
+                                            <option value="{{ $clinic->city_id }}" selected>
+                                                {{ $clinic->city?->getTranslation('title', $locale) }}
+                                            </option>
+                                        @endif
+                                    </select>
+                                    @error('city_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Zone --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="zone_id">{{ __('clinic::attribute.zone_id') ?? 'المنطقة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-select select2" name="zone_id" id="zone_id" required>
+                                        <option value="">{{ __('clinic::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
+                                        @if($clinic->zone_id)
+                                            <option value="{{ $clinic->zone_id }}" selected>
+                                                {{ $clinic->zone?->getTranslation('title', $locale) }}
+                                            </option>
+                                        @endif
+                                    </select>
+                                    @error('zone_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Location on Map --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-text"><i data-feather="search"></i></span>
+                                        <input type="text" id="map-search" class="form-control"
+                                            placeholder="{{ __('common::general.search_location') ?? 'ابحث عن موقع أو عنوان...' }}" />
+                                    </div>
+                                    <div id="google-map-picker" class="map-picker-container rounded border"
+                                        data-google-map-picker
+                                        data-lat-input="#latitude"
+                                        data-lng-input="#longitude"
+                                        data-search-input="#map-search"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Latitude --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label" for="latitude">{{ __('clinic::attribute.latitude') ?? 'خط العرض' }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <input type="text" id="long" value="{{ $clinic->long }}"
-                                            class="form-control" name="long"
-                                            placeholder="{{ __('clinic::attribute.long') }}" required />
-                                        @error('long')
-                                            <p class="alert alert-danger">{{ $message }}</p>
-                                        @enderror
+                                        <input type="text" id="latitude" class="form-control" name="latitude"
+                                            placeholder="{{ __('clinic::attribute.latitude') ?? 'خط العرض' }}"
+                                            value="{{ $clinic->latitude }}" readonly />
                                     </div>
+                                    @error('latitude')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Longitude --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="longitude">{{ __('clinic::attribute.longitude') ?? 'خط الطول' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
+                                        <input type="text" id="longitude" class="form-control" name="longitude"
+                                            placeholder="{{ __('clinic::attribute.longitude') ?? 'خط الطول' }}"
+                                            value="{{ $clinic->longitude }}" readonly />
+                                    </div>
+                                    @error('longitude')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -274,5 +347,20 @@
 @endsection
 
 @section('js')
-    {{-- <script src="//cdn.ckeditor.com/4.16.0/full/ckeditor.js"></script> --}}
+    <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            var select = $('.select2');
+            if (select.length) {
+                select.each(function () {
+                    var $this = $(this);
+                    $this.wrap('<div class="position-relative"></div>');
+                    $this.select2({
+                        placeholder: '...',
+                        dropdownParent: $this.parent()
+                    });
+                });
+            }
+        });
+    </script>
 @endsection

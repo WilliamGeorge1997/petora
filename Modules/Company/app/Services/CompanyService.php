@@ -13,8 +13,7 @@ class CompanyService
 {
     use UploaderHelper;
 
-    public function __construct(private Company $model) {}
-
+    protected string $model = Company::class;
 
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
     {

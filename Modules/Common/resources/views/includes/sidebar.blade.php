@@ -67,11 +67,13 @@
                     <span class="menu-item text-truncate">{{ __('common::sidebar.dashboard') }}</span>
                 </a>
             </li>
+
             <li class="navigation-header">
                 <span>{{ __('common::sidebar.apps_and_pages') }}</span>
                 <i data-feather="more-horizontal"></i>
             </li>
 
+            @can('Index-admin')
             <li class="nav-item {{ Route::is('admin.admins.*', 'admin.users.*') ? 'sidebar-group-active open' : '' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="users"></i>
@@ -86,7 +88,9 @@
                     </li>
                 </ul>
             </li>
+            @endcan
 
+            @canany(['Index-company', 'Index-store'])
             <li
                 class="nav-item {{ Route::is('admin.company.*', 'admin.store.*') ? 'sidebar-group-active open' : '' }}">
                 <a class="d-flex align-items-center" href="#">
@@ -94,28 +98,36 @@
                     <span class="menu-title text-truncate">{{ __('common::sidebar.store_management') }}</span>
                 </a>
                 <ul class="menu-content">
+                    @can('Index-company')
                     <li class="nav-item {{ Route::is('admin.company.*') ? 'active' : '' }}">
                         <a class="d-flex align-items-center" href="{{ route('admin.company.index') }}">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate">{{ __('common::sidebar.companies') }}</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('Index-store')
                     <li class="nav-item {{ Route::is('admin.store.*') ? 'active' : '' }}">
                         <a class="d-flex align-items-center" href="{{ route('admin.store.index') }}">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate">{{ __('store::general.stores') }}</span>
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </li>
+            @endcanany
 
+            @can('Index-clinic')
             <li class="nav-item {{ Route::is('admin.clinic.*') ? 'active' : '' }}">
                 <a class="d-flex align-items-center" href="{{ route('admin.clinic.index') }}">
                     <i data-feather="activity"></i>
                     <span class="menu-item text-truncate">{{ __('clinic::general.clinics') }}</span>
                 </a>
             </li>
+            @endcan
 
+            @can('Index-category')
             <li class="nav-item {{ Route::is('admin.category.*') ? 'sidebar-group-active open' : '' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="grid"></i>
@@ -130,6 +142,42 @@
                     </li>
                 </ul>
             </li>
+            @endcan
+
+            @can('Index-country')
+            <li class="navigation-header">
+                <span>البيانات الاساسية</span>
+                <i data-feather="more-horizontal"></i>
+            </li>
+
+            <li
+                class="nav-item {{ Route::is('admin.countries.*', 'admin.cities.*', 'admin.zones.*') ? 'sidebar-group-active open' : '' }}">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="map"></i>
+                    <span class="menu-title text-truncate">المواقع</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="nav-item {{ Route::is('admin.countries.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.countries.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">الدول</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ Route::is('admin.cities.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.cities.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">المدن</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ Route::is('admin.zones.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.zones.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">المناطق</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endcan
         </ul>
     </div>
 </div>

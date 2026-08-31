@@ -2,32 +2,27 @@
 
 namespace Modules\Country\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
-use Modules\Admin\Enums\AdminRole;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Modules\Country\DTOs\CountryDto;
 use Modules\Country\Http\Requests\CountryRequest;
 use Modules\Country\Models\Country;
 use Modules\Country\Services\CountryService;
 use Illuminate\Support\Facades\Gate;
 
-class CountryController implements HasMiddleware
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-country|Create-country|Edit-country|Delete-country', only: ['index', 'store'])]
+#[Middleware('permission:Create-country', only: ['create', 'store'])]
+#[Middleware('permission:Edit-country', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-country', only: ['destroy'])]
+class CountryController extends Controller
 {
     public function __construct(private CountryService $countryService) {}
 
-    public static function middleware(): array
-    {
-        return [
-            'auth:admin',
-            new Middleware('permission:Index-country|Create-country|Edit-country|Delete-country', only: ['index', 'store']),
-            new Middleware('permission:Create-country', only: ['create', 'store']),
-            new Middleware('permission:Edit-country', only: ['edit', 'update', 'activate']),
-            new Middleware('permission:Delete-country', only: ['destroy']),
-        ];
-    }
+
 
     public function index(Request $request): View|JsonResponse
     {

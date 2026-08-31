@@ -12,7 +12,8 @@ class CityController extends Controller
 
     public function index(Request $request, int $country_id)
     {
-        $cities = $this->cityService->active($request->all());
+        $conditions = ['country_id' => $country_id, 'is_active' => true];
+        $cities = $this->cityService->findByConditions($conditions, $request->all());
         return success(true, __('country::message.fetched'), $cities);
     }
 }

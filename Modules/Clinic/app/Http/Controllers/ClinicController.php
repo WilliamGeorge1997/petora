@@ -2,33 +2,28 @@
 
 namespace Modules\Clinic\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Clinic\DTOs\ClinicDto;
 use Modules\Clinic\Http\Requests\ClinicRequest;
 use Modules\Clinic\Models\Clinic;
 use Modules\Clinic\Services\ClinicService;
+use Modules\Clinic\ViewModels\ClinicViewModel;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 
-class ClinicController implements HasMiddleware
+#[Middleware('auth:admin')]
+#[Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update'])]
+#[Middleware('permission:Index-clinic|Create-clinic|Edit-clinic|Delete-clinic', only: ['index', 'store'])]
+#[Middleware('permission:Create-clinic', only: ['create', 'store'])]
+#[Middleware('permission:Edit-clinic', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-clinic', only: ['destroy'])]
+class ClinicController extends Controller
 {
     public function __construct(private ClinicService $clinicService) {}
-
-    public static function middleware(): array
-    {
-        return [
-            'auth:admin',
-            new Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update']),
-            new Middleware('permission:Index-clinic|Create-clinic|Edit-clinic|Delete-clinic', only: ['index', 'store']),
-            new Middleware('permission:Create-clinic', only: ['create', 'store']),
-            new Middleware('permission:Edit-clinic', only: ['edit', 'update', 'activate']),
-            new Middleware('permission:Delete-clinic', only: ['destroy']),
-        ];
-    }
 
     public function index(Request $request): View|JsonResponse
     {
@@ -42,7 +37,8 @@ class ClinicController implements HasMiddleware
 
     public function create()
     {
-        return view('clinic::clinics.create');
+        $viewModel = new ClinicViewModel();
+        return view('clinic::clinics.create', compact('viewModel'));
     }
 
     public function store(ClinicRequest $request)
@@ -55,7 +51,8 @@ class ClinicController implements HasMiddleware
     public function edit(Clinic $clinic)
     {
         Gate::authorize('update', $clinic);
-        return view('clinic::clinics.edit', compact('clinic'));
+        $viewModel = new ClinicViewModel();
+        return view('clinic::clinics.edit', compact('clinic', 'viewModel'));
     }
 
     public function update(ClinicRequest $request, Clinic $clinic)

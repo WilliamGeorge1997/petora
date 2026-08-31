@@ -3,6 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\Country\Models\City;
+use Modules\Country\Models\Country;
+use Modules\Country\Models\Zone;
 
 return new class extends Migration
 {
@@ -18,6 +21,9 @@ return new class extends Migration
             $table->json('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('image')->nullable();
+            $table->foreignIdFor(Country::class)->nullable()->index()->constrained()->nullOnDelete();
+            $table->foreignIdFor(City::class)->nullable()->index()->constrained()->nullOnDelete();
+            $table->foreignIdFor(Zone::class)->nullable()->index()->constrained()->nullOnDelete();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->boolean('is_active')->default(true);

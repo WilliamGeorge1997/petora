@@ -74,7 +74,6 @@
                             </div>
                         </div>
 
-
                         {{-- Description en --}}
                         <div class="col-12">
                             <div class="mb-1 row">
@@ -196,41 +195,131 @@
                             </div>
                         </div>
 
-                        {{-- Lat --}}
+                        {{-- Country --}}
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="lat">{{ __('store::attribute.lat') }}</label>
+                                    <label class="col-form-label"
+                                        for="country_id">{{ __('store::attribute.country_id') ?? 'الدولة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <input type="text" id="lat" class="form-control" name="lat"
-                                            placeholder="{{ __('store::attribute.lat') }}"
-                                            value="{{ old('lat') }}" />
-                                    </div>
-                                    @error('lat')
+                                    <select class="form-select" name="country_id" id="country_id" required
+                                        data-fetch-url="{{ route('admin.ajax.cities') }}"
+                                        data-ajax-col="country_id"
+                                        data-ajax-target="#city_id"
+                                        data-ajax-child="#zone_id">
+                                        <option value="">
+                                            {{ __('store::attribute.select_country') ?? 'اختر الدولة' }}</option>
+                                        @foreach ($viewModel->countries() as $country)
+                                            <option value="{{ $country->id }}"
+                                                {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                                {{ $country->getTranslation('title', $locale) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('country_id')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Long --}}
+                        {{-- City --}}
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="long">{{ __('store::attribute.long') }}</label>
+                                        for="city_id">{{ __('store::attribute.city_id') ?? 'المدينة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="city_id" id="city_id" required disabled
+                                        data-fetch-url="{{ route('admin.ajax.zones') }}"
+                                        data-ajax-col="city_id"
+                                        data-ajax-target="#zone_id">
+                                        <option value="">{{ __('store::attribute.select_city') ?? 'اختر المدينة' }}</option>
+                                    </select>
+                                    @error('city_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Zone --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="zone_id">{{ __('store::attribute.zone_id') ?? 'المنطقة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="zone_id" id="zone_id" required disabled>
+                                        <option value="">{{ __('store::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
+                                    </select>
+                                    @error('zone_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Location on Map --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-text"><i data-feather="search"></i></span>
+                                        <input type="text" id="map-search" class="form-control"
+                                            placeholder="{{ __('common::general.search_location') ?? 'ابحث عن موقع أو عنوان...' }}" />
+                                    </div>
+                                    <div id="google-map-picker" class="map-picker-container rounded border"
+                                        data-google-map-picker
+                                        data-lat-input="#latitude"
+                                        data-lng-input="#longitude"
+                                        data-search-input="#map-search"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Latitude --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="latitude">{{ __('store::attribute.latitude') ?? 'خط العرض' }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <input type="text" id="long" class="form-control" name="long"
-                                            placeholder="{{ __('store::attribute.long') }}"
-                                            value="{{ old('long') }}" />
+                                        <input type="text" id="latitude" class="form-control" name="latitude"
+                                            placeholder="{{ __('store::attribute.latitude') ?? 'خط العرض' }}"
+                                            value="{{ old('latitude') }}" />
                                     </div>
-                                    @error('long')
+                                    @error('latitude')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Longitude --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="longitude">{{ __('store::attribute.longitude') ?? 'خط الطول' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
+                                        <input type="text" id="longitude" class="form-control" name="longitude"
+                                            placeholder="{{ __('store::attribute.longitude') ?? 'خط الطول' }}"
+                                            value="{{ old('longitude') }}" />
+                                    </div>
+                                    @error('longitude')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -259,4 +348,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    {{-- <script src="//cdn.ckeditor.com/4.16.0/full/ckeditor.js"></script> --}}
 @endsection

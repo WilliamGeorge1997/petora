@@ -86,3 +86,40 @@ if (!function_exists('getSettings')) {
         return Setting::whereIn('key', $keys)->pluck('value', 'key')->toArray();
     }
 }
+
+if (!function_exists('haversineSql')) {
+    function haversineSql(string $latitudeColumn = 'latitude', string $longitudeColumn = 'longitude'): string
+    {
+        return "( 
+            6371 * acos( 
+                cos( radians(?) ) * 
+                cos( radians( {$latitudeColumn} ) ) * 
+                cos( radians( {$longitudeColumn} ) - radians(?) ) + 
+                sin( radians(?) ) * 
+                sin( radians( {$latitudeColumn} ) ) 
+            ) 
+        )";
+    }
+}
+
+if (!function_exists('nearest')) {
+    function nearest(
+        Builder $query,
+        float|string $latitude,
+        float|string $longitude,
+        float|int|string|null $radius = null,
+        string $latitudeColumn = 'latitude',
+        string $longitudeColumn = 'longitude'
+    ): Builder {
+
+        $radius = $radius ?? 50;
+        $sql = haversineSql($latitudeColumn, $longitudeColumn);
+        
+        return $query->whereNotNull($latitudeColumn)
+            ->whereNotNull($longitudeColumn)
+            ->selectRaw("*, $sql AS distance", [$latitude, $longitude, $latitude])
+            ->having('distance', '<=', $radius)
+            ->orderBy('distance');
+            
+    }
+}

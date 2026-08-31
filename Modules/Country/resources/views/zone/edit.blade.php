@@ -71,7 +71,7 @@
                                 <div class="col-sm-9">
                                     <select class="select2 form-select" name="city_id" id="city_id" required>
                                         <option value="">{{ __('country::general.select_city') }}</option>
-                                        @foreach ($cities as $city)
+                                        @foreach ($viewModel->cities() as $city)
                                             <option value="{{ $city->id }}"
                                                 {{ $zone->city_id == $city->id ? 'selected' : '' }}>
                                                 {{ $city->getTranslation('title', $locale) }}

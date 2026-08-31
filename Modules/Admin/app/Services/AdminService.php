@@ -26,13 +26,13 @@ class AdminService
         return $this->model->with($relations)->findOrFail($id);
     }
 
-    public function findBy(string $key, mixed $value, array $data,  array $relations = []): Collection
+    public function findBy(string $key, mixed $value, array $data,  array $relations = []):  LengthAwarePaginator|Collection
     {
         $query = $this->model->query()->with($relations)->where($key, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], $relations = []): Collection
+    public function active(array $data = [], $relations = []):  LengthAwarePaginator|Collection
     {
         $query = $this->model->query()->with($relations)->active();
         return getCaseCollection($query, $data);

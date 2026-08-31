@@ -18,12 +18,7 @@ class StoreService
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
     {
         $query = $this->model::query()->with($relations)
-            ->when($data['title'] ?? null, function (Builder $query) use ($data) {
-                return $query->whereJsonContainsLocales('title', ['en', 'ar'], "%{$data['title']}%", 'LIKE');
-            })
-            ->when(isset($data['is_active']) && $data['is_active'] !== '', function (Builder $query) use ($data) {
-                return $query->where('is_active', (bool) $data['is_active']);
-            })
+            ->filter($data)
             ->latest('id');
         return getCaseCollection($query, $data);
     }
@@ -38,13 +33,13 @@ class StoreService
         return $storeOrId instanceof Store ? $storeOrId : $this->findById($storeOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []): Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']): Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);

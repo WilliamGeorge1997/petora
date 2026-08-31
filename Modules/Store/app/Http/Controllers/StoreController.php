@@ -2,11 +2,11 @@
 
 namespace Modules\Store\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Store\DTOs\StoreDto;
 use Modules\Store\Http\Requests\StoreRequest;
@@ -15,21 +15,15 @@ use Modules\Store\Services\StoreService;
 use Illuminate\Support\Facades\Gate;
 use Modules\Store\ViewModels\StoreViewModel;
 
-class StoreController implements HasMiddleware
+#[Middleware('auth:admin')]
+#[Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update'])]
+#[Middleware('permission:Index-store|Create-store|Edit-store|Delete-store', only: ['index', 'store'])]
+#[Middleware('permission:Create-store', only: ['create', 'store'])]
+#[Middleware('permission:Edit-store', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-store', only: ['destroy'])]
+class StoreController extends Controller
 {
     public function __construct(private StoreService $storeService) {}
-
-    public static function middleware(): array
-    {
-        return [
-            'auth:admin',
-            new Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update']),
-            new Middleware('permission:Index-store|Create-store|Edit-store|Delete-store', only: ['index', 'store']),
-            new Middleware('permission:Create-store', only: ['create', 'store']),
-            new Middleware('permission:Edit-store', only: ['edit', 'update', 'activate']),
-            new Middleware('permission:Delete-store', only: ['destroy']),
-        ];
-    }
 
     public function index(Request $request): View|JsonResponse
     {

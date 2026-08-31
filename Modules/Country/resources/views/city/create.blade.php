@@ -70,7 +70,7 @@
                                 <div class="col-sm-9">
                                     <select class="select2 form-select" name="country_id" id="country_id" required>
                                         <option value="">{{ __('country::general.select_country') }}</option>
-                                        @foreach ($countries as $country)
+                                        @foreach ($viewModel->countries() as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ old('country_id') == $country->id ? 'selected' : '' }}>
                                                 {{ $country->getTranslation('title', $locale) }}

@@ -21,7 +21,9 @@ return [
     'done'          => 'Well Done!',
     'select_status' => 'Select status',
     'home'          => 'Home',
-    'stores'     => 'stores',
+    'stores'        => 'Stores',
     'search'        => 'Search',
     'reset'         => 'Reset',
+    'active'        => 'Active',
+    'inactive'      => 'Inactive',
 ];

@@ -13,7 +13,7 @@ class CountryService
 {
     use UploaderHelper;
 
-    public function __construct(private Country $model) {}
+    protected string $model = Country::class;
 
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
     {
@@ -38,18 +38,18 @@ class CountryService
         return $countryOrId instanceof Country ? $countryOrId : $this->findById($countryOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []): Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']): Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);
     }
-    
+
     public function save(CountryDto $dto): Country
     {
         $data = $dto->toArray();

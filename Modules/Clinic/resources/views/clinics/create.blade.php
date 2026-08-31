@@ -2,6 +2,10 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
+@endsection
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
@@ -9,7 +13,7 @@
                 <h4 class="card-title">{{ __('clinic::general.create_clinic') }}</h4>
             </div>
             <div class="card-body">
-                <form class="form form-horizontal" action="{{ route('admin.clinic.clinic') }}" method="POST"
+                <form class="form form-horizontal" action="{{ route('admin.clinic.store') }}" method="POST"
                     enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="row">
@@ -73,7 +77,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         {{-- Description en --}}
                         <div class="col-12">
@@ -152,30 +155,6 @@
                             </div>
                         </div>
 
-                        {{-- Company --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="company_id">{{ __('clinic::attribute.company_id') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <select class="form-select" name="company_id" id="company_id" required>
-                                        <option value="">{{ __('clinic::attribute.select_company') }}</option>
-                                        @foreach ($viewModel->companies() as $company)
-                                            <option value="{{ $company->id }}"
-                                                {{ old('company_id') == $company->id ? 'selected' : '' }}>
-                                                {{ $company->getTranslation('title', $locale) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('company_id')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
                         {{-- Image --}}
                         <div class="col-12">
                             <div class="mb-1 row">
@@ -196,41 +175,130 @@
                             </div>
                         </div>
 
-                        {{-- Lat --}}
+                        {{-- Country --}}
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="lat">{{ __('clinic::attribute.lat') }}</label>
+                                    <label class="col-form-label"
+                                        for="country_id">{{ __('clinic::attribute.country_id') ?? 'الدولة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <input type="text" id="lat" class="form-control" name="lat"
-                                            placeholder="{{ __('clinic::attribute.lat') }}"
-                                            value="{{ old('lat') }}" />
-                                    </div>
-                                    @error('lat')
+                                    <select class="form-select select2" name="country_id" id="country_id" required
+                                        data-fetch-url="{{ route('admin.ajax.cities') }}"
+                                        data-ajax-col="country_id"
+                                        data-ajax-target="#city_id"
+                                        data-ajax-child="#zone_id">
+                                        <option value="">{{ __('clinic::attribute.select_country') ?? 'اختر الدولة' }}</option>
+                                        @foreach ($viewModel->countries() as $country)
+                                            <option value="{{ $country->id }}"
+                                                {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                                {{ $country->getTranslation('title', $locale) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('country_id')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Long --}}
+                        {{-- City --}}
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="long">{{ __('clinic::attribute.long') }}</label>
+                                        for="city_id">{{ __('clinic::attribute.city_id') ?? 'المدينة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-select select2" name="city_id" id="city_id" required disabled
+                                        data-fetch-url="{{ route('admin.ajax.zones') }}"
+                                        data-ajax-col="city_id"
+                                        data-ajax-target="#zone_id">
+                                        <option value="">{{ __('clinic::attribute.select_city') ?? 'اختر المدينة' }}</option>
+                                    </select>
+                                    @error('city_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Zone --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="zone_id">{{ __('clinic::attribute.zone_id') ?? 'المنطقة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-select select2" name="zone_id" id="zone_id" required disabled>
+                                        <option value="">{{ __('clinic::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
+                                    </select>
+                                    @error('zone_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Location on Map --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-text"><i data-feather="search"></i></span>
+                                        <input type="text" id="map-search" class="form-control"
+                                            placeholder="{{ __('common::general.search_location') ?? 'ابحث عن موقع أو عنوان...' }}" />
+                                    </div>
+                                    <div id="google-map-picker" class="map-picker-container rounded border"
+                                        data-google-map-picker
+                                        data-lat-input="#latitude"
+                                        data-lng-input="#longitude"
+                                        data-search-input="#map-search"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Latitude --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="latitude">{{ __('clinic::attribute.latitude') ?? 'خط العرض' }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <input type="text" id="long" class="form-control" name="long"
-                                            placeholder="{{ __('clinic::attribute.long') }}"
-                                            value="{{ old('long') }}" />
+                                        <input type="text" id="latitude" class="form-control" name="latitude"
+                                            placeholder="{{ __('clinic::attribute.latitude') ?? 'خط العرض' }}"
+                                            value="{{ old('latitude') }}" readonly />
                                     </div>
-                                    @error('long')
+                                    @error('latitude')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Longitude --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="longitude">{{ __('clinic::attribute.longitude') ?? 'خط الطول' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
+                                        <input type="text" id="longitude" class="form-control" name="longitude"
+                                            placeholder="{{ __('clinic::attribute.longitude') ?? 'خط الطول' }}"
+                                            value="{{ old('longitude') }}" readonly />
+                                    </div>
+                                    @error('longitude')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -259,4 +327,23 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            var select = $('.select2');
+            if (select.length) {
+                select.each(function () {
+                    var $this = $(this);
+                    $this.wrap('<div class="position-relative"></div>');
+                    $this.select2({
+                        placeholder: '...',
+                        dropdownParent: $this.parent()
+                    });
+                });
+            }
+        });
+    </script>
 @endsection

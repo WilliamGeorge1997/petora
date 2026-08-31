@@ -3,11 +3,16 @@
 namespace Modules\Store\ViewModels;
 
 use Modules\Company\Services\CompanyService;
-
+use Modules\Country\Services\CountryService;
 class StoreViewModel
 {
-    public function companies(CompanyService $companyService)
+    public function companies()
     {
-        return $companyService->active(columns:['id','title']);
+        return (new CompanyService())->active(columns: ['id', 'title']);
+    }
+
+    public function countries()
+    {
+        return (new CountryService())->active(columns: ['id', 'title']);
     }
 }

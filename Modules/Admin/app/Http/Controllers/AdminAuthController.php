@@ -2,23 +2,17 @@
 
 namespace Modules\Admin\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Modules\Admin\Http\Requests\AdminLoginRequest;
 use Modules\Admin\Models\Admin;
 use Modules\Admin\Services\AdminService;
 
-class AdminAuthController implements HasMiddleware
+#[Middleware('guest:admin', except: ['logout', 'editProfile', 'updateProfile'])]
+class AdminAuthController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('guest:admin', except: ['logout', 'editProfile', 'updateProfile']),
-        ];
-    }
-
     public function showLoginForm()
     {
         return view('admin::login');

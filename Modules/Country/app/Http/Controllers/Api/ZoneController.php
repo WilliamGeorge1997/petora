@@ -10,9 +10,10 @@ class ZoneController extends Controller
 {
     public function __construct(private ZoneService $zoneService) {}
 
-    public function index(Request $request)
+    public function index(Request $request, int $city_id)
     {
-        $zones = $this->zoneService->active($request->all());
+        $conditions = ['city_id'=> $city_id, 'is_active' => true];
+        $zones = $this->zoneService->findByConditions($conditions, $request->all());
         return success(true, __('country::message.fetched'), $zones);
     }
 }

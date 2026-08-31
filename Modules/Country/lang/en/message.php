@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'fetched' => 'Data fetched successfully.',
+    'fetched' => 'Countries fetched successfully.',
     'created' => 'Created successfully.',
     'updated' => 'Updated successfully.',
     'deleted' => 'Deleted successfully.',

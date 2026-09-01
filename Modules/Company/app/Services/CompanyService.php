@@ -5,6 +5,7 @@ namespace Modules\Company\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Company\DTOs\CompanyDto;
 use Modules\Company\Models\Company;
@@ -15,7 +16,7 @@ class CompanyService
 
     protected string $model = Company::class;
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->when($data['title'] ?? null, function (Builder $query) use ($data) {

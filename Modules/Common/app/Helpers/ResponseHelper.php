@@ -67,7 +67,17 @@ if (!function_exists('getCaseCollection')) {
     function getCaseCollection(Builder $builder, array $data, array $columns = ['*'])
     {
         if ($data['paginated'] ?? null) {
-            return $builder->paginate($data['paginated'] ?? 20, $columns);
+            $type = $data['pagination_type'] ?? 'default';
+            $perPage = is_numeric($data['paginated']) ? $data['paginated'] : 50;
+
+            if ($type === 'cursor') {
+                return $builder->cursorPaginate($perPage, $columns);
+            }
+            if ($type === 'simple') {
+                return $builder->simplePaginate($perPage, $columns);
+            }
+
+            return $builder->paginate($perPage, $columns);
         }
         return $builder->get($columns);
     }

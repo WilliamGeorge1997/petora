@@ -44,10 +44,10 @@ class AdminDatabaseSeeder extends Seeder
             ['Edit-admin', 'Admin', 'Edit'],
             ['Delete-admin', 'Admin', 'Delete'],
 
-            ['Index-role', 'Roles', 'Index'],
-            ['Create-role', 'Roles', 'Create'],
-            ['Edit-role', 'Roles', 'Edit'],
-            ['Delete-role', 'Roles', 'Delete'],
+            ['Index-role', 'Role', 'Index'],
+            ['Create-role', 'Role', 'Create'],
+            ['Edit-role', 'Role', 'Edit'],
+            ['Delete-role', 'Role', 'Delete'],
 
             ['Index-country', 'Country', 'Index'],
             ['Create-country', 'Country', 'Create'],

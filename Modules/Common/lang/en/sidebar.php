@@ -9,5 +9,6 @@ return [
     'general_settings' => 'General Settings',
     'store_management' => 'Store Management',
     'product_management' => 'Product Management',
+    'clinic_management' => 'Clinic Management',
     'companies' => 'Companies',
 ];

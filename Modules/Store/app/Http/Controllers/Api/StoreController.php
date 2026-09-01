@@ -12,7 +12,8 @@ class StoreController extends Controller
 
     public function index(Request $request)
     {
-        $stores = $this->storeService->active($request->all());
+        $data = $request->merge(['pagination_type' => 'cursor'])->all();
+        $stores = $this->storeService->active($data);
         return success(true, __('store::message.fetched'), $stores);
     }
 }

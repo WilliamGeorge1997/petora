@@ -28,8 +28,24 @@ $(document).on('change', '[data-fetch-url]', function () {
             var title = typeof item.title === 'object' ? (item.title[locale] || item.title['ar']) : item.title;
             $target.append('<option value="' + item.id + '">' + title + '</option>');
         });
+        
         $target.prop('disabled', false);
+
+        var selectedVal = $target.data('selected');
+        if (selectedVal) {
+            $target.val(selectedVal);
+            $target.removeAttr('data-selected');
+            $target.trigger('change');
+        }
     }).always(function () {
         $spinner.remove();
+    });
+});
+
+$(document).ready(function() {
+    $('[data-fetch-url]').each(function() {
+        if ($(this).val()) {
+            $(this).trigger('change');
+        }
     });
 });

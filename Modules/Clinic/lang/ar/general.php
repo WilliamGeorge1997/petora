@@ -20,6 +20,7 @@ return [
     'id'             => 'ID',
     'done'          => 'أحسنت!',
     'select_status' => 'اختر الحالة',
+    'select_clinic' => 'اختر العيادة',
     'home'          => 'الرئيسية',
     'clinics'        => 'العيادات',
     'search'        => 'بحث',

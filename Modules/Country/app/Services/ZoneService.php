@@ -5,6 +5,7 @@ namespace Modules\Country\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Country\DTOs\ZoneDto;
 use Modules\Country\Models\Zone;
@@ -15,7 +16,7 @@ class ZoneService
 
     protected string $model = Zone::class;
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->when($data['title'] ?? null, function (Builder $query) use ($data) {
@@ -33,13 +34,13 @@ class ZoneService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function findByConditions(array $conditions, array $data = [], array $relations = []): LengthAwarePaginator|Collection
+    public function findByConditions(array $conditions, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations);
 
@@ -56,7 +57,7 @@ class ZoneService
     }
 
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);

@@ -188,7 +188,7 @@
                                         data-ajax-col="country_id"
                                         data-ajax-target="#city_id"
                                         data-ajax-child="#zone_id">
-                                        <option value="">{{ __('clinic::attribute.select_country') ?? 'اختر الدولة' }}</option>
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_country') ?? 'اختر الدولة' }}</option>
                                         @foreach ($viewModel->countries() as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ old('country_id') == $country->id ? 'selected' : '' }}>
@@ -215,7 +215,7 @@
                                         data-fetch-url="{{ route('admin.ajax.zones') }}"
                                         data-ajax-col="city_id"
                                         data-ajax-target="#zone_id">
-                                        <option value="">{{ __('clinic::attribute.select_city') ?? 'اختر المدينة' }}</option>
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_city') ?? 'اختر المدينة' }}</option>
                                     </select>
                                     @error('city_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -233,7 +233,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="zone_id" id="zone_id" required disabled>
-                                        <option value="">{{ __('clinic::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
                                     </select>
                                     @error('zone_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -339,7 +339,6 @@
                     var $this = $(this);
                     $this.wrap('<div class="position-relative"></div>');
                     $this.select2({
-                        placeholder: '...',
                         dropdownParent: $this.parent()
                     });
                 });

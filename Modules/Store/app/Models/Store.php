@@ -92,7 +92,7 @@ class Store extends Model
                 return $value;
             }
 
-            return asset('uploads/store/' . $value);
+            return asset('storage/uploads/store/' . $value);
         }
 
         return $value;

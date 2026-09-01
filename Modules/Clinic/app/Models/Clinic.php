@@ -5,11 +5,14 @@ namespace Modules\Clinic\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Country\Models\City;
 use Modules\Country\Models\Country;
 use Modules\Country\Models\Zone;
-use Spatie\Activitylog\Support\LogOptions;
+use Modules\Doctor\Models\Doctor;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
 
 class Clinic extends Model
@@ -93,7 +96,7 @@ class Clinic extends Model
                 return $value;
             }
 
-            return asset('uploads/clinic/' . $value);
+            return asset('storage/uploads/clinic/' . $value);
         }
 
         return $value;
@@ -101,18 +104,28 @@ class Clinic extends Model
 
 
     //Relations
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
 
-    public function city()
+    public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
     }
 
-    public function zone()
+    public function zone(): BelongsTo
     {
         return $this->belongsTo(Zone::class);
+    }
+
+    public function doctors(): HasMany
+    {
+        return $this->hasMany(Doctor::class);
+    }
+
+    public function activeDoctors(): HasMany
+    {
+        return $this->doctors()->where('is_active', true);
     }
 }

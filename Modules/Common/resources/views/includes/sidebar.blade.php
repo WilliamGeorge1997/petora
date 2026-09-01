@@ -118,31 +118,60 @@
             </li>
             @endcanany
 
-            @can('Index-clinic')
-            <li class="nav-item {{ Route::is('admin.clinic.*') ? 'active' : '' }}">
-                <a class="d-flex align-items-center" href="{{ route('admin.clinic.index') }}">
-                    <i data-feather="activity"></i>
-                    <span class="menu-item text-truncate">{{ __('clinic::general.clinics') }}</span>
-                </a>
-            </li>
-            @endcan
-
-            @can('Index-category')
-            <li class="nav-item {{ Route::is('admin.category.*') ? 'sidebar-group-active open' : '' }}">
+            @canany(['Index-clinic', 'Index-doctor'])
+            <li
+                class="nav-item {{ Route::is('admin.clinic.*', 'admin.doctor.*') ? 'sidebar-group-active open' : '' }}">
                 <a class="d-flex align-items-center" href="#">
-                    <i data-feather="grid"></i>
-                    <span class="menu-title text-truncate">{{ __('common::sidebar.product_management') }}</span>
+                    <i data-feather="activity"></i>
+                    <span class="menu-title text-truncate">{{ __('common::sidebar.clinic_management') ?? 'ادارة العيادات' }}</span>
                 </a>
                 <ul class="menu-content">
+                    @can('Index-clinic')
+                    <li class="nav-item {{ Route::is('admin.clinic.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.clinic.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('clinic::general.clinics') }}</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('Index-doctor')
+                    <li class="nav-item {{ Route::is('admin.doctor.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.doctor.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('doctor::general.doctors') ?? 'الاطباء' }}</span>
+                        </a>
+                    </li>
+                    @endcan
+                </ul>
+            </li>
+            @endcanany
+
+            @canany(['Index-category', 'Index-product'])
+            <li class="nav-item {{ Route::is('admin.category.*', 'admin.product.*') ? 'sidebar-group-active open' : '' }}">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="grid"></i>
+                    <span class="menu-title text-truncate">{{ __('common::sidebar.product_management') ?? 'ادارة المنتجات' }}</span>
+                </a>
+                <ul class="menu-content">
+                    @can('Index-category')
                     <li class="nav-item {{ Route::is('admin.category.*') ? 'active' : '' }}">
                         <a class="d-flex align-items-center" href="{{ route('admin.category.index') }}">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate">{{ __('category::general.categories') }}</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('Index-product')
+                    <li class="nav-item {{ Route::is('admin.product.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.product.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('product::general.products') ?? 'المنتجات' }}</span>
+                        </a>
+                    </li>
+                    @endcan
                 </ul>
             </li>
-            @endcan
+            @endcanany
 
             @can('Index-country')
             <li class="navigation-header">
@@ -178,6 +207,19 @@
                 </ul>
             </li>
             @endcan
+
+            @role(\Modules\Admin\Enums\AdminRole::SuperAdmin->value)
+            <li class="navigation-header">
+                <span>أدوات النظام</span>
+                <i data-feather="more-horizontal"></i>
+            </li>
+            <li class="nav-item">
+                <a class="d-flex align-items-center" href="{{ url('admin/telescope') }}" target="_blank">
+                    <i data-feather="monitor"></i>
+                    <span class="menu-title text-truncate">Telescope</span>
+                </a>
+            </li>
+            @endrole
         </ul>
     </div>
 </div>

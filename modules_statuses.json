@@ -6,5 +6,7 @@
     "Clinic": true,
     "Category": true,
     "Client": true,
-    "Country": true
+    "Country": true,
+    "Product": true,
+    "Doctor": true
 }

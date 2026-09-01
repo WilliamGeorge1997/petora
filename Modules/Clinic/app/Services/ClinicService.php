@@ -5,9 +5,10 @@ namespace Modules\Clinic\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Modules\Common\Helpers\UploaderHelper;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Clinic\DTOs\ClinicDto;
 use Modules\Clinic\Models\Clinic;
+use Modules\Common\Helpers\UploaderHelper;
 
 class ClinicService
 {
@@ -15,7 +16,7 @@ class ClinicService
 
     private string $model = Clinic::class;
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->filter($data)
@@ -33,15 +34,15 @@ class ClinicService
         return $clinicOrId instanceof Clinic ? $clinicOrId : $this->findById($clinicOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->active()->filter($data)->with($relations);
+        $query = $this->model::query()->active()->filter($data)->with($relations)->latest('id');;
         return getCaseCollection($query, $data, $columns);
     }
     

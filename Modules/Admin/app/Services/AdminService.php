@@ -5,6 +5,7 @@ namespace Modules\Admin\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Admin\DTOs\AdminDto;
 use Modules\Admin\Models\Admin;
 use Modules\Common\Helpers\UploaderHelper;
@@ -15,7 +16,7 @@ class AdminService
 
     public function __construct(private Admin $model) {}
 
-    public function findAll(array $data = [], array $relations = []): Collection|LengthAwarePaginator
+    public function findAll(array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model->query()->with($relations)->latest('id');
         return getCaseCollection($query, $data);
@@ -26,13 +27,13 @@ class AdminService
         return $this->model->with($relations)->findOrFail($id);
     }
 
-    public function findBy(string $key, mixed $value, array $data,  array $relations = []):  LengthAwarePaginator|Collection
+    public function findBy(string $key, mixed $value, array $data,  array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model->query()->with($relations)->where($key, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], $relations = []):  LengthAwarePaginator|Collection
+    public function active(array $data = [], $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model->query()->with($relations)->active();
         return getCaseCollection($query, $data);

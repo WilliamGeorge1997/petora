@@ -3,24 +3,24 @@
 return [
     'countries' => 'الدول',
     'country' => 'دولة',
-    'create_country' => 'إضافة دولة',
+    'create_country' => 'إنشاء دولة جديدة',
     'edit_country' => 'تعديل دولة',
 
     'cities' => 'المدن',
     'city' => 'مدينة',
-    'create_city' => 'إضافة مدينة',
+    'create_city' => 'إنشاء مدينة جديدة',
     'edit_city' => 'تعديل مدينة',
 
     'zones' => 'المناطق',
     'zone' => 'منطقة',
-    'create_zone' => 'إضافة منطقة',
+    'create_zone' => 'إنشاء منطقة جديدة',
     'edit_zone' => 'تعديل منطقة',
 
     'home' => 'الرئيسية',
     'actions' => 'العمليات',
     'search' => 'بحث',
     'reset' => 'إعادة تعيين',
-    'create' => 'إضافة',
+    'create' => 'إنشاء',
     'update' => 'تحديث',
     'delete' => 'حذف',
     'sure_delete' => 'هل أنت متأكد من الحذف؟',

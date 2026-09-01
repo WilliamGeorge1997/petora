@@ -177,7 +177,7 @@
                                 var $user_img = full['image'],
                                     $name = data.{{ $locale }};
                                 if ($user_img) {
-                                    // $user_img = window.location.origin+'/uploads/package/'+$user_img;
+                                    // $user_img = window.location.origin+'/uploads/company/'+$user_img;
                                     // For Avatar image
                                     var $output =
                                         '<img src="' + $user_img +
@@ -270,7 +270,7 @@
                     lengthMenu: [7, 10, 25, 50, 75, 100],
                     bPaginate: false,
                     buttons: [
-                        @can('Create-package')
+                        @can('Create-company')
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'

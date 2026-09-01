@@ -54,7 +54,7 @@ class Admin extends Authenticatable
                 return $value;
             }
 
-            return asset('uploads/admin/' . $value);
+            return asset('storage/uploads/admin/' . $value);
         }
 
         return $value;

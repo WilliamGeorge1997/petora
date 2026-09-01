@@ -39,12 +39,12 @@
             <div class="content-header row">
             </div>
             <div class="content-body">
-                @if (session('success'))
+                {{-- @if (session('success'))
                     <x-common::alert type="success" :message="session('success')" />
                 @endif
                 @if (session('error'))
                     <x-common::alert type="danger" :message="session('error')" />
-                @endif
+                @endif --}}
 
                 @yield('content')
 

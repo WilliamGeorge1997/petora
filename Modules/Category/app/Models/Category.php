@@ -56,7 +56,7 @@ class Category extends Model
                 return $value;
             }
 
-            return asset('uploads/category/' . $value);
+            return asset('storage/uploads/category/' . $value);
         }
 
         return $value;

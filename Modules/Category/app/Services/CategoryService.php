@@ -5,9 +5,10 @@ namespace Modules\Category\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Modules\Common\Helpers\UploaderHelper;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Category\DTOs\CategoryDto;
 use Modules\Category\Models\Category;
+use Modules\Common\Helpers\UploaderHelper;
 
 class CategoryService
 {
@@ -15,7 +16,7 @@ class CategoryService
 
     public function __construct(private Category $model) {}
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->when($data['title'] ?? null, function (Builder $query) use ($data) {
@@ -33,13 +34,13 @@ class CategoryService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);

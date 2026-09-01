@@ -68,7 +68,7 @@ class Client extends Authenticatable
                 return $value;
             }
 
-            return asset('uploads/store/' . $value);
+            return asset('storage/uploads/client/' . $value);
         }
 
         return $value;

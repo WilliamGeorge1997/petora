@@ -5,6 +5,7 @@ namespace Modules\Country\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Country\DTOs\CityDto;
 use Modules\Country\Models\City;
@@ -15,7 +16,7 @@ class CityService
 
     protected string $model = City::class;
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->when($data['title'] ?? null, function (Builder $query) use ($data) {
@@ -34,13 +35,13 @@ class CityService
     }
 
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function findByConditions(array $conditions, array $data = [], array $relations = []): LengthAwarePaginator|Collection
+    public function findByConditions(array $conditions, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations);
 
@@ -56,7 +57,7 @@ class CityService
         return $cityOrId instanceof City ? $cityOrId : $this->findById($cityOrId);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);

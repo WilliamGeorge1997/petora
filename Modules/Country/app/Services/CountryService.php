@@ -5,6 +5,7 @@ namespace Modules\Country\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Country\DTOs\CountryDto;
 use Modules\Country\Models\Country;
@@ -15,7 +16,7 @@ class CountryService
 
     protected string $model = Country::class;
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->when($data['title'] ?? null, function (Builder $query) use ($data) {
@@ -38,15 +39,15 @@ class CountryService
         return $countryOrId instanceof Country ? $countryOrId : $this->findById($countryOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->active()->with($relations);
+        $query = $this->model::query()->active()->with($relations)->latest('id');
         return getCaseCollection($query, $data, $columns);
     }
 

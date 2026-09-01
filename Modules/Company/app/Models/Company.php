@@ -61,7 +61,7 @@ class Company extends Model
                 return $value;
             }
 
-            return asset('uploads/company/' . $value);
+            return asset('storage/uploads/company/' . $value);
         }
 
         return $value;

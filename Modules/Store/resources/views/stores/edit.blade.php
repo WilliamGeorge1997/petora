@@ -240,16 +240,12 @@
                                         for="city_id">{{ __('store::attribute.city_id') ?? 'المدينة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select" name="city_id" id="city_id" required
+                                    <select class="form-select" name="city_id" id="city_id" required disabled
                                         data-fetch-url="{{ route('admin.ajax.zones') }}"
                                         data-ajax-col="city_id"
-                                        data-ajax-target="#zone_id">
+                                        data-ajax-target="#zone_id"
+                                        data-selected="{{ $store->city_id }}">
                                         <option value="">{{ __('store::attribute.select_city') ?? 'اختر المدينة' }}</option>
-                                        @if($store->city_id)
-                                            <option value="{{ $store->city_id }}" selected>
-                                                {{ $store->city?->getTranslation('title', $locale) }}
-                                            </option>
-                                        @endif
                                     </select>
                                     @error('city_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -266,13 +262,8 @@
                                         for="zone_id">{{ __('store::attribute.zone_id') ?? 'المنطقة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select" name="zone_id" id="zone_id" required>
+                                    <select class="form-select" name="zone_id" id="zone_id" required disabled data-selected="{{ $store->zone_id }}">
                                         <option value="">{{ __('store::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
-                                        @if($store->zone_id)
-                                            <option value="{{ $store->zone_id }}" selected>
-                                                {{ $store->zone?->getTranslation('title', $locale) }}
-                                            </option>
-                                        @endif
                                     </select>
                                     @error('zone_id')
                                         <p class="text-danger">{{ $message }}</p>

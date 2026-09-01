@@ -2,19 +2,20 @@
 
 namespace Modules\Client\Services;
 
-use Modules\Client\Models\Client;
-use Modules\Common\Helpers\UploaderHelper;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Client\DTOs\ClientDto;
+use Modules\Client\Models\Client;
+use Modules\Common\Helpers\UploaderHelper;
 
 class ClientService
 {
     use UploaderHelper;
     public function __construct(private Client $model) {}
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->when(isset($data['is_active']) && $data['is_active'] !== '', function (Builder $query) use ($data) {
@@ -34,13 +35,13 @@ class ClientService
         return $clientOrId instanceof Client ? $clientOrId : $this->findById($clientOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data = [], array $relations = []):  LengthAwarePaginator|Collection
+    public function findBy(string $column, mixed $value, array $data = [], array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);

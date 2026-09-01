@@ -270,7 +270,7 @@
                     lengthMenu: [7, 10, 25, 50, 75, 100],
                     bPaginate: false,
                     buttons: [
-                        @can('Create-package')
+                        @can('Create-category')
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'

@@ -3,19 +3,18 @@
 namespace Modules\Store\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Store\DTOs\StoreDto;
 use Modules\Store\Models\Store;
-
+use Illuminate\Pagination\CursorPaginator;
 class StoreService
 {
     use UploaderHelper;
 
     public function __construct(private Store $model) {}
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->filter($data)
@@ -33,13 +32,13 @@ class StoreService
         return $storeOrId instanceof Store ? $storeOrId : $this->findById($storeOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);

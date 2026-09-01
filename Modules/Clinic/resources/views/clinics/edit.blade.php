@@ -196,7 +196,7 @@
                                         data-ajax-col="country_id"
                                         data-ajax-target="#city_id"
                                         data-ajax-child="#zone_id">
-                                        <option value="">{{ __('clinic::attribute.select_country') ?? 'اختر الدولة' }}</option>
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_country') ?? 'اختر الدولة' }}</option>
                                         @foreach ($viewModel->countries() as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ $clinic->country_id == $country->id ? 'selected' : '' }}>
@@ -219,16 +219,12 @@
                                         for="city_id">{{ __('clinic::attribute.city_id') ?? 'المدينة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select select2" name="city_id" id="city_id" required
+                                    <select class="form-select select2" name="city_id" id="city_id" required disabled
                                         data-fetch-url="{{ route('admin.ajax.zones') }}"
                                         data-ajax-col="city_id"
-                                        data-ajax-target="#zone_id">
-                                        <option value="">{{ __('clinic::attribute.select_city') ?? 'اختر المدينة' }}</option>
-                                        @if($clinic->city_id)
-                                            <option value="{{ $clinic->city_id }}" selected>
-                                                {{ $clinic->city?->getTranslation('title', $locale) }}
-                                            </option>
-                                        @endif
+                                        data-ajax-target="#zone_id"
+                                        data-selected="{{ $clinic->city_id }}">
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_city') ?? 'اختر المدينة' }}</option>
                                     </select>
                                     @error('city_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -245,13 +241,8 @@
                                         for="zone_id">{{ __('clinic::attribute.zone_id') ?? 'المنطقة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select select2" name="zone_id" id="zone_id" required>
-                                        <option value="">{{ __('clinic::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
-                                        @if($clinic->zone_id)
-                                            <option value="{{ $clinic->zone_id }}" selected>
-                                                {{ $clinic->zone?->getTranslation('title', $locale) }}
-                                            </option>
-                                        @endif
+                                    <select class="form-select select2" name="zone_id" id="zone_id" required disabled data-selected="{{ $clinic->zone_id }}">
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
                                     </select>
                                     @error('zone_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -356,7 +347,6 @@
                     var $this = $(this);
                     $this.wrap('<div class="position-relative"></div>');
                     $this.select2({
-                        placeholder: '...',
                         dropdownParent: $this.parent()
                     });
                 });

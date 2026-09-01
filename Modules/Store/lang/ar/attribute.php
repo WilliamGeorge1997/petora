@@ -23,6 +23,6 @@ return [
     'select_zone' => 'اختر المنطقة',
     'latitude'   => 'خط العرض',
     'longitude'  => 'خط الطول',
-    'is_active'  => 'الحالة',
+    'is_active'  => 'تفعيل',
     'created_at' => 'التاريخ',
 ];

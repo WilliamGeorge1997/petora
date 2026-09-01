@@ -14,7 +14,7 @@ class Setting extends Model
     public function getValueAttribute($value)
     {
         if ($value != null && $value != '' && $this->type == 'file') {
-            return asset('uploads/setting/' . $value);
+            return asset('storage/uploads/setting/' . $value);
         }
         return $value;
     }

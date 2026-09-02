@@ -11,4 +11,7 @@ return [
     'product_management' => 'إدارة المنتجات',
     'clinic_management' => 'إدارة العيادات',
     'companies' => 'الشركات',
+    'basic_data' => 'البيانات الاساسية',
+    'locations' => 'المواقع',
+    'system_tools' => 'أدوات النظام',
 ];

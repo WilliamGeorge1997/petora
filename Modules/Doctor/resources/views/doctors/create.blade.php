@@ -172,17 +172,17 @@
 @section('js')
     <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var select = $('.select2');
-            select.each(function () {
-                var $this = $(this);
-                $this.wrap('<div class="position-relative"></div>');
-                $this.select2({
-                    dropdownAutoWidth: true,
-                    width: '100%',
-                    dropdownParent: $this.parent()
+            if (select.length) {
+                select.each(function () {
+                    var $this = $(this);
+                    $this.wrap('<div class="position-relative"></div>');
+                    $this.select2({
+                        dropdownParent: $this.parent()
+                    });
                 });
-            });
+            }
         });
     </script>
 @endsection

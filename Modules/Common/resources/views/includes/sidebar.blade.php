@@ -175,7 +175,7 @@
 
             @can('Index-country')
             <li class="navigation-header">
-                <span>البيانات الاساسية</span>
+                <span>{{ __('common::sidebar.basic_data') }}</span>
                 <i data-feather="more-horizontal"></i>
             </li>
 
@@ -183,25 +183,25 @@
                 class="nav-item {{ Route::is('admin.countries.*', 'admin.cities.*', 'admin.zones.*') ? 'sidebar-group-active open' : '' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="map"></i>
-                    <span class="menu-title text-truncate">المواقع</span>
+                    <span class="menu-title text-truncate">{{ __('common::sidebar.locations') }}</span>
                 </a>
                 <ul class="menu-content">
                     <li class="nav-item {{ Route::is('admin.countries.*') ? 'active' : '' }}">
                         <a class="d-flex align-items-center" href="{{ route('admin.countries.index') }}">
                             <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">الدول</span>
+                            <span class="menu-item text-truncate">{{ __('country::general.countries') }}</span>
                         </a>
                     </li>
                     <li class="nav-item {{ Route::is('admin.cities.*') ? 'active' : '' }}">
                         <a class="d-flex align-items-center" href="{{ route('admin.cities.index') }}">
                             <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">المدن</span>
+                            <span class="menu-item text-truncate">{{ __('country::general.cities') }}</span>
                         </a>
                     </li>
                     <li class="nav-item {{ Route::is('admin.zones.*') ? 'active' : '' }}">
                         <a class="d-flex align-items-center" href="{{ route('admin.zones.index') }}">
                             <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">المناطق</span>
+                            <span class="menu-item text-truncate">{{ __('country::general.zones') }}</span>
                         </a>
                     </li>
                 </ul>
@@ -210,7 +210,7 @@
 
             @role(\Modules\Admin\Enums\AdminRole::SuperAdmin->value)
             <li class="navigation-header">
-                <span>أدوات النظام</span>
+                <span>{{ __('common::sidebar.system_tools') }}</span>
                 <i data-feather="more-horizontal"></i>
             </li>
             <li class="nav-item">

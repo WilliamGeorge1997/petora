@@ -229,6 +229,14 @@
                                     }) +
                                     '</a>' +
                                     '<div class="dropdown-menu dropdown-menu-end">'
+                                    @can('Edit-clinic')
+                                        +
+                                        '<a href="clinics/' + data + '/products" class="dropdown-item">' +
+                                        feather.icons['box'].toSvg({
+                                                class: 'font-small-4 me-50'
+                                            }) +
+                                            '{{ __('clinic::general.products') ?? 'Products' }}</a>'
+                                    @endcan
                                     @can('Delete-clinic')
                                         +
                                         '<a href="javascript:;" class="dropdown-item delete-record">' +

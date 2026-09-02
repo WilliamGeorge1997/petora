@@ -14,7 +14,7 @@ class CategoryService
 {
     use UploaderHelper;
 
-    public function __construct(private Category $model) {}
+    private string $model = Category::class;
 
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
@@ -34,18 +34,18 @@ class CategoryService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
         return getCaseCollection($query, $data, $columns);
     }
-    
+
     public function save(CategoryDto $dto): Category
     {
         $data = $dto->toArray();
@@ -79,5 +79,20 @@ class CategoryService
     {
         $category->update(['is_active' => !$category->is_active]);
         return $category;
+    }
+
+    //For API
+    public function categoriesHaveProducts(string $sellerType, int $sellerId, $data = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
+    {
+        $type = $sellerType == 'store' ? 'stores' : 'clinics';
+        $query = $this->model::query()->active()->latest('id')
+            ->whereHas('products', function ($q) use ($type, $sellerId) {
+                $q->active()
+                    ->whereHas($type, function ($sq) use ($type, $sellerId) {
+                        $sq->where("$type.id", $sellerId)
+                            ->where('product_sellers.is_active', true);
+                    });
+            });
+        return getCaseCollection($query, $data, $columns);
     }
 }

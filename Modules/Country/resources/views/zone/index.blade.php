@@ -208,7 +208,7 @@
                                     }) +
                                     '</a>' +
                                     '<div class="dropdown-menu dropdown-menu-end">'
-                                    @can('Delete-zone')
+                                    @can('Delete-country')
                                         +
                                         '<a href="javascript:;" class="dropdown-item delete-record">' +
                                         feather.icons['trash-2'].toSvg({
@@ -218,7 +218,7 @@
                                     @endcan +
                                     '</div>' +
                                     '</div>'
-                                    @can('Edit-zone')
+                                    @can('Edit-country')
                                         +
                                         '<a href="zones/' + data +
                                             '/edit" class="item-edit">' +
@@ -239,11 +239,11 @@
                     lengthMenu: [7, 10, 25, 50, 75, 100],
                     bPaginate: false,
                     buttons: [
-                        @can('Create-zone')
+                        @can('Create-country')
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
-                                }) + '{{ __('country::general.create') }}',
+                                }) + '{{ __('country::general.create_zone') }}',
                                 className: 'create-new btn btn-primary',
                                 action: function(e, dt, node, config) {
                                     window.location.href = './zones/create';
@@ -297,7 +297,7 @@
                         }
                     }
                 });
-                $('div.head-label').html('<h6 class="mb-0">{{ __('country::general.zones') }}</h6>');
+                $('div.head-label').html('<h6 class="mb-0">{{ __('country::general.main_data') }}</h6>');
             }
 
             // Toggle Status

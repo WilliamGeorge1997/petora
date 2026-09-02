@@ -9,7 +9,7 @@
                 <h4 class="card-title">{{ __('category::general.create_category') }}</h4>
             </div>
             <div class="card-body">
-                <form class="form form-horizontal" action="{{ route('admin.category.category') }}" method="POST"
+                <form class="form form-horizontal" action="{{ route('admin.category.store') }}" method="POST"
                     enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="row">
@@ -55,126 +55,6 @@
                             </div>
                         </div>
 
-                        {{-- Description ar --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="description_ar">{{ __('category::attribute.description_ar') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="file-text"></i></span>
-                                        <textarea class="form-control" name="description_ar" placeholder="{{ __('category::attribute.description_ar') }}">{{ old('description_ar') }}</textarea>
-                                    </div>
-                                    @error('description_ar')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-
-                        {{-- Description en --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="description_en">{{ __('category::attribute.description_en') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="file-text"></i></span>
-                                        <textarea class="form-control" name="description_en" placeholder="{{ __('category::attribute.description_en') }}">{{ old('description_en') }}</textarea>
-                                    </div>
-                                    @error('description_en')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Address ar --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="address_ar">{{ __('category::attribute.address_ar') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <textarea class="form-control" name="address_ar" placeholder="{{ __('category::attribute.address_ar') }}">{{ old('address_ar') }}</textarea>
-                                    </div>
-                                    @error('address_ar')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Address en --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="address_en">{{ __('category::attribute.address_en') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <textarea class="form-control" name="address_en" placeholder="{{ __('category::attribute.address_en') }}">{{ old('address_en') }}</textarea>
-                                    </div>
-                                    @error('address_en')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Phone --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="phone">{{ __('category::attribute.phone') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="phone"></i></span>
-                                        <input type="text" class="form-control" name="phone"
-                                            placeholder="{{ __('category::attribute.phone') }}"
-                                            value="{{ old('phone') }}" />
-                                    </div>
-                                    @error('phone')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Company --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="company_id">{{ __('category::attribute.company_id') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <select class="form-select" name="company_id" id="company_id" required>
-                                        <option value="">{{ __('category::attribute.select_company') }}</option>
-                                        @foreach ($viewModel->companies() as $company)
-                                            <option value="{{ $company->id }}"
-                                                {{ old('company_id') == $company->id ? 'selected' : '' }}>
-                                                {{ $company->getTranslation('title', $locale) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('company_id')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
 
                         {{-- Image --}}
                         <div class="col-12">
@@ -196,46 +76,6 @@
                             </div>
                         </div>
 
-                        {{-- Lat --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="lat">{{ __('category::attribute.lat') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <input type="text" id="lat" class="form-control" name="lat"
-                                            placeholder="{{ __('category::attribute.lat') }}"
-                                            value="{{ old('lat') }}" />
-                                    </div>
-                                    @error('lat')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Long --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="long">{{ __('category::attribute.long') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
-                                        <input type="text" id="long" class="form-control" name="long"
-                                            placeholder="{{ __('category::attribute.long') }}"
-                                            value="{{ old('long') }}" />
-                                    </div>
-                                    @error('long')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
 
                         {{-- Is Active --}}
                         <div class="col-sm-9 offset-sm-3">

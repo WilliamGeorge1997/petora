@@ -175,13 +175,10 @@
                                 </div>
                                 @if ($company->image != null)
                                     <div class="col-sm-3">
-                                        <div class="images-container  d-flex flex-row flex-wrap"
-                                            style="display: flex !important;margin-right:25%">
-
-                                            <div class="image-container position-relative"
-                                                style="width: 100px; height: 100px;margin: 2px 7px;margin-top:10px">
-                                                <img style="width: 100%; height: 100%"
-                                                    src="{{ asset($company->image) }}">
+                                        <div class="images-container d-flex flex-row flex-wrap me-5">
+                                            <div class="image-container position-relative m-1 mt-2">
+                                                <img class="w-100 h-100 object-fit-cover"
+                                                     src="{{ asset($company->image) }}">
                                             </div>
                                         </div>
                                     </div>

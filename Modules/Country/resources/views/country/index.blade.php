@@ -227,7 +227,7 @@
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
-                                }) + '{{ __('country::general.create') }}',
+                                }) + '{{ __('country::general.create_country') }}',
                                 className: 'create-new btn btn-primary',
                                 action: function(e, dt, node, config) {
                                     window.location.href = './countries/create';
@@ -281,7 +281,7 @@
                         }
                     }
                 });
-                $('div.head-label').html('<h6 class="mb-0">{{ __('country::general.countries') }}</h6>');
+                $('div.head-label').html('<h6 class="mb-0">{{ __('country::general.main_data') }}</h6>');
             }
 
             // Toggle Status

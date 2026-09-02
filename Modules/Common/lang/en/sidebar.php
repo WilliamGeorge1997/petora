@@ -11,4 +11,7 @@ return [
     'product_management' => 'Product Management',
     'clinic_management' => 'Clinic Management',
     'companies' => 'Companies',
+    'basic_data' => 'Basic Data',
+    'locations' => 'Locations',
+    'system_tools' => 'System Tools',
 ];

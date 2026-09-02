@@ -77,6 +77,7 @@
                                 <th></th>
                                 <th>{{ __('product::attribute.id') ?? 'ID' }}</th>
                                 <th>{{ __('product::attribute.title') ?? 'Title' }}</th>
+                                <th>{{ __('product::attribute.category_id') ?? 'Category' }}</th>
                                 <th>{{ __('product::attribute.price') }}</th>
                                 <th>{{ __('product::attribute.created_at') ?? 'Created At' }}</th>
                                 <th>{{ __('product::attribute.is_active') }}</th>
@@ -126,6 +127,9 @@
                             data: 'title'
                         },
                         {
+                            data: 'category'
+                        },
+                        {
                             data: 'price',
                         },
                         {
@@ -153,7 +157,7 @@
                             render: function(data, type, full, meta) {
                                 return (
                                     '<div class="form-check"> <input class="form-check-input dt-checkboxes" type="checkbox" value="" id="checkbox' +
-                                    data +
+                                     data +
                                     '" /><label class="form-check-label" for="checkbox' +
                                     data +
                                     '"></label></div>'
@@ -172,17 +176,21 @@
                             targets: 3,
                             responsivePriority: 4,
                             render: function(data, type, full, meta) {
-                                var $name = data.{{ $locale }};
-                                var stateNum = full['is_active'];
-                                var states = ['info', 'primary'];
-                                var $state = states[stateNum];
-                                var $initials = $name.match(/\b\w/g) || [];
-                                $initials = (($initials.shift() || '') + ($initials.pop() ||
-                                    '')).toUpperCase();
-                                var $output = '<span class="avatar-content">' + $initials +
-                                    '</span>';
+                                var $user_img = full['images'] && full['images'].length > 0 ? full['images'][0]['image'] : null,
+                                    $name = data.{{ $locale }};
+                                if ($user_img) {
+                                    var $output = '<img src="' + $user_img + '" alt="Avatar" width="32" height="32">';
+                                } else {
+                                    var stateNum = full['is_active'];
+                                    var states = ['info', 'primary'];
+                                    var $state = states[stateNum],
+                                        $initials = $name.match(/\b\w/g) || [];
+                                    $initials = (($initials.shift() || '') + ($initials.pop() ||
+                                        '')).toUpperCase();
+                                    $output = '<span class="avatar-content">' + $initials + '</span>';
+                                }
 
-                                var colorClass = ' bg-light-' + $state + ' ';
+                                var colorClass = $user_img === null ? ' bg-light-' + $state + ' ' : '';
                                 // Creates full output for row
                                 var $row_output =
                                     '<div class="d-flex justify-content-left align-items-center">' +
@@ -198,6 +206,18 @@
                                     '</div>' +
                                     '</div>';
                                 return $row_output;
+                            }
+                        },
+                        {
+                            // Category
+                            targets: 4,
+                            responsivePriority: 4,
+                            render: function(data, type, full, meta) {
+                                if (data && data.title) {
+                                    var locale = '{{ $locale }}';
+                                    return data.title[locale] ?? data.title['ar'] ?? data.title;
+                                }
+                                return '';
                             }
                         },
                         {
@@ -277,7 +297,8 @@
                             display: $.fn.dataTable.Responsive.display.modal({
                                 header: function(row) {
                                     var data = row.data();
-                                    return 'Details of ' + data['title'];
+                                    var locale = '{{ $locale }}';
+                                    return 'Details of ' + (data['title'][locale] ?? data['title']['ar'] ?? data['title']);
                                 }
                             }),
                             type: 'column',

@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Category\Http\Controllers\Api\CategoryController as ApiCategoryController;
+use Modules\Category\Http\Controllers\Api\CategoryController;
 
-Route::prefix('v1')->name('api.')->group(function () {
-    Route::get('categories', [ApiCategoryController::class, 'index'])->name('category.index');
-});
+Route::get('stores/{store}/categories', [CategoryController::class, 'index']);

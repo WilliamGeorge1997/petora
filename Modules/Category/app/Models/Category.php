@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Product\Models\Product;
 class Category extends Model
 {
     use HasFactory, HasTranslations, LogsActivity;
@@ -60,5 +61,11 @@ class Category extends Model
         }
 
         return $value;
+    }
+
+    //Relations
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
     }
 }

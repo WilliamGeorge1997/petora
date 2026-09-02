@@ -5,8 +5,13 @@ namespace Modules\Product\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Support\LogOptions;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Modules\Category\Models\Category;
+use Modules\Clinic\Models\Clinic;
+use Modules\Store\Models\Store;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
 
 class Product extends Model
@@ -14,6 +19,7 @@ class Product extends Model
     use HasFactory, HasTranslations, LogsActivity;
 
     protected $fillable = [
+        'category_id',
         'title',
         'description',
         'price',
@@ -55,8 +61,36 @@ class Product extends Model
         $query->when($filters['title'] ?? null, function ($query, $title) {
             $query->whereJsonContainsLocales('title', ['en', 'ar'], "%{$title}%", 'LIKE');
         })
+        ->when($filters['category_id'] ?? null, function ($query, $categoryId) {
+            $query->where('category_id', $categoryId);
+        })
         ->when(isset($filters['is_active']) && $filters['is_active'] !== '', function ($query) use ($filters) {
             $query->where('is_active', (bool) $filters['is_active']);
         });
+    }
+
+    //Relations
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    public function stores(): MorphToMany
+    {
+        return $this->morphedByMany(Store::class, 'sellerable', 'product_sellers')
+            ->withPivot(['price', 'is_active'])
+            ->withTimestamps();
+    }
+
+    public function clinics(): MorphToMany
+    {
+        return $this->morphedByMany(Clinic::class, 'sellerable', 'product_sellers')
+            ->withPivot(['price', 'is_active'])
+            ->withTimestamps();
     }
 }

@@ -3,14 +3,16 @@
 namespace Modules\Product\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
+use Modules\Common\Helpers\UploaderHelper;
 use Modules\Product\DTOs\ProductDto;
 use Modules\Product\Models\Product;
 
 class ProductService
 {
+    use UploaderHelper;
+
     public function __construct(private Product $model) {}
 
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
@@ -45,19 +47,49 @@ class ProductService
 
     public function save(ProductDto $dto): Product
     {
-        return $this->model::create($dto->toArray());
+        $product = $this->model::create($dto->toArray());
+
+        if ($dto->images) {
+            foreach ($dto->images as $image) {
+                $product->images()->create([
+                    'image' => $this->uploadImage($image, 'product'),
+                ]);
+            }
+        }
+
+        return $product;
     }
 
     public function update(int|Product $productOrId, ProductDto $dto): Product
     {
         $product = $this->resolveModel($productOrId);
         $product->update($dto->toArray());
+
+        if ($dto->images) {
+            foreach ($product->images as $oldImage) {
+                $this->deleteImage($oldImage->getRawOriginal('image'), 'product');
+            }
+            $product->images()->delete();
+
+            foreach ($dto->images as $image) {
+                $product->images()->create([
+                    'image' => $this->uploadImage($image, 'product'),
+                ]);
+            }
+        }
+
         return $product;
     }
 
     public function delete(int|Product $productOrId): bool
     {
         $product = $this->resolveModel($productOrId);
+
+        foreach ($product->images as $image) {
+            $this->deleteImage($image->getRawOriginal('image'), 'product');
+        }
+        $product->images()->delete();
+
         return $product->delete();
     }
 
@@ -66,5 +98,18 @@ class ProductService
         $product = $this->resolveModel($productOrId);
         $product->update(['is_active' => !$product->is_active]);
         return $product;
+    }
+
+    //For API
+    public function byCategoryAndSeller(int $categoryId, string $sellerType, int $sellerId, array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
+    {
+        $type = $sellerType == 'store' ? 'stores' : 'clinics';
+        $query = $this->model::query()->with($relations)->active()->latest('id')
+            ->where('category_id', $categoryId)
+            ->withWhereHas($type, function ($q) use ($type, $sellerId) {
+                $q->where("$type.id", $sellerId)
+                    ->where('product_sellers.is_active', true);
+            });
+        return getCaseCollection($query, $data, $columns);
     }
 }

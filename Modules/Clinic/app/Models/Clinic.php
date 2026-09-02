@@ -14,6 +14,8 @@ use Modules\Doctor\Models\Doctor;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
+use Modules\Product\Models\Product;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Clinic extends Model
 {
@@ -124,8 +126,10 @@ class Clinic extends Model
         return $this->hasMany(Doctor::class);
     }
 
-    public function activeDoctors(): HasMany
+    public function products(): MorphToMany
     {
-        return $this->doctors()->where('is_active', true);
+        return $this->morphToMany(Product::class, 'sellerable', 'product_sellers')
+            ->withPivot(['price', 'is_active'])
+            ->withTimestamps();
     }
 }

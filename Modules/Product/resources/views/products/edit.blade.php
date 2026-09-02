@@ -2,6 +2,9 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
+@endsection
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
@@ -50,6 +53,30 @@
                                             value="{{ old('title_en', $product->getTranslation('title', 'en', false)) }}" />
                                     </div>
                                     @error('title_en')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Category --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="category_id">{{ __('product::attribute.category_id') }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-select select2" name="category_id" id="category_id" required>
+                                        <option value="" disabled selected>{{ __('product::attribute.select_category') }}</option>
+                                        @foreach ($viewModel->categories() as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                                                {{ $category->getTranslation('title', $locale) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_id')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -114,6 +141,35 @@
                             </div>
                         </div>
 
+                        {{-- Images --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label" for="images">{{ __('product::attribute.images') }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    @if ($product->images->isNotEmpty())
+                                        <div class="d-flex flex-wrap gap-1 mb-1">
+                                            @foreach ($product->images as $image)
+                                                <img src="{{ $image->image }}" alt="product image" class="rounded border img-thumbnail" width="80" height="80" />
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="image"></i></span>
+                                        <input type="file" id="images" class="form-control" name="images[]"
+                                            placeholder="{{ __('product::attribute.images') }}" accept="image/*" multiple />
+                                    </div>
+                                    @error('images')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                    @error('images.*')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Is Active --}}
                         <div class="col-sm-9 offset-sm-3">
                             <div class="mb-1">
@@ -139,4 +195,19 @@
 @endsection
 
 @section('js')
+    <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            var select = $('.select2');
+            if (select.length) {
+                select.each(function () {
+                    var $this = $(this);
+                    $this.wrap('<div class="position-relative"></div>');
+                    $this.select2({
+                        dropdownParent: $this.parent()
+                    });
+                });
+            }
+        });
+    </script>
 @endsection

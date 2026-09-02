@@ -13,6 +13,8 @@ use Modules\Country\Models\Zone;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Translatable\HasTranslations;
+use Modules\Product\Models\Product;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Store extends Model
 {
@@ -117,5 +119,12 @@ class Store extends Model
     public function zone()
     {
         return $this->belongsTo(Zone::class);
+    }
+
+    public function products(): MorphToMany
+    {
+        return $this->morphToMany(Product::class, 'sellerable', 'product_sellers')
+            ->withPivot(['price', 'is_active'])
+            ->withTimestamps();
     }
 }

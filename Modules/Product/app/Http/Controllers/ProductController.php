@@ -12,6 +12,7 @@ use Modules\Product\Http\Requests\ProductRequest;
 use Modules\Product\Models\Product;
 use Modules\Product\Services\ProductService;
 use Illuminate\Support\Facades\Gate;
+use Modules\Product\ViewModels\ProductViewModel;
 
 #[Middleware('auth:admin')]
 #[Middleware('permission:Index-product|Create-product|Edit-product|Delete-product', only: ['index', 'store'])]
@@ -25,7 +26,8 @@ class ProductController extends Controller
     public function index(Request $request): View|JsonResponse
     {
         $data = $request->merge(['paginated' => 50])->all();
-        $products = $this->productService->findAll($data);
+        $relations = ['category', 'images'];
+        $products = $this->productService->findAll($data, $relations);
         if ($request->ajax()) {
             return success(true, __('product::message.fetched'), $products->items());
         }
@@ -34,7 +36,8 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('product::products.create');
+        $viewModel = new ProductViewModel();
+        return view('product::products.create', compact('viewModel'));
     }
 
     public function store(ProductRequest $request)
@@ -46,13 +49,12 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        Gate::authorize('update', $product);
-        return view('product::products.edit', compact('product'));
+        $viewModel = new ProductViewModel();
+        return view('product::products.edit', compact('product', 'viewModel'));
     }
 
     public function update(ProductRequest $request, Product $product)
     {
-        Gate::authorize('update', $product);
         $dto = ProductDto::fromRequest($request);
         $this->productService->update($product, $dto);
         return to_route('admin.product.index')->with('success', __('product::message.updated'));

@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="select2 form-select" name="country_id" id="country_id" required>
-                                        <option value="">{{ __('country::general.select_country') }}</option>
+                                        <option value="" disabled selected>{{ __('country::general.select_country') }}</option>
                                         @foreach ($viewModel->countries() as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ old('country_id') == $country->id ? 'selected' : '' }}>
@@ -114,12 +114,10 @@
         $(document).ready(function() {
             var select = $('.select2');
             if (select.length) {
-                select.each(function() {
+                select.each(function () {
                     var $this = $(this);
                     $this.wrap('<div class="position-relative"></div>');
                     $this.select2({
-                        dropdownAutoWidth: true,
-                        width: '100%',
                         dropdownParent: $this.parent()
                     });
                 });

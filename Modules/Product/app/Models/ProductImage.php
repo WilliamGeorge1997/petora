@@ -3,20 +3,39 @@
 namespace Modules\Product\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Modules\Product\Database\Factories\ProductImageFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductImage extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'product_id',
+        'image',
+    ];
 
-    /**
-     * The attributes that are mass assignable.
-     */
-    protected $fillable = [];
+    protected $hidden = ['product_id'];
+    //Date serialization
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d h:i A');
+    }
 
-    // protected static function newFactory(): ProductImageFactory
-    // {
-    //     // return ProductImageFactory::new();
-    // }
+    //Getters
+    public function getImageAttribute(?string $value): ?string
+    {
+        if ($value !== null && $value !== '') {
+            if (filter_var($value, FILTER_VALIDATE_URL)) {
+                return $value;
+            }
+
+            return asset('storage/uploads/product/' . $value);
+        }
+
+        return $value;
+    }
+
+    //Relations
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

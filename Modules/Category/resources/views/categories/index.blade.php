@@ -77,7 +77,6 @@
                                 <th></th>
                                 <th>{{ __('category::attribute.id') }}</th>
                                 <th>{{ __('category::attribute.title') }}</th>
-                                <th>{{ __('category::attribute.phone') }}</th>
                                 <th>{{ __('category::attribute.created_at') }}</th>
                                 <th>{{ __('category::attribute.is_active') }}</th>
                                 <th></th>
@@ -124,9 +123,6 @@
                         }, // used for sorting so will hide this column
                         {
                             data: 'title'
-                        },
-                        {
-                            data: 'phone',
                         },
                         {
                             data: 'created_at',

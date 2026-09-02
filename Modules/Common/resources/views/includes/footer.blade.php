@@ -4,7 +4,7 @@
         <span class="float-md-start d-block d-md-inline-block mt-25">
             {{ __('common::footer.copyright', ['year' => date('Y')]) }}
 
-            <a class="ms-25" href="#" target="_blank">
+            <a class="ms-25" href="https://icontds.com/" target="_blank">
                 {{ __('common::footer.company') }}
             </a>
 

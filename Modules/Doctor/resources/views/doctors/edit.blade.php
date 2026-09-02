@@ -127,26 +127,28 @@
 
                         {{-- Image --}}
                         <div class="col-12">
-                            <div class="mb-1 row">
+                            <div class="mb-1 row align-items-center">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
                                         for="image">{{ __('doctor::attribute.image') }}</label>
                                 </div>
-                                <div class="col-sm-9">
-                                    @if ($doctor->image)
-                                        <div class="mb-1">
-                                            <img src="{{ $doctor->image }}" alt="Doctor Image" width="100">
-                                        </div>
-                                    @endif
+                                <div class="col-sm-6">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="image"></i></span>
                                         <input type="file" id="image" class="form-control" name="image"
                                             placeholder="{{ __('doctor::attribute.image') }}" accept="image/*" />
+                                        @error('image')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
-                                    @error('image')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
                                 </div>
+                                @if ($doctor->image != null)
+                                    <div class="col-sm-3 text-center">
+                                        <div class="d-flex justify-content-center align-items-center mt-1">
+                                            <img class="img-fluid rounded border" width="100" height="100" src="{{ asset($doctor->image) }}" alt="{{ $doctor->getTranslation('name', $locale) }}">
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -177,17 +179,17 @@
 @section('js')
     <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var select = $('.select2');
-            select.each(function () {
-                var $this = $(this);
-                $this.wrap('<div class="position-relative"></div>');
-                $this.select2({
-                    dropdownAutoWidth: true,
-                    width: '100%',
-                    dropdownParent: $this.parent()
+            if (select.length) {
+                select.each(function () {
+                    var $this = $(this);
+                    $this.wrap('<div class="position-relative"></div>');
+                    $this.select2({
+                        dropdownParent: $this.parent()
+                    });
                 });
-            });
+            }
         });
     </script>
 @endsection

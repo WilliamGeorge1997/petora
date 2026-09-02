@@ -6,7 +6,10 @@ return [
     'description_en' => 'الوصف بالانجليزية',
     'description_ar' => 'الوصف بالعربية',
     'title' => 'الاسم',
+    'category_id' => 'القسم',
+    'select_category' => 'اختر القسم',
     'price' => 'السعر',
     'is_active' => 'تفعيل',
+    'images'     => 'الصور',
     'created_at' => 'التاريخ',
 ];

@@ -2,6 +2,10 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
+@endsection
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
@@ -159,8 +163,8 @@
                                         for="company_id">{{ __('store::attribute.company_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select" name="company_id" id="company_id" required>
-                                        <option value="">{{ __('store::attribute.select_company') }}</option>
+                                    <select class="form-select select2" name="company_id" id="company_id" required>
+                                        <option value="" disabled selected>{{ __('store::attribute.select_company') }}</option>
                                         @foreach ($viewModel->companies() as $company)
                                             <option value="{{ $company->id }}"
                                                 {{ old('company_id') == $company->id ? 'selected' : '' }}>
@@ -203,13 +207,12 @@
                                         for="country_id">{{ __('store::attribute.country_id') ?? 'الدولة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select" name="country_id" id="country_id" required
+                                    <select class="form-select select2" name="country_id" id="country_id" required
                                         data-fetch-url="{{ route('admin.ajax.cities') }}"
                                         data-ajax-col="country_id"
                                         data-ajax-target="#city_id"
                                         data-ajax-child="#zone_id">
-                                        <option value="">
-                                            {{ __('store::attribute.select_country') ?? 'اختر الدولة' }}</option>
+                                        <option value="" disabled selected>{{ __('store::attribute.select_country') ?? 'اختر الدولة' }}</option>
                                         @foreach ($viewModel->countries() as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ old('country_id') == $country->id ? 'selected' : '' }}>
@@ -232,11 +235,11 @@
                                         for="city_id">{{ __('store::attribute.city_id') ?? 'المدينة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select" name="city_id" id="city_id" required disabled
+                                    <select class="form-select select2" name="city_id" id="city_id" required disabled
                                         data-fetch-url="{{ route('admin.ajax.zones') }}"
                                         data-ajax-col="city_id"
                                         data-ajax-target="#zone_id">
-                                        <option value="">{{ __('store::attribute.select_city') ?? 'اختر المدينة' }}</option>
+                                        <option value="" disabled selected>{{ __('store::attribute.select_city') ?? 'اختر المدينة' }}</option>
                                     </select>
                                     @error('city_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -253,8 +256,8 @@
                                         for="zone_id">{{ __('store::attribute.zone_id') ?? 'المنطقة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select" name="zone_id" id="zone_id" required disabled>
-                                        <option value="">{{ __('store::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
+                                    <select class="form-select select2" name="zone_id" id="zone_id" required disabled>
+                                        <option value="" disabled selected>{{ __('store::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
                                     </select>
                                     @error('zone_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -296,7 +299,7 @@
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <input type="text" id="latitude" class="form-control" name="latitude"
                                             placeholder="{{ __('store::attribute.latitude') ?? 'خط العرض' }}"
-                                            value="{{ old('latitude') }}" />
+                                            value="{{ old('latitude') }}" readonly />
                                     </div>
                                     @error('latitude')
                                         <p class="text-danger">{{ $message }}</p>
@@ -317,7 +320,7 @@
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <input type="text" id="longitude" class="form-control" name="longitude"
                                             placeholder="{{ __('store::attribute.longitude') ?? 'خط الطول' }}"
-                                            value="{{ old('longitude') }}" />
+                                            value="{{ old('longitude') }}" readonly />
                                     </div>
                                     @error('longitude')
                                         <p class="text-danger">{{ $message }}</p>
@@ -351,5 +354,19 @@
 @endsection
 
 @section('js')
-    {{-- <script src="//cdn.ckeditor.com/4.16.0/full/ckeditor.js"></script> --}}
+    <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            var select = $('.select2');
+            if (select.length) {
+                select.each(function () {
+                    var $this = $(this);
+                    $this.wrap('<div class="position-relative"></div>');
+                    $this.select2({
+                        dropdownParent: $this.parent()
+                    });
+                });
+            }
+        });
+    </script>
 @endsection

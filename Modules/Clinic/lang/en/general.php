@@ -27,4 +27,9 @@ return [
     'reset'         => 'Reset',
     'active'        => 'Active',
     'inactive'      => 'Inactive',
+    'products'      => 'Products',
+    'import'        => 'Import Excel',
+    'export'        => 'Export Excel',
+    'excel_file'    => 'Excel File',
+    'submit'        => 'Submit',
 ];

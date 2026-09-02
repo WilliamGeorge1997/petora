@@ -1,9 +1,15 @@
 <?php
 
 
+use \Illuminate\Contracts\Pagination\CursorPaginator;
+use \Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\Paginator;
 use Modules\Common\Models\Setting;
+
+
 
 
 if (!function_exists('allStatusCode')) {
@@ -60,6 +66,22 @@ if (!function_exists('fail')) {
             'message' => $message,
             'errors' => $errors,
         ], getStatusCode($status_string));
+    }
+}
+
+if (!function_exists('paginatedResource')) {
+    function paginatedResource(LengthAwarePaginator|CursorPaginator|Collection $data, string $resourceClass)
+    {
+        if ($data instanceof Paginator || $data instanceof CursorPaginator) {
+            $data->getCollection()->transform(fn($item) => (new $resourceClass($item))->resolve());
+            return $data;
+        }
+
+        if ($data instanceof Collection) {
+            return $data->map(fn($item) => (new $resourceClass($item))->resolve());
+        }
+
+        return $data;
     }
 }
 
@@ -124,12 +146,11 @@ if (!function_exists('nearest')) {
 
         $radius = $radius ?? 50;
         $sql = haversineSql($latitudeColumn, $longitudeColumn);
-        
+
         return $query->whereNotNull($latitudeColumn)
             ->whereNotNull($longitudeColumn)
             ->selectRaw("*, $sql AS distance", [$latitude, $longitude, $latitude])
             ->having('distance', '<=', $radius)
             ->orderBy('distance');
-            
     }
 }

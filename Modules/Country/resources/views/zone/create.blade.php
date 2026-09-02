@@ -4,7 +4,7 @@
 @extends('common::layouts.master')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{asset('')}}admin/vendors/css/forms/select/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
 @endsection
 
 @section('content')
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="select2 form-select" name="city_id" id="city_id" required>
-                                        <option value="">{{ __('country::general.select_city') }}</option>
+                                        <option value="" disabled selected>{{ __('country::general.select_city') }}</option>
                                         @foreach ($viewModel->cities() as $city)
                                             <option value="{{ $city->id }}"
                                                 {{ old('city_id') == $city->id ? 'selected' : '' }}>
@@ -109,17 +109,15 @@
 @endsection
 
 @section('js')
-    <script src="{{asset('')}}admin/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
     <script>
         $(document).ready(function() {
             var select = $('.select2');
             if (select.length) {
-                select.each(function() {
+                select.each(function () {
                     var $this = $(this);
                     $this.wrap('<div class="position-relative"></div>');
                     $this.select2({
-                        dropdownAutoWidth: true,
-                        width: '100%',
                         dropdownParent: $this.parent()
                     });
                 });

@@ -276,6 +276,20 @@
                     lengthMenu: [7, 10, 25, 50, 75, 100],
                     bPaginate: false,
                     buttons: [
+                        @can('Index-product')
+                            {
+                                text: feather.icons['download'].toSvg({
+                                    class: 'me-50 font-small-4'
+                                }) + '{{ __('product::general.export') ?? 'Export Excel' }}',
+                                className: 'btn btn-outline-success me-2',
+                                action: function(e, dt, node, config) {
+                                    window.location.href = '{{ route('admin.product.export') }}';
+                                },
+                                init: function(api, node, config) {
+                                    $(node).removeClass('btn-secondary');
+                                }
+                            },
+                        @endcan
                         @can('Create-product')
                             {
                                 text: feather.icons['plus'].toSvg({

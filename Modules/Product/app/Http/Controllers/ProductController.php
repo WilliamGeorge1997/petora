@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Gate;
 use Modules\Product\ViewModels\ProductViewModel;
 
 #[Middleware('auth:admin')]
-#[Middleware('permission:Index-product|Create-product|Edit-product|Delete-product', only: ['index', 'store'])]
+#[Middleware('permission:Index-product|Create-product|Edit-product|Delete-product', only: ['index', 'export', 'store'])]
 #[Middleware('permission:Create-product', only: ['create', 'store'])]
 #[Middleware('permission:Edit-product', only: ['edit', 'update', 'activate'])]
 #[Middleware('permission:Delete-product', only: ['destroy'])]
@@ -64,6 +64,11 @@ class ProductController extends Controller
     {
         $this->productService->delete($product);
         return success(true, __('product::message.deleted'));
+    }
+
+    public function export()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ProductExport(), 'products.xlsx');
     }
 
     public function activate(Product $product)

@@ -6,31 +6,23 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Modules\Product\Models\Product;
+use Illuminate\Support\Collection;
 
 class ProductExport implements FromCollection, WithHeadings, WithMapping
 {
-    protected $seller;
 
-    public function __construct($seller)
+    public function collection(): Collection
     {
-        $this->seller = $seller;
-    }
-
-    public function collection()
-    {
-        return $this->seller->products;
+        return Product::query()->active()->latest('id')->get(['id', 'title', 'price']);
     }
 
     public function headings(): array
     {
         return [
             'id',
-            'category_id',
-            'title_en',
-            'title_ar',
-            'price_pivot',
-            'is_active_pivot',
-            'created_at',
+            'الاسم بالعربية',
+            'الاسم بالانجيليزية',
+            'السعر',
         ];
     }
 
@@ -38,12 +30,9 @@ class ProductExport implements FromCollection, WithHeadings, WithMapping
     {
         return [
             $product->id,
-            $product->category_id,
             $product->getTranslation('title', 'en', false),
             $product->getTranslation('title', 'ar', false),
-            $product->pivot->price,
-            $product->pivot->is_active ? 'Yes' : 'No',
-            $product->created_at->format('Y-m-d H:i:s'),
+            $product->price,
         ];
     }
 }

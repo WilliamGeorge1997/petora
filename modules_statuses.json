@@ -8,5 +8,8 @@
     "Client": true,
     "Country": true,
     "Product": true,
-    "Doctor": true
+    "Doctor": true,
+    "Order": true,
+    "Pet": true,
+    "Service": true
 }

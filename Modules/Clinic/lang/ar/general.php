@@ -28,8 +28,11 @@ return [
     'active'        => 'مفعل',
     'inactive'      => 'غير مفعل',
     'products'      => 'المنتجات',
+    'services'      => 'الخدمات',
     'import'        => 'استيراد إكسيل',
     'export'        => 'تصدير إكسيل',
+    'import_all_services'   => 'استيراد كافة الخدمات',
+    'imported_all_services' => 'تم استيراد كافة الخدمات بنجاح',
     'excel_file'    => 'ملف الإكسيل',
     'submit'        => 'إرسال',
 ];

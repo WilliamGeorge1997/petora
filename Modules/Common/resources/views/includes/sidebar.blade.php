@@ -118,9 +118,9 @@
             </li>
             @endcanany
 
-            @canany(['Index-clinic', 'Index-doctor'])
+            @canany(['Index-clinic', 'Index-doctor', 'Index-service'])
             <li
-                class="nav-item {{ Route::is('admin.clinic.*', 'admin.doctor.*') ? 'sidebar-group-active open' : '' }}">
+                class="nav-item {{ Route::is('admin.clinic.*', 'admin.doctor.*', 'admin.service.*') ? 'sidebar-group-active open' : '' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="activity"></i>
                     <span class="menu-title text-truncate">{{ __('common::sidebar.clinic_management') ?? 'ادارة العيادات' }}</span>
@@ -139,6 +139,14 @@
                         <a class="d-flex align-items-center" href="{{ route('admin.doctor.index') }}">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate">{{ __('doctor::general.doctors') ?? 'الاطباء' }}</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('Index-service')
+                    <li class="nav-item {{ Route::is('admin.service.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.service.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('service::general.services') ?? 'الخدمات' }}</span>
                         </a>
                     </li>
                     @endcan
@@ -166,6 +174,33 @@
                         <a class="d-flex align-items-center" href="{{ route('admin.product.index') }}">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate">{{ __('product::general.products') ?? 'المنتجات' }}</span>
+                        </a>
+                    </li>
+                    @endcan
+                </ul>
+            </li>
+            @endcanany
+
+            @canany(['Index-pet', 'Index-pettype'])
+            <li class="nav-item {{ Route::is('admin.pet.*', 'admin.pet_type.*') ? 'sidebar-group-active open' : '' }}">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="heart"></i>
+                    <span class="menu-title text-truncate">{{ __('pet::general.pet_management') ?? 'ادارة الحيوانات الأليفة' }}</span>
+                </a>
+                <ul class="menu-content">
+                    @can('Index-pettype')
+                    <li class="nav-item {{ Route::is('admin.pet_type.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.pet_type.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('pet::general.pet_types') ?? 'أنواع الحيوانات' }}</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('Index-pet')
+                    <li class="nav-item {{ Route::is('admin.pet.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.pet.index') }}">
+                            <i data-feather="circle"></i>
+                            <span class="menu-item text-truncate">{{ __('pet::general.pets') ?? 'الحيوانات الأليفة' }}</span>
                         </a>
                     </li>
                     @endcan

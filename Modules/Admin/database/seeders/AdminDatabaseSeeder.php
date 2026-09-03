@@ -94,6 +94,21 @@ class AdminDatabaseSeeder extends Seeder
             ['Edit-product', 'Product', 'Edit'],
             ['Delete-product', 'Product', 'Delete'],
 
+            ['Index-pet', 'Pet', 'Index'],
+            ['Create-pet', 'Pet', 'Create'],
+            ['Edit-pet', 'Pet', 'Edit'],
+            ['Delete-pet', 'Pet', 'Delete'],
+
+            ['Index-pettype', 'PetType', 'Index'],
+            ['Create-pettype', 'PetType', 'Create'],
+            ['Edit-pettype', 'PetType', 'Edit'],
+            ['Delete-pettype', 'PetType', 'Delete'],
+
+            ['Index-service', 'Service', 'Index'],
+            ['Create-service', 'Service', 'Create'],
+            ['Edit-service', 'Service', 'Edit'],
+            ['Delete-service', 'Service', 'Delete'],
+
             ['Index-coupon', 'Coupon', 'Index'],
             ['Create-coupon', 'Coupon', 'Create'],
             ['Edit-coupon', 'Coupon', 'Edit'],
@@ -104,10 +119,10 @@ class AdminDatabaseSeeder extends Seeder
             ['Edit-ordermethod', 'OrderMethod', 'Edit'],
             ['Delete-ordermethod', 'OrderMethod', 'Delete'],
 
-            ['Index-paymentmethods', 'PaymentMethods', 'Index'],
-            ['Create-paymentmethods', 'PaymentMethods', 'Create'],
-            ['Edit-paymentmethods', 'PaymentMethods', 'Edit'],
-            ['Delete-paymentmethods', 'PaymentMethods', 'Delete'],
+            ['Index-paymentmethod', 'PaymentMethod', 'Index'],
+            ['Create-paymentmethod', 'PaymentMethod', 'Create'],
+            ['Edit-paymentmethod', 'PaymentMethod', 'Edit'],
+            ['Delete-paymentmethod', 'PaymentMethod', 'Delete'],
 
             ['Index-orderstatus', 'OrderStatus', 'Index'],
             ['Create-orderstatus', 'OrderStatus', 'Create'],

@@ -132,4 +132,16 @@ class Clinic extends Model
             ->withPivot(['price', 'is_active'])
             ->withTimestamps();
     }
+
+    public function services(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\Modules\Service\Models\Service::class, 'clinic_services')
+            ->withPivot(['price', 'duration', 'is_active'])
+            ->withTimestamps();
+    }
+
+    public function clinicServices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\Modules\Service\Models\ClinicService::class);
+    }
 }

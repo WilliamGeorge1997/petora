@@ -28,8 +28,11 @@ return [
     'active'        => 'Active',
     'inactive'      => 'Inactive',
     'products'      => 'Products',
+    'services'      => 'Services',
     'import'        => 'Import Excel',
     'export'        => 'Export Excel',
+    'import_all_services'   => 'Import All Services',
+    'imported_all_services' => 'All services imported successfully',
     'excel_file'    => 'Excel File',
     'submit'        => 'Submit',
 ];

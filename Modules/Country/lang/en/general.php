@@ -1,20 +1,25 @@
 <?php
 
 return [
+    'index'          => 'Countries',
+    'create'         => 'Create a new country',
+    'edit'           => 'Edit country data',
+    'index_city'     => 'Cities',
+    'index_zone'     => 'Zones',
     'countries'      => 'Countries',
     'country'        => 'Country',
-    'create_country' => 'Create Country',
-    'edit_country'   => 'Edit Country Details',
+    'create_country' => 'Create a new country',
+    'edit_country'   => 'Edit country data',
 
     'cities'         => 'Cities',
     'city'           => 'City',
-    'create_city'    => 'Create City',
-    'edit_city'      => 'Edit City Details',
+    'create_city'    => 'Create a new city',
+    'edit_city'      => 'Edit city data',
 
     'zones'          => 'Zones',
     'zone'           => 'Zone',
-    'create_zone'    => 'Create Zone',
-    'edit_zone'      => 'Edit Zone Details',
+    'create_zone'    => 'Create a new zone',
+    'edit_zone'      => 'Edit zone data',
 
     'actions'        => 'Actions',
     'date'           => 'Date',

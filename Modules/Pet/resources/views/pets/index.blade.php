@@ -3,6 +3,8 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('pet::general.index'))
+
 @section('css')
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
@@ -169,7 +171,7 @@
                             responsivePriority: 4,
                             render: function(data, type, full, meta) {
                                 var $user_img = full['image'],
-                                    $name = (data && data.{{ $locale }}) ? data.{{ $locale }} : (data || '');
+                                    $name = data || '';
                                 if ($user_img) {
                                     var $output =
                                         '<img src="' + $user_img +
@@ -261,7 +263,7 @@
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
-                                }) + '{{ __('pet::general.create_pet') }}',
+                                }) + '{{ __('pet::general.create') }}',
                                 className: 'create-new btn btn-primary',
                                 action: function(e, dt, node, config) {
                                     window.location.href = './pets/create';
@@ -277,7 +279,7 @@
                             display: $.fn.dataTable.Responsive.display.modal({
                                 header: function(row) {
                                     var data = row.data();
-                                    return 'Details of ' + (data['name'] ? (data['name']['{{ $locale }}'] || data['name']) : '');
+                                    return 'Details of ' + (data['name'] || '');
                                 }
                             }),
                             type: 'column',

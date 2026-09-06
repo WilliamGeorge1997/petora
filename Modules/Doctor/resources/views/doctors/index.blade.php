@@ -3,6 +3,8 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('doctor::general.index'))
+
 @section('css')
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
@@ -273,7 +275,7 @@
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
-                                }) + '{{ __('doctor::general.create_doctor') }}',
+                                }) + '{{ __('doctor::general.create') }}',
                                 className: 'create-new btn btn-primary',
                                 // attr: {
                                 //     'data-bs-toggle': 'modal',

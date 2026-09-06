@@ -1,10 +1,12 @@
 @extends('common::layouts.master')
 
+@section('title', __('company::general.edit'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('company::general.edit_company') }}
+                <h4 class="card-title">{{ __('company::general.edit') }}</h4>
                     {{ $company->getTranslation('title', 'ar') }}</h4>
             </div>
             <div class="card-body">
@@ -174,14 +176,19 @@
                                     </div>
                                 </div>
                                 @if ($company->image != null)
-                                    <div class="col-sm-3">
-                                        <div class="images-container d-flex flex-row flex-wrap me-5">
-                                            <div class="image-container position-relative m-1 mt-2">
-                                                <img class="w-100 h-100 object-fit-cover"
-                                                     src="{{ asset($company->image) }}">
-                                            </div>
+                                    <div class="col-sm-3 text-center">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img class="rounded border width-100 height-100 cursor-pointer"
+                                                role="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#companyImageModal"
+                                                src="{{ asset($company->image) }}"
+                                                alt="{{ $company->getTranslation('title', app()->getLocale()) }}">
                                         </div>
                                     </div>
+                                    <x-common::modal id="companyImageModal" :title="$company->getTranslation('title', app()->getLocale())" body-class="text-center">
+                                        <img src="{{ asset($company->image) }}" class="img-fluid rounded border" alt="{{ $company->getTranslation('title', app()->getLocale()) }}">
+                                    </x-common::modal>
                                 @endif
                             </div>
                         </div>
@@ -201,7 +208,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('company::general.update') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('company::general.update') }}</button>
                         </div>
                     </div>
                 </form>

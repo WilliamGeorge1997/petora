@@ -2,18 +2,20 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('client::general.create'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('client::general.create_client') }}</h4>
+                <h4 class="card-title">{{ __('client::general.create') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.client.store') }}" method="POST"
                     enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="row">
-                        
                         {{-- Name --}}
                         <div class="col-12">
                             <div class="mb-1 row">
@@ -105,8 +107,11 @@
                                         for="image">{{ __('client::attribute.image') }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="file" class="form-control dropify" name="image"
-                                        data-default-file="" />
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="image"></i></span>
+                                        <input type="file" id="image" class="form-control" name="image"
+                                            placeholder="{{ __('client::attribute.image') }}" accept="image/*" />
+                                    </div>
                                     @error('image')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -115,34 +120,21 @@
                         </div>
 
                         {{-- Is Active --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="is_active">{{ __('client::attribute.is_active') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="form-check form-switch form-check-success">
-                                        <input type="checkbox" class="form-check-input switch-active" name="is_active" value="1"
-                                            id="is_active" {{ old('is_active') ? 'checked' : '' }} />
-                                        <label class="form-check-label" for="is_active">
-                                            <span class="switch-icon-left"><i data-feather="check"></i></span>
-                                            <span class="switch-icon-right"><i data-feather="x"></i></span>
-                                        </label>
-                                    </div>
-                                    @error('is_active')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                        <div class="col-sm-9 offset-sm-3">
+                            <div class="mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" value="1" name="is_active" class="form-check-input"
+                                        id="customCheck2" />
+                                    <label class="form-check-label"
+                                        for="customCheck2">{{ __('client::attribute.is_active') }}</label>
                                 </div>
                             </div>
                         </div>
 
-
-                        <div class="col-sm-9 offset-sm-3 text-center">
+                        {{-- Submit Button --}}
+                        <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('client::general.save') }}</button>
-                            <a href="{{ route('admin.client.index') }}"
-                                class="btn btn-outline-secondary">{{ __('client::general.cancel') }}</a>
+                                class="btn btn-primary me-1"><i data-feather="plus" class="me-50"></i>{{ __('client::general.create') }}</button>
                         </div>
                     </div>
                 </form>

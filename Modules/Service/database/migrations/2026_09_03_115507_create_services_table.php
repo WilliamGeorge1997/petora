@@ -17,7 +17,7 @@ return new class extends Migration
             $table->json('description')->nullable();
             $table->string('image')->nullable();
             $table->decimal('price', 10, 2)->default(0);
-            $table->unsignedSmallInteger('duration')->default(30)->comment('minutes');
+            $table->unsignedSmallInteger('duration')->nullable()->comment('minutes');
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });

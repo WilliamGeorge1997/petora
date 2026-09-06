@@ -3,6 +3,8 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('country::general.create_zone'))
+
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
 @endsection
@@ -99,7 +101,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('country::general.create') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="plus" class="me-50"></i>{{ __('country::general.create_zone') }}</button>
                         </div>
                     </div>
                 </form>

@@ -13,8 +13,8 @@ class PetTypeController extends Controller
     public function index(Request $request)
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
-        $petTypes = $this->petTypeService->findAll($data);
+        $petTypes = $this->petTypeService->active($data);
         
-        return success(true, __('pet::message.fetched'), $petTypes);
+        return success(true, __('pet::message.type_fetched'), $petTypes);
     }
 }

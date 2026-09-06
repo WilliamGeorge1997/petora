@@ -33,10 +33,10 @@ class PetService
         return $petOrId instanceof Pet ? $petOrId : $this->findById($petOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
-        return getCaseCollection($query, $data);
+        return getCaseCollection($query, $data, $columns);
     }
 
     public function save(PetDto $dto): Pet

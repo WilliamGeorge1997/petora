@@ -5,8 +5,12 @@ namespace Modules\Service\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Support\LogOptions;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Clinic\Models\Clinic;
+use Modules\Service\Models\ClinicService;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
 
 class Service extends Model
@@ -78,15 +82,15 @@ class Service extends Model
     }
 
     //Relations
-    public function clinics(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function clinics(): BelongsToMany
     {
-        return $this->belongsToMany(\Modules\Clinic\Models\Clinic::class, 'clinic_services')
+        return $this->belongsToMany(Clinic::class, 'clinic_services')
             ->withPivot(['price', 'duration', 'is_active'])
             ->withTimestamps();
     }
 
-    public function clinicServices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function clinicServices(): HasMany
     {
-        return $this->hasMany(\Modules\Service\Models\ClinicService::class);
+        return $this->hasMany(ClinicService::class);
     }
 }

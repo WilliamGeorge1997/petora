@@ -3,6 +3,8 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('store::general.index'))
+
 @section('css')
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
@@ -106,7 +108,7 @@
             var ajaxRequest = "stores?";
             if (page != null) ajaxRequest += "page=" + page + '&';
             if (title != null) ajaxRequest += "title=" + title + '&';
-            if (is_active != null) ajaxRequest += "is_active=" + is_active + '&';
+            if (is_active != null) ajaxRequest += "is_active=" + is_active + '&';            
             var dt_basic_table = $('.datatables-basic'),
                 dt_date_table = $('.dt-date');
             if (dt_basic_table.length) {
@@ -172,8 +174,6 @@
                             targets: 3,
                             responsivePriority: 4,
                             render: function(data, type, full, meta) {
-                                console.log(data);
-
                                 var $user_img = full['image'],
                                     $name = data.{{ $locale }};
                                 if ($user_img) {
@@ -281,7 +281,7 @@
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
-                                }) + '{{ __('store::general.create_store') }}',
+                                }) + '{{ __('store::general.create') }}',
                                 className: 'create-new btn btn-primary',
                                 // attr: {
                                 //     'data-bs-toggle': 'modal',

@@ -2,11 +2,14 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('country::general.edit'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('country::general.edit_country') }} {{ $country->getTranslation('title', 'ar') }}</h4>
+                <h4 class="card-title">{{ __('country::general.edit') }} {{ $country->getTranslation('title', 'ar') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.countries.update', $country->id) }}" method="POST"
@@ -71,7 +74,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('country::general.update') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('country::general.edit') }}</button>
                         </div>
                     </div>
                 </form>

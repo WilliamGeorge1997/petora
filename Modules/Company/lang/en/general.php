@@ -1,13 +1,15 @@
 <?php
 
 return [
+    'index'          => 'Companies',
+    'create'         => 'Create a new company',
+    'edit'           => 'Edit company data',
+    'update'         => 'Edit company data',
     'create_company' => 'Create a new company',
     'edit_company'   => 'Edit company data',
     'actions'        => 'Actions',
     'date'           => 'Date',
     'status'         => 'Status',
-    'create'         => 'Create',
-    'update'         => 'Update',
     'main_data'      => 'Main Data',
     'activate'       => 'Activate',
     'deactivate'     => 'Deactivate',

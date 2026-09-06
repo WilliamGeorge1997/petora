@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Clinic::class)->index()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Service::class)->index()->constrained()->cascadeOnDelete();
             $table->decimal('price', 10, 2);
-            $table->unsignedInteger('duration');
+            $table->unsignedInteger('duration')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 

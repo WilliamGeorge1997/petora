@@ -3,11 +3,13 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('service::general.edit'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('service::general.edit_service') }} {{ $service->getTranslation('title', 'ar') }}</h4>
+                <h4 class="card-title">{{ __('service::general.edit') }} {{ $service->getTranslation('title', 'ar') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.service.update', $service->id) }}" method="POST"
@@ -114,10 +116,18 @@
                                 </div>
                                 @if ($service->image != null)
                                     <div class="col-sm-3 text-center">
-                                        <div class="d-flex justify-content-center align-items-center mt-1">
-                                            <img class="img-fluid rounded border" width="100" height="100" src="{{ asset($service->image) }}" alt="{{ $service->getTranslation('title', $locale) }}">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img class="rounded border width-100 height-100 cursor-pointer"
+                                                role="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#serviceImageModal"
+                                                src="{{ asset($service->image) }}"
+                                                alt="{{ $service->getTranslation('title', $locale) }}">
                                         </div>
                                     </div>
+                                    <x-common::modal id="serviceImageModal" :title="$service->getTranslation('title', $locale)" body-class="text-center">
+                                        <img src="{{ asset($service->image) }}" class="img-fluid rounded border" alt="{{ $service->getTranslation('title', $locale) }}">
+                                    </x-common::modal>
                                 @endif
                             </div>
                         </div>
@@ -153,7 +163,7 @@
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="clock"></i></span>
                                         <input type="number" min="1" id="duration" class="form-control" name="duration"
-                                            placeholder="{{ __('service::attribute.duration') }}" value="{{ old('duration', $service->duration) }}" required />
+                                            placeholder="{{ __('service::attribute.duration') }}" value="{{ old('duration', $service->duration) }}" />
                                     </div>
                                     @error('duration')
                                         <p class="text-danger">{{ $message }}</p>
@@ -176,7 +186,7 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1">{{ __('service::general.edit_service') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('service::general.edit') }}</button>
                         </div>
                     </div>
                 </form>

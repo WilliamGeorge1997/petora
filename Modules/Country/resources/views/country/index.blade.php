@@ -3,6 +3,8 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('country::general.index'))
+
 @section('css')
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
@@ -227,7 +229,7 @@
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
-                                }) + '{{ __('country::general.create_country') }}',
+                                }) + '{{ __('country::general.create') }}',
                                 className: 'create-new btn btn-primary',
                                 action: function(e, dt, node, config) {
                                     window.location.href = './countries/create';

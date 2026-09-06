@@ -2,11 +2,14 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('client::general.edit'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('client::general.edit_client') }}</h4>
+                <h4 class="card-title">{{ __('client::general.edit') }} {{ $client->name }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.client.update', $client->id) }}" method="POST"
@@ -14,7 +17,6 @@
                     {{ method_field('PUT') }}
                     {{ csrf_field() }}
                     <div class="row">
-                        
                         {{-- Name --}}
                         <div class="col-12">
                             <div class="mb-1 row">
@@ -25,13 +27,13 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="user"></i></span>
-                                        <input type="text" class="form-control" name="name" required
-                                            placeholder="{{ __('client::attribute.name') }}"
-                                            value="{{ old('name', $client->name) }}" />
+                                        <input type="text" id="name"
+                                            value="{{ $client->name }}" class="form-control"
+                                            name="name" placeholder="{{ __('client::attribute.name') }}" required />
+                                        @error('name')
+                                            <p class="alert alert-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
-                                    @error('name')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -46,13 +48,13 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="mail"></i></span>
-                                        <input type="email" class="form-control" name="email"
-                                            placeholder="{{ __('client::attribute.email') }}"
-                                            value="{{ old('email', $client->email) }}" />
+                                        <input type="email" id="email"
+                                            value="{{ $client->email }}" class="form-control"
+                                            name="email" placeholder="{{ __('client::attribute.email') }}" />
+                                        @error('email')
+                                            <p class="alert alert-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
-                                    @error('email')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -67,13 +69,13 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="phone"></i></span>
-                                        <input type="text" class="form-control" name="phone" required
-                                            placeholder="{{ __('client::attribute.phone') }}"
-                                            value="{{ old('phone', $client->phone) }}" />
+                                        <input type="text" id="phone" value="{{ $client->phone }}"
+                                            class="form-control" name="phone"
+                                            placeholder="{{ __('client::attribute.phone') }}" required />
+                                        @error('phone')
+                                            <p class="alert alert-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
-                                    @error('phone')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -88,63 +90,67 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="lock"></i></span>
-                                        <input type="password" class="form-control" name="password"
-                                            placeholder="{{ __('client::attribute.password') }}" />
+                                        <input type="password" id="password" class="form-control"
+                                            name="password" placeholder="{{ __('client::attribute.password') }}" />
+                                        @error('password')
+                                            <p class="alert alert-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                     <small class="text-muted">{{ __('client::general.leave_blank_to_keep_current') }}</small>
-                                    @error('password')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
 
                         {{-- Image --}}
                         <div class="col-12">
-                            <div class="mb-1 row">
+                            <div class="mb-1 row align-items-center">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
                                         for="image">{{ __('client::attribute.image') }}</label>
                                 </div>
-                                <div class="col-sm-9">
-                                    <input type="file" class="form-control dropify" name="image"
-                                        data-default-file="{{ $client->image }}" />
-                                    @error('image')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                                <div class="col-sm-6">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="image"></i></span>
+                                        <input type="file" id="image" class="form-control" name="image"
+                                            placeholder="{{ __('client::attribute.image') }}" accept="image/*" />
+                                        @error('image')
+                                            <p class="alert alert-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
+                                @if ($client->image != null)
+                                    <div class="col-sm-3 text-center">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img class="rounded border width-100 height-100 cursor-pointer"
+                                                role="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#clientImageModal"
+                                                src="{{ asset($client->image) }}"
+                                                alt="{{ $client->name }}">
+                                        </div>
+                                    </div>
+                                    <x-common::modal id="clientImageModal" :title="$client->name" body-class="text-center">
+                                        <img src="{{ asset($client->image) }}" class="img-fluid rounded border" alt="{{ $client->name }}">
+                                    </x-common::modal>
+                                @endif
                             </div>
                         </div>
 
                         {{-- Is Active --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="is_active">{{ __('client::attribute.is_active') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="form-check form-switch form-check-success">
-                                        <input type="checkbox" class="form-check-input switch-active" name="is_active" value="1"
-                                            id="is_active" {{ old('is_active', $client->is_active) ? 'checked' : '' }} />
-                                        <label class="form-check-label" for="is_active">
-                                            <span class="switch-icon-left"><i data-feather="check"></i></span>
-                                            <span class="switch-icon-right"><i data-feather="x"></i></span>
-                                        </label>
-                                    </div>
-                                    @error('is_active')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                        <div class="col-sm-9 offset-sm-3">
+                            <div class="mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" value="1" @if ($client->is_active == 1) checked @endif
+                                        name="is_active" class="form-check-input" id="customCheck2" />
+                                    <label class="form-check-label"
+                                        for="customCheck2">{{ __('client::attribute.is_active') }}</label>
                                 </div>
                             </div>
                         </div>
 
-
-                        <div class="col-sm-9 offset-sm-3 text-center">
-                            <button type="submit"
-                                class="btn btn-primary me-1">{{ __('client::general.save') }}</button>
-                            <a href="{{ route('admin.client.index') }}"
-                                class="btn btn-outline-secondary">{{ __('client::general.cancel') }}</a>
+                        {{-- Submit Button --}}
+                        <div class="col-sm-9 offset-sm-3">
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('client::general.update') }}</button>
                         </div>
                     </div>
                 </form>

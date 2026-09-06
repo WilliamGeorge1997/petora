@@ -60,6 +60,23 @@ class Client extends Authenticatable
         return $query->where('is_active', true);
     }
 
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        return $query
+            ->when($filters['name'] ?? null, function (Builder $query, $name) {
+                $query->where('name', 'LIKE', "%{$name}%");
+            })
+            ->when($filters['email'] ?? null, function (Builder $query, $email) {
+                $query->where('email', 'LIKE', "%{$email}%");
+            })
+            ->when($filters['phone'] ?? null, function (Builder $query, $phone) {
+                $query->where('phone', 'LIKE', "%{$phone}%");
+            })
+            ->when(isset($filters['is_active']) && $filters['is_active'] !== '', function (Builder $query) use ($filters) {
+                $query->where('is_active', (bool) $filters['is_active']);
+            });
+    }
+
     //Getters
     public function getImageAttribute(?string $value): ?string
     {

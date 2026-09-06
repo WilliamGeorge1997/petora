@@ -2,11 +2,14 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('category::general.create'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('category::general.create_category') }}</h4>
+                <h4 class="card-title">{{ __('category::general.create') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.category.store') }}" method="POST"
@@ -92,7 +95,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('category::general.create') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="plus" class="me-50"></i>{{ __('category::general.create') }}</button>
                         </div>
                     </div>
                 </form>

@@ -2,11 +2,15 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('category::general.edit'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('category::general.edit_category') }} {{ $category->getTranslation('title', 'ar') }}</h4>
+                <h4 class="card-title">{{ __('category::general.edit') }}
+                    {{ $category->getTranslation('title', 'ar') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.category.update', $category->id) }}" method="POST"
@@ -26,8 +30,32 @@
                                         <span class="input-group-text"><i data-feather="user"></i></span>
                                         <input type="text" id="title_ar"
                                             value="{{ $category->getTranslation('title', 'ar') }}" class="form-control"
-                                            name="title_ar" placeholder="{{ __('category::attribute.title_ar') }}" required />
+                                            name="title_ar" placeholder="{{ __('category::attribute.title_ar') }}"
+                                            required />
                                         @error('title_ar')
+                                            <p class="alert alert-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        {{-- Title en --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="title_en">{{ __('category::attribute.title_en') }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="user"></i></span>
+                                        <input type="text" id="title_en"
+                                            value="{{ $category->getTranslation('title', 'en') }}" class="form-control"
+                                            name="title_en" placeholder="{{ __('category::attribute.title_en') }}"
+                                            required />
+                                        @error('title_en')
                                             <p class="alert alert-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -55,13 +83,19 @@
                                     </div>
                                 </div>
                                 @if ($category->image != null)
-                                    <div class="col-sm-3">
-                                        <div class="images-container d-flex flex-row flex-wrap me-5">
-                                            <div class="image-container position-relative m-1 mt-2">
-                                                <img class="w-100 h-100 object-fit-cover" src="{{ asset($category->image) }}">
-                                            </div>
+                                    <div class="col-sm-3 text-center">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img class="rounded border width-100 height-100 cursor-pointer"
+                                                role="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#categoryImageModal"
+                                                src="{{ asset($category->image) }}"
+                                                alt="{{ $category->getTranslation('title', $locale) }}">
                                         </div>
                                     </div>
+                                    <x-common::modal id="categoryImageModal" :title="$category->getTranslation('title', $locale)" body-class="text-center">
+                                        <img src="{{ asset($category->image) }}" class="img-fluid rounded border" alt="{{ $category->getTranslation('title', $locale) }}">
+                                    </x-common::modal>
                                 @endif
                             </div>
                         </div>
@@ -82,7 +116,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('category::general.update') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('category::general.update') }}</button>
                         </div>
                     </div>
                 </form>

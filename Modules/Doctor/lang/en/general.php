@@ -1,13 +1,14 @@
 <?php
 
 return [
-    'create_doctor' => 'Create New Doctor',
-    'edit_doctor'   => 'Edit Doctor Details',
+    'index'          => 'Doctors',
+    'create'         => 'Create New Doctor',
+    'edit'           => 'Edit Doctor Details',
     'actions'        => 'Actions',
     'date'           => 'Date',
     'status'         => 'Status',
-    'create'         => 'Create',
-    'update'         => 'Update',
+    'create_doctor'  => 'Create New Doctor',
+    'edit_doctor'    => 'Edit Doctor Details',
     'main_data'      => 'Main Data',
     'activate'       => 'Activate',
     'deactivate'     => 'Deactivate',

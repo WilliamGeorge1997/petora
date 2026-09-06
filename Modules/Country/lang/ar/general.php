@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'index'          => 'الدول',
+    'create'         => 'إنشاء دولة جديدة',
+    'edit'           => 'تعديل بيانات الدولة',
+    'index_city'     => 'المدن',
+    'index_zone'     => 'المناطق',
     'countries'      => 'الدول',
     'country'        => 'الدولة',
     'create_country' => 'إنشاء دولة جديدة',

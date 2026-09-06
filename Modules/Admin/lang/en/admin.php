@@ -10,4 +10,10 @@ return [
     'password_string' => 'The password must be a string.',
     'invalid_credentials' => 'These credentials do not match our records.',
     'account_inactive' => 'Your account is deactivated by the administration.',
+    'index' => 'Admins',
+    'create' => 'Create Admin',
+    'edit' => 'Edit Admin',
+    'admins' => 'Admins',
+    'create_admin' => 'Create Admin',
+    'edit_admin' => 'Edit Admin',
 ];

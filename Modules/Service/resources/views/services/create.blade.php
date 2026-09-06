@@ -3,11 +3,13 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('service::general.create'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('service::general.create_service') }}</h4>
+                <h4 class="card-title">{{ __('service::general.create') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.service.store') }}" method="POST"
@@ -145,7 +147,7 @@
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="clock"></i></span>
                                         <input type="number" min="1" id="duration" class="form-control" name="duration"
-                                            placeholder="{{ __('service::attribute.duration') }}" value="{{ old('duration', '30') }}" required />
+                                            placeholder="{{ __('service::attribute.duration') }}" value="{{ old('duration') }}" />
                                     </div>
                                     @error('duration')
                                         <p class="text-danger">{{ $message }}</p>
@@ -169,7 +171,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('service::general.create_service') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="plus" class="me-50"></i>{{ __('service::general.create') }}</button>
                         </div>
                     </div>
                 </form>

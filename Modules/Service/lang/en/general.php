@@ -6,8 +6,10 @@ return [
     'actions'        => 'Actions',
     'date'           => 'Date',
     'status'         => 'Status',
-    'create'         => 'Create',
-    'update'         => 'Update',
+    'index'          => 'Services',
+    'create'         => 'Create a new service',
+    'edit'           => 'Edit service data',
+    'update'         => 'Edit service data',
     'main_data'      => 'Main Data',
     'activate'       => 'Activate',
     'deactivate'     => 'Deactivate',
@@ -27,4 +29,5 @@ return [
     'active'         => 'Active',
     'inactive'       => 'Inactive',
     'submit'         => 'Submit',
+    'export'         => 'Export Excel',
 ];

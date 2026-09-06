@@ -73,187 +73,218 @@
                 <i data-feather="more-horizontal"></i>
             </li>
 
-            @can('Index-admin')
-            <li class="nav-item {{ Route::is('admin.admins.*', 'admin.users.*') ? 'sidebar-group-active open' : '' }}">
-                <a class="d-flex align-items-center" href="#">
-                    <i data-feather="users"></i>
-                    <span class="menu-title text-truncate">{{ __('common::sidebar.user_management') }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="nav-item {{ Route::is('admin.admins.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.admins.index') }}">
-                            <i data-feather="user-check"></i>
-                            <span class="menu-item text-truncate">{{ __('common::sidebar.admins') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            @endcan
-
-            @canany(['Index-company', 'Index-store'])
-            <li
-                class="nav-item {{ Route::is('admin.company.*', 'admin.store.*') ? 'sidebar-group-active open' : '' }}">
-                <a class="d-flex align-items-center" href="#">
-                    <i data-feather="briefcase"></i>
-                    <span class="menu-title text-truncate">{{ __('common::sidebar.store_management') }}</span>
-                </a>
-                <ul class="menu-content">
-                    @can('Index-company')
-                    <li class="nav-item {{ Route::is('admin.company.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.company.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('common::sidebar.companies') }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                    @can('Index-store')
-                    <li class="nav-item {{ Route::is('admin.store.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.store.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('store::general.stores') }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
+            @canany(['Index-admin', 'Index-client'])
+                <li
+                    class="nav-item {{ Route::is('admin.admins.*', 'admin.client.*', 'admin.users.*') ? 'sidebar-group-active open' : '' }}">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="users"></i>
+                        <span class="menu-title text-truncate">{{ __('common::sidebar.user_management') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('Index-admin')
+                            <li class="nav-item {{ Route::is('admin.admins.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.admins.index') }}">
+                                    <i data-feather="user-check"></i>
+                                    <span class="menu-item text-truncate">{{ __('common::sidebar.admins') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-client')
+                            <li class="nav-item {{ Route::is('admin.client.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.client.index') }}">
+                                    <i data-feather="user"></i>
+                                    <span class="menu-item text-truncate">{{ __('common::sidebar.clients') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
             @endcanany
 
-            @canany(['Index-clinic', 'Index-doctor', 'Index-service'])
-            <li
-                class="nav-item {{ Route::is('admin.clinic.*', 'admin.doctor.*', 'admin.service.*') ? 'sidebar-group-active open' : '' }}">
-                <a class="d-flex align-items-center" href="#">
-                    <i data-feather="activity"></i>
-                    <span class="menu-title text-truncate">{{ __('common::sidebar.clinic_management') ?? 'ادارة العيادات' }}</span>
-                </a>
-                <ul class="menu-content">
-                    @can('Index-clinic')
-                    <li class="nav-item {{ Route::is('admin.clinic.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.clinic.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('clinic::general.clinics') }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                    @can('Index-doctor')
-                    <li class="nav-item {{ Route::is('admin.doctor.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.doctor.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('doctor::general.doctors') ?? 'الاطباء' }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                    @can('Index-service')
-                    <li class="nav-item {{ Route::is('admin.service.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.service.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('service::general.services') ?? 'الخدمات' }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
+            @canany(['Index-company', 'Index-store'])
+                <li
+                    class="nav-item {{ Route::is('admin.company.*', 'admin.store.*') ? 'sidebar-group-active open' : '' }}">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="shopping-bag"></i>
+                        <span class="menu-title text-truncate">{{ __('common::sidebar.store_management') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('Index-company')
+                            <li class="nav-item {{ Route::is('admin.company.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.company.index') }}">
+                                    <i data-feather="briefcase"></i>
+                                    <span class="menu-item text-truncate">{{ __('common::sidebar.companies') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-store')
+                            <li class="nav-item {{ Route::is('admin.store.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.store.index') }}">
+                                    <i data-feather="shopping-cart"></i>
+                                    <span class="menu-item text-truncate">{{ __('store::general.stores') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcanany
+
+            @canany(['Index-clinic', 'Index-service', 'Index-doctor'])
+                <li
+                    class="nav-item {{ Route::is('admin.clinic.*', 'admin.doctor.*', 'admin.service.*') ? 'sidebar-group-active open' : '' }}">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="activity"></i>
+                        <span
+                            class="menu-title text-truncate">{{ __('common::sidebar.clinic_management') ?? 'ادارة العيادات' }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('Index-clinic')
+                            <li class="nav-item {{ Route::is('admin.clinic.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.clinic.index') }}">
+                                    <i data-feather="plus-square"></i>
+                                    <span class="menu-item text-truncate">{{ __('clinic::general.clinics') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-service')
+                            <li class="nav-item {{ Route::is('admin.service.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.service.index') }}">
+                                    <i data-feather="clipboard"></i>
+                                    <span
+                                        class="menu-item text-truncate">{{ __('service::general.services') ?? 'الخدمات' }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-doctor')
+                            <li class="nav-item {{ Route::is('admin.doctor.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.doctor.index') }}">
+                                    <i data-feather="user-plus"></i>
+                                    <span
+                                        class="menu-item text-truncate">{{ __('doctor::general.doctors') ?? 'الاطباء' }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
             @endcanany
 
             @canany(['Index-category', 'Index-product'])
-            <li class="nav-item {{ Route::is('admin.category.*', 'admin.product.*') ? 'sidebar-group-active open' : '' }}">
-                <a class="d-flex align-items-center" href="#">
-                    <i data-feather="grid"></i>
-                    <span class="menu-title text-truncate">{{ __('common::sidebar.product_management') ?? 'ادارة المنتجات' }}</span>
-                </a>
-                <ul class="menu-content">
-                    @can('Index-category')
-                    <li class="nav-item {{ Route::is('admin.category.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.category.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('category::general.categories') }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                    @can('Index-product')
-                    <li class="nav-item {{ Route::is('admin.product.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.product.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('product::general.products') ?? 'المنتجات' }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
+                <li
+                    class="nav-item {{ Route::is('admin.category.*', 'admin.product.*') ? 'sidebar-group-active open' : '' }}">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="grid"></i>
+                        <span
+                            class="menu-title text-truncate">{{ __('common::sidebar.product_management') ?? 'ادارة المنتجات' }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('Index-category')
+                            <li class="nav-item {{ Route::is('admin.category.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.category.index') }}">
+                                    <i data-feather="tag"></i>
+                                    <span class="menu-item text-truncate">{{ __('category::general.categories') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-product')
+                            <li class="nav-item {{ Route::is('admin.product.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.product.index') }}">
+                                    <i data-feather="package"></i>
+                                    <span
+                                        class="menu-item text-truncate">{{ __('product::general.products') ?? 'المنتجات' }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
             @endcanany
 
             @canany(['Index-pet', 'Index-pettype'])
-            <li class="nav-item {{ Route::is('admin.pet.*', 'admin.pet_type.*') ? 'sidebar-group-active open' : '' }}">
-                <a class="d-flex align-items-center" href="#">
-                    <i data-feather="heart"></i>
-                    <span class="menu-title text-truncate">{{ __('pet::general.pet_management') ?? 'ادارة الحيوانات الأليفة' }}</span>
-                </a>
-                <ul class="menu-content">
-                    @can('Index-pettype')
-                    <li class="nav-item {{ Route::is('admin.pet_type.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.pet_type.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('pet::general.pet_types') ?? 'أنواع الحيوانات' }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                    @can('Index-pet')
-                    <li class="nav-item {{ Route::is('admin.pet.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.pet.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('pet::general.pets') ?? 'الحيوانات الأليفة' }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
+                <li
+                    class="nav-item {{ Route::is('admin.pet.*', 'admin.pet_type.*') ? 'sidebar-group-active open' : '' }}">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="heart"></i>
+                        <span
+                            class="menu-title text-truncate">{{ __('pet::general.pet_management') ?? 'ادارة الحيوانات الأليفة' }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('Index-pettype')
+                            <li class="nav-item {{ Route::is('admin.pet_type.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.pet_type.index') }}">
+                                    <i data-feather="list"></i>
+                                    <span
+                                        class="menu-item text-truncate">{{ __('pet::general.pet_types') ?? 'أنواع الحيوانات' }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-pet')
+                            <li class="nav-item {{ Route::is('admin.pet.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.pet.index') }}">
+                                    <i data-feather="smile"></i>
+                                    <span
+                                        class="menu-item text-truncate">{{ __('pet::general.pets') ?? 'الحيوانات الأليفة' }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
             @endcanany
 
-            @can('Index-country')
-            <li class="navigation-header">
-                <span>{{ __('common::sidebar.basic_data') }}</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
 
-            <li
-                class="nav-item {{ Route::is('admin.countries.*', 'admin.cities.*', 'admin.zones.*') ? 'sidebar-group-active open' : '' }}">
-                <a class="d-flex align-items-center" href="#">
-                    <i data-feather="map"></i>
-                    <span class="menu-title text-truncate">{{ __('common::sidebar.locations') }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="nav-item {{ Route::is('admin.countries.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.countries.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('country::general.countries') }}</span>
+            @can('Index-country')
+                <li class="navigation-header">
+                    <span>{{ __('common::sidebar.basic_data') }}</span>
+                    <i data-feather="more-horizontal"></i>
+                </li>
+
+                @can('Index-paymentmethod')
+                    <li class="nav-item {{ Route::is('admin.payment_method.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.payment_method.index') }}">
+                            <i data-feather="credit-card"></i>
+                            <span class="menu-item text-truncate">{{ __('order::general.payment_methods') }}</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ Route::is('admin.cities.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.cities.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('country::general.cities') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ Route::is('admin.zones.*') ? 'active' : '' }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.zones.index') }}">
-                            <i data-feather="circle"></i>
-                            <span class="menu-item text-truncate">{{ __('country::general.zones') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                @endcan
+
+                <li
+                    class="nav-item {{ Route::is('admin.countries.*', 'admin.cities.*', 'admin.zones.*') ? 'sidebar-group-active open' : '' }}">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="map"></i>
+                        <span class="menu-title text-truncate">{{ __('common::sidebar.locations') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li class="nav-item {{ Route::is('admin.countries.*') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('admin.countries.index') }}">
+                                <i data-feather="globe"></i>
+                                <span class="menu-item text-truncate">{{ __('country::general.countries') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ Route::is('admin.cities.*') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('admin.cities.index') }}">
+                                <i data-feather="map-pin"></i>
+                                <span class="menu-item text-truncate">{{ __('country::general.cities') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ Route::is('admin.zones.*') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('admin.zones.index') }}">
+                                <i data-feather="compass"></i>
+                                <span class="menu-item text-truncate">{{ __('country::general.zones') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             @endcan
 
             @role(\Modules\Admin\Enums\AdminRole::SuperAdmin->value)
-            <li class="navigation-header">
-                <span>{{ __('common::sidebar.system_tools') }}</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
-            <li class="nav-item">
-                <a class="d-flex align-items-center" href="{{ url('admin/telescope') }}" target="_blank">
-                    <i data-feather="monitor"></i>
-                    <span class="menu-title text-truncate">Telescope</span>
-                </a>
-            </li>
+                <li class="navigation-header">
+                    <span>{{ __('common::sidebar.system_tools') }}</span>
+                    <i data-feather="more-horizontal"></i>
+                </li>
+                <li class="nav-item">
+                    <a class="d-flex align-items-center" href="{{ url('admin/telescope') }}" target="_blank">
+                        <i data-feather="monitor"></i>
+                        <span class="menu-title text-truncate">Telescope</span>
+                    </a>
+                </li>
             @endrole
         </ul>
     </div>

@@ -19,9 +19,17 @@ return [
     'description_en_string'  => 'English description must be a string.',
     'description_ar_string'  => 'Arabic description must be a string.',
 
+    'price_required'         => 'Price is required.',
+    'price_numeric'          => 'Price must be a number.',
+    'price_min'              => 'Price must be at least 0.',
+
+    'duration_integer'       => 'Duration must be an integer.',
+    'duration_min'           => 'Duration must be at least 1 minute.',
+
     'image_invalid'          => 'The uploaded file must be an image.',
     'image_mimes'            => 'Image must be of type: jpeg, png, jpg, webp, svg, gif.',
     'image_max'              => 'Image size must not exceed 2048 KB.',
 
     'is_active_boolean'      => 'Active status must be a boolean.',
 ];
+

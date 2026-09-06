@@ -11,7 +11,7 @@ readonly class ServiceDto
         public array $title,
         public bool $isActive,
         public float $price = 0,
-        public int $duration = 30,
+        public ?int $duration = null,
         public ?array $description = null,
         public ?UploadedFile $image = null,
     ) {}
@@ -25,7 +25,7 @@ readonly class ServiceDto
             ],
             isActive: $request->boolean('is_active'),
             price: (float) $request->validated('price', 0),
-            duration: (int) $request->validated('duration', 30),
+            duration: $request->validated('duration'),
             description: ($request->validated('description_en') || $request->validated('description_ar')) ? [
                 'en' => $request->validated('description_en'),
                 'ar' => $request->validated('description_ar'),

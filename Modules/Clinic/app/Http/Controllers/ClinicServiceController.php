@@ -23,7 +23,7 @@ class ClinicServiceController extends Controller
     public function index(Request $request, Clinic $clinic)
     {
         if ($request->ajax()) {
-            $clinicServices = ClinicService::with('service')
+            $clinicServices = ClinicService::with(['service', 'schedules'])
                 ->where('clinic_id', $clinic->id)
                 ->latest('id')
                 ->get();
@@ -31,7 +31,7 @@ class ClinicServiceController extends Controller
             return response()->json(['data' => $clinicServices]);
         }
 
-        $services = ClinicService::with('service')
+        $services = ClinicService::with(['service', 'schedules'])
             ->where('clinic_id', $clinic->id)
             ->paginate(50);
 
@@ -62,7 +62,7 @@ class ClinicServiceController extends Controller
         foreach ($activeServices as $service) {
             $syncData[$service->id] = [
                 'price'     => (float) $service->price,
-                'duration'  => (int) $service->duration,
+                'duration'  => $service->duration !== null ? (int) $service->duration : null,
                 'is_active' => true,
             ];
         }
@@ -77,12 +77,26 @@ class ClinicServiceController extends Controller
     public function update(Request $request, Clinic $clinic, ClinicService $clinicService): JsonResponse
     {
         $data = $request->validate([
-            'price'     => ['required', 'numeric', 'min:0'],
-            'duration'  => ['required', 'integer', 'min:1'],
-            'is_active' => ['nullable', 'boolean'],
+            'price'            => ['sometimes', 'required', 'numeric', 'min:0'],
+            'duration'         => ['nullable', 'integer', 'min:1'],
+            'is_active'        => ['nullable', 'boolean'],
+            'schedules'        => ['nullable', 'array'],
+            'schedules.*.day'  => ['required', 'string'],
+            'schedules.*.from' => ['required'],
+            'schedules.*.to'   => ['required'],
         ]);
 
-        $clinicService->update($data);
+        $attributes = collect($data)->only(['price', 'duration', 'is_active'])->filter(fn($v) => !is_null($v))->all();
+        if (!empty($attributes)) {
+            $clinicService->update($attributes);
+        }
+
+        if ($request->has('schedules')) {
+            $clinicService->schedules()->delete();
+            if (!empty($data['schedules'])) {
+                $clinicService->schedules()->createMany($data['schedules']);
+            }
+        }
 
         return response()->json([
             'success' => true,

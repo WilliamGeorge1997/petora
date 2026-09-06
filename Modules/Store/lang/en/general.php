@@ -1,13 +1,15 @@
 <?php
 
 return [
-    'create_store' => 'Create a new store',
-    'edit_store'   => 'Edit store data',
+    'index'          => 'Stores',
+    'create'         => 'Create a new store',
+    'edit'           => 'Edit store data',
+    'update'         => 'Edit store data',
     'actions'        => 'Actions',
     'date'           => 'Date',
     'status'         => 'Status',
-    'create'         => 'Create',
-    'update'         => 'Update',
+    'create_store'   => 'Create a new store',
+    'edit_store'     => 'Edit store data',
     'main_data'      => 'Main Data',
     'activate'       => 'Activate',
     'deactivate'     => 'Deactivate',

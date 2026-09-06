@@ -52,4 +52,3 @@ class PetServiceProvider extends ModuleServiceProvider
         $this->loadJsonTranslationsFrom($langPath);
     }
 }
-

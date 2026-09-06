@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'index'           => 'Categories',
+    'create'          => 'Create a new category',
+    'edit'            => 'Edit category data',
+    'update'          => 'Edit category data',
     'categories'      => 'Categories',
     'create_category' => 'Create a new category',
     'edit_category'   => 'Edit category data',
@@ -9,8 +13,6 @@ return [
     'actions'         => 'Actions',
     'date'            => 'Date',
     'status'          => 'Status',
-    'create'          => 'Create',
-    'update'          => 'Update',
     'main_data'       => 'Main Data',
     'activate'        => 'Activate',
     'deactivate'      => 'Deactivate',

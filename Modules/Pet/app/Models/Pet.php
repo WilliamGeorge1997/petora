@@ -7,13 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Client\Models\Client;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
-use Spatie\Translatable\HasTranslations;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Pet extends Model
 {
-    use HasFactory, HasTranslations, LogsActivity;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'client_id',
@@ -25,8 +24,6 @@ class Pet extends Model
         'weight',
         'image',
     ];
-
-    public array $translatable = ['name', 'breed'];
 
     protected $casts = [
         'date_of_birth' => 'date',
@@ -54,7 +51,7 @@ class Pet extends Model
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when($filters['name'] ?? null, function ($query, $name) {
-            $query->whereJsonContainsLocales('name', ['en', 'ar'], "%{$name}%", 'LIKE');
+            $query->where('name', 'LIKE', "%{$name}%");
         })
             ->when($filters['client_id'] ?? null, function ($query, $clientId) {
                 $query->where('client_id', $clientId);

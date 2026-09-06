@@ -26,7 +26,7 @@ class PetTypeController extends Controller
         $data = $request->merge(['paginated' => 50])->all();
         $petTypes = $this->petTypeService->findAll($data);
         if ($request->ajax()) {
-            return success(true, __('pet::message.fetched'), $petTypes->items());
+            return success(true, __('pet::message.type_fetched'), $petTypes->items());
         }
         return view('pet::pet_types.index', compact('petTypes'));
     }

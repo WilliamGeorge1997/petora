@@ -15,7 +15,7 @@ use Modules\Service\Services\ServiceService;
 use Illuminate\Support\Facades\Gate;
 
 #[Middleware('auth:admin')]
-#[Middleware('permission:Index-service|Create-service|Edit-service|Delete-service', only: ['index', 'store'])]
+#[Middleware('permission:Index-service|Create-service|Edit-service|Delete-service', only: ['index', 'export', 'store'])]
 #[Middleware('permission:Create-service', only: ['create', 'store'])]
 #[Middleware('permission:Edit-service', only: ['edit', 'update', 'activate'])]
 #[Middleware('permission:Delete-service', only: ['destroy'])]
@@ -63,6 +63,11 @@ class ServiceController extends Controller
     {
         $this->serviceService->delete($service);
         return success(true, __('service::message.deleted'));
+    }
+
+    public function export()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ServiceExport(), 'services.xlsx');
     }
 
     public function activate(Service $service)

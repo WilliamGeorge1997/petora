@@ -3,6 +3,8 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('pet::general.index_type'))
+
 @section('css')
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
@@ -244,7 +246,7 @@
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
-                                }) + '{{ __('pet::general.create_pet_type') }}',
+                                }) + '{{ __('pet::general.create_type') }}',
                                 className: 'create-new btn btn-primary',
                                 action: function(e, dt, node, config) {
                                     window.location.href = './pet-types/create';

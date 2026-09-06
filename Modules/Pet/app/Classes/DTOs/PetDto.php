@@ -10,8 +10,8 @@ class PetDto
     public function __construct(
         public int $clientId,
         public int $petTypeId,
-        public array $name,
-        public ?array $breed = null,
+        public string $name,
+        public ?string $breed = null,
         public ?string $dateOfBirth = null,
         public ?float $weight = null,
         public ?string $gender = null,
@@ -23,14 +23,8 @@ class PetDto
         return new self(
             clientId: $request->validated('client_id'),
             petTypeId: $request->validated('pet_type_id'),
-            name: [
-                'en' => $request->validated('name_en'),
-                'ar' => $request->validated('name_ar'),
-            ],
-            breed: ($request->validated('breed_en') || $request->validated('breed_ar')) ? [
-                'en' => $request->validated('breed_en'),
-                'ar' => $request->validated('breed_ar'),
-            ] : null,
+            name: $request->validated('name'),
+            breed: $request->validated('breed'),
             dateOfBirth: $request->validated('date_of_birth'),
             weight: $request->validated('weight') ? (float) $request->validated('weight') : null,
             gender: $request->validated('gender'),

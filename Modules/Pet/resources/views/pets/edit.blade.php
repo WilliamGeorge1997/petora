@@ -2,6 +2,9 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('pet::general.edit'))
+
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/forms/select/select2.min.css') }}">
 @endsection
@@ -10,7 +13,7 @@
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('pet::general.edit_pet') }} {{ $pet->getTranslation('name', 'ar') }}</h4>
+                <h4 class="card-title">{{ __('pet::general.edit') }} {{ $pet->name }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.pet.update', $pet->id) }}" method="POST"
@@ -18,84 +21,42 @@
                     {{ method_field('PUT') }}
                     {{ csrf_field() }}
                     <div class="row">
-                        {{-- Name ar --}}
+                        {{-- Name --}}
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="name_ar">{{ __('pet::attribute.name_ar') }}</label>
+                                        for="name">{{ __('pet::attribute.name') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="user"></i></span>
-                                        <input type="text" id="name_ar"
-                                            value="{{ $pet->getTranslation('name', 'ar') }}" class="form-control"
-                                            name="name_ar" placeholder="{{ __('pet::attribute.name_ar') }}" required />
+                                        <input type="text" id="name"
+                                            value="{{ old('name', $pet->name) }}" class="form-control"
+                                            name="name" placeholder="{{ __('pet::attribute.name') }}" required />
                                     </div>
-                                    @error('name_ar')
+                                    @error('name')
                                         <p class="alert alert-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Name en --}}
+                        {{-- Breed --}}
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="name_en">{{ __('pet::attribute.name_en') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="user"></i></span>
-                                        <input type="text" id="name_en"
-                                            value="{{ $pet->getTranslation('name', 'en') }}" class="form-control"
-                                            name="name_en" placeholder="{{ __('pet::attribute.name_en') }}" required />
-                                    </div>
-                                    @error('name_en')
-                                        <p class="alert alert-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Breed ar --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="breed_ar">{{ __('pet::attribute.breed_ar') }}</label>
+                                        for="breed">{{ __('pet::attribute.breed') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="tag"></i></span>
-                                        <input type="text" class="form-control" name="breed_ar"
-                                            placeholder="{{ __('pet::attribute.breed_ar') }}"
-                                            value="{{ $pet->getTranslation('breed', 'ar', false) }}" />
+                                        <input type="text" id="breed" class="form-control" name="breed"
+                                            placeholder="{{ __('pet::attribute.breed') }}"
+                                            value="{{ old('breed', $pet->breed) }}" />
                                     </div>
-                                    @error('breed_ar')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Breed en --}}
-                        <div class="col-12">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="breed_en">{{ __('pet::attribute.breed_en') }}</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i data-feather="tag"></i></span>
-                                        <input type="text" class="form-control" name="breed_en"
-                                            placeholder="{{ __('pet::attribute.breed_en') }}"
-                                            value="{{ $pet->getTranslation('breed', 'en', false) }}" />
-                                    </div>
-                                    @error('breed_en')
+                                    @error('breed')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -158,7 +119,7 @@
                                         for="gender">{{ __('pet::attribute.gender') }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select" name="gender" id="gender">
+                                    <select class="form-select" name="gender" id="gender" required>
                                         <option value="m" {{ $pet->gender === 'm' ? 'selected' : '' }}>{{ __('pet::general.male') }}</option>
                                         <option value="f" {{ $pet->gender === 'f' ? 'selected' : '' }}>{{ __('pet::general.female') }}</option>
                                     </select>
@@ -222,17 +183,25 @@
                                 </div>
                                 @if ($pet->image != null)
                                     <div class="col-sm-3 text-center">
-                                        <div class="d-flex justify-content-center align-items-center mt-1">
-                                            <img class="img-fluid rounded border" width="100" height="100" src="{{ asset($pet->image) }}" alt="{{ $pet->getTranslation('name', $locale) }}">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img class="rounded border width-100 height-100 cursor-pointer"
+                                                role="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#petImageModal"
+                                                src="{{ asset($pet->image) }}"
+                                                alt="{{ $pet->name }}">
                                         </div>
                                     </div>
+                                    <x-common::modal id="petImageModal" :title="$pet->name" body-class="text-center">
+                                        <img src="{{ asset($pet->image) }}" class="img-fluid rounded border" alt="{{ $pet->name }}">
+                                    </x-common::modal>
                                 @endif
                             </div>
                         </div>
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1">{{ __('pet::general.edit_pet') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('pet::general.edit') }}</button>
                         </div>
                     </div>
                 </form>

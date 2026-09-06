@@ -3,11 +3,13 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('pet::general.create_type'))
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('pet::general.create_pet_type') }}</h4>
+                <h4 class="card-title">{{ __('pet::general.create_type') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.pet_type.store') }}" method="POST">
@@ -60,7 +62,7 @@
                             <div class="mb-1">
                                 <div class="form-check">
                                     <input type="checkbox" value="1" name="is_active" class="form-check-input"
-                                        id="customCheck2" checked />
+                                        id="customCheck2" {{ old('is_active') ? 'checked' : '' }} />
                                     <label class="form-check-label"
                                         for="customCheck2">{{ __('pet::attribute.is_active') }}</label>
                                 </div>
@@ -70,7 +72,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('pet::general.create_pet_type') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="plus" class="me-50"></i>{{ __('pet::general.create_type') }}</button>
                         </div>
                     </div>
                 </form>

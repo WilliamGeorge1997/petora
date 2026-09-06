@@ -1,4 +1,7 @@
 @extends('common::layouts.master')
+
+@section('title', __('common::sidebar.dashboard'))
+
 @section('content')
     <section id="dashboard-ecommerce">
         <div class="row match-height">

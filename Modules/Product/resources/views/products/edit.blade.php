@@ -2,6 +2,9 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('product::general.edit'))
+
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
 @endsection
@@ -9,7 +12,7 @@
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('product::general.edit_product') }}</h4>
+                <h4 class="card-title">{{ __('product::general.edit') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.product.update', $product->id) }}" method="POST"
@@ -151,7 +154,13 @@
                                     @if ($product->images->isNotEmpty())
                                         <div class="d-flex flex-wrap gap-1 mb-1">
                                             @foreach ($product->images as $image)
-                                                <img src="{{ $image->image }}" alt="product image" class="rounded border img-thumbnail" width="80" height="80" />
+                                                <img src="{{ $image->image }}" alt="product image" class="rounded border width-100 height-100 cursor-pointer"
+                                                    role="button"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#productImageModal{{ $image->id }}" />
+                                                <x-common::modal id="productImageModal{{ $image->id }}" title="{{ __('product::attribute.images') }}" body-class="text-center">
+                                                    <img src="{{ $image->image }}" class="img-fluid rounded border" alt="product image">
+                                                </x-common::modal>
                                             @endforeach
                                         </div>
                                     @endif
@@ -185,7 +194,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('product::general.edit_product') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('product::general.edit') }}</button>
                         </div>
                     </div>
                 </form>

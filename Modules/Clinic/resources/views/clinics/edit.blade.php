@@ -2,6 +2,9 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('clinic::general.edit'))
+
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
 @endsection
@@ -10,7 +13,7 @@
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('clinic::general.edit_clinic') }} {{ $clinic->getTranslation('title', 'ar') }}</h4>
+                <h4 class="card-title">{{ __('clinic::general.edit') }} {{ $clinic->getTranslation('title', 'ar') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.clinic.update', $clinic->id) }}" method="POST"
@@ -175,10 +178,18 @@
                                 </div>
                                 @if ($clinic->image != null)
                                     <div class="col-sm-3 text-center">
-                                        <div class="d-flex justify-content-center align-items-center mt-1">
-                                            <img class="img-fluid rounded border" width="100" height="100" src="{{ asset($clinic->image) }}" alt="{{ $clinic->getTranslation('title', $locale) }}">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img class="rounded border width-100 height-100 cursor-pointer"
+                                                role="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#clinicImageModal"
+                                                src="{{ asset($clinic->image) }}"
+                                                alt="{{ $clinic->getTranslation('title', $locale) }}">
                                         </div>
                                     </div>
+                                    <x-common::modal id="clinicImageModal" :title="$clinic->getTranslation('title', $locale)" body-class="text-center">
+                                        <img src="{{ asset($clinic->image) }}" class="img-fluid rounded border" alt="{{ $clinic->getTranslation('title', $locale) }}">
+                                    </x-common::modal>
                                 @endif
                             </div>
                         </div>
@@ -328,7 +339,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('clinic::general.update') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('clinic::general.update') }}</button>
                         </div>
                     </div>
                 </form>

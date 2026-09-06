@@ -4,11 +4,13 @@ namespace Modules\Pet\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Modules\Pet\Classes\DTOs\PetDto;
 use Modules\Pet\Http\Requests\PetRequest;
 use Modules\Pet\Models\Pet;
 use Modules\Pet\Services\PetService;
-use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Modules\Pet\Transformers\PetResource;
 
 #[Middleware('auth:client')]
 class PetController extends Controller
@@ -18,55 +20,42 @@ class PetController extends Controller
     public function index(Request $request)
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
-        $pets = $this->petService->findAll($data, ['type']);
+        $relations = ['type'];
+        $pets = $this->petService->findBy('client_id', auth('client')->id(), $data, $relations);
 
-        return success(true, __('pet::message.fetched'), $pets);
+        return success(true, __('pet::message.fetched'), paginatedResource($pets, PetResource::class));
     }
 
     public function store(PetRequest $request)
     {
-        $request->merge(['client_id' => auth('client')->id()]);
-
         $dto = PetDto::fromRequest($request);
         $pet = $this->petService->save($dto);
 
         return success(true, __('pet::message.created'), $pet);
     }
 
-    public function show($id)
+    public function show(int $pet_id)
     {
-        $pet = $this->petService->findById($id, ['type']);
+        $pet = $this->petService->findById($pet_id, ['type']);
+        
+        Gate::authorize('view', $pet);
 
-        if ($pet->client_id !== auth('client')->id()) {
-            return fail(false, __('pet::message.unauthorized'), 403);
-        }
-
-        return success(true, __('pet::message.fetched'), $pet);
+        return success(true, __('pet::message.fetched'), new PetResource($pet));
     }
 
-    public function update(PetRequest $request, $id)
+    public function update(PetRequest $request, Pet $pet)
     {
-        $pet = $this->petService->findById($id);
+        Gate::authorize('update', $pet);
 
-        if ($pet->client_id !== auth('client')->id()) {
-            return fail(false, __('pet::message.unauthorized'), 403);
-        }
-
-        $request->merge(['client_id' => auth('client')->id()]);
         $dto = PetDto::fromRequest($request);
-
         $pet = $this->petService->update($pet, $dto);
 
         return success(true, __('pet::message.updated'), $pet);
     }
 
-    public function destroy($id)
+    public function destroy(Pet $pet)
     {
-        $pet = $this->petService->findById($id);
-
-        if ($pet->client_id !== auth('client')->id()) {
-            return fail(false, __('pet::message.unauthorized'), 403);
-        }
+        Gate::authorize('delete', $pet);
 
         $this->petService->delete($pet);
         return success(true, __('pet::message.deleted'));

@@ -3,6 +3,8 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('company::general.index'))
+
 @section('css')
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
@@ -172,8 +174,6 @@
                             targets: 3,
                             responsivePriority: 4,
                             render: function(data, type, full, meta) {
-                                console.log(data);
-
                                 var $user_img = full['image'],
                                     $name = data.{{ $locale }};
                                 if ($user_img) {
@@ -274,7 +274,7 @@
                             {
                                 text: feather.icons['plus'].toSvg({
                                     class: 'me-50 font-small-4'
-                                }) + '{{ __('company::general.create_company') }}',
+                                }) + '{{ __('company::general.create') }}',
                                 className: 'create-new btn btn-primary',
                                 // attr: {
                                 //     'data-bs-toggle': 'modal',

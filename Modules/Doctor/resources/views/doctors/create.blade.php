@@ -2,6 +2,9 @@
     $locale = app()->getLocale();
 @endphp
 @extends('common::layouts.master')
+
+@section('title', __('doctor::general.create'))
+
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
 @endsection
@@ -9,7 +12,7 @@
     <div class="col-md-12 col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ __('doctor::general.create_doctor') }}</h4>
+                <h4 class="card-title">{{ __('doctor::general.create') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.doctor.store') }}" method="POST"
@@ -160,7 +163,7 @@
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit"
-                                class="btn btn-primary me-1">{{ __('doctor::general.create') }}</button>
+                                class="btn btn-primary me-1"><i data-feather="plus" class="me-50"></i>{{ __('doctor::general.create') }}</button>
                         </div>
                     </div>
                 </form>

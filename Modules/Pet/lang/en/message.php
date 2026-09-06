@@ -1,8 +1,9 @@
 <?php
 
 return [
-    'fetched'               => 'Data fetched successfully.',
-    'created'               => 'Created successfully.',
+    'fetched'               => 'Animals fetched successfully.',
+    'type_fetched'          => 'Types of animals fetched successfully.',
+    'created'               => 'Pet created successfully.',
     'updated'               => 'Updated successfully.',
     'deleted'               => 'Deleted successfully.',
     'activated'             => 'Activated successfully.',
@@ -26,6 +27,10 @@ return [
     'pet_type_id_integer'   => 'Invalid pet type selected.',
     'pet_type_id_exists'    => 'Selected pet type does not exist.',
 
+    'name_required'         => 'Name is required.',
+    'name_string'           => 'Name must be a string.',
+    'name_max'              => 'Name must not exceed 255 characters.',
+
     'name_en_required'      => 'English name is required.',
     'name_en_string'        => 'English name must be a string.',
     'name_en_max'           => 'English name must not exceed 255 characters.',
@@ -33,6 +38,9 @@ return [
     'name_ar_required'      => 'Arabic name is required.',
     'name_ar_string'        => 'Arabic name must be a string.',
     'name_ar_max'           => 'Arabic name must not exceed 255 characters.',
+
+    'breed_string'          => 'Breed must be a string.',
+    'breed_max'             => 'Breed must not exceed 255 characters.',
 
     'breed_en_string'       => 'English breed must be a string.',
     'breed_en_max'          => 'English breed must not exceed 255 characters.',
@@ -45,6 +53,7 @@ return [
     'weight_numeric'        => 'Weight must be a number.',
     'weight_min'            => 'Weight must be greater than 0.',
 
+    'gender_required'       => 'Gender is required.',
     'gender_string'         => 'Invalid gender.',
     'gender_in'             => 'Invalid gender value.',
 

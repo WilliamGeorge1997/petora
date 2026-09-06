@@ -13,16 +13,17 @@ class ProductExport implements FromCollection, WithHeadings, WithMapping
 
     public function collection(): Collection
     {
-        return Product::query()->active()->latest('id')->get(['id', 'title', 'price']);
+        return Product::query()->active()->latest('id')->get(['id', 'title', 'price', 'is_active']);
     }
 
     public function headings(): array
     {
         return [
             'id',
-            'الاسم بالعربية',
-            'الاسم بالانجيليزية',
-            'السعر',
+            'name_en',
+            'name_ar',
+            'price',
+            'is_active',
         ];
     }
 
@@ -33,6 +34,7 @@ class ProductExport implements FromCollection, WithHeadings, WithMapping
             $product->getTranslation('title', 'en', false),
             $product->getTranslation('title', 'ar', false),
             $product->price,
+            $product->is_active,
         ];
     }
 }

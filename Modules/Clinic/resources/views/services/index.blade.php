@@ -3,6 +3,8 @@
 @endphp
 @extends('common::layouts.master')
 
+@section('title', __('clinic::general.services'))
+
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/tables/datatable/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/tables/datatable/responsive.bootstrap5.min.css') }}">
@@ -44,7 +46,7 @@
                                 <form method="POST" action="{{ route('admin.clinic.services.import-all', $clinic->id) }}" class="d-inline me-1">
                                     @csrf
                                     <button type="submit" class="btn btn-outline-info">
-                                        <i data-feather="download-cloud"></i> {{ __('clinic::general.import_all_services') ?? 'استيراد كافة الخدمات' }}
+                                        <i data-feather="download-cloud"></i> {{ __('clinic::general.import_all') ?? 'استيراد كافة الخدمات' }}
                                     </button>
                                 </form>
                                 <button class="dt-button btn btn-outline-primary me-1" type="button" data-bs-toggle="modal" data-bs-target="#importModal">

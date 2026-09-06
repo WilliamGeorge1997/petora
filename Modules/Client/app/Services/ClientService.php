@@ -18,9 +18,7 @@ class ClientService
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
-            ->when(isset($data['is_active']) && $data['is_active'] !== '', function (Builder $query) use ($data) {
-                return $query->where('is_active', (bool) $data['is_active']);
-            })
+            ->filter($data)
             ->latest('id');
         return getCaseCollection($query, $data);
     }

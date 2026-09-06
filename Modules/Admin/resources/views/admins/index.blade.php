@@ -1,5 +1,7 @@
 @extends('common::layouts.master')
 
+@section('title', __('admin::admin.index'))
+
 @section('css')
     {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     <link rel="stylesheet" type="text/css"

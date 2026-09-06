@@ -1,5 +1,7 @@
 @extends('common::layouts.master')
 
+@section('title', __('admin::admin.edit'))
+
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('') }}admin/vendors/css/forms/select/select2.min.css">
 @endsection
@@ -73,17 +75,35 @@
                         </div>
 
                         <div class="col-12">
-                            <div class="mb-1 row">
+                            <div class="mb-1 row align-items-center">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="pass-icon">الصوره</label>
+                                    <label class="col-form-label" for="image">الصوره</label>
                                 </div>
-                                <div class="col-sm-9">
+                                <div class="col-sm-{{ $admin->image ? '6' : '9' }}">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="image"></i></span>
-                                        <input type="file" id="pass-icon" class="form-control" name="image"
-                                            placeholder="image" />
+                                        <input type="file" id="image" class="form-control" name="image"
+                                            placeholder="image" accept="image/*" />
                                     </div>
+                                    @error('image')
+                                        <p class="alert alert-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
+                                @if ($admin->image != null)
+                                    <div class="col-sm-3 text-center">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img class="rounded border width-100 height-100 cursor-pointer"
+                                                role="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#adminImageModal"
+                                                src="{{ $admin->image }}"
+                                                alt="{{ $admin->name }}">
+                                        </div>
+                                    </div>
+                                    <x-common::modal id="adminImageModal" :title="$admin->name" body-class="text-center">
+                                        <img src="{{ $admin->image }}" class="img-fluid rounded border" alt="{{ $admin->name }}">
+                                    </x-common::modal>
+                                @endif
                             </div>
                         </div>
 
@@ -141,7 +161,7 @@
                             </div>
                         </div>
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1">تعديل</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>تعديل بيانات المدير</button>
                         </div>
                     </div>
                 </form>

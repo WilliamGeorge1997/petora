@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'index'           => 'الأقسام',
+    'create'          => 'إنشاء قسم جديد',
+    'edit'            => 'تعديل بيانات القسم',
+    'update'          => 'تعديل بيانات القسم',
     'categories'      => 'الأقسام',
     'create_category' => 'إنشاء قسم جديد',
     'edit_category'   => 'تعديل بيانات القسم',
@@ -9,8 +13,6 @@ return [
     'actions'         => 'الإجراءات',
     'date'            => 'التاريخ',
     'status'          => 'الحالة',
-    'create'          => 'إنشاء',
-    'update'          => 'تعديل',
     'main_data'       => 'البيانات الرئيسية',
     'activate'        => 'تفعيل',
     'deactivate'      => 'إلغاء التفعيل',

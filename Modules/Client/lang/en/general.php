@@ -1,13 +1,15 @@
 <?php
 
 return [
+    'index'          => 'Clients',
+    'create'         => 'Create a new client',
+    'edit'           => 'Edit client data',
+    'update'         => 'Edit client data',
     'create_client'  => 'Create a new client',
     'edit_client'    => 'Edit client data',
     'actions'        => 'Actions',
     'date'           => 'Date',
     'status'         => 'Status',
-    'create'         => 'Create',
-    'update'         => 'Update',
     'main_data'      => 'Main Data',
     'activate'       => 'Activate',
     'deactivate'     => 'Deactivate',

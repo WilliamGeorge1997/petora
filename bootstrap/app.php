@@ -1,14 +1,13 @@
 <?php
 
+use App\Exceptions\ApiExceptionHandler;
 use App\Http\Middleware\PreventBackHistory;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\SetLocaleApi;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
@@ -28,7 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo('/admin/login')
             ->redirectUsersTo('/admin/dashboard')
             ->web([SetLocale::class])
-            ->api([SetLocaleApi::class])
+            ->api(prepend: [SetLocaleApi::class])
             ->alias([
                 'prevent-back-history' => PreventBackHistory::class,
                 'permission' => PermissionMiddleware::class,
@@ -37,32 +36,12 @@ return Application::configure(basePath: dirname(__DIR__))
             ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $isApiRequest = function (Request $request) {
-            return $request->is('api/*') || $request->expectsJson();
-        };
-
         $exceptions->shouldRenderJsonWhen(
-            function (Request $request, Throwable $e) use ($isApiRequest) {
-                return $isApiRequest($request);
-            }
-        )->render(function (ValidationException $e, Request $request) use ($isApiRequest) {
-            if ($isApiRequest($request)) { 
-                return fail(
-                    status: false,
-                    message: __('common::message.validation_error'),
-                    errors: $e->errors(),
-                    status_string: 'validation_error'
-                );
-            }
-        })->render(function (AuthenticationException $e, Request $request) use ($isApiRequest) {
-            if ($isApiRequest($request)) {
-                return fail(
-                    status: false,
-                    message: __('common::message.unauthenticated'),
-                    errors: null,
-                    status_string: 'unauthorized'
-                );
-            }
-        });
+            fn(Request $request) => $request->is('api/*') || $request->expectsJson()
+        );
+
+        $exceptions->render(
+            fn(Throwable $e, Request $request) => ApiExceptionHandler::render($e, $request)
+        );
     })
     ->create();

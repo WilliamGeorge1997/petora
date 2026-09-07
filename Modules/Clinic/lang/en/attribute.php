@@ -25,4 +25,8 @@ return [
     'longitude'      => 'Longitude',
     'is_active'      => 'Status',
     'created_at'     => 'Date',
+    'day'            => 'Day',
+    'times'          => 'Working Shifts',
+    'from'           => 'From',
+    'to'             => 'To',
 ];

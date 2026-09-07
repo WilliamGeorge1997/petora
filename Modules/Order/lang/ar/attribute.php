@@ -5,6 +5,6 @@ return [
     'title'      => 'الاسم',
     'title_en'   => 'الاسم (إنجليزي)',
     'title_ar'   => 'الاسم (عربي)',
-    'is_active'  => 'الحالة',
+    'is_active'  => 'التفعيل',
     'created_at' => 'التاريخ',
 ];

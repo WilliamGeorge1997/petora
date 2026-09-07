@@ -11,5 +11,6 @@
     "Doctor": true,
     "Order": true,
     "Pet": true,
-    "Service": true
+    "Service": true,
+    "Community": true
 }

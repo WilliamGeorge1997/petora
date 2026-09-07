@@ -10,6 +10,6 @@ return [
     'image'                 => 'الصورة',
     'fcm_token'  => 'FCM Token',
     'locale'     => 'اللغة',
-    'is_active'  => 'تفعيل',
+    'is_active'  => 'التفعيل',
     'created_at' => 'التاريخ',
 ];

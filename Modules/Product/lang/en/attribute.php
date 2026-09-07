@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'id' => 'ID',
     'title_en' => 'English Title',
     'title_ar' => 'Arabic Title',
     'description_en' => 'English Description',

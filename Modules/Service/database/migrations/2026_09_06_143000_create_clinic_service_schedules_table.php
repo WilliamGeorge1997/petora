@@ -16,11 +16,9 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(ClinicService::class)->index()->constrained()->cascadeOnDelete();
             $table->enum('day', ['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday']);
-            $table->time('from');
-            $table->time('to');
             $table->timestamps();
 
-            $table->index(['clinic_service_id', 'day']);
+            $table->unique(['clinic_service_id', 'day']);
         });
     }
 

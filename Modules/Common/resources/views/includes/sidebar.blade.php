@@ -229,6 +229,72 @@
                 </li>
             @endcanany
 
+            @canany(['Index-hashtag', 'Index-post', 'Index-comment', 'Index-like', 'Index-story', 'Index-follow', 'Index-block'])
+                <li class="nav-item {{ Route::is('admin.hashtags.*', 'admin.posts.*', 'admin.comments.*', 'admin.likes.*', 'admin.stories.*', 'admin.follows.*', 'admin.blocks.*') ? 'sidebar-group-active open' : '' }}">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="message-circle"></i>
+                        <span class="menu-title text-truncate">Community</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('Index-hashtag')
+                            <li class="nav-item {{ Route::is('admin.hashtags.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.hashtags.index') }}">
+                                    <i data-feather="hash"></i>
+                                    <span class="menu-item text-truncate">Hashtags</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-post')
+                            <li class="nav-item {{ Route::is('admin.posts.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.posts.index') }}">
+                                    <i data-feather="image"></i>
+                                    <span class="menu-item text-truncate">Posts</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-comment')
+                            <li class="nav-item {{ Route::is('admin.comments.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.comments.index') }}">
+                                    <i data-feather="message-square"></i>
+                                    <span class="menu-item text-truncate">Comments</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-like')
+                            <li class="nav-item {{ Route::is('admin.likes.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.likes.index') }}">
+                                    <i data-feather="thumbs-up"></i>
+                                    <span class="menu-item text-truncate">Likes</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-story')
+                            <li class="nav-item {{ Route::is('admin.stories.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.stories.index') }}">
+                                    <i data-feather="clock"></i>
+                                    <span class="menu-item text-truncate">Stories</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-follow')
+                            <li class="nav-item {{ Route::is('admin.follows.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.follows.index') }}">
+                                    <i data-feather="users"></i>
+                                    <span class="menu-item text-truncate">Follows</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-block')
+                            <li class="nav-item {{ Route::is('admin.blocks.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.blocks.index') }}">
+                                    <i data-feather="slash"></i>
+                                    <span class="menu-item text-truncate">Blocks</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcanany
 
             @can('Index-country')
                 <li class="navigation-header">
@@ -241,6 +307,24 @@
                         <a class="d-flex align-items-center" href="{{ route('admin.payment_method.index') }}">
                             <i data-feather="credit-card"></i>
                             <span class="menu-item text-truncate">{{ __('order::general.payment_methods') }}</span>
+                        </a>
+                    </li>
+                @endcan
+
+                @can('Index-ordermethod')
+                    <li class="nav-item {{ Route::is('admin.order_method.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.order_method.index') }}">
+                            <i data-feather="package"></i>
+                            <span class="menu-item text-truncate">{{ __('order::general.order_methods') }}</span>
+                        </a>
+                    </li>
+                @endcan
+
+                @can('Index-orderstatus')
+                    <li class="nav-item {{ Route::is('admin.order_status.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.order_status.index') }}">
+                            <i data-feather="check-circle"></i>
+                            <span class="menu-item text-truncate">{{ __('order::general.order_statuses') }}</span>
                         </a>
                     </li>
                 @endcan

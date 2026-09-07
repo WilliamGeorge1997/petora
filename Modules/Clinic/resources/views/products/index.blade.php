@@ -17,14 +17,14 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">{{ __('clinic::general.products') ?? 'Products' }} - {{ $clinic->title }}</h4>
+                        <h4 class="card-title">{{ __('clinic::general.products') }} - {{ $clinic->title }}</h4>
                     </div>
                     <div class="card-body">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">{{ __('clinic::general.home') ?? 'Home' }}</a></li>
-                                <li class="breadcrumb-item"><a href="{{ route('admin.clinic.index') }}">{{ __('clinic::general.clinics') ?? 'Clinics' }}</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">{{ __('clinic::general.products') ?? 'Products' }}</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">{{ __('clinic::general.home') }}</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.clinic.index') }}">{{ __('clinic::general.clinics') }}</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ __('clinic::general.products') }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -39,14 +39,14 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header border-bottom p-1">
-                        <div class="head-label"><h6 class="mb-0">{{ __('clinic::general.products') ?? 'Products' }}</h6></div>
+                        <div class="head-label"><h6 class="mb-0">{{ __('clinic::general.products') }}</h6></div>
                         <div class="dt-action-buttons text-end">
                             <div class="dt-buttons d-inline-flex">
                                 <button class="dt-button btn btn-outline-primary me-2" type="button" data-bs-toggle="modal" data-bs-target="#importModal">
-                                    <span><i data-feather="upload"></i> {{ __('clinic::general.import') ?? 'Import Excel' }}</span>
+                                    <span><i data-feather="upload"></i> {{ __('clinic::general.import') }}</span>
                                 </button>
                                 <a href="{{ route('admin.clinic.products.export', $clinic->id) }}" class="dt-button btn btn-outline-success">
-                                    <span><i data-feather="download"></i> {{ __('clinic::general.export') ?? 'Export Excel' }}</span>
+                                    <span><i data-feather="download"></i> {{ __('clinic::general.export') }}</span>
                                 </a>
                             </div>
                         </div>
@@ -55,11 +55,11 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>{{ __('product::attribute.id') ?? 'ID' }}</th>
-                                <th>{{ __('product::attribute.title') ?? 'Title' }}</th>
-                                <th>{{ __('product::attribute.category_id') ?? 'Category' }}</th>
-                                <th>{{ __('product::attribute.price') ?? 'Price (Pivot)' }}</th>
-                                <th>{{ __('product::attribute.is_active') ?? 'Is Active (Pivot)' }}</th>
+                                <th>{{ __('product::attribute.id') }}</th>
+                                <th>{{ __('product::attribute.title') }}</th>
+                                <th>{{ __('product::attribute.category_id') }}</th>
+                                <th>{{ __('product::attribute.price') }}</th>
+                                <th>{{ __('product::attribute.is_active') }}</th>
                             </tr>
                         </thead>
                     </table>
@@ -77,15 +77,15 @@
                 </div>
                 <div class="modal-body px-sm-5 pb-5">
                     <div class="text-center mb-2">
-                        <h1 class="mb-1">{{ __('clinic::general.import') ?? 'Import Products' }}</h1>
+                        <h1 class="mb-1">{{ __('clinic::general.import') }}</h1>
                     </div>
                     <form method="POST" action="{{ route('admin.clinic.products.import', $clinic->id) }}" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-1">
-                            <label class="form-label" for="file">{{ __('clinic::general.excel_file') ?? 'Excel File' }}</label>
+                            <label class="form-label" for="file">{{ __('clinic::general.excel_file') }}</label>
                             <input type="file" id="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" required />
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 mt-2">{{ __('clinic::general.submit') ?? 'Submit' }}</button>
+                        <button type="submit" class="btn btn-primary w-100 mt-2">{{ __('clinic::general.submit') }}</button>
                     </form>
                 </div>
             </div>

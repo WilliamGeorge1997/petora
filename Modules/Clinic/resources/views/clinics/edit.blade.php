@@ -199,7 +199,7 @@
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="country_id">{{ __('clinic::attribute.country_id') ?? 'الدولة' }}</label>
+                                        for="country_id">{{ __('clinic::attribute.country_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="country_id" id="country_id" required
@@ -207,7 +207,7 @@
                                         data-ajax-col="country_id"
                                         data-ajax-target="#city_id"
                                         data-ajax-child="#zone_id">
-                                        <option value="" disabled selected>{{ __('clinic::attribute.select_country') ?? 'اختر الدولة' }}</option>
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_country') }}</option>
                                         @foreach ($viewModel->countries() as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ $clinic->country_id == $country->id ? 'selected' : '' }}>
@@ -227,7 +227,7 @@
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="city_id">{{ __('clinic::attribute.city_id') ?? 'المدينة' }}</label>
+                                        for="city_id">{{ __('clinic::attribute.city_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="city_id" id="city_id" required disabled
@@ -235,7 +235,7 @@
                                         data-ajax-col="city_id"
                                         data-ajax-target="#zone_id"
                                         data-selected="{{ $clinic->city_id }}">
-                                        <option value="" disabled selected>{{ __('clinic::attribute.select_city') ?? 'اختر المدينة' }}</option>
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_city') }}</option>
                                     </select>
                                     @error('city_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -249,11 +249,11 @@
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="zone_id">{{ __('clinic::attribute.zone_id') ?? 'المنطقة' }}</label>
+                                        for="zone_id">{{ __('clinic::attribute.zone_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="zone_id" id="zone_id" required disabled data-selected="{{ $clinic->zone_id }}">
-                                        <option value="" disabled selected>{{ __('clinic::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
+                                        <option value="" disabled selected>{{ __('clinic::attribute.select_zone') }}</option>
                                     </select>
                                     @error('zone_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -266,13 +266,13 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
+                                    <label class="col-form-label">{{ __('common::general.location_on_map') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group mb-1">
                                         <span class="input-group-text"><i data-feather="search"></i></span>
                                         <input type="text" id="map-search" class="form-control"
-                                            placeholder="{{ __('common::general.search_location') ?? 'ابحث عن موقع أو عنوان...' }}" />
+                                            placeholder="{{ __('common::general.search_location') }}" />
                                     </div>
                                     <div id="google-map-picker" class="map-picker-container rounded border"
                                         data-google-map-picker
@@ -287,13 +287,13 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="latitude">{{ __('clinic::attribute.latitude') ?? 'خط العرض' }}</label>
+                                    <label class="col-form-label" for="latitude">{{ __('clinic::attribute.latitude') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <input type="text" id="latitude" class="form-control" name="latitude"
-                                            placeholder="{{ __('clinic::attribute.latitude') ?? 'خط العرض' }}"
+                                            placeholder="{{ __('clinic::attribute.latitude') }}"
                                             value="{{ $clinic->latitude }}" readonly />
                                     </div>
                                     @error('latitude')
@@ -308,13 +308,13 @@
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="longitude">{{ __('clinic::attribute.longitude') ?? 'خط الطول' }}</label>
+                                        for="longitude">{{ __('clinic::attribute.longitude') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <input type="text" id="longitude" class="form-control" name="longitude"
-                                            placeholder="{{ __('clinic::attribute.longitude') ?? 'خط الطول' }}"
+                                            placeholder="{{ __('clinic::attribute.longitude') }}"
                                             value="{{ $clinic->longitude }}" readonly />
                                     </div>
                                     @error('longitude')

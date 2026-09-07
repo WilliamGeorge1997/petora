@@ -142,6 +142,32 @@ class AdminDatabaseSeeder extends Seeder
             ['Index-report', 'Report', 'Index'],
 
             ['Index-dashboard', 'Dashboard', 'Index'],
+            
+            ['Index-hashtag', 'Hashtag', 'Index'],
+            ['Create-hashtag', 'Hashtag', 'Create'],
+            ['Edit-hashtag', 'Hashtag', 'Edit'],
+            ['Delete-hashtag', 'Hashtag', 'Delete'],
+
+            ['Index-post', 'Post', 'Index'],
+            ['Edit-post', 'Post', 'Edit'],
+            ['Delete-post', 'Post', 'Delete'],
+
+            ['Index-comment', 'Comment', 'Index'],
+            ['Edit-comment', 'Comment', 'Edit'],
+            ['Delete-comment', 'Comment', 'Delete'],
+
+            ['Index-like', 'Like', 'Index'],
+            ['Delete-like', 'Like', 'Delete'],
+
+            ['Index-story', 'Story', 'Index'],
+            ['Edit-story', 'Story', 'Edit'],
+            ['Delete-story', 'Story', 'Delete'],
+
+            ['Index-follow', 'Follow', 'Index'],
+            ['Delete-follow', 'Follow', 'Delete'],
+
+            ['Index-block', 'Block', 'Index'],
+            ['Delete-block', 'Block', 'Delete'],
 
         ];
 

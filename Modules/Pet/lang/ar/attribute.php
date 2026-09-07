@@ -5,7 +5,7 @@ return [
     'title'         => 'الاسم',
     'title_en'      => 'الاسم (إنجليزي)',
     'title_ar'      => 'الاسم (عربي)',
-    'is_active'     => 'تفعيل',
+    'is_active'     => 'التفعيل',
     'client_id'     => 'العميل',
     'select_client' => 'اختر العميل',
     'pet_type_id'   => 'نوع الحيوان الأليف',

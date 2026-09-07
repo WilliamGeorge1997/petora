@@ -23,7 +23,7 @@ class ClinicController extends Controller
         $clinic = $this->clinicService->findById($clinic_id, ['doctors' => function ($q) {
             $q->active()->latest('id');
         }]);
-        $categories = $categoryService->categoriesHaveProducts('clinic', $clinic_id,);
+        $categories = $categoryService->categoriesHaveProducts('clinic', $clinic_id);
         $clinic->setAttribute('categories', $categories);
 
         return success(true, __('clinic::message.fetched'), $clinic);

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('order_methods', function (Blueprint $table) {
             $table->id();
-            
+            $table->json('title');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

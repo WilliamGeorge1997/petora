@@ -9,7 +9,7 @@ return [
     'specialty_en' => 'التخصص (بالانجليزية)',
     'specialty_ar' => 'التخصص (بالعربية)',
     'image' => 'الصورة',
-    'is_active' => 'تفعيل',
+    'is_active' => 'التفعيل',
     'created_at' => 'التاريخ',
     'clinic_id' => 'العيادة',
 ];

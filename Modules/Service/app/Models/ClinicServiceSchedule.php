@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -16,8 +17,6 @@ class ClinicServiceSchedule extends Model
     protected $fillable = [
         'clinic_service_id',
         'day',
-        'from',
-        'to',
     ];
 
     // Activity log options
@@ -58,5 +57,10 @@ class ClinicServiceSchedule extends Model
     public function clinicService(): BelongsTo
     {
         return $this->belongsTo(ClinicService::class);
+    }
+
+    public function times(): HasMany
+    {
+        return $this->hasMany(ClinicServiceScheduleTime::class);
     }
 }

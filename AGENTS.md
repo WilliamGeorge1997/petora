@@ -6,6 +6,15 @@
 - Act as a strict code-typist: implement exactly what is asked.
 - **Canonical Structure:** Any new module MUST strictly mirror the **Store** module's structure (Model, Migration, Controller, Service, DTO, CustomRequest, index/edit/create blades, translation files/locations, and translation loading in ServiceProvider).
 - **ViewModels:** A ViewModel should ONLY be applied if the current module needs to view/access a model from another module. Do not add ViewModels by default.
+- **Route Building & Parameter Binding Rule:**
+  - Prefer using `Route::resource` or `Route::apiResource` wherever applicable.
+  - **URL & Parameter Casing Conventions:**
+    - URI path segments MUST be **`kebab-case`** and plural (e.g. `/order-methods`, `/clinic-services`, `/pet-types`).
+    - Route parameters MUST ALWAYS be **`snake_case`** (e.g. `{order_method}`, `{clinic_service}`, `{schedule_id}`). NEVER use `camelCase` (e.g. avoid `{clinicService}`).
+  - **When writing explicit routes / controller actions:**
+    - **Eager Loading Relations:** If relationships WILL be eager-loaded inside the route/action, do **NOT** use Route Model Binding (which queries the model without relations first and causes redundant database queries). Instead, pass only the ID named `{model_name}_id` in the route (e.g., `{schedule_id}`, `{clinic_id}`) and method signature (`int $schedule_id`), and fetch the model with its eager-loaded relations inside the action/service (e.g., `$service->findById($schedule_id, ['times'])`). Do not use a generic `{id}` in nested/custom routes.
+    - **No Relations Needed:** If NO relationships need to be eager-loaded (e.g., simple updates, deletes, status toggles), use **Route Model Binding** named `{model_name}` in the route (e.g., `{clinic_service}`, `{schedule}`) and typed `Model $model` in the method for cleaner, easier syntax.
+  - **Imports in Routes:** Always import controller classes at the top of route files via `use` statements. Never use inline FQCNs.
 
 <laravel-boost-guidelines>
 === foundation rules ===

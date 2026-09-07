@@ -5,35 +5,34 @@ namespace Modules\Clinic\Http\Controllers;
 use App\Exports\ServiceExport;
 use App\Http\Controllers\Controller;
 use App\Imports\ClinicServiceImport;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Admin\Enums\AdminRole;
+use Modules\Clinic\DTOs\ClinicServiceDto;
+use Modules\Clinic\Http\Requests\ClinicServiceImportRequest;
+use Modules\Clinic\Http\Requests\ClinicServiceUpdateRequest;
 use Modules\Clinic\Models\Clinic;
+use Modules\Clinic\Services\ClinicServiceService;
 use Modules\Service\Models\ClinicService;
-use Modules\Service\Models\Service;
 
 #[Middleware('auth:admin')]
-#[Middleware('role:' . AdminRole::SuperAdmin->value)]
 #[Middleware('permission:Edit-clinic')]
 class ClinicServiceController extends Controller
 {
-    public function index(Request $request, Clinic $clinic)
+    public function __construct(private ClinicServiceService $clinicServiceService) {}
+
+    public function index(Request $request, Clinic $clinic): View|JsonResponse
     {
+        $data = $request->merge(['paginated' => 50, 'clinic_id' => $clinic->id])->all();
+        $relations = ['service', 'schedules'];
+        $services = $this->clinicServiceService->findAll($data, $relations);
+
         if ($request->ajax()) {
-            $clinicServices = ClinicService::with(['service', 'schedules'])
-                ->where('clinic_id', $clinic->id)
-                ->latest('id')
-                ->get();
-
-            return response()->json(['data' => $clinicServices]);
+            return success(true, __('clinic::message.service.fetched'), $services->items());
         }
-
-        $services = ClinicService::with(['service', 'schedules'])
-            ->where('clinic_id', $clinic->id)
-            ->paginate(50);
 
         return view('clinic::services.index', compact('clinic', 'services'));
     }
@@ -43,84 +42,48 @@ class ClinicServiceController extends Controller
         return Excel::download(new ServiceExport(), 'services_template.xlsx');
     }
 
-    public function import(Request $request, Clinic $clinic): RedirectResponse
+    public function edit(Clinic $clinic, int $clinic_service): View
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv',
-        ]);
+        $clinic_service->load('service');
+        return view('clinic::services.edit', compact('clinic', 'clinic_service'));
+    }
 
+    public function import(ClinicServiceImportRequest $request, Clinic $clinic): RedirectResponse
+    {
         Excel::import(new ClinicServiceImport($clinic), $request->file('file'));
-
-        return back()->with('success', __('common::message.imported_successfully') ?? 'Services imported successfully');
+        return back()->with('success', __('clinic::message.service.imported'));
     }
 
     public function importAll(Clinic $clinic): RedirectResponse
     {
-        $activeServices = Service::active()->get();
-        $syncData = [];
-
-        foreach ($activeServices as $service) {
-            $syncData[$service->id] = [
-                'price'     => (float) $service->price,
-                'duration'  => $service->duration !== null ? (int) $service->duration : null,
-                'is_active' => true,
-            ];
-        }
-
-        if (!empty($syncData)) {
-            $clinic->services()->syncWithoutDetaching($syncData);
-        }
-
-        return back()->with('success', __('clinic::general.imported_all_services') ?? 'All services imported successfully');
+        $this->clinicServiceService->importAll($clinic);
+        return back()->with('success', __('clinic::message.service.imported'));
     }
 
-    public function update(Request $request, Clinic $clinic, ClinicService $clinicService): JsonResponse
+    public function update(ClinicServiceUpdateRequest $request, Clinic $clinic, ClinicService $clinic_service): RedirectResponse
     {
-        $data = $request->validate([
-            'price'            => ['sometimes', 'required', 'numeric', 'min:0'],
-            'duration'         => ['nullable', 'integer', 'min:1'],
-            'is_active'        => ['nullable', 'boolean'],
-            'schedules'        => ['nullable', 'array'],
-            'schedules.*.day'  => ['required', 'string'],
-            'schedules.*.from' => ['required'],
-            'schedules.*.to'   => ['required'],
-        ]);
+        $dto = ClinicServiceDto::fromRequest($request);
+        $this->clinicServiceService->update($clinic_service, $dto);
 
-        $attributes = collect($data)->only(['price', 'duration', 'is_active'])->filter(fn($v) => !is_null($v))->all();
-        if (!empty($attributes)) {
-            $clinicService->update($attributes);
-        }
-
-        if ($request->has('schedules')) {
-            $clinicService->schedules()->delete();
-            if (!empty($data['schedules'])) {
-                $clinicService->schedules()->createMany($data['schedules']);
-            }
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => __('clinic::message.updated_successfully') ?? 'Service updated successfully',
-        ]);
+        return redirect()->route('admin.clinic.services.index', $clinic->id)
+            ->with('success', __('clinic::message.service.updated'));
     }
 
-    public function activate(Clinic $clinic, ClinicService $clinicService): JsonResponse
+    public function activate(Clinic $clinic, ClinicService $clinic_service): JsonResponse
     {
-        $clinicService->update(['is_active' => !$clinicService->is_active]);
+        $clinic_service = $this->clinicServiceService->activate($clinic_service);
 
-        return response()->json([
-            'success' => true,
-            'message' => __('clinic::message.status_updated') ?? 'Status updated successfully',
-        ]);
+        return success(
+            true,
+            $clinic_service->is_active ? __('clinic::message.service.activated') : __('clinic::message.service.deactivated'),
+            $clinic_service
+        );
     }
 
-    public function destroy(Clinic $clinic, ClinicService $clinicService): JsonResponse
+    public function destroy(Clinic $clinic, ClinicService $clinic_service): JsonResponse
     {
-        $clinicService->delete();
+        $this->clinicServiceService->delete($clinic_service);
 
-        return response()->json([
-            'success' => true,
-            'message' => __('clinic::message.deleted_successfully') ?? 'Service deleted successfully',
-        ]);
+        return success(true, __('clinic::message.service.deleted'));
     }
 }

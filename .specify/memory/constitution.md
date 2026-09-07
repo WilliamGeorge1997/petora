@@ -1,8 +1,9 @@
 <!-- Sync Impact Report
-Version change: 1.6.0 → 1.7.0 (MINOR)
+Version change: 1.7.0 → 1.8.0 (MINOR)
 Modified:
   - Updated Principle XI: Changed Canonical Structure from Company to Store, and added rule for ViewModels
-Last Amended: 2026-08-26
+  - Added Principle XII: Route Building and Route Parameter Binding Rule (NON-NEGOTIABLE)
+Last Amended: 2026-09-07
 -->
 
 # Petora Backend Constitution
@@ -248,6 +249,19 @@ Specifically, when creating a new module, you MUST replicate the presence and st
 8. **Translations** (`Modules/{Name}/lang/en/general.php` and `Modules/{Name}/lang/ar/general.php`): Translation files and their exact locations must be maintained.
 9. **ServiceProvider** (`Modules/{Name}/app/Providers/{Name}ServiceProvider.php`): MUST manually register and load the translation files according to the nwidart v13 language docs pattern.
 10. **ViewModels** (`Modules/{Name}/app/ViewModels/`): A ViewModel should ONLY be applied if the current module needs to view/access a model from another module. Do not create ViewModels by default otherwise.
+
+### XII. Route Building & Route Parameter Binding (NON-NEGOTIABLE)
+
+Every route definition and associated controller method signature MUST adhere to this explicit design decision tree:
+
+1. **Prefer Resource Routing**: Always prefer `Route::resource` or `Route::apiResource` where applicable.
+2. **URL & Route Parameter Casing Conventions**:
+   - URI path segments MUST be **`kebab-case`** and plural (e.g., `/order-methods`, `/clinic-services`, `/pet-types`).
+   - Route parameters MUST ALWAYS be **`snake_case`** (e.g., `{order_method}`, `{clinic_service}`, `{schedule_id}`). NEVER use `camelCase` (e.g., avoid `{clinicService}`).
+3. **Explicit / Custom Routes & Parameter Binding**:
+   - **Eager Loading Relations:** If relationships WILL be eager-loaded inside the route/action (e.g., `$service->findById($schedule_id, ['relations'])`), do **NOT** use implicit Route Model Binding (`Model $model`). Route Model Binding performs an initial bare query without relations, resulting in duplicate database queries when the relation is subsequently loaded. Instead, accept only the ID in the route definition using `{model_name}_id` (e.g., `{schedule_id}`, `{clinic_id}`) and method signature (`int $schedule_id`), then query the model with its eager-loaded relations in the Service. Avoid using generic `{id}` in nested/custom routes.
+   - **No Relations Needed:** If NO relationships need to be loaded (e.g., simple updates, deletions, or status activations), use **Route Model Binding** named `{model_name}` in the route (e.g., `{clinic_service}`, `{schedule}`) and typed `Model $model` in the method directly for cleaner, simpler, and standard syntax.
+4. **Top-Level Route Imports**: All controller classes referenced in route files MUST be imported using `use` statements at the top of the file. Inline fully-qualified class names (FQCN) in route files are strictly forbidden.
 
 ---
 

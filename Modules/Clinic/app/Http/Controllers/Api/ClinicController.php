@@ -20,9 +20,12 @@ class ClinicController extends Controller
 
     public function show(int $clinic_id, CategoryService $categoryService)
     {
-        $clinic = $this->clinicService->findById($clinic_id, ['doctors' => function ($q) {
+        $relations = ['doctors' => function ($q) {
             $q->active()->latest('id');
-        }]);
+        }, 'clinicServices as services' => function ($q) {
+            $q->active()->latest('id');
+        }];
+        $clinic = $this->clinicService->findById($clinic_id, $relations);
         $categories = $categoryService->categoriesHaveProducts('clinic', $clinic_id);
         $clinic->setAttribute('categories', $categories);
 

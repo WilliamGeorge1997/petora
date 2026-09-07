@@ -34,11 +34,17 @@ class StoryService
         return $storyOrId instanceof Story ? $storyOrId : $this->findById($storyOrId);
     }
 
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
+    {
+        $query = $this->model::query()->active()->with($relations);
+        return getCaseCollection($query, $data, $columns);
+    }
+
     public function save(StoryDto $dto): Story
     {
         $data = $dto->toArray();
         if ($dto->media instanceof UploadedFile) {
-            $data['media'] = $this->uploadImage($dto->media, 'story');
+            $data['media'] = $this->uploadImage($dto->media, 'community/story');
         } elseif (is_string($dto->media)) {
             $data['media'] = $dto->media;
         }
@@ -50,7 +56,7 @@ class StoryService
     {
         $story = $this->resolveModel($storyOrId);
         if ($story->media) {
-            $this->deleteImage($story->getRawOriginal('media'), 'story');
+            $this->deleteImage($story->getRawOriginal('media'), 'community/story');
         }
         return $story->delete();
     }

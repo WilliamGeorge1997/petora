@@ -37,4 +37,26 @@ class LikeService
     {
         return $this->resolveModel($likeOrId)->delete();
     }
+
+    public function firstBy(array $conditions, array $relations = []): ?Like
+    {
+        return $this->model::with($relations)->where($conditions)->first();
+    }
+
+    public function toggleLike(int $client_id, int $likeable_id, string $likeable_type): ?Like
+    {
+        $like = $this->firstBy([
+            'client_id' => $client_id,
+            'likeable_id' => $likeable_id,
+            'likeable_type' => $likeable_type
+        ]);
+
+        if ($like) {
+            $this->delete($like);
+            return null;
+        }
+
+        $dto = new LikeDto($client_id, $likeable_id, $likeable_type);
+        return $this->save($dto);
+    }
 }

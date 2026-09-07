@@ -6,16 +6,19 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\Country\Models\City;
 use Modules\Country\Models\Country;
 use Modules\Country\Models\Zone;
 use Modules\Doctor\Models\Doctor;
+use Modules\Product\Models\Product;
+use Modules\Service\Models\ClinicService;
+use Modules\Service\Models\Service;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
-use Modules\Product\Models\Product;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Clinic extends Model
 {
@@ -133,15 +136,15 @@ class Clinic extends Model
             ->withTimestamps();
     }
 
-    public function services(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function services(): BelongsToMany
     {
-        return $this->belongsToMany(\Modules\Service\Models\Service::class, 'clinic_services')
+        return $this->belongsToMany(Service::class, 'clinic_services')
             ->withPivot(['price', 'duration', 'is_active'])
             ->withTimestamps();
     }
 
-    public function clinicServices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function clinicServices(): HasMany
     {
-        return $this->hasMany(\Modules\Service\Models\ClinicService::class);
+        return $this->hasMany(ClinicService::class);
     }
 }

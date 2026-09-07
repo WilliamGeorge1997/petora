@@ -37,4 +37,25 @@ class FollowService
     {
         return $this->resolveModel($followOrId)->delete();
     }
+
+    public function firstBy(array $conditions, array $relations = []): ?Follow
+    {
+        return $this->model::with($relations)->where($conditions)->first();
+    }
+
+    public function toggleFollow(int $follower_id, int $following_id): ?Follow
+    {
+        $follow = $this->firstBy([
+            'follower_id' => $follower_id,
+            'following_id' => $following_id
+        ]);
+
+        if ($follow) {
+            $this->delete($follow);
+            return null;
+        }
+
+        $dto = new FollowDto($follower_id, $following_id);
+        return $this->save($dto);
+    }
 }

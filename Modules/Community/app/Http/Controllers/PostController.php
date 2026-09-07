@@ -31,7 +31,7 @@ class PostController extends Controller
 
     public function show(Post $post): View
     {
-        $post->load(['client', 'pet', 'images', 'hashtags']);
+        $post->load(['client', 'pet', 'media', 'hashtags']);
         return view('community::posts.show', compact('post'));
     }
 

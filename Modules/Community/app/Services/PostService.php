@@ -49,11 +49,17 @@ class PostService
     {
         $post = $this->model::create($dto->toArray());
         
-        if ($dto->images) {
-            foreach ($dto->images as $image) {
-                $post->images()->create([
-                    'image' => $this->uploadImage($image, 'post'),
-                ]);
+        if ($dto->media) {
+            foreach ($dto->media as $item) {
+                if (isset($item['file'])) {
+                    $isVideo = $item['is_video'] ?? false;
+                    $mediaPath = $isVideo ? $this->uploadFile($item['file'], 'community/post') : $this->uploadImage($item['file'], 'community/post');
+                    
+                    $post->media()->create([
+                        'media' => $mediaPath,
+                        'is_video' => $isVideo,
+                    ]);
+                }
             }
         }
         
@@ -65,20 +71,26 @@ class PostService
         $post = $this->resolveModel($postOrId);
         $post->update($dto->toArray());
 
-        if ($dto->images) {
-            // Delete old images
-            foreach ($post->images as $postImage) {
-                if ($postImage->image) {
-                    $this->deleteImage($postImage->getRawOriginal('image'), 'post');
+        if ($dto->media) {
+            // Delete old media
+            foreach ($post->media as $postMedia) {
+                if ($postMedia->media) {
+                    $this->deleteImage($postMedia->getRawOriginal('media'), 'community/post');
                 }
-                $postImage->delete();
+                $postMedia->delete();
             }
 
             // Upload new ones
-            foreach ($dto->images as $image) {
-                $post->images()->create([
-                    'image' => $this->uploadImage($image, 'post'),
-                ]);
+            foreach ($dto->media as $item) {
+                if (isset($item['file'])) {
+                    $isVideo = $item['is_video'] ?? false;
+                    $mediaPath = $isVideo ? $this->uploadFile($item['file'], 'community/post') : $this->uploadImage($item['file'], 'community/post');
+                    
+                    $post->media()->create([
+                        'media' => $mediaPath,
+                        'is_video' => $isVideo,
+                    ]);
+                }
             }
         }
 
@@ -88,9 +100,9 @@ class PostService
     public function delete(int|Post $postOrId): bool
     {
         $post = $this->resolveModel($postOrId);
-        foreach ($post->images as $postImage) {
-            if ($postImage->image) {
-                $this->deleteImage($postImage->getRawOriginal('image'), 'post');
+        foreach ($post->media as $postMedia) {
+            if ($postMedia->media) {
+                $this->deleteImage($postMedia->getRawOriginal('media'), 'community/post');
             }
         }
         return $post->delete();

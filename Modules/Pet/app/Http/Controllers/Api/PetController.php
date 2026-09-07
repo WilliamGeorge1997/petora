@@ -30,33 +30,27 @@ class PetController extends Controller
     {
         $dto = PetDto::fromRequest($request);
         $pet = $this->petService->save($dto);
-
         return success(true, __('pet::message.created'), $pet);
     }
 
     public function show(int $pet_id)
     {
         $pet = $this->petService->findById($pet_id, ['type']);
-        
         Gate::authorize('view', $pet);
-
         return success(true, __('pet::message.fetched'), new PetResource($pet));
     }
 
     public function update(PetRequest $request, Pet $pet)
     {
         Gate::authorize('update', $pet);
-
         $dto = PetDto::fromRequest($request);
         $pet = $this->petService->update($pet, $dto);
-
         return success(true, __('pet::message.updated'), $pet);
     }
 
     public function destroy(Pet $pet)
     {
         Gate::authorize('delete', $pet);
-
         $this->petService->delete($pet);
         return success(true, __('pet::message.deleted'));
     }

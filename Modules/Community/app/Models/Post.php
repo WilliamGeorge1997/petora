@@ -78,9 +78,9 @@ class Post extends Model
         return $this->belongsTo(Pet::class);
     }
 
-    public function images(): HasMany
+    public function media(): HasMany
     {
-        return $this->hasMany(PostImage::class);
+        return $this->hasMany(PostMedia::class);
     }
 
     public function hashtags(): BelongsToMany

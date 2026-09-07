@@ -11,7 +11,7 @@ readonly class PostDto
         public bool $isActive,
         public ?int $petId = null,
         public ?string $content = null,
-        public ?array $images = null,
+        public ?array $media = null,
     ) {}
 
     public static function fromRequest(PostRequest $request): self
@@ -21,7 +21,7 @@ readonly class PostDto
             isActive: $request->boolean('is_active'),
             petId: $request->validated('pet_id'),
             content: $request->validated('content'),
-            images: $request->file('images'),
+            media: $request->validated('media'),
         );
     }
 

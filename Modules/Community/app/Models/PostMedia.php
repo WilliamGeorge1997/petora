@@ -6,17 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PostImage extends Model
+class PostMedia extends Model
 {
     use HasFactory;
 
+    protected $table = 'post_media';
+
     protected $fillable = [
         'post_id',
-        'image',
+        'media',
+        'is_video',
+    ];
+
+    protected $casts = [
+        'is_video' => 'boolean',
     ];
 
     //Getters
-    public function getImageAttribute(?string $value): ?string
+    public function getMediaAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
             if (filter_var($value, FILTER_VALIDATE_URL)) {

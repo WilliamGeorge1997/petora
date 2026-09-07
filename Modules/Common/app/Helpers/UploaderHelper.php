@@ -27,6 +27,16 @@ trait UploaderHelper
         return $fileName;
     }
 
+    public function uploadFile(UploadedFile $file, string $dir): string
+    {
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        $path = "uploads/{$dir}";
+
+        $file->storeAs($path, $fileName, $this->disk);
+
+        return $fileName;
+    }
+
     public function deleteImage(string $fileName, string $dir): bool
     {
         $file = "uploads/{$dir}/{$fileName}";

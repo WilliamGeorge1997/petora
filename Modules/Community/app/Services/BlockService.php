@@ -37,4 +37,25 @@ class BlockService
     {
         return $this->resolveModel($blockOrId)->delete();
     }
+
+    public function firstBy(array $conditions, array $relations = []): ?Block
+    {
+        return $this->model::with($relations)->where($conditions)->first();
+    }
+
+    public function toggleBlock(int $blocker_id, int $blocked_id): ?Block
+    {
+        $block = $this->firstBy([
+            'blocker_id' => $blocker_id,
+            'blocked_id' => $blocked_id
+        ]);
+
+        if ($block) {
+            $this->delete($block);
+            return null;
+        }
+
+        $dto = new BlockDto($blocker_id, $blocked_id);
+        return $this->save($dto);
+    }
 }

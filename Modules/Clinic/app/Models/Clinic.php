@@ -147,4 +147,9 @@ class Clinic extends Model
     {
         return $this->hasMany(ClinicService::class);
     }
+
+    public function workingHours(): HasMany
+    {
+        return $this->hasMany(ClinicWorkingHour::class);
+    }
 }

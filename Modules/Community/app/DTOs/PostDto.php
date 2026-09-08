@@ -12,6 +12,7 @@ readonly class PostDto
         public ?int $petId = null,
         public ?string $content = null,
         public ?array $media = null,
+        public ?array $hashtags = null,
     ) {}
 
     public static function fromRequest(PostRequest $request): self
@@ -22,6 +23,7 @@ readonly class PostDto
             petId: $request->validated('pet_id'),
             content: $request->validated('content'),
             media: $request->validated('media'),
+            hashtags: $request->validated('hashtags'),
         );
     }
 

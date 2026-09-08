@@ -19,6 +19,8 @@ class ClinicServiceSchedule extends Model
         'day',
     ];
 
+    protected $hidden = ['clinic_service_id'];
+
     // Activity log options
     public function getActivitylogOptions(): LogOptions
     {

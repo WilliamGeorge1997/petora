@@ -5,6 +5,7 @@ namespace Modules\Community\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 
@@ -52,5 +53,11 @@ class Hashtag extends Model
             ->when(isset($filters['is_active']) && $filters['is_active'] !== '', function ($query) use ($filters) {
                 $query->where('is_active', (bool) $filters['is_active']);
             });
+    }
+
+    //Relations
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'post_hashtag');
     }
 }

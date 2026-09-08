@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\Client\Models\Client;
+use Modules\Pet\Models\Pet;
 
 return new class extends Migration
 {
@@ -13,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\Modules\Client\Models\Client::class)->constrained()->cascadeOnDelete();
-            $table->foreignId('pet_id')->nullable()->constrained('pets')->nullOnDelete();
+            $table->foreignIdFor(Client::class)->index()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Pet::class)->index()->constrained()->cascadeOnDelete();
             $table->text('content')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

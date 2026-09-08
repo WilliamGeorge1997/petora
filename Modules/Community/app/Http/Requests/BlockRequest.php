@@ -40,7 +40,11 @@ class BlockRequest extends FormRequest
     {
         return [
             'blocker_id.required' => __('community::message.blocker_id_required'),
+            'blocker_id.integer'  => __('community::message.blocker_id_integer'),
+            'blocker_id.exists'   => __('community::message.blocker_id_exists'),
             'blocked_id.required' => __('community::message.blocked_id_required'),
+            'blocked_id.integer'  => __('community::message.blocked_id_integer'),
+            'blocked_id.exists'   => __('community::message.blocked_id_exists'),
         ];
     }
 }

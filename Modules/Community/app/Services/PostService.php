@@ -6,8 +6,10 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Community\DTOs\PostDto;
+use Modules\Community\Models\Hashtag;
 use Modules\Community\Models\Post;
 use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Facades\DB;
 
 class PostService
 {
@@ -15,17 +17,18 @@ class PostService
 
     private string $model = Post::class;
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function findAll(array $data, array $relations = [], array $counts = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
+            ->withCount($counts)
             ->filter($data)
             ->latest('id');
         return getCaseCollection($query, $data);
     }
 
-    public function findById(int $id, array $relations = []): Post
+    public function findById(int $id, array $relations = [], array $counts = []): Post
     {
-        return $this->model::with($relations)->findOrFail($id);
+        return $this->model::with($relations)->withCount($counts)->findOrFail($id);
     }
 
     protected function resolveModel(int|Post $postOrId): Post
@@ -39,62 +42,126 @@ class PostService
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $counts = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->active()->with($relations);
+        $query = $this->model::query()->active()->with($relations)->withCount($counts)->latest('id');
         return getCaseCollection($query, $data, $columns);
+    }
+
+    public function postRelations(?int $commentsLimit = null, ?int $repliesLimit = null): array
+    {
+        return [
+            'client:id,name,phone,email,image',
+            'media',
+            'hashtags' => fn ($query) => $query->active(),
+            'comments' => fn ($query) => $query->active()
+                ->whereNull('parent_id')
+                ->latest('id')
+                ->when($commentsLimit, fn ($q) => $q->limit($commentsLimit))
+                ->with([
+                    'client:id,name,phone,email,image',
+                    'replies' => fn ($q) => $q->active()
+                        ->latest('id')
+                        ->when($repliesLimit, fn ($rq) => $rq->limit($repliesLimit))
+                        ->with('client:id,name,phone,email,image')
+                        ->withCount('likes'),
+                ])
+                ->withCount([
+                    'likes',
+                    'replies' => fn ($q) => $q->active(),
+                ]),
+        ];
+    }
+
+    public function postCounts(): array
+    {
+        return [
+            'likes',
+            'comments' => fn ($query) => $query->active()->whereNull('parent_id'),
+        ];
     }
 
     public function save(PostDto $dto): Post
     {
-        $post = $this->model::create($dto->toArray());
-        
-        if ($dto->media) {
-            foreach ($dto->media as $item) {
-                if (isset($item['file'])) {
-                    $isVideo = $item['is_video'] ?? false;
-                    $mediaPath = $isVideo ? $this->uploadFile($item['file'], 'community/post') : $this->uploadImage($item['file'], 'community/post');
-                    
-                    $post->media()->create([
-                        'media' => $mediaPath,
-                        'is_video' => $isVideo,
-                    ]);
+        return DB::transaction(function () use ($dto) {
+            $post = $this->model::create($dto->toArray());
+
+            if ($dto->media) {
+                foreach ($dto->media as $item) {
+                    if (isset($item['file'])) {
+                        $isVideo = $item['is_video'] ?? false;
+                        $mediaPath = $isVideo ? $this->uploadFile($item['file'], 'community/post') : $this->uploadImage($item['file'], 'community/post');
+
+                        $post->media()->create([
+                            'media' => $mediaPath,
+                            'is_video' => $isVideo,
+                        ]);
+                    }
                 }
             }
-        }
-        
-        return $post;
+
+            $this->syncHashtags($post, $dto->hashtags);
+
+            return $post->load(['media', 'hashtags']);
+        });
     }
 
     public function update(int|Post $postOrId, PostDto $dto): Post
     {
-        $post = $this->resolveModel($postOrId);
-        $post->update($dto->toArray());
+        return DB::transaction(function () use ($postOrId, $dto) {
+            $post = $this->resolveModel($postOrId);
+            $post->update($dto->toArray());
 
-        if ($dto->media) {
-            // Delete old media
-            foreach ($post->media as $postMedia) {
-                if ($postMedia->media) {
-                    $this->deleteImage($postMedia->getRawOriginal('media'), 'community/post');
+            if ($dto->media) {
+                // Delete old media
+                foreach ($post->media as $postMedia) {
+                    if ($postMedia->media) {
+                        $this->deleteImage($postMedia->getRawOriginal('media'), 'community/post');
+                    }
+                    $postMedia->delete();
                 }
-                $postMedia->delete();
+
+                // Upload new ones
+                foreach ($dto->media as $item) {
+                    if (isset($item['file'])) {
+                        $isVideo = $item['is_video'] ?? false;
+                        $mediaPath = $isVideo ? $this->uploadFile($item['file'], 'community/post') : $this->uploadImage($item['file'], 'community/post');
+
+                        $post->media()->create([
+                            'media' => $mediaPath,
+                            'is_video' => $isVideo,
+                        ]);
+                    }
+                }
             }
 
-            // Upload new ones
-            foreach ($dto->media as $item) {
-                if (isset($item['file'])) {
-                    $isVideo = $item['is_video'] ?? false;
-                    $mediaPath = $isVideo ? $this->uploadFile($item['file'], 'community/post') : $this->uploadImage($item['file'], 'community/post');
-                    
-                    $post->media()->create([
-                        'media' => $mediaPath,
-                        'is_video' => $isVideo,
-                    ]);
-                }
-            }
+            $this->syncHashtags($post, $dto->hashtags);
+
+            return $post->load(['media', 'hashtags']);
+        });
+    }
+
+    public function syncHashtags(Post $post, ?array $hashtags): void
+    {
+        if ($hashtags === null) {
+            return;
         }
 
-        return $post;
+        $hashtagIds = [];
+        foreach ($hashtags as $tag) {
+            if (!is_string($tag)) {
+                continue;
+            }
+
+            $hashtag = Hashtag::firstOrCreate(
+                ['text' => $tag],
+                ['is_active' => true]
+            );
+
+            $hashtagIds[] = $hashtag->id;
+        }
+
+        $post->hashtags()->sync(array_unique($hashtagIds));
     }
 
     public function delete(int|Post $postOrId): bool

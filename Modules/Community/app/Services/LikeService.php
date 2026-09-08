@@ -43,12 +43,12 @@ class LikeService
         return $this->model::with($relations)->where($conditions)->first();
     }
 
-    public function toggleLike(int $client_id, int $likeable_id, string $likeable_type): ?Like
+    public function toggle(LikeDto $dto): ?Like
     {
         $like = $this->firstBy([
-            'client_id' => $client_id,
-            'likeable_id' => $likeable_id,
-            'likeable_type' => $likeable_type
+            'client_id' => $dto->clientId,
+            'likeable_id' => $dto->likeableId,
+            'likeable_type' => $dto->likeableType,
         ]);
 
         if ($like) {
@@ -56,7 +56,6 @@ class LikeService
             return null;
         }
 
-        $dto = new LikeDto($client_id, $likeable_id, $likeable_type);
         return $this->save($dto);
     }
 }

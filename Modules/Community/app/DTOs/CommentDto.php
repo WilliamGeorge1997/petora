@@ -7,11 +7,11 @@ use Modules\Community\Http\Requests\CommentRequest;
 readonly class CommentDto
 {
     public function __construct(
-        public int $clientId,
-        public int $postId,
-        public ?int $parentId,
-        public string $content,
-        public bool $isActive,
+        public readonly  int $clientId,
+        public readonly ?int $postId = null,
+        public readonly ?int $parentId = null,
+        public readonly string $content = '',
+        public readonly bool $isActive = true,
     ) {}
 
     public static function fromRequest(CommentRequest $request): self

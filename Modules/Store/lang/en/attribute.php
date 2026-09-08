@@ -25,4 +25,9 @@ return [
     'longitude'  => 'Longitude',
     'is_active'  => 'Status',
     'created_at' => 'Date',
+    'working_hours' => 'Working Hours',
+    'day' => 'Day',
+    'is_open_24_hours' => 'Open 24 Hours',
+    'from' => 'From',
+    'to' => 'To',
 ];

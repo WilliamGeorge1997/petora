@@ -14,12 +14,18 @@ class ClinicServiceResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            $this->mergeWhen($this->relationLoaded('service'), function () {
+                return [
+                    'title' => $this->service->title,
+                    'description' => $this->service->description,
+                    'image' => $this->service->image,
+                ];
+            }),
             'price' => $this->price,
             'duration' => $this->duration,
-            'title' => $this->whenLoaded('service', function () {
-                return $this->service->title;
-            }),
             'schedules' => $this->whenLoaded('schedules'),
+            'created_at' => $this->created_at->format('Y-m-d h:i A'),
+            'updated_at' => $this->updated_at->format('Y-m-d h:i A')
         ];
     }
 }

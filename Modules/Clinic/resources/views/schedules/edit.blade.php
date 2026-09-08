@@ -11,9 +11,10 @@
         'friday'    => __('clinic::general.schedule.days.friday'),
     ];
 
-    $initialTimes = old('times') ?? $schedule->times->map(fn($t) => [
-        'from' => substr($t->from, 0, 5),
-        'to'   => substr($t->to, 0, 5),
+    $initialTimes = old('times') ?? $schedule->times->map(fn($time) => [
+        'from'     => substr($time->from, 0, 5),
+        'to'       => substr($time->to, 0, 5),
+        'capacity' => $time->capacity,
     ])->toArray();
 @endphp
 @extends('common::layouts.master')
@@ -74,21 +75,29 @@
                                             @if(!empty($initialTimes))
                                                 @foreach($initialTimes as $time)
                                                     <div data-repeater-item class="row mb-1 align-items-center">
-                                                            <div class="col-md-5 col-5">
+                                                            <div class="col-md-4 col-4">
                                                                 <label class="form-label"><small>{{ __('clinic::general.schedule.from') }}</small></label>
                                                                 <div class="input-group input-group-merge">
                                                                     <span class="input-group-text"><i data-feather="clock"></i></span>
                                                                     <input type="time" name="from" class="form-control" value="{{ $time['from'] ?? '' }}" required />
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-5 col-5">
+                                                            <div class="col-md-4 col-4">
                                                                 <label class="form-label"><small>{{ __('clinic::general.schedule.to') }}</small></label>
                                                                 <div class="input-group input-group-merge">
                                                                     <span class="input-group-text"><i data-feather="clock"></i></span>
                                                                     <input type="time" name="to" class="form-control" value="{{ $time['to'] ?? '' }}" required />
                                                                 </div>
                                                             </div>
-                                                        <div class="col-md-2 col-2 text-end pt-2">
+                                                            <div class="col-md-3 col-3">
+                                                                <label class="form-label"><small>{{ __('clinic::general.schedule.capacity') }}</small></label>
+                                                                <div class="input-group input-group-merge">
+                                                                    <span class="input-group-text"><i data-feather="users"></i></span>
+                                                                    <input type="number" name="capacity" class="form-control" value="{{ $time['capacity'] ?? '' }}" />
+                                                                </div>
+                                                                <small class="text-muted d-block">{{ __('clinic::general.schedule.capacity_tip') }}</small>
+                                                            </div>
+                                                        <div class="col-md-1 col-1 text-end pt-2">
                                                             <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
                                                                 <i data-feather="trash-2"></i>
                                                             </button>
@@ -97,21 +106,29 @@
                                                 @endforeach
                                             @else
                                                 <div data-repeater-item class="row mb-1 align-items-center">
-                                                        <div class="col-md-5 col-5">
+                                                        <div class="col-md-4 col-4">
                                                             <label class="form-label"><small>{{ __('clinic::general.schedule.from') }}</small></label>
                                                             <div class="input-group input-group-merge">
                                                                 <span class="input-group-text"><i data-feather="clock"></i></span>
                                                                 <input type="time" name="from" class="form-control" value="09:00" required />
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-5 col-5">
+                                                        <div class="col-md-4 col-4">
                                                             <label class="form-label"><small>{{ __('clinic::general.schedule.to') }}</small></label>
                                                             <div class="input-group input-group-merge">
                                                                 <span class="input-group-text"><i data-feather="clock"></i></span>
                                                                 <input type="time" name="to" class="form-control" value="17:00" required />
                                                             </div>
                                                         </div>
-                                                    <div class="col-md-2 col-2 text-end pt-2">
+                                                        <div class="col-md-3 col-3">
+                                                            <label class="form-label"><small>{{ __('clinic::general.schedule.capacity') }}</small></label>
+                                                            <div class="input-group input-group-merge">
+                                                                <span class="input-group-text"><i data-feather="users"></i></span>
+                                                                <input type="number" name="capacity" class="form-control" />
+                                                            </div>
+                                                            <small class="text-muted d-block">{{ __('clinic::general.schedule.capacity_tip') }}</small>
+                                                        </div>
+                                                    <div class="col-md-1 col-1 text-end pt-2">
                                                         <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
                                                             <i data-feather="trash-2"></i>
                                                         </button>

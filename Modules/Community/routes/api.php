@@ -11,19 +11,22 @@ use Modules\Community\Http\Controllers\Api\StoryController;
 
     // Posts
     Route::get('posts/{post_id}', [PostController::class, 'show']);
-    Route::apiResource('posts', PostController::class)->except(['show']);
+    Route::post('posts/{post}', [PostController::class, 'update']);
+    Route::apiResource('posts', PostController::class)->except(['show', 'update']);
 
     // Stories
     Route::apiResource('stories', StoryController::class)->except(['update', 'show']);
     
     // Comments
-    Route::get('posts/{post_id}/comments', [CommentController::class, 'index']);
-    Route::post('posts/{post_id}/comments', [CommentController::class, 'store']);
+    Route::get('posts/{post}/comments', [CommentController::class, 'index']);
+    Route::post('posts/{post}/comments', [CommentController::class, 'store']);
     Route::apiResource('comments', CommentController::class)->only(['update', 'destroy']);
 
     // Likes
     Route::get('posts/{post_id}/likes', [LikeController::class, 'index']);
     Route::post('posts/{post_id}/like', [LikeController::class, 'toggle']);
+    Route::get('comments/{comment_id}/likes', [LikeController::class, 'index']);
+    Route::post('comments/{comment_id}/like', [LikeController::class, 'toggle']);
 
     // Follows
     Route::get('users/{user_id}/followers', [FollowController::class, 'followers']);

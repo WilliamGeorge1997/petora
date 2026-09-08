@@ -6,8 +6,10 @@ use \Illuminate\Support\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
 use Modules\Common\Models\Setting;
+
 
 
 
@@ -154,3 +156,20 @@ if (!function_exists('nearest')) {
             ->orderBy('distance');
     }
 }
+
+if (!function_exists('isVideo')) {
+    function isVideo(UploadedFile $file): bool
+    {
+        if ($file instanceof UploadedFile) {
+            return str_starts_with($file->getMimeType(), 'video/');
+        }
+
+        if (is_string($file)) {
+            $extension = strtolower(pathinfo(parse_url($file, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
+            return in_array($extension, ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm', '3gp', 'm4v'], true);
+        }
+
+        return false;
+    }
+}
+

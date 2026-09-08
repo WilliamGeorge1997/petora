@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(ClinicServiceSchedule::class)->index()->constrained()->cascadeOnDelete();
             $table->time('from');
             $table->time('to');
+            $table->unsignedSmallInteger('capacity')->nullable();
             $table->timestamps();
         });
     }

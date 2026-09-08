@@ -5,29 +5,29 @@ namespace Modules\Community\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Modules\Community\DTOs\CommentDto;
 use Modules\Community\Http\Requests\CommentRequest;
 use Modules\Community\Models\Comment;
+use Modules\Community\Models\Post;
 use Modules\Community\Services\CommentService;
-use Illuminate\Support\Facades\Gate;
 
 #[Middleware('auth:client')]
 class CommentController extends Controller
 {
     public function __construct(private CommentService $commentService) {}
 
-    public function index(Request $request, int $post_id)
+    public function index(Request $request, Post $post)
     {
-        $data = $request->merge(['pagination_type' => 'cursor', 'post_id' => $post_id])->all();
-        $comments = $this->commentService->active($data, ['user', 'replies']);
+        $data = $request->merge(['pagination_type' => 'cursor', 'post_id' => $post->id])->all();
+        $comments = $this->commentService->active($data, ['client', 'replies']);
         return success(true, __('community::message.comment.fetched'), $comments);
     }
 
-    public function store(CommentRequest $request, int $post_id)
+    public function store(CommentRequest $request, Post $post)
     {
-        $request->merge(['post_id' => $post_id]);
         $data = CommentDto::fromRequest($request);
-        $comment = $this->commentService->save($data);
+        $comment = $this->commentService->save($post, $data);
         return success(true, __('community::message.comment.created'), $comment);
     }
 

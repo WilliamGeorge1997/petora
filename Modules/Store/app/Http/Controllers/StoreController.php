@@ -48,8 +48,10 @@ class StoreController extends Controller
         return to_route('admin.store.index')->with('success', __('store::message.created'));
     }
 
-    public function edit(Store $store)
+    public function edit(int $store_id)
     {
+        $relations = ['workingHours'];
+        $store = $this->storeService->findById($store_id, $relations);
         Gate::authorize('update', $store);
         $viewModel = new StoreViewModel();
         return view('store::stores.edit', compact('viewModel', 'store'));

@@ -25,4 +25,9 @@ return [
     'longitude'  => 'خط الطول',
     'is_active'  => 'التفعيل',
     'created_at' => 'التاريخ',
+    'working_hours' => 'مواعيد العمل',
+    'day' => 'اليوم',
+    'is_open_24_hours' => 'مفتوح 24 ساعة',
+    'from' => 'من',
+    'to' => 'إلى',
 ];

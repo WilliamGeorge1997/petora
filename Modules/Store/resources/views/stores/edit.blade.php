@@ -1,5 +1,20 @@
 @php
     $locale = app()->getLocale();
+    $days = [
+        'saturday'  => __('store::general.days.saturday'),
+        'sunday'    => __('store::general.days.sunday'),
+        'monday'    => __('store::general.days.monday'),
+        'tuesday'   => __('store::general.days.tuesday'),
+        'wednesday' => __('store::general.days.wednesday'),
+        'thursday'  => __('store::general.days.thursday'),
+        'friday'    => __('store::general.days.friday'),
+    ];
+    $initialWorkingHours = old('working_hours') ?? ($store->workingHours ? $store->workingHours->map(fn($wh) => [
+        'day'              => $wh->day,
+        'from'             => $wh->from ? substr($wh->from, 0, 5) : '',
+        'to'               => $wh->to ? substr($wh->to, 0, 5) : '',
+        'is_open_24_hours' => $wh->is_open_24_hours,
+    ])->toArray() : []);
 @endphp
 @extends('common::layouts.master')
 
@@ -349,6 +364,113 @@
                             </div>
                         </div>
 
+                        {{-- Working Hours (Vuexy Form Repeater) --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label">
+                                        {{ __('store::general.working_hours') }}
+                                    </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="working-hours-repeater">
+                                        <div data-repeater-list="working_hours">
+                                            @if(!empty($initialWorkingHours))
+                                                @foreach($initialWorkingHours as $item)
+                                                    <div data-repeater-item class="row mb-1 align-items-center">
+                                                        <div class="col-md-3 col-12 mb-50">
+                                                            <label class="form-label"><small>{{ __('store::general.day') }}</small></label>
+                                                            <select class="form-select" name="day" required>
+                                                                <option value="" disabled {{ empty($item['day']) ? 'selected' : '' }}>{{ __('store::general.select_day') }}</option>
+                                                                @foreach ($days as $dayKey => $dayLabel)
+                                                                    <option value="{{ $dayKey }}" {{ ($item['day'] ?? '') === $dayKey ? 'selected' : '' }}>
+                                                                        {{ $dayLabel }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-3 col-6 mb-50">
+                                                            <label class="form-label"><small>{{ __('store::general.from') }}</small></label>
+                                                            <div class="input-group input-group-merge">
+                                                                <span class="input-group-text"><i data-feather="clock"></i></span>
+                                                                <input type="time" name="from" class="form-control time-input" value="{{ $item['from'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 col-6 mb-50">
+                                                            <label class="form-label"><small>{{ __('store::general.to') }}</small></label>
+                                                            <div class="input-group input-group-merge">
+                                                                <span class="input-group-text"><i data-feather="clock"></i></span>
+                                                                <input type="time" name="to" class="form-control time-input" value="{{ $item['to'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 col-8 mb-50">
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox" name="is_open_24_hours" value="1" class="form-check-input open-24-hours-check" {{ !empty($item['is_open_24_hours']) ? 'checked' : '' }} />
+                                                                <label class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 col-4 mb-50 text-end pt-2">
+                                                            <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
+                                                                <i data-feather="trash-2"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <div data-repeater-item class="row mb-1 align-items-center">
+                                                    <div class="col-md-3 col-12 mb-50">
+                                                        <label class="form-label"><small>{{ __('store::general.day') }}</small></label>
+                                                        <select class="form-select" name="day">
+                                                            <option value="" disabled selected>{{ __('store::general.select_day') }}</option>
+                                                            @foreach ($days as $dayKey => $dayLabel)
+                                                                <option value="{{ $dayKey }}">{{ $dayLabel }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 col-6 mb-50">
+                                                        <label class="form-label"><small>{{ __('store::general.from') }}</small></label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i data-feather="clock"></i></span>
+                                                            <input type="time" name="from" class="form-control time-input" value="09:00" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6 mb-50">
+                                                        <label class="form-label"><small>{{ __('store::general.to') }}</small></label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i data-feather="clock"></i></span>
+                                                            <input type="time" name="to" class="form-control time-input" value="17:00" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 col-8 mb-50">
+                                                        <div class="form-check mt-2">
+                                                            <input type="checkbox" name="is_open_24_hours" value="1" class="form-check-input open-24-hours-check" />
+                                                            <label class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1 col-4 mb-50 text-end pt-2">
+                                                        <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
+                                                            <i data-feather="trash-2"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-sm btn-outline-primary" data-repeater-create>
+                                                    <i data-feather="plus" class="me-50"></i> {{ __('store::general.add_working_hours') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('working_hours')
+                                        <p class="text-danger mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Is Active --}}
                         <div class="col-sm-9 offset-sm-3">
                             <div class="mb-1">
@@ -374,6 +496,7 @@
 
 @section('js')
     <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script src="{{asset('admin/vendors/js/forms/repeater/jquery.repeater.min.js')}}"></script>
     <script>
         $(document).ready(function() {
             var select = $('.select2');
@@ -386,6 +509,33 @@
                     });
                 });
             }
+
+            // Working Hours Repeater
+            $('.working-hours-repeater').repeater({
+                show: function () {
+                    $(this).slideDown();
+                    $(this).find('.time-input').prop('disabled', false);
+                    $(this).find('.open-24-hours-check').prop('checked', false);
+                    if (feather) {
+                        feather.replace({ width: 14, height: 14 });
+                    }
+                },
+                hide: function (deleteElement) {
+                    $(this).slideUp(deleteElement);
+                },
+                isFirstItemUndeletable: false
+            });
+
+            $(document).on('change', '.open-24-hours-check', function () {
+                var isChecked = $(this).is(':checked');
+                var $row = $(this).closest('[data-repeater-item]');
+                var $timeInputs = $row.find('.time-input');
+                if (isChecked) {
+                    $timeInputs.val('').prop('disabled', true);
+                } else {
+                    $timeInputs.prop('disabled', false);
+                }
+            });
         });
     </script>
 @endsection

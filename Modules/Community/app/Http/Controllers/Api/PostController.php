@@ -10,8 +10,9 @@ use Modules\Community\Models\Post;
 use Modules\Community\Services\PostService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Modules\Community\Transformers\PostResource;
 
-#[Middleware('auth:client')]
+#[Middleware('auth:client', except: ['index', 'show'])]
 class PostController extends Controller
 {
     public function __construct(private PostService $postService) {}
@@ -19,14 +20,22 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
-        $posts = $this->postService->active($data, ['client', 'media', 'hashtags', 'comments']);
-        return success(true, __('community::message.post.fetched'), $posts);
+        $posts = $this->postService->active(
+            $data,
+            $this->postService->postRelations(commentsLimit: 2, repliesLimit: 2),
+            $this->postService->postCounts()
+        );
+        return success(true, __('community::message.post.fetched'), paginatedResource($posts, PostResource::class));
     }
 
     public function show(int $post_id)
     {
-        $post = $this->postService->findById($post_id, ['client', 'media', 'hashtags', 'comments']);
-        return success(true, __('community::message.post.fetched'), $post);
+        $post = $this->postService->findById(
+            $post_id,
+            $this->postService->postRelations(),
+            $this->postService->postCounts()
+        );
+        return success(true, __('community::message.post.fetched'), new PostResource($post));
     }
 
     public function store(PostRequest $request)

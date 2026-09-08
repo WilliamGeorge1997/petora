@@ -31,7 +31,7 @@ class ClinicServiceScheduleService
         return $scheduleOrId instanceof ClinicServiceSchedule ? $scheduleOrId : $this->findById($scheduleOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
         return getCaseCollection($query, $data);

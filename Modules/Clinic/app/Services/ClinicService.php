@@ -9,6 +9,7 @@ use Illuminate\Pagination\CursorPaginator;
 use Modules\Clinic\DTOs\ClinicDto;
 use Modules\Clinic\Models\Clinic;
 use Modules\Common\Helpers\UploaderHelper;
+use Illuminate\Support\Facades\DB;
 
 class ClinicService
 {
@@ -46,28 +47,73 @@ class ClinicService
         return getCaseCollection($query, $data, $columns);
     }
     
-    public function save(ClinicDto $dto): Clinic
+    public function save(ClinicDto $dto, array $workingHours = []): Clinic
     {
-        $data = $dto->toArray();
-        if ($dto->image) {
-            $data['image'] = $this->uploadImage($dto->image, 'clinic');
-        }
+        return DB::transaction(function () use ($dto, $workingHours) {
+            $data = $dto->toArray();
+            if ($dto->image) {
+                $data['image'] = $this->uploadImage($dto->image, 'clinic');
+            }
 
-        return $this->model::create($data);
+            /** @var Clinic $clinic */
+            $clinic = $this->model::create($data);
+
+            if (!empty($workingHours)) {
+                $this->syncWorkingHours($clinic, $workingHours);
+            }
+
+            return $clinic;
+        });
     }
 
-    public function update(int|Clinic $clinicOrId, ClinicDto $dto): Clinic
+    public function update(int|Clinic $clinicOrId, ClinicDto $dto, ?array $workingHours = null): Clinic
     {
         $clinic = $this->resolveModel($clinicOrId);
-        $data = $dto->toArray();
-        if ($dto->image) {
-            if ($clinic->image) $this->deleteImage($clinic->image, 'clinic');
 
-            $data['image'] = $this->uploadImage($dto->image, 'clinic');
+        return DB::transaction(function () use ($clinic, $dto, $workingHours) {
+            $data = $dto->toArray();
+            if ($dto->image) {
+                if ($clinic->image) {
+                    $this->deleteImage($clinic->image, 'clinic');
+                }
+
+                $data['image'] = $this->uploadImage($dto->image, 'clinic');
+            }
+
+            $clinic->update($data);
+
+            if ($workingHours !== null) {
+                $this->syncWorkingHours($clinic, $workingHours);
+            }
+
+            return $clinic;
+        });
+    }
+
+    public function syncWorkingHours(Clinic $clinic, array $workingHours): void
+    {
+        $days = [];
+
+        foreach ($workingHours as $item) {
+            if (empty($item['day'])) {
+                continue;
+            }
+
+            $isOpen24 = (bool) ($item['is_open_24_hours'] ?? false);
+
+            $clinic->workingHours()->updateOrCreate(
+                ['day' => $item['day']],
+                [
+                    'is_open_24_hours' => $isOpen24,
+                    'from'             => $isOpen24 ? null : ($item['from'] ?? null),
+                    'to'               => $isOpen24 ? null : ($item['to'] ?? null),
+                ]
+            );
+
+            $days[] = $item['day'];
         }
 
-        $clinic->update($data);
-        return $clinic;
+        $clinic->workingHours()->whereNotIn('day', $days)->delete();
     }
 
     public function delete(int|Clinic $clinicOrId): bool

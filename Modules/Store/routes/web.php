@@ -13,5 +13,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stores/{store}/products/export', [StoreProductController::class, 'export'])->name('store.products.export');
     Route::post('stores/{store}/products/import', [StoreProductController::class, 'import'])->name('store.products.import');
 
-    Route::resource('stores', StoreController::class)->names('store')->except(['show']);
+    Route::get('stores/{store_id}/edit', [StoreController::class, 'edit'])->name('store.edit');
+    Route::resource('stores', StoreController::class)->names('store')->except(['show', 'edit']);
 });

@@ -29,4 +29,7 @@ return [
     'times'          => 'Working Shifts',
     'from'           => 'From',
     'to'             => 'To',
+    'capacity'       => 'Capacity',
+    'working_hours'  => 'Working Hours',
+    'is_open_24_hours' => 'Open 24 Hours',
 ];

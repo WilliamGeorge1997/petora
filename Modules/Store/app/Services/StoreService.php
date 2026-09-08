@@ -8,6 +8,7 @@ use Modules\Common\Helpers\UploaderHelper;
 use Modules\Store\DTOs\StoreDto;
 use Modules\Store\Models\Store;
 use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Facades\DB;
 
 class StoreService
 {
@@ -45,28 +46,73 @@ class StoreService
         return getCaseCollection($query, $data, $columns);
     }
 
-    public function save(StoreDto $dto): Store
+    public function save(StoreDto $dto, array $workingHours = []): Store
     {
-        $data = $dto->toArray();
-        if ($dto->image) {
-            $data['image'] = $this->uploadImage($dto->image, 'store');
-        }
+        return DB::transaction(function () use ($dto, $workingHours) {
+            $data = $dto->toArray();
+            if ($dto->image) {
+                $data['image'] = $this->uploadImage($dto->image, 'store');
+            }
 
-        return $this->model::create($data);
+            /** @var Store $store */
+            $store = $this->model::create($data);
+
+            if (!empty($workingHours)) {
+                $this->syncWorkingHours($store, $workingHours);
+            }
+
+            return $store;
+        });
     }
 
-    public function update(int|Store $storeOrId, StoreDto $dto): Store
+    public function update(int|Store $storeOrId, StoreDto $dto, ?array $workingHours = null): Store
     {
         $store = $this->resolveModel($storeOrId);
-        $data = $dto->toArray();
-        if ($dto->image) {
-            if ($store->image) $this->deleteImage($store->image, 'store');
 
-            $data['image'] = $this->uploadImage($dto->image, 'store');
+        return DB::transaction(function () use ($store, $dto, $workingHours) {
+            $data = $dto->toArray();
+            if ($dto->image) {
+                if ($store->image) {
+                    $this->deleteImage($store->image, 'store');
+                }
+
+                $data['image'] = $this->uploadImage($dto->image, 'store');
+            }
+
+            $store->update($data);
+
+            if ($workingHours !== null) {
+                $this->syncWorkingHours($store, $workingHours);
+            }
+
+            return $store;
+        });
+    }
+
+    public function syncWorkingHours(Store $store, array $workingHours): void
+    {
+        $days = [];
+
+        foreach ($workingHours as $item) {
+            if (empty($item['day'])) {
+                continue;
+            }
+
+            $isOpen24 = (bool) ($item['is_open_24_hours'] ?? false);
+
+            $store->workingHours()->updateOrCreate(
+                ['day' => $item['day']],
+                [
+                    'is_open_24_hours' => $isOpen24,
+                    'from'             => $isOpen24 ? null : ($item['from'] ?? null),
+                    'to'               => $isOpen24 ? null : ($item['to'] ?? null),
+                ]
+            );
+
+            $days[] = $item['day'];
         }
 
-        $store->update($data);
-        return $store;
+        $store->workingHours()->whereNotIn('day', $days)->delete();
     }
 
     public function delete(int|Store $storeOrId): bool

@@ -4,9 +4,10 @@ namespace Modules\Community\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Community\DTOs\CommentDto;
 use Modules\Community\Models\Comment;
-use Illuminate\Pagination\CursorPaginator;
+use Modules\Community\Models\Post;
 
 class CommentService
 {
@@ -20,6 +21,12 @@ class CommentService
         return getCaseCollection($query, $data);
     }
 
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
+    {
+        $query = $this->model::query()->active()->with($relations)->filter($data)->latest('id');
+        return getCaseCollection($query, $data, $columns);
+    }
+
     public function findById(int $id, array $relations = []): Comment
     {
         return $this->model::with($relations)->findOrFail($id);
@@ -30,9 +37,10 @@ class CommentService
         return $commentOrId instanceof Comment ? $commentOrId : $this->findById($commentOrId);
     }
 
-    public function save(CommentDto $dto): Comment
+    public function save(Post $post, CommentDto $dto): Comment
     {
-        return $this->model::create($dto->toArray());
+        $data = array_merge($dto->toArray(), ['post_id' => $post->id]);
+        return $this->model::create($data);
     }
 
     public function update(int|Comment $commentOrId, CommentDto $dto): Comment

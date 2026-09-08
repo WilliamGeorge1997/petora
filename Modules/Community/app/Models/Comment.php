@@ -28,6 +28,12 @@ class Comment extends Model
         'is_active' => 'boolean',
     ];
 
+    protected $hidden = [
+        'parent_id',
+        'post_id',
+        'client_id',
+    ];
+
     //Activity log options
     public function getActivitylogOptions(): LogOptions
     {

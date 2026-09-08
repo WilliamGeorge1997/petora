@@ -11,7 +11,10 @@ class PostRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         if (auth('client')->check()) {
-            $this->merge(['client_id' => auth('client')->id()]);
+            $this->merge([
+                'client_id' => auth('client')->id(),
+                'is_active' => true,
+            ]);
         }
     }
 
@@ -24,10 +27,11 @@ class PostRequest extends FormRequest
             'client_id' => ['required', 'integer', 'exists:clients,id'],
             'pet_id'    => ['nullable', 'integer', 'exists:pets,id'],
             'content'   => ['required_without:media', 'nullable', 'string'],
-            'is_active' => ['nullable', 'boolean'],
             'media'     => ['required_without:content', 'nullable', 'array'],
             'media.*.file' => ['file', 'mimes:jpeg,png,jpg,webp,svg,gif,mp4,mov,avi', 'max:20480'],
             'media.*.is_video' => ['required_with:media', 'boolean'],
+            'hashtags'   => ['nullable', 'array'],
+            'hashtags.*' => ['string', 'max:100'],
         ];
     }
 
@@ -48,6 +52,7 @@ class PostRequest extends FormRequest
             'content' => __('community::attribute.content'),
             'is_active' => __('community::attribute.is_active'),
             'media' => __('community::attribute.media'),
+            'hashtags' => __('community::attribute.hashtags'),
         ];
     }
 
@@ -64,6 +69,9 @@ class PostRequest extends FormRequest
             'media.*.file.mimes' => __('community::message.media_mimes'),
             'media.*.file.max' => __('community::message.media_max'),
             'media.*.is_video.required_with' => __('community::message.is_video_required'),
+            'hashtags.array' => __('community::message.hashtags_array'),
+            'hashtags.*.string' => __('community::message.hashtags_string'),
+            'hashtags.*.max' => __('community::message.hashtags_max'),
         ];
     }
 }

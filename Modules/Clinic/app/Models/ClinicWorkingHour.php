@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Service\Models;
+namespace Modules\Clinic\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -8,28 +8,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
-class ClinicServiceScheduleTime extends Model
+class ClinicWorkingHour extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'clinic_service_schedule_id',
+        'clinic_id',
+        'day',
         'from',
         'to',
-        'capacity',
+        'is_open_24_hours',
     ];
 
     protected $casts = [
-        'capacity' => 'integer',
+        'is_open_24_hours' => 'boolean',
     ];
-
-    protected $hidden = ['clinic_service_schedule_id'];
 
     // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('ClinicServiceScheduleTime')
+            ->useLogName('ClinicWorkingHour')
             ->logAll()
             ->logOnlyDirty()
             ->dontLogIfAttributesChangedOnly(['updated_at'])
@@ -43,8 +42,8 @@ class ClinicServiceScheduleTime extends Model
     }
 
     // Relations
-    public function schedule(): BelongsTo
+    public function clinic(): BelongsTo
     {
-        return $this->belongsTo(ClinicServiceSchedule::class, 'clinic_service_schedule_id');
+        return $this->belongsTo(Clinic::class);
     }
 }

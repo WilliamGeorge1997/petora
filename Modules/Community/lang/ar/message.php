@@ -1,4 +1,5 @@
 <?php
+
 return [
     'hashtag' => [
         'index' => 'الهاشتاجات',
@@ -54,4 +55,69 @@ return [
         'created' => 'تم إنشاء الحظر بنجاح',
         'deleted' => 'تم حذف الحظر بنجاح',
     ],
+
+    // رسائل التحقق (Validation Messages)
+    'client_id_required' => 'حقل العميل مطلوب.',
+    'client_id_integer' => 'اختيار العميل غير صالح.',
+    'client_id_exists' => 'العميل المحدد غير موجود.',
+
+    'pet_id_required' => 'حقل الحيوان الأليف مطلوب.',
+    'pet_id_integer' => 'اختيار الحيوان الأليف غير صالح.',
+    'pet_id_exists' => 'الحيوان الأليف المحدد غير موجود.',
+
+    'post_id_required' => 'حقل المنشور مطلوب.',
+    'post_id_integer' => 'اختيار المنشور غير صالح.',
+    'post_id_exists' => 'المنشور المحدد غير موجود.',
+
+    'parent_id_required' => 'حقل التعليق الأصلي مطلوب.',
+    'parent_id_integer' => 'اختيار التعليق الأصلي غير صالح.',
+    'parent_id_exists' => 'التعليق الأصلي المحدد غير موجود.',
+
+    'content_required' => 'حقل المحتوى مطلوب.',
+    'content_or_media_required' => 'يجب إدخال نص المنشور أو وسائط على الأقل.',
+    'content_string' => 'يجب أن يكون المحتوى نصاً.',
+
+    'is_active_required' => 'حقل الحالة مطلوب.',
+    'is_active_boolean' => 'تنسيق الحالة غير صالح.',
+
+    'media_required' => 'حقل الوسائط مطلوب.',
+    'media_invalid' => 'الملف المرفوع غير صالح.',
+    'media_mimes' => 'يجب أن تكون الوسائط ملفاً من نوع: jpeg, png, jpg, webp, svg, gif, mp4, mov, avi.',
+    'media_max' => 'يجب ألا يتجاوز حجم الوسائط 20480 كيلوبايت.',
+
+    'is_video_required' => 'تحديد نوع الفيديو مطلوب.',
+    'is_video_boolean' => 'تنسيق تحديد الفيديو غير صالح.',
+
+    'likeable_id_required' => 'حقل العنصر المعجب به مطلوب.',
+    'likeable_id_integer' => 'اختيار العنصر المعجب به غير صالح.',
+    'likeable_id_exists' => 'العنصر المعجب به المحدد غير موجود.',
+    'likeable_type_required' => 'حقل نوع العنصر المعجب به مطلوب.',
+    'likeable_type_string' => 'تنسيق نوع العنصر غير صالح.',
+
+    'follower_id_required' => 'حقل المتابع مطلوب.',
+    'follower_id_integer' => 'اختيار المتابع غير صالح.',
+    'follower_id_exists' => 'المتابع المحدد غير موجود.',
+
+    'following_id_required' => 'حقل المتابَع مطلوب.',
+    'following_id_integer' => 'اختيار المتابَع غير صالح.',
+    'following_id_exists' => 'المتابَع المحدد غير موجود.',
+
+    'blocker_id_required' => 'حقل الحاظر مطلوب.',
+    'blocker_id_integer' => 'اختيار الحاظر غير صالح.',
+    'blocker_id_exists' => 'الحاظر المحدد غير موجود.',
+
+    'blocked_id_required' => 'حقل المحظور مطلوب.',
+    'blocked_id_integer' => 'اختيار المحظور غير صالح.',
+    'blocked_id_exists' => 'المحظور المحدد غير موجود.',
+
+    'expires_at_required' => 'تاريخ الانتهاء مطلوب.',
+    'expires_at_date' => 'يجب أن يكون تاريخ الانتهاء صالحاً.',
+
+    'text_required' => 'نص الهاشتاج مطلوب.',
+    'text_string' => 'يجب أن يكون نص الهاشتاج نصاً.',
+    'text_unique' => 'هذا الهاشتاج موجود بالفعل.',
+
+    'hashtags_array' => 'يجب أن تكون الوسوم مصفوفة.',
+    'hashtags_string' => 'يجب أن يكون كل وسم نصاً.',
+    'hashtags_max' => 'يجب ألا يتجاوز طول كل وسم 100 حرف.',
 ];

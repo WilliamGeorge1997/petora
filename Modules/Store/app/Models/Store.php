@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Company\Models\Company;
 use Modules\Country\Models\City;
 use Modules\Country\Models\Country;
@@ -126,5 +127,10 @@ class Store extends Model
         return $this->morphToMany(Product::class, 'sellerable', 'product_sellers')
             ->withPivot(['price', 'is_active'])
             ->withTimestamps();
+    }
+
+    public function workingHours(): HasMany
+    {
+        return $this->hasMany(StoreWorkingHour::class);
     }
 }

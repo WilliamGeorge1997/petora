@@ -30,7 +30,7 @@ class HashtagRequest extends FormRequest
     public function attributes()
     {
         return [
-
+            'text' => __('community::attribute.text'),
         ];
     }
 
@@ -38,7 +38,9 @@ class HashtagRequest extends FormRequest
     public function messages()
     {
         return [
-
+            'text.required' => __('community::message.text_required'),
+            'text.string'   => __('community::message.text_string'),
+            'text.unique'   => __('community::message.text_unique'),
         ];
     }
 }

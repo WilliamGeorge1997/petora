@@ -26,6 +26,11 @@ class ClinicRequest extends FormRequest
             'zone_id'    => ['nullable', 'integer', 'exists:zones,id'],
             'latitude'   => ['nullable', 'numeric'],
             'longitude'  => ['nullable', 'numeric'],
+            'working_hours' => ['nullable', 'array'],
+            'working_hours.*.day' => ['required', 'string', 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday'],
+            'working_hours.*.is_open_24_hours' => ['nullable', 'boolean'],
+            'working_hours.*.from' => ['nullable', 'date_format:H:i'],
+            'working_hours.*.to' => ['nullable', 'date_format:H:i'],
         ];
     }
 
@@ -54,6 +59,11 @@ class ClinicRequest extends FormRequest
             'zone_id'    => __('clinic::attribute.zone_id'),
             'latitude'   => __('clinic::attribute.latitude'),
             'longitude'  => __('clinic::attribute.longitude'),
+            'working_hours' => __('clinic::attribute.working_hours'),
+            'working_hours.*.day' => __('clinic::attribute.day'),
+            'working_hours.*.is_open_24_hours' => __('clinic::attribute.is_open_24_hours'),
+            'working_hours.*.from' => __('clinic::attribute.from'),
+            'working_hours.*.to' => __('clinic::attribute.to'),
         ];
     }
 

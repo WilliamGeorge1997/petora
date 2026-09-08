@@ -40,8 +40,7 @@ class ClinicServiceScheduleController extends Controller
 
     public function create(Request $request, Clinic $clinic, ClinicService $clinic_service)
     {
-        $data = $request->merge(['clinic_service_id' => $clinic_service->id])->all();
-        $schedules = $this->scheduleService->findAll($data);
+        $schedules = $this->scheduleService->findBy('clinic_service_id', $clinic_service->id);
 
         return view('clinic::schedules.create', [
             'clinic' => $clinic,

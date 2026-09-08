@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Category\Services\CategoryService;
 use Modules\Clinic\Services\ClinicService;
+use Modules\Clinic\Transformers\ClinicResource;
 
 class ClinicController extends Controller
 {
@@ -18,17 +19,18 @@ class ClinicController extends Controller
         return success(true, __('clinic::message.fetched'), $clinics);
     }
 
+    //Screen after select clinic
     public function show(int $clinic_id, CategoryService $categoryService)
     {
         $relations = ['doctors' => function ($q) {
             $q->active()->latest('id');
-        }, 'clinicServices as services' => function ($q) {
+        }, 'clinicServices.service' => function ($q) {
             $q->active()->latest('id');
         }];
         $clinic = $this->clinicService->findById($clinic_id, $relations);
         $categories = $categoryService->categoriesHaveProducts('clinic', $clinic_id);
-        $clinic->setAttribute('categories', $categories);
+        $clinic->setRelation('categories', $categories);
 
-        return success(true, __('clinic::message.fetched'), $clinic);
+        return success(true, __('clinic::message.fetched'), new ClinicResource($clinic));
     }
 }

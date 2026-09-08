@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\Community\Models\Hashtag;
+use Modules\Community\Models\Post;
 
 return new class extends Migration
 {
@@ -13,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('post_hashtag', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\Modules\Community\Models\Post::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\Modules\Community\Models\Hashtag::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Post::class)->index()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Hashtag::class)->index()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

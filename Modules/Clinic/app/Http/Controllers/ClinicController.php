@@ -48,8 +48,10 @@ class ClinicController extends Controller
         return to_route('admin.clinic.index')->with('success', __('clinic::message.created'));
     }
 
-    public function edit(Clinic $clinic)
+    public function edit(int $clinic_id)
     {
+        $relations = ['workingHours'];
+        $clinic = $this->clinicService->findById($clinic_id, $relations);
         Gate::authorize('update', $clinic);
         $viewModel = new ClinicViewModel();
         return view('clinic::clinics.edit', compact('clinic', 'viewModel'));

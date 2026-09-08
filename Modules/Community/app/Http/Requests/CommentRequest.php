@@ -7,6 +7,15 @@ use Override;
 
 class CommentRequest extends FormRequest
 {
+    #[Override]
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'client_id' => auth('client')->id(),
+            'is_active' => true,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      */
@@ -14,10 +23,8 @@ class CommentRequest extends FormRequest
     {
         return [
             'client_id' => ['required', 'integer', 'exists:clients,id'],
-            'post_id'   => ['required', 'integer', 'exists:posts,id'],
             'parent_id' => ['nullable', 'integer', 'exists:comments,id'],
             'content'   => ['required', 'string'],
-            'is_active' => ['nullable', 'boolean'],
         ];
     }
 
@@ -37,7 +44,6 @@ class CommentRequest extends FormRequest
             'post_id' => __('community::attribute.post_id'),
             'parent_id' => __('community::attribute.parent_id'),
             'content' => __('community::attribute.content'),
-            'is_active' => __('community::attribute.is_active'),
         ];
     }
 
@@ -46,10 +52,12 @@ class CommentRequest extends FormRequest
     {
         return [
             'client_id.required' => __('community::message.client_id_required'),
-            'post_id.required' => __('community::message.post_id_required'),
-            'parent_id.required' => __('community::message.parent_id_required'),
-            'content.required' => __('community::message.content_required'),
-            'is_active.required' => __('community::message.is_active_required'),
+            'client_id.integer'  => __('community::message.client_id_integer'),
+            'client_id.exists'   => __('community::message.client_id_exists'),
+            'parent_id.integer'  => __('community::message.parent_id_integer'),
+            'parent_id.exists'   => __('community::message.parent_id_exists'),
+            'content.required'   => __('community::message.content_required'),
+            'content.string'     => __('community::message.content_string'),
         ];
     }
 }

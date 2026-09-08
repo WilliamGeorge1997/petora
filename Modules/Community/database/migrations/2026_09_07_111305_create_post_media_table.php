@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('post_media', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Post::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Post::class)->index()->constrained()->cascadeOnDelete();
             $table->string('media');
             $table->boolean('is_video')->default(false);
             $table->timestamps();

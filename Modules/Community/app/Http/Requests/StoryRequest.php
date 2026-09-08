@@ -7,6 +7,15 @@ use Override;
 
 class StoryRequest extends FormRequest
 {
+    #[Override]
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'client_id' => auth('client')->id(),
+            'is_active' => true,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      */
@@ -46,10 +55,12 @@ class StoryRequest extends FormRequest
     {
         return [
             'client_id.required' => __('community::message.client_id_required'),
-            'media.required' => __('community::message.media_required'),
-            'is_video.required' => __('community::message.is_video_required'),
-            'expires_at.required' => __('community::message.expires_at_required'),
-            'is_active.required' => __('community::message.is_active_required'),
+            'client_id.integer'  => __('community::message.client_id_integer'),
+            'client_id.exists'   => __('community::message.client_id_exists'),
+            'media.required'     => __('community::message.media_required'),
+            'is_video.boolean'   => __('community::message.is_video_boolean'),
+            'expires_at.date'    => __('community::message.expires_at_date'),
+            'is_active.boolean'  => __('community::message.is_active_boolean'),
         ];
     }
 }

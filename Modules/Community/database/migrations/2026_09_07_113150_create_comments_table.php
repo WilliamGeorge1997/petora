@@ -3,6 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\Client\Models\Client;
+use Modules\Community\Models\Comment;
+use Modules\Community\Models\Post;
 
 return new class extends Migration
 {
@@ -13,9 +16,9 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\Modules\Client\Models\Client::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\Modules\Community\Models\Post::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\Modules\Community\Models\Comment::class, 'parent_id')->nullable()->constrained('comments')->cascadeOnDelete();
+            $table->foreignIdFor(Client::class)->index()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Post::class)->index()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Comment::class, 'parent_id')->nullable()->index()->constrained('comments')->cascadeOnDelete();
             $table->text('content');
             $table->boolean('is_active')->default(true);
             $table->timestamps();

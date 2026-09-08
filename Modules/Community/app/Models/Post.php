@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Modules\Client\Models\Client;
 use Modules\Pet\Models\Pet;
 use Spatie\Activitylog\Support\LogOptions;
@@ -26,6 +27,11 @@ class Post extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+    ];
+
+    protected $hidden = [
+        'pet_id',
+        'client_id'
     ];
 
     //Activity log options
@@ -85,6 +91,16 @@ class Post extends Model
 
     public function hashtags(): BelongsToMany
     {
-        return $this->belongsToMany(Hashtag::class);
+        return $this->belongsToMany(Hashtag::class, 'post_hashtag');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
     }
 }

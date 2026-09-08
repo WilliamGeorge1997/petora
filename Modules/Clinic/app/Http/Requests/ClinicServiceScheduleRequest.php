@@ -17,6 +17,7 @@ class ClinicServiceScheduleRequest extends FormRequest
             'times'          => ['required', 'array', 'min:1'],
             'times.*.from'   => ['required'],
             'times.*.to'     => ['required'],
+            'times.*.capacity' => ['nullable', 'integer', 'min:1'],
         ];
     }
 
@@ -36,6 +37,7 @@ class ClinicServiceScheduleRequest extends FormRequest
             'times'        => __('clinic::attribute.times'),
             'times.*.from' => __('clinic::attribute.from'),
             'times.*.to'   => __('clinic::attribute.to'),
+            'times.*.capacity' => __('clinic::attribute.capacity'),
         ];
     }
 
@@ -51,6 +53,8 @@ class ClinicServiceScheduleRequest extends FormRequest
             'times.min'             => __('clinic::message.times_min'),
             'times.*.from.required' => __('clinic::message.times_from_required'),
             'times.*.to.required'   => __('clinic::message.times_to_required'),
+            'times.*.capacity.integer' => __('clinic::message.times_capacity_integer'),
+            'times.*.capacity.min'     => __('clinic::message.times_capacity_min'),
         ];
     }
 }

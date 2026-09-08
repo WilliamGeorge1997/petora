@@ -1,12 +1,22 @@
 @php
     $locale = app()->getLocale();
+    $days = [
+        'saturday'  => __('store::general.days.saturday'),
+        'sunday'    => __('store::general.days.sunday'),
+        'monday'    => __('store::general.days.monday'),
+        'tuesday'   => __('store::general.days.tuesday'),
+        'wednesday' => __('store::general.days.wednesday'),
+        'thursday'  => __('store::general.days.thursday'),
+        'friday'    => __('store::general.days.friday'),
+    ];
+    $initialWorkingHours = old('working_hours') ?? [];
 @endphp
 @extends('common::layouts.master')
 
 @section('title', __('store::general.create'))
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/forms/select/select2.min.css') }}">
 @endsection
 
 @section('content')
@@ -167,7 +177,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="company_id" id="company_id" required>
-                                        <option value="" disabled selected>{{ __('store::attribute.select_company') }}</option>
+                                        <option value="" disabled selected>
+                                            {{ __('store::attribute.select_company') }}</option>
                                         @foreach ($viewModel->companies() as $company)
                                             <option value="{{ $company->id }}"
                                                 {{ old('company_id') == $company->id ? 'selected' : '' }}>
@@ -211,11 +222,10 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="country_id" id="country_id" required
-                                        data-fetch-url="{{ route('admin.ajax.cities') }}"
-                                        data-ajax-col="country_id"
-                                        data-ajax-target="#city_id"
-                                        data-ajax-child="#zone_id">
-                                        <option value="" disabled selected>{{ __('store::attribute.select_country') ?? 'اختر الدولة' }}</option>
+                                        data-fetch-url="{{ route('admin.ajax.cities') }}" data-ajax-col="country_id"
+                                        data-ajax-target="#city_id" data-ajax-child="#zone_id">
+                                        <option value="" disabled selected>
+                                            {{ __('store::attribute.select_country') ?? 'اختر الدولة' }}</option>
                                         @foreach ($viewModel->countries() as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ old('country_id') == $country->id ? 'selected' : '' }}>
@@ -239,10 +249,10 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="city_id" id="city_id" required disabled
-                                        data-fetch-url="{{ route('admin.ajax.zones') }}"
-                                        data-ajax-col="city_id"
+                                        data-fetch-url="{{ route('admin.ajax.zones') }}" data-ajax-col="city_id"
                                         data-ajax-target="#zone_id">
-                                        <option value="" disabled selected>{{ __('store::attribute.select_city') ?? 'اختر المدينة' }}</option>
+                                        <option value="" disabled selected>
+                                            {{ __('store::attribute.select_city') ?? 'اختر المدينة' }}</option>
                                     </select>
                                     @error('city_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -260,7 +270,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="zone_id" id="zone_id" required disabled>
-                                        <option value="" disabled selected>{{ __('store::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
+                                        <option value="" disabled selected>
+                                            {{ __('store::attribute.select_zone') ?? 'اختر المنطقة' }}</option>
                                     </select>
                                     @error('zone_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -273,7 +284,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
+                                    <label
+                                        class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group mb-1">
@@ -282,9 +294,7 @@
                                             placeholder="{{ __('common::general.search_location') ?? 'ابحث عن موقع أو عنوان...' }}" />
                                     </div>
                                     <div id="google-map-picker" class="map-picker-container rounded border"
-                                        data-google-map-picker
-                                        data-lat-input="#latitude"
-                                        data-lng-input="#longitude"
+                                        data-google-map-picker data-lat-input="#latitude" data-lng-input="#longitude"
                                         data-search-input="#map-search"></div>
                                 </div>
                             </div>
@@ -332,6 +342,113 @@
                             </div>
                         </div>
 
+                        {{-- Working Hours (Vuexy Form Repeater) --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label">
+                                        {{ __('store::general.working_hours') }}
+                                    </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="working-hours-repeater">
+                                        <div data-repeater-list="working_hours">
+                                            @if(!empty($initialWorkingHours))
+                                                @foreach($initialWorkingHours as $item)
+                                                    <div data-repeater-item class="row mb-1 align-items-center">
+                                                        <div class="col-md-3 col-12 mb-50">
+                                                            <label class="form-label"><small>{{ __('store::general.day') }}</small></label>
+                                                            <select class="form-select" name="day" required>
+                                                                <option value="" disabled {{ empty($item['day']) ? 'selected' : '' }}>{{ __('store::general.select_day') }}</option>
+                                                                @foreach ($days as $dayKey => $dayLabel)
+                                                                    <option value="{{ $dayKey }}" {{ ($item['day'] ?? '') === $dayKey ? 'selected' : '' }}>
+                                                                        {{ $dayLabel }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-3 col-6 mb-50">
+                                                            <label class="form-label"><small>{{ __('store::general.from') }}</small></label>
+                                                            <div class="input-group input-group-merge">
+                                                                <span class="input-group-text"><i data-feather="clock"></i></span>
+                                                                <input type="time" name="from" class="form-control time-input" value="{{ $item['from'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 col-6 mb-50">
+                                                            <label class="form-label"><small>{{ __('store::general.to') }}</small></label>
+                                                            <div class="input-group input-group-merge">
+                                                                <span class="input-group-text"><i data-feather="clock"></i></span>
+                                                                <input type="time" name="to" class="form-control time-input" value="{{ $item['to'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 col-8 mb-50">
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox" name="is_open_24_hours" value="1" class="form-check-input open-24-hours-check" {{ !empty($item['is_open_24_hours']) ? 'checked' : '' }} />
+                                                                <label class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 col-4 mb-50 text-end pt-2">
+                                                            <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
+                                                                <i data-feather="trash-2"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <div data-repeater-item class="row mb-1 align-items-center">
+                                                    <div class="col-md-3 col-12 mb-50">
+                                                        <label class="form-label"><small>{{ __('store::general.day') }}</small></label>
+                                                        <select class="form-select" name="day">
+                                                            <option value="" disabled selected>{{ __('store::general.select_day') }}</option>
+                                                            @foreach ($days as $dayKey => $dayLabel)
+                                                                <option value="{{ $dayKey }}">{{ $dayLabel }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 col-6 mb-50">
+                                                        <label class="form-label"><small>{{ __('store::general.from') }}</small></label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i data-feather="clock"></i></span>
+                                                            <input type="time" name="from" class="form-control time-input" value="09:00" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6 mb-50">
+                                                        <label class="form-label"><small>{{ __('store::general.to') }}</small></label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i data-feather="clock"></i></span>
+                                                            <input type="time" name="to" class="form-control time-input" value="17:00" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 col-8 mb-50">
+                                                        <div class="form-check mt-2">
+                                                            <input type="checkbox" name="is_open_24_hours" value="1" class="form-check-input open-24-hours-check" />
+                                                            <label class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1 col-4 mb-50 text-end pt-2">
+                                                        <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
+                                                            <i data-feather="trash-2"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-sm btn-outline-primary" data-repeater-create>
+                                                    <i data-feather="plus" class="me-50"></i> {{ __('store::general.add_working_hours') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('working_hours')
+                                        <p class="text-danger mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Is Active --}}
                         <div class="col-sm-9 offset-sm-3">
                             <div class="mb-1">
@@ -346,8 +463,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit"
-                                class="btn btn-primary me-1"><i data-feather="plus" class="me-50"></i>{{ __('store::general.create') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="plus"
+                                    class="me-50"></i>{{ __('store::general.create') }}</button>
                         </div>
                     </div>
                 </form>
@@ -357,12 +474,13 @@
 @endsection
 
 @section('js')
-    <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script src="{{ asset('admin/vendors/js/forms/select/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             var select = $('.select2');
             if (select.length) {
-                select.each(function () {
+                select.each(function() {
                     var $this = $(this);
                     $this.wrap('<div class="position-relative"></div>');
                     $this.select2({
@@ -370,6 +488,33 @@
                     });
                 });
             }
+
+            // Working Hours Repeater
+            $('.working-hours-repeater').repeater({
+                show: function () {
+                    $(this).slideDown();
+                    $(this).find('.time-input').prop('disabled', false);
+                    $(this).find('.open-24-hours-check').prop('checked', false);
+                    if (feather) {
+                        feather.replace({ width: 14, height: 14 });
+                    }
+                },
+                hide: function (deleteElement) {
+                    $(this).slideUp(deleteElement);
+                },
+                isFirstItemUndeletable: false
+            });
+
+            $(document).on('change', '.open-24-hours-check', function () {
+                var isChecked = $(this).is(':checked');
+                var $row = $(this).closest('[data-repeater-item]');
+                var $timeInputs = $row.find('.time-input');
+                if (isChecked) {
+                    $timeInputs.val('').prop('disabled', true);
+                } else {
+                    $timeInputs.prop('disabled', false);
+                }
+            });
         });
     </script>
 @endsection

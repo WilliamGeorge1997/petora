@@ -27,6 +27,11 @@ class StoreRequest extends FormRequest
             'zone_id'    => ['nullable', 'integer', 'exists:zones,id'],
             'latitude'   => ['nullable', 'numeric'],
             'longitude'  => ['nullable', 'numeric'],
+            'working_hours' => ['nullable', 'array'],
+            'working_hours.*.day' => ['required', 'string', 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday'],
+            'working_hours.*.is_open_24_hours' => ['nullable', 'boolean'],
+            'working_hours.*.from' => ['nullable', 'date_format:H:i'],
+            'working_hours.*.to' => ['nullable', 'date_format:H:i'],
         ];
     }
 
@@ -56,6 +61,11 @@ class StoreRequest extends FormRequest
             'zone_id'    => __('store::attribute.zone_id'),
             'latitude'   => __('store::attribute.latitude'),
             'longitude'  => __('store::attribute.longitude'),
+            'working_hours' => __('store::attribute.working_hours'),
+            'working_hours.*.day' => __('store::attribute.day'),
+            'working_hours.*.is_open_24_hours' => __('store::attribute.is_open_24_hours'),
+            'working_hours.*.from' => __('store::attribute.from'),
+            'working_hours.*.to' => __('store::attribute.to'),
         ];
     }
 

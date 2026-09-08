@@ -29,4 +29,7 @@ return [
     'times'          => 'فترات العمل',
     'from'           => 'من',
     'to'             => 'إلى',
+    'capacity'       => 'السعة',
+    'working_hours'  => 'مواعيد العمل',
+    'is_open_24_hours' => 'مفتوح 24 ساعة',
 ];

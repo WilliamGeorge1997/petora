@@ -31,5 +31,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('clinics/{clinic}/services/{clinic_service}/schedules/{schedule}', [ClinicServiceScheduleController::class, 'update'])->name('clinic.services.schedules.update');
     Route::delete('clinics/{clinic}/services/{clinic_service}/schedules/{schedule}', [ClinicServiceScheduleController::class, 'destroy'])->name('clinic.services.schedules.destroy');
 
-    Route::resource('clinics', ClinicController::class)->names('clinic');
+    Route::get('clinics/{clinic_id}/edit', [ClinicController::class, 'edit'])->name('clinic.edit');
+    Route::resource('clinics', ClinicController::class)->names('clinic')->except(['show', 'edit']);
 });

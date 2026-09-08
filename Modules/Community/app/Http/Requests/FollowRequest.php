@@ -39,8 +39,12 @@ class FollowRequest extends FormRequest
     public function messages()
     {
         return [
-            'follower_id.required' => __('community::message.follower_id_required'),
+            'follower_id.required'  => __('community::message.follower_id_required'),
+            'follower_id.integer'   => __('community::message.follower_id_integer'),
+            'follower_id.exists'    => __('community::message.follower_id_exists'),
             'following_id.required' => __('community::message.following_id_required'),
+            'following_id.integer'  => __('community::message.following_id_integer'),
+            'following_id.exists'   => __('community::message.following_id_exists'),
         ];
     }
 }

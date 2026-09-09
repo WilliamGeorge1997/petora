@@ -133,4 +133,9 @@ class Store extends Model
     {
         return $this->hasMany(StoreWorkingHour::class);
     }
+
+    public function deliverySchedules(): HasMany
+    {
+        return $this->hasMany(StoreDeliverySchedule::class);
+    }
 }

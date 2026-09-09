@@ -19,6 +19,7 @@ class PostResource extends JsonResource
             'created_at' => $this->created_at?->format('Y-m-d h:i A'),
             'updated_at' => $this->updated_at?->format('Y-m-d h:i A'),
             'likes_count' => $this->whenCounted('likes'),
+            'is_liked' => (bool) ($this->is_liked ?? false),
             'comments_count' => $this->whenCounted('comments'),
             'client' => $this->whenLoaded('client', function () {
                 return $this->client ? [

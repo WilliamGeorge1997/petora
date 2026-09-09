@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'fetched'             => 'Payment methods fetched successfully.',
+    'fetched'                 => 'Payment methods fetched successfully.',
+    'order_methods_fetched'   => 'Order methods fetched successfully.',
+    'payment_methods_fetched' => 'Payment methods fetched successfully.',
+    'order_statuses_fetched'  => 'Order statuses fetched successfully.',
     'created'             => 'Payment method created successfully.',
     'updated'             => 'Payment method updated successfully.',
     'deleted'             => 'Payment method deleted successfully.',

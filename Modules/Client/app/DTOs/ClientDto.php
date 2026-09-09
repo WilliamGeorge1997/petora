@@ -32,6 +32,23 @@ readonly class ClientDto
         return self::mapRequestToDto($request, $request->boolean('is_active'));
     }
 
+    public static function fromClientRequest(FormRequest $request): self
+    {
+        $newPassword = $request->validated('new_password');
+
+        return new self(
+            name: $request->validated('name'),
+            phone: $request->validated('phone'),
+            password: $newPassword ? Hash::make($newPassword) : null,
+            email: $request->validated('email'),
+            image: $request->hasFile('image') ? $request->file('image') : null,
+            fcmToken: $request->validated('fcm_token'),
+            locale: $request->validated('locale'),
+            verifyCode: null,
+            isActive: true,
+        );
+    }
+
     //Helper
     private static function mapRequestToDto(FormRequest $request, bool $isActive, ?string $verifyCode = null): self
     {

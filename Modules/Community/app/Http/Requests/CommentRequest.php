@@ -10,10 +10,12 @@ class CommentRequest extends FormRequest
     #[Override]
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'client_id' => auth('client')->id(),
-            'is_active' => true,
-        ]);
+        if (auth('client')->check()) {
+            $this->merge([
+                'client_id' => auth('client')->id(),
+                'is_active' => true,
+            ]);
+        }
     }
 
     /**
@@ -23,7 +25,6 @@ class CommentRequest extends FormRequest
     {
         return [
             'client_id' => ['required', 'integer', 'exists:clients,id'],
-            'parent_id' => ['nullable', 'integer', 'exists:comments,id'],
             'content'   => ['required', 'string'],
         ];
     }
@@ -42,7 +43,6 @@ class CommentRequest extends FormRequest
         return [
             'client_id' => __('community::attribute.client_id'),
             'post_id' => __('community::attribute.post_id'),
-            'parent_id' => __('community::attribute.parent_id'),
             'content' => __('community::attribute.content'),
         ];
     }
@@ -54,8 +54,6 @@ class CommentRequest extends FormRequest
             'client_id.required' => __('community::message.client_id_required'),
             'client_id.integer'  => __('community::message.client_id_integer'),
             'client_id.exists'   => __('community::message.client_id_exists'),
-            'parent_id.integer'  => __('community::message.parent_id_integer'),
-            'parent_id.exists'   => __('community::message.parent_id_exists'),
             'content.required'   => __('community::message.content_required'),
             'content.string'     => __('community::message.content_string'),
         ];

@@ -15,6 +15,7 @@ class ClinicServiceScheduleRequest extends FormRequest
         return [
             'day'            => ['required', 'string', 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday'],
             'times'          => ['required', 'array', 'min:1'],
+            'times.*.id'     => ['nullable', 'integer'],
             'times.*.from'   => ['required'],
             'times.*.to'     => ['required'],
             'times.*.capacity' => ['nullable', 'integer', 'min:1'],

@@ -16,6 +16,7 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'content' => $this->content,
             'likes_count' => $this->whenCounted('likes', $this->likes_count, $this->likes_count ?? 0),
+            'is_liked' => (bool) ($this->is_liked ?? false),
             'replies_count' => $this->whenCounted('replies'),
             'created_at' => $this->created_at?->format('Y-m-d h:i A'),
             'client' => $this->whenLoaded('client', function () {

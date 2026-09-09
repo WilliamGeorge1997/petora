@@ -152,4 +152,9 @@ class Clinic extends Model
     {
         return $this->hasMany(ClinicWorkingHour::class);
     }
+
+    public function deliverySchedules(): HasMany
+    {
+        return $this->hasMany(ClinicDeliverySchedule::class);
+    }
 }

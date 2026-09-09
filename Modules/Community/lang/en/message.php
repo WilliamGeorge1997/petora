@@ -44,11 +44,12 @@ return [
         'deactivated' => 'Story deactivated successfully',
     ],
     'follow' => [
-        'index' => 'Follows',
-        'fetched' => 'Follows fetched successfully',
-        'created' => 'Follow created successfully',
-        'deleted' => 'Follow deleted successfully',
+        'followers_fetched' => 'Followers fetched successfully.',
+        'following_fetched' => 'Following fetched successfully.',
+        'created' => 'Followed successfully.',
+        'deleted' => 'Unfollowed successfully.',
     ],
+    'follow_self' => 'You cannot follow yourself.',
     'block' => [
         'index' => 'Blocks',
         'fetched' => 'Blocks fetched successfully',
@@ -71,7 +72,8 @@ return [
 
     'parent_id_required' => 'Parent comment selection is required.',
     'parent_id_integer' => 'Invalid parent comment selection.',
-    'parent_id_exists' => 'Selected parent comment does not exist.',
+    'parent_id_exists'     => 'Selected parent comment does not exist.',
+    'parent_id_max_depth'  => 'You can only reply to a comment, not to a reply.',
 
     'content_required' => 'Content is required.',
     'content_or_media_required' => 'Either content or media is required.',

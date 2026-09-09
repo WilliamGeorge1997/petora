@@ -18,7 +18,11 @@ return [
     'password_changed' => 'تم تغيير كلمة المرور بنجاح',
     'logged_user' => 'المستخدم الحالي',
     'logged_out' => 'تم تسجيل الخروج بنجاح',
-    'authenticated' => 'تم تسجيل الدخول بنجاح',
+    'authenticated'              => 'تم تسجيل الدخول بنجاح',
+    'profile_updated'            => 'تم تحديث الملف الشخصي بنجاح.',
+    'old_password_incorrect'     => 'كلمة المرور القديمة غير صحيحة.',
+    'old_password_required_with' => 'كلمة المرور القديمة مطلوبة عند تغيير كلمة المرور.',
+    'new_password_required_with' => 'كلمة المرور الجديدة مطلوبة عند توفير كلمة المرور القديمة.',
 
     'name_required'   => 'حقل الاسم مطلوب.',
     'name_string'     => 'يجب أن يكون الاسم نصاً.',

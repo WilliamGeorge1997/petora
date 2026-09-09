@@ -1,0 +1,54 @@
+<?php
+
+namespace Modules\Community\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
+
+class ToggleFollowRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'client_id' => $this->route('client_id'),
+        ]);
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     */
+    public function rules(): array
+    {
+        return [
+            'client_id' => [
+                'required', 
+                'integer', 
+                'exists:clients,id', 
+                'not_in:' . auth('client')->id()
+            ],
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'client_id.not_in' => __('community::message.follow_self'),
+        ];
+    }
+
+
+}

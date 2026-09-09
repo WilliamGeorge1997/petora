@@ -21,14 +21,19 @@ class PostService
     {
         $query = $this->model::query()->with($relations)
             ->withCount($counts)
+            ->withIsLiked()
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
     public function findById(int $id, array $relations = [], array $counts = []): Post
     {
-        return $this->model::with($relations)->withCount($counts)->findOrFail($id);
+        return $this->model::with($relations)
+            ->withCount($counts)
+            ->withIsLiked()
+            ->findOrFail($id);
     }
 
     protected function resolveModel(int|Post $postOrId): Post
@@ -44,41 +49,14 @@ class PostService
 
     public function active(array $data = [], array $relations = [], array $counts = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->active()->with($relations)->withCount($counts)->latest('id');
+        $query = $this->model::query()
+            ->active()
+            ->with($relations)
+            ->withCount($counts)
+            ->withIsLiked()
+            ->latest('id');
+
         return getCaseCollection($query, $data, $columns);
-    }
-
-    public function postRelations(?int $commentsLimit = null, ?int $repliesLimit = null): array
-    {
-        return [
-            'client:id,name,phone,email,image',
-            'media',
-            'hashtags' => fn ($query) => $query->active(),
-            'comments' => fn ($query) => $query->active()
-                ->whereNull('parent_id')
-                ->latest('id')
-                ->when($commentsLimit, fn ($q) => $q->limit($commentsLimit))
-                ->with([
-                    'client:id,name,phone,email,image',
-                    'replies' => fn ($q) => $q->active()
-                        ->latest('id')
-                        ->when($repliesLimit, fn ($rq) => $rq->limit($repliesLimit))
-                        ->with('client:id,name,phone,email,image')
-                        ->withCount('likes'),
-                ])
-                ->withCount([
-                    'likes',
-                    'replies' => fn ($q) => $q->active(),
-                ]),
-        ];
-    }
-
-    public function postCounts(): array
-    {
-        return [
-            'likes',
-            'comments' => fn ($query) => $query->active()->whereNull('parent_id'),
-        ];
     }
 
     public function save(PostDto $dto): Post
@@ -180,5 +158,47 @@ class PostService
         $post = $this->resolveModel($postOrId);
         $post->update(['is_active' => !$post->is_active]);
         return $post;
+    }
+
+
+    //Helpers
+    public function postRelations(bool $includeComments = true, ?int $commentsLimit = null, ?int $repliesLimit = null): array
+    {
+        $relations = [
+            'client:id,name,phone,email,image',
+            'media',
+            'hashtags' => fn($query) => $query->active(),
+        ];
+
+        if ($includeComments) {
+            $relations['comments'] = fn($query) => $query->active()
+                ->whereNull('parent_id')
+                ->latest('id')
+                ->when($commentsLimit, fn($q) => $q->limit($commentsLimit))
+                ->with([
+                    'client:id,name,phone,email,image',
+                    'replies' => fn($q) => $q->active()
+                        ->latest('id')
+                        ->when($repliesLimit, fn($rq) => $rq->limit($repliesLimit))
+                        ->with('client:id,name,phone,email,image')
+                        ->withCount('likes')
+                        ->withIsLiked(),
+                ])
+                ->withCount([
+                    'likes',
+                    'replies' => fn($q) => $q->active(),
+                ])
+                ->withIsLiked();
+        }
+
+        return $relations;
+    }
+
+    public function postCounts(): array
+    {
+        return [
+            'likes',
+            'comments' => fn($query) => $query->active()->whereNull('parent_id'),
+        ];
     }
 }

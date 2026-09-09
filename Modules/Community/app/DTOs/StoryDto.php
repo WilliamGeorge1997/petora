@@ -17,11 +17,16 @@ readonly class StoryDto
 
     public static function fromRequest(StoryRequest $request): self
     {
+        $media = $request->file('media') ?? $request->validated('media');
+        $isVideo = $media instanceof UploadedFile
+            ? isVideo($media)
+            : $request->boolean('is_video', false);
+
         return new self(
             clientId: $request->validated('client_id'),
-            media: $request->file('media') ?? $request->validated('media'),
-            isVideo: $request->boolean('is_video', false),
-            expiresAt: $request->validated('expires_at'),
+            media: $media,
+            isVideo: $isVideo,
+            expiresAt: $request->validated('expires_at') ?? now()->addHours(24)->toDateTimeString(),
             isActive: $request->boolean('is_active', true),
         );
     }

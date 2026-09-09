@@ -30,4 +30,5 @@ return [
     'is_open_24_hours' => 'Open 24 Hours',
     'from' => 'From',
     'to' => 'To',
+    'times' => 'Times',
 ];

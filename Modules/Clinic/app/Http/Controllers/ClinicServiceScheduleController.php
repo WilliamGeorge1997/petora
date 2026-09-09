@@ -52,7 +52,7 @@ class ClinicServiceScheduleController extends Controller
     public function store(ClinicServiceScheduleRequest $request, Clinic $clinic, ClinicService $clinic_service): RedirectResponse
     {
         $dto = ClinicServiceScheduleDto::fromRequest($request);
-        $this->scheduleService->save($dto);
+        $this->scheduleService->save($clinic_service, $dto);
 
         return to_route('admin.clinic.services.schedules.index', [$clinic->id, $clinic_service->id])
             ->with('success', __('clinic::message.created'));

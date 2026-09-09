@@ -15,27 +15,34 @@ use Modules\Community\Http\Controllers\Api\StoryController;
     Route::apiResource('posts', PostController::class)->except(['show', 'update']);
 
     // Stories
+    Route::get('stories/{story_id}', [StoryController::class, 'show']);
+    Route::get('clients/{client_id}/stories', [StoryController::class, 'clientStories']);
     Route::apiResource('stories', StoryController::class)->except(['update', 'show']);
     
     // Comments
-    Route::get('posts/{post}/comments', [CommentController::class, 'index']);
-    Route::post('posts/{post}/comments', [CommentController::class, 'store']);
-    Route::apiResource('comments', CommentController::class)->only(['update', 'destroy']);
+    Route::get('posts/{post}/comments',    [CommentController::class, 'index']);
+    Route::post('posts/{post}/comments',   [CommentController::class, 'store']);
+    Route::get('comments/{comment}/replies',  [CommentController::class, 'replies']);
+    Route::post('comments/{comment}/replies', [CommentController::class, 'reply']);
+    Route::post('comments/{comment}', [CommentController::class, 'update']);
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy']);
 
     // Likes
     Route::get('posts/{post_id}/likes', [LikeController::class, 'index']);
     Route::post('posts/{post_id}/like', [LikeController::class, 'toggle']);
     Route::get('comments/{comment_id}/likes', [LikeController::class, 'index']);
     Route::post('comments/{comment_id}/like', [LikeController::class, 'toggle']);
+    Route::get('stories/{story_id}/likes', [LikeController::class, 'index']);
+    Route::post('stories/{story_id}/like', [LikeController::class, 'toggle']);
 
     // Follows
-    Route::get('users/{user_id}/followers', [FollowController::class, 'followers']);
-    Route::get('users/{user_id}/following', [FollowController::class, 'following']);
-    Route::post('users/{user_id}/follow', [FollowController::class, 'toggle']);
+    Route::get('clients/{client_id}/followers', [FollowController::class, 'followers']);
+    Route::get('clients/{client_id}/following', [FollowController::class, 'following']);
+    Route::post('clients/{client_id}/follow', [FollowController::class, 'toggle']);
 
     // Blocks
     Route::get('blocks', [BlockController::class, 'index']);
-    Route::post('users/{user_id}/block', [BlockController::class, 'toggle']);
+    Route::post('clients/{client_id}/block', [BlockController::class, 'toggle']);
 
     // Hashtags
     Route::get('hashtags/{hashtag_id}', [HashtagController::class, 'show']);

@@ -18,7 +18,11 @@ return [
     'password_changed' => 'Password Changed Successfully',
     'logged_user' => 'Logged User',
     'logged_out' => 'Successfully logged out',
-    'authenticated' => 'Logged in successfully',
+    'authenticated'              => 'Logged in successfully',
+    'profile_updated'            => 'Profile updated successfully.',
+    'old_password_incorrect'     => 'The old password is incorrect.',
+    'old_password_required_with' => 'The old password is required when a new password is provided.',
+    'new_password_required_with' => 'The new password is required when the old password is provided.',
 
     'name_required'   => 'Name is required.',
     'name_string'     => 'The name must be a string.',

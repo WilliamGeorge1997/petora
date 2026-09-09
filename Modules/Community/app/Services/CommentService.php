@@ -13,23 +13,36 @@ class CommentService
 {
     private string $model = Comment::class;
 
-    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function findAll(array $data, array $relations = [], array $counts = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
+            ->withCount($counts)
+            ->withIsLiked()
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $counts = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->active()->with($relations)->filter($data)->latest('id');
+        $query = $this->model::query()
+            ->active()
+            ->with($relations)
+            ->withCount($counts)
+            ->withIsLiked()
+            ->filter($data)
+            ->latest('id');
+
         return getCaseCollection($query, $data, $columns);
     }
 
-    public function findById(int $id, array $relations = []): Comment
+    public function findById(int $id, array $relations = [], array $counts = []): Comment
     {
-        return $this->model::with($relations)->findOrFail($id);
+        return $this->model::with($relations)
+            ->withCount($counts)
+            ->withIsLiked()
+            ->findOrFail($id);
     }
 
     protected function resolveModel(int|Comment $commentOrId): Comment
@@ -40,6 +53,15 @@ class CommentService
     public function save(Post $post, CommentDto $dto): Comment
     {
         $data = array_merge($dto->toArray(), ['post_id' => $post->id]);
+        return $this->model::create($data);
+    }
+
+    public function reply(Comment $parent, CommentDto $dto): Comment
+    {
+        $data = array_merge($dto->toArray(), [
+            'post_id'   => $parent->post_id,
+            'parent_id' => $parent->id,
+        ]);
         return $this->model::create($data);
     }
 

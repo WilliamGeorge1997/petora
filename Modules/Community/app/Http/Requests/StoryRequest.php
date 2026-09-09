@@ -23,10 +23,7 @@ class StoryRequest extends FormRequest
     {
         return [
             'client_id'  => ['required', 'integer', 'exists:clients,id'],
-            'media'      => ['required'], // Could be file or string url
-            'is_video'   => ['nullable', 'boolean'],
-            'expires_at' => ['nullable', 'date'],
-            'is_active'  => ['nullable', 'boolean'],
+            'media'      => ['required', 'file', 'mimes:jpeg,png,jpg,webp,mp4,mov', 'max:2048'],
         ];
     }
 
@@ -44,9 +41,6 @@ class StoryRequest extends FormRequest
         return [
             'client_id' => __('community::attribute.client_id'),
             'media' => __('community::attribute.media'),
-            'is_video' => __('community::attribute.is_video'),
-            'expires_at' => __('community::attribute.expires_at'),
-            'is_active' => __('community::attribute.is_active'),
         ];
     }
 
@@ -58,9 +52,6 @@ class StoryRequest extends FormRequest
             'client_id.integer'  => __('community::message.client_id_integer'),
             'client_id.exists'   => __('community::message.client_id_exists'),
             'media.required'     => __('community::message.media_required'),
-            'is_video.boolean'   => __('community::message.is_video_boolean'),
-            'expires_at.date'    => __('community::message.expires_at_date'),
-            'is_active.boolean'  => __('community::message.is_active_boolean'),
         ];
     }
 }

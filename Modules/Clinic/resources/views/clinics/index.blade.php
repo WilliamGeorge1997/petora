@@ -242,7 +242,12 @@
                                         feather.icons['activity'].toSvg({
                                                 class: 'font-small-4 me-50'
                                             }) +
-                                            '{{ __('clinic::general.services') }}</a>'
+                                            '{{ __('clinic::general.services') }}</a>' +
+                                        '<a href="clinics/' + data + '/delivery-schedules" class="dropdown-item">' +
+                                        feather.icons['clock'].toSvg({
+                                                class: 'font-small-4 me-50'
+                                            }) +
+                                            '{{ __('clinic::general.delivery_schedules') }}</a>'
                                     @endcan
                                     @can('Delete-clinic')
                                         +

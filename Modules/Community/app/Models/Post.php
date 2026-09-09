@@ -57,6 +57,15 @@ class Post extends Model
         return $query->where('is_active', true);
     }
 
+    public function scopeWithIsLiked(Builder $query): Builder
+    {
+        return $query->when(auth('client')->check(), function ($q) {
+            $q->withExists(['likes as is_liked' => function ($query) {
+                $query->where('client_id', auth('client')->id());
+            }]);
+        });
+    }
+
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when($filters['content'] ?? null, function ($query, $content) {

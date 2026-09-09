@@ -14,7 +14,7 @@ class FollowService
 
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->with($relations)->latest('id');
+        $query = $this->model::query()->with($relations)->filter($data)->latest('id');
         return getCaseCollection($query, $data);
     }
 

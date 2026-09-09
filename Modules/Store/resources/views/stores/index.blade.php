@@ -244,7 +244,12 @@
                                         feather.icons['box'].toSvg({
                                                 class: 'font-small-4 me-50'
                                             }) +
-                                            '{{ __('store::general.products') ?? 'Products' }}</a>'
+                                            '{{ __('store::general.products') ?? 'Products' }}</a>' +
+                                        '<a href="stores/' + data + '/delivery-schedules" class="dropdown-item">' +
+                                        feather.icons['clock'].toSvg({
+                                                class: 'font-small-4 me-50'
+                                            }) +
+                                            '{{ __('store::general.delivery_schedules') }}</a>'
                                     @endcan
                                     @can('Delete-store')
                                         +

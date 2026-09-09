@@ -9,6 +9,8 @@ use Modules\Community\DTOs\StoryDto;
 use Modules\Community\Http\Requests\StoryRequest;
 use Modules\Community\Models\Story;
 use Modules\Community\Services\StoryService;
+use Modules\Community\Transformers\StoryResource;
+use Modules\Community\Transformers\StoryFeedResource;
 use Illuminate\Support\Facades\Gate;
 
 #[Middleware('auth:client')]
@@ -27,15 +29,31 @@ class StoryController extends Controller
     public function index(Request $request)
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
-        $stories = $this->storyService->active($data, ['client']);
-        return success(true, __('community::message.story.fetched'), $stories);
+        $clients = $this->storyService->feed(auth('client')->id(), $data);
+        return success(true, __('community::message.story.fetched'), paginatedResource($clients, StoryFeedResource::class));
+    }
+
+    public function clientStories(int $client_id, Request $request)
+    {
+        $data = $request->merge([
+            'pagination_type' => 'cursor',
+            'client_id' => $client_id,
+        ])->all();
+        $stories = $this->storyService->active($data, counts: $this->storyService->storyCounts());
+        return success(true, __('community::message.story.fetched'), paginatedResource($stories, StoryResource::class));
+    }
+
+    public function show(int $story_id)
+    {
+        $story = $this->storyService->findById($story_id, ['client'], $this->storyService->storyCounts());
+        return success(true, __('community::message.story.fetched'), new StoryResource($story));
     }
 
     public function store(StoryRequest $request)
     {
         $data = StoryDto::fromRequest($request);
         $story = $this->storyService->save($data);
-        return success(true, __('community::message.story.created'), $story);
+        return success(true, __('community::message.story.created'), new StoryResource($story->load('client')));
     }
 
     public function destroy(Story $story)

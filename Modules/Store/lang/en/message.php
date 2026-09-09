@@ -35,4 +35,13 @@ return [
     
     'latitude_numeric'   => 'Invalid Latitude format.',
     'longitude_numeric'  => 'Invalid Longitude format.',
+
+    'day_required'        => 'Day is required.',
+    'day_string'          => 'Invalid Day format.',
+    'day_in'              => 'Selected Day is invalid.',
+    'times_required'      => 'Delivery shifts are required.',
+    'times_array'         => 'Invalid Delivery shifts format.',
+    'times_min'           => 'At least one delivery shift is required.',
+    'times_from_required' => 'Start time (from) is required.',
+    'times_to_required'   => 'End time (to) is required.',
 ];

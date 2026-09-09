@@ -5,6 +5,7 @@ namespace Modules\Community\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\Community\Models\Comment;
 use Modules\Community\Models\Post;
+use Modules\Community\Models\Story;
 use Override;
 
 class LikeRequest extends FormRequest
@@ -16,6 +17,8 @@ class LikeRequest extends FormRequest
             $this->merge(['likeable_id' => (int) $id, 'likeable_type' => Post::class]);
         } elseif ($id = $this->route('comment_id')) {
             $this->merge(['likeable_id' => (int) $id, 'likeable_type' => Comment::class]);
+        } elseif ($id = $this->route('story_id')) {
+            $this->merge(['likeable_id' => (int) $id, 'likeable_type' => Story::class]);
         }
 
         $this->merge([
@@ -31,6 +34,7 @@ class LikeRequest extends FormRequest
         $table = match ($this->likeable_type) {
             Post::class    => 'posts',
             Comment::class => 'comments',
+            Story::class   => 'stories',
             default        => null,
         };
 

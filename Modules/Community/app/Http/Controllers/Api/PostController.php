@@ -22,7 +22,7 @@ class PostController extends Controller
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $posts = $this->postService->active(
             $data,
-            $this->postService->postRelations(commentsLimit: 2, repliesLimit: 2),
+            $this->postService->postRelations(includeComments: true, commentsLimit: 2, repliesLimit: 2),
             $this->postService->postCounts()
         );
         return success(true, __('community::message.post.fetched'), paginatedResource($posts, PostResource::class));
@@ -32,7 +32,7 @@ class PostController extends Controller
     {
         $post = $this->postService->findById(
             $post_id,
-            $this->postService->postRelations(),
+            $this->postService->postRelations(includeComments: false),
             $this->postService->postCounts()
         );
         return success(true, __('community::message.post.fetched'), new PostResource($post));

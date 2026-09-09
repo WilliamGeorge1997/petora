@@ -29,7 +29,7 @@ class StoryController extends Controller
     public function index(Request $request)
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
-        $clients = $this->storyService->feed(auth('client')->id(), $data);
+        $clients = $this->storyService->feed($data);
         return success(true, __('community::message.story.fetched'), paginatedResource($clients, StoryFeedResource::class));
     }
 

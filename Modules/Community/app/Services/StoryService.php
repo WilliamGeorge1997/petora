@@ -56,21 +56,16 @@ class StoryService
         return getCaseCollection($query, $data, $columns);
     }
 
-    public function storyCounts(): array
+    public function feed(array $data = []): LengthAwarePaginator|CursorPaginator|Collection
     {
-        return [
-            'likes',
-        ];
-    }
-
-    public function feed(int $authId, array $data = []): LengthAwarePaginator|CursorPaginator|Collection
-    {
+        $authId = auth('client')->id();
         $query = Client::selectRaw('id, name, image, (id = ?) as is_me', [$authId])
-            ->whereHas('stories', fn ($q) => $q->active())
-            ->withCount(['stories' => fn ($q) => $q->active()])
-            ->where(fn ($q) => $q
-                ->whereIn('id', Follow::select('following_id')->where('follower_id', $authId))
-                ->orWhere('id', $authId)
+            ->whereHas('stories', fn($q) => $q->active())
+            ->withCount(['stories' => fn($q) => $q->active()])
+            ->where(
+                fn($q) => $q
+                    ->whereIn('id', Follow::select('following_id')->where('follower_id', $authId))
+                    ->orWhere('id', $authId)
             )
             ->orderByDesc('is_me')
             ->latest('id');
@@ -103,5 +98,13 @@ class StoryService
         $story = $this->resolveModel($storyOrId);
         $story->update(['is_active' => !$story->is_active]);
         return $story;
+    }
+
+    //Helpers
+    public function storyCounts(): array
+    {
+        return [
+            'likes',
+        ];
     }
 }

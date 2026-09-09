@@ -172,4 +172,3 @@ if (!function_exists('isVideo')) {
         return false;
     }
 }
-

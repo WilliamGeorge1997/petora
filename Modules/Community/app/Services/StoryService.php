@@ -56,16 +56,14 @@ class StoryService
         return getCaseCollection($query, $data, $columns);
     }
 
-    public function feed(array $data = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function feed(int $authId, array $data = []): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $authId = auth('client')->id();
         $query = Client::selectRaw('id, name, image, (id = ?) as is_me', [$authId])
-            ->whereHas('stories', fn($q) => $q->active())
-            ->withCount(['stories' => fn($q) => $q->active()])
-            ->where(
-                fn($q) => $q
-                    ->whereIn('id', Follow::select('following_id')->where('follower_id', $authId))
-                    ->orWhere('id', $authId)
+            ->whereHas('stories', fn ($q) => $q->active())
+            ->withCount(['stories' => fn ($q) => $q->active()])
+            ->where(fn ($q) => $q
+                ->whereIn('id', Follow::select('following_id')->where('follower_id', $authId))
+                ->orWhere('id', $authId)
             )
             ->orderByDesc('is_me')
             ->latest('id');

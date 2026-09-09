@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignIdFor(Client::class, 'follower_id')->index()->constrained('clients')->cascadeOnDelete();
             $table->foreignIdFor(Client::class, 'following_id')->index()->constrained('clients')->cascadeOnDelete();
             $table->timestamps();
+
+            $table->unique(['follower_id', 'following_id'], 'follows_follower_following_unique');
         });
     }
 

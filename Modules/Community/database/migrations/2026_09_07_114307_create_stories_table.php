@@ -20,6 +20,8 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->index(['client_id', 'is_active', 'expires_at'], 'stories_client_active_expires_index');
         });
     }
 

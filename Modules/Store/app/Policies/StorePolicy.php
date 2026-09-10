@@ -2,10 +2,10 @@
 
 namespace Modules\Store\Policies;
 
-use Modules\Admin\Models\Admin;
-use Modules\Store\Models\Store;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Admin\Enums\AdminRole;
+use Modules\Admin\Models\Admin;
+use Modules\Store\Models\Store;
 
 class StorePolicy
 {

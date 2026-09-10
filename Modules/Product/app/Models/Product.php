@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\Category\Models\Category;
 use Modules\Clinic\Models\Clinic;
@@ -33,7 +34,7 @@ class Product extends Model
         'price' => 'decimal:2',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -44,13 +45,13 @@ class Product extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -61,21 +62,21 @@ class Product extends Model
         $query->when($filters['title'] ?? null, function ($query, $title) {
             $query->whereJsonContainsLocales('title', ['en', 'ar'], "%{$title}%", 'LIKE');
         })
-        ->when($filters['category_id'] ?? null, function ($query, $categoryId) {
-            $query->where('category_id', $categoryId);
-        })
-        ->when(isset($filters['is_active']) && $filters['is_active'] !== '', function ($query) use ($filters) {
-            $query->where('is_active', (bool) $filters['is_active']);
-        });
+            ->when($filters['category_id'] ?? null, function ($query, $categoryId) {
+                $query->where('category_id', $categoryId);
+            })
+            ->when(isset($filters['is_active']) && $filters['is_active'] !== '', function ($query) use ($filters) {
+                $query->where('is_active', (bool) $filters['is_active']);
+            });
     }
 
-    //Relations
+    // Relations
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class);
     }

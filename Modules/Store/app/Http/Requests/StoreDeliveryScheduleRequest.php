@@ -13,11 +13,11 @@ class StoreDeliveryScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'day'            => ['required', 'string', 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday'],
-            'times'          => ['required', 'array', 'min:1'],
-            'times.*.id'     => ['nullable', 'integer'],
-            'times.*.from'   => ['required'],
-            'times.*.to'     => ['required'],
+            'day' => ['required', 'string', 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday'],
+            'times' => ['required', 'array', 'min:1'],
+            'times.*.id' => ['nullable', 'integer'],
+            'times.*.from' => ['required'],
+            'times.*.to' => ['required'],
         ];
     }
 
@@ -33,10 +33,10 @@ class StoreDeliveryScheduleRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'day'          => __('store::attribute.day'),
-            'times'        => __('store::attribute.times'),
+            'day' => __('store::attribute.day'),
+            'times' => __('store::attribute.times'),
             'times.*.from' => __('store::attribute.from'),
-            'times.*.to'   => __('store::attribute.to'),
+            'times.*.to' => __('store::attribute.to'),
         ];
     }
 
@@ -44,14 +44,14 @@ class StoreDeliveryScheduleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'day.required'          => __('store::message.day_required'),
-            'day.string'            => __('store::message.day_string'),
-            'day.in'                => __('store::message.day_in'),
-            'times.required'        => __('store::message.times_required'),
-            'times.array'           => __('store::message.times_array'),
-            'times.min'             => __('store::message.times_min'),
+            'day.required' => __('store::message.day_required'),
+            'day.string' => __('store::message.day_string'),
+            'day.in' => __('store::message.day_in'),
+            'times.required' => __('store::message.times_required'),
+            'times.array' => __('store::message.times_array'),
+            'times.min' => __('store::message.times_min'),
             'times.*.from.required' => __('store::message.times_from_required'),
-            'times.*.to.required'   => __('store::message.times_to_required'),
+            'times.*.to.required' => __('store::message.times_to_required'),
         ];
     }
 }

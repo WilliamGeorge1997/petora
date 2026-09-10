@@ -39,24 +39,27 @@ class ClinicServiceController extends Controller
 
     public function export(Clinic $clinic)
     {
-        return Excel::download(new ServiceExport(), 'services_template.xlsx');
+        return Excel::download(new ServiceExport, 'services_template.xlsx');
     }
 
     public function edit(Clinic $clinic, int $clinic_service): View
     {
         $clinic_service->load('service');
+
         return view('clinic::services.edit', compact('clinic', 'clinic_service'));
     }
 
     public function import(ClinicServiceImportRequest $request, Clinic $clinic): RedirectResponse
     {
         Excel::import(new ClinicServiceImport($clinic), $request->file('file'));
+
         return back()->with('success', __('clinic::message.service.imported'));
     }
 
     public function importAll(Clinic $clinic): RedirectResponse
     {
         $this->clinicServiceService->importAll($clinic);
+
         return back()->with('success', __('clinic::message.service.imported'));
     }
 

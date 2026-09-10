@@ -17,6 +17,7 @@ class StoryService
     use UploaderHelper;
 
     private string $model = Story::class;
+    private string $uploadFolder = 'story';
 
     public function findAll(array $data, array $relations = [], array $counts = []): LengthAwarePaginator|CursorPaginator|Collection
     {
@@ -60,6 +61,7 @@ class StoryService
     {
         $authId = auth('client')->id();
         $query = Client::selectRaw('id, name, image, (id = ?) as is_me', [$authId])
+            ->withCasts(['is_me' => 'boolean'])
             ->whereHas('stories', fn ($q) => $q->active())
             ->withCount(['stories' => fn ($q) => $q->active()])
             ->where(fn ($q) => $q
@@ -77,9 +79,10 @@ class StoryService
         $data = $dto->toArray();
         if ($dto->media instanceof UploadedFile) {
             $data['media'] = $dto->isVideo
-                ? $this->uploadFile($dto->media, 'community/story')
-                : $this->uploadImage($dto->media, 'community/story');
+                ? $this->uploadFile($dto->media, $this->uploadFolder)
+                : $this->uploadImage($dto->media, $this->uploadFolder);
         }
+
         return $this->model::create($data);
     }
 
@@ -87,19 +90,21 @@ class StoryService
     {
         $story = $this->resolveModel($storyOrId);
         if ($story->media) {
-            $this->deleteImage($story->getRawOriginal('media'), 'community/story');
+            $this->deleteImage($story->getRawOriginal('media'), $this->uploadFolder);
         }
+
         return $story->delete();
     }
 
     public function activate(int|Story $storyOrId): Story
     {
         $story = $this->resolveModel($storyOrId);
-        $story->update(['is_active' => !$story->is_active]);
+        $story->update(['is_active' => ! $story->is_active]);
+
         return $story;
     }
 
-    //Helpers
+    // Helpers
     public function storyCounts(): array
     {
         return [

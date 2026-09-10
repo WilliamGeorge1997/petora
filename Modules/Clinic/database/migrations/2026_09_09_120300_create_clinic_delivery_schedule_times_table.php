@@ -14,7 +14,9 @@ return new class extends Migration
     {
         Schema::create('clinic_delivery_schedule_times', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ClinicDeliverySchedule::class)->index()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(ClinicDeliverySchedule::class)->index('clinic_delivery_schedule_times_schedule_id_index')
+                ->constrained(indexName: 'clinic_delivery_schedule_times_schedule_id_foreign')
+                ->cascadeOnDelete();
             $table->time('from');
             $table->time('to');
             $table->timestamps();

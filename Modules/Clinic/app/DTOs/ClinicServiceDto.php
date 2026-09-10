@@ -24,8 +24,8 @@ readonly class ClinicServiceDto
     public function toArray(): array
     {
         $data = [
-            'price'     => $this->price,
-            'duration'  => $this->duration,
+            'price' => $this->price,
+            'duration' => $this->duration,
             'is_active' => $this->isActive,
         ];
 

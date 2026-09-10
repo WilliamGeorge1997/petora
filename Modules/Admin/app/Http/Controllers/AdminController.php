@@ -3,9 +3,13 @@
 namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Routing\Redirector;
 use Modules\Admin\DTOs\AdminDto;
 use Modules\Admin\Services\AdminService;
 use Modules\Admin\Services\RoleService;
@@ -22,6 +26,7 @@ class AdminController extends Controller
 
     /**
      * Display a listing of the resource.
+     *
      * @return Renderable
      */
     public function dashboard(Request $request)
@@ -40,38 +45,44 @@ class AdminController extends Controller
             return response()->json(['data' => $admins->items()]);
         }
 
-        $roles = (new RoleService())->findAll(['id', 'name']);
+        $roles = (new RoleService)->findAll(['id', 'name']);
 
         return view('admin::admins.index', ['roles' => $roles]);
     }
 
     /**
      * Show the form for creating a new resource.
+     *
      * @return Renderable
      */
     public function create()
     {
-        $roles = (new RoleService())->findAll(['id', 'name']);
+        $roles = (new RoleService)->findAll(['id', 'name']);
+
         return view('admin::admins.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
         $data = (new AdminDto($request))->dataFromRequest();
         $validation = $this->validateStore($data);
-        if ($validation->fails()) return redirect()->back()->withInput()->withErrors($validation);
+        if ($validation->fails()) {
+            return redirect()->back()->withInput()->withErrors($validation);
+        }
         $admin = $this->adminService->save($data);
+
         return redirect('admin/admins')->with('created', 'created');
     }
 
     /**
      * Show the specified resource.
-     * @param int $id
+     *
+     * @param  int  $id
      * @return Renderable
      */
     public function show($id)
@@ -81,47 +92,55 @@ class AdminController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * @param int $id
+     *
+     * @param  int  $id
      * @return Renderable
      */
     public function edit($id)
     {
         $admin = $this->adminService->findById($id);
-        $roles = (new RoleService())->findAll(['id', 'name']);
+        $roles = (new RoleService)->findAll(['id', 'name']);
         $userRole = $admin->roles->pluck('name', 'name')->all();
-        $viewModel = new AdminViewModel();
+        $viewModel = new AdminViewModel;
+
         return view('admin::admins.edit', compact('admin', 'roles', 'userRole', 'viewModel'));
     }
 
     /**
      * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     *
+     * @param  int  $id
+     * @return Application|RedirectResponse|Redirector
      */
     public function update(Request $request, $id)
     {
         $data = (new AdminDto($request))->dataFromRequest();
         $validation = $this->validateUpdate($data, $id);
-        if ($validation->fails()) return redirect()->back()->withInput()->withErrors($validation);
+        if ($validation->fails()) {
+            return redirect()->back()->withInput()->withErrors($validation);
+        }
         $admin = $this->adminService->update($id, $data);
+
         return redirect('admin/admins')->with('updated', 'updated');
     }
 
     /**
      * Remove the specified resource from storage.
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @param  int  $id
+     * @return JsonResponse
      */
     public function destroy($id, Request $request)
     {
         $this->adminService->delete($id);
+
         return response()->json(['data' => 'success'], 200);
     }
 
     public function activate($id)
     {
         $this->adminService->activate($id);
+
         return redirect('admin/admins')->with('updated', 'updated');
     }
 }

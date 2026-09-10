@@ -18,11 +18,11 @@ return [
     'description_en_string' => 'الوصف بالانجليزية يجب ان يكون نص.',
     'description_ar_string' => 'الوصف بالعربية يجب ان يكون نص.',
     'price_required' => 'السعر مطلوب.',
-    'price_numeric'  => 'السعر يجب أن يكون رقماً.',
-    'price_min'      => 'السعر يجب ألا يقل عن 0.',
+    'price_numeric' => 'السعر يجب أن يكون رقماً.',
+    'price_min' => 'السعر يجب ألا يقل عن 0.',
 
-    'images_array'   => 'الصور يجب أن تكون مصفوفة.',
+    'images_array' => 'الصور يجب أن تكون مصفوفة.',
     'images_invalid' => 'كل ملف يجب أن يكون صورة صالحة.',
-    'images_mimes'   => 'الصور يجب أن تكون من النوع: jpeg, png, jpg, webp, svg, gif.',
-    'images_max'     => 'حجم كل صورة يجب ألا يتجاوز 2 ميجابايت.',
+    'images_mimes' => 'الصور يجب أن تكون من النوع: jpeg, png, jpg, webp, svg, gif.',
+    'images_max' => 'حجم كل صورة يجب ألا يتجاوز 2 ميجابايت.',
 ];

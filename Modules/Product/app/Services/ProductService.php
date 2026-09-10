@@ -20,6 +20,7 @@ class ProductService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -36,12 +37,14 @@ class ProductService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -96,11 +99,12 @@ class ProductService
     public function activate(int|Product $productOrId): Product
     {
         $product = $this->resolveModel($productOrId);
-        $product->update(['is_active' => !$product->is_active]);
+        $product->update(['is_active' => ! $product->is_active]);
+
         return $product;
     }
 
-    //For API
+    // For API
     public function byCategoryAndSeller(int $categoryId, string $sellerType, int $sellerId, array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $type = $sellerType == 'store' ? 'stores' : 'clinics';
@@ -110,6 +114,7 @@ class ProductService
                 $q->where("$type.id", $sellerId)
                     ->where('product_sellers.is_active', true);
             });
+
         return getCaseCollection($query, $data, $columns);
     }
 }

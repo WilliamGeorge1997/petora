@@ -55,10 +55,10 @@ class ClinicDeliveryScheduleService
             /** @var ClinicDeliverySchedule $schedule */
             $schedule = $this->model::create([
                 'clinic_id' => $clinicId,
-                'day'       => $dto->day,
+                'day' => $dto->day,
             ]);
 
-            if (!empty($dto->times)) {
+            if (! empty($dto->times)) {
                 $this->syncTimes($schedule, $dto->times);
             }
 
@@ -73,7 +73,7 @@ class ClinicDeliveryScheduleService
         return DB::transaction(function () use ($schedule, $dto) {
             $schedule->update($dto->toArray());
 
-            if (!empty($dto->times)) {
+            if (! empty($dto->times)) {
                 $this->syncTimes($schedule, $dto->times);
             }
 
@@ -90,16 +90,16 @@ class ClinicDeliveryScheduleService
                 continue;
             }
 
-            if (!empty($item['id'])) {
+            if (! empty($item['id'])) {
                 $schedule->times()->where('id', $item['id'])->update([
                     'from' => $item['from'],
-                    'to'   => $item['to'],
+                    'to' => $item['to'],
                 ]);
                 $keptIds[] = (int) $item['id'];
             } else {
                 $created = $schedule->times()->create([
                     'from' => $item['from'],
-                    'to'   => $item['to'],
+                    'to' => $item['to'],
                 ]);
                 $keptIds[] = $created->id;
             }

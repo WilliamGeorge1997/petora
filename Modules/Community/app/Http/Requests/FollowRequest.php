@@ -13,7 +13,7 @@ class FollowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'follower_id'  => ['required', 'integer', 'exists:clients,id'],
+            'follower_id' => ['required', 'integer', 'exists:clients,id'],
             'following_id' => ['required', 'integer', 'exists:clients,id'],
         ];
     }
@@ -39,12 +39,12 @@ class FollowRequest extends FormRequest
     public function messages()
     {
         return [
-            'follower_id.required'  => __('community::message.follower_id_required'),
-            'follower_id.integer'   => __('community::message.follower_id_integer'),
-            'follower_id.exists'    => __('community::message.follower_id_exists'),
+            'follower_id.required' => __('community::message.follower_id_required'),
+            'follower_id.integer' => __('community::message.follower_id_integer'),
+            'follower_id.exists' => __('community::message.follower_id_exists'),
             'following_id.required' => __('community::message.following_id_required'),
-            'following_id.integer'  => __('community::message.following_id_integer'),
-            'following_id.exists'   => __('community::message.following_id_exists'),
+            'following_id.integer' => __('community::message.following_id_integer'),
+            'following_id.exists' => __('community::message.following_id_exists'),
         ];
     }
 }

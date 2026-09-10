@@ -2,16 +2,17 @@
 
 namespace Modules\Product\Http\Controllers;
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Product\DTOs\ProductDto;
 use Modules\Product\Http\Requests\ProductRequest;
 use Modules\Product\Models\Product;
 use Modules\Product\Services\ProductService;
-use Illuminate\Support\Facades\Gate;
 use Modules\Product\ViewModels\ProductViewModel;
 
 #[Middleware('auth:admin')]
@@ -31,12 +32,14 @@ class ProductController extends Controller
         if ($request->ajax()) {
             return success(true, __('product::message.fetched'), $products->items());
         }
+
         return view('product::products.index', compact('products'));
     }
 
     public function create()
     {
-        $viewModel = new ProductViewModel();
+        $viewModel = new ProductViewModel;
+
         return view('product::products.create', compact('viewModel'));
     }
 
@@ -44,12 +47,14 @@ class ProductController extends Controller
     {
         $dto = ProductDto::fromRequest($request);
         $this->productService->save($dto);
+
         return to_route('admin.product.index')->with('success', __('product::message.created'));
     }
 
     public function edit(Product $product)
     {
-        $viewModel = new ProductViewModel();
+        $viewModel = new ProductViewModel;
+
         return view('product::products.edit', compact('product', 'viewModel'));
     }
 
@@ -57,26 +62,29 @@ class ProductController extends Controller
     {
         $dto = ProductDto::fromRequest($request);
         $this->productService->update($product, $dto);
+
         return to_route('admin.product.index')->with('success', __('product::message.updated'));
     }
 
     public function destroy(Product $product)
     {
         $this->productService->delete($product);
+
         return success(true, __('product::message.deleted'));
     }
 
     public function export()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ProductExport(), 'products.xlsx');
+        return Excel::download(new ProductExport, 'products.xlsx');
     }
 
     public function activate(Product $product)
     {
         $product = $this->productService->activate($product);
+
         return success(
             true,
-            $product->is_active ?  __('product::message.activated') :  __('product::message.deactivated'),
+            $product->is_active ? __('product::message.activated') : __('product::message.deactivated'),
             $product
         );
     }

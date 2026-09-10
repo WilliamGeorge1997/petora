@@ -26,17 +26,17 @@ class AdminDatabaseSeeder extends Seeder
         $admin->assignRole($role);
     }
 
-    function superAdminCreation()
+    public function superAdminCreation()
     {
         return Admin::create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('123456789'),
-            'phone' => '0123456789'
+            'phone' => '0123456789',
         ]);
     }
 
-    function permissionCreation()
+    public function permissionCreation()
     {
         $permissions = [
             ['Index-admin', 'Admin', 'Index'],
@@ -142,7 +142,7 @@ class AdminDatabaseSeeder extends Seeder
             ['Index-report', 'Report', 'Index'],
 
             ['Index-dashboard', 'Dashboard', 'Index'],
-            
+
             ['Index-hashtag', 'Hashtag', 'Index'],
             ['Create-hashtag', 'Hashtag', 'Create'],
             ['Edit-hashtag', 'Hashtag', 'Edit'],
@@ -176,35 +176,39 @@ class AdminDatabaseSeeder extends Seeder
         }
     }
 
-    function superAdminRoleCreation()
+    public function superAdminRoleCreation()
     {
         $role = Role::create(['name' => 'Super Admin', 'guard_name' => 'admin']);
         $permissions = Permission::all();
         $role->syncPermissions($permissions);
+
         return $role;
     }
 
-    function companyManagerRoleCreation()
+    public function companyManagerRoleCreation()
     {
         $role = Role::create(['name' => 'Company Manager', 'guard_name' => 'admin']);
+
         // $permissions = Permission::whereNotIn('category', ['Admin', 'Roles', 'Branch', 'OrderMethod', 'PaymentMethods', 'Setting', 'OrderStatus'])
         //     ->get();
         // $role->syncPermissions($permissions);
         return $role;
     }
 
-    function storeManagerRoleCreation()
+    public function storeManagerRoleCreation()
     {
         $role = Role::create(['name' => 'Store Manager', 'guard_name' => 'admin']);
+
         // $permissions = Permission::whereNotIn('category', ['Admin', 'Roles', 'Branch', 'OrderMethod', 'PaymentMethods', 'Setting', 'OrderStatus'])
         //     ->get();
         // $role->syncPermissions($permissions);
         return $role;
     }
 
-    function clinicManagerRoleCreation()
+    public function clinicManagerRoleCreation()
     {
         $role = Role::create(['name' => 'Clinic Manager', 'guard_name' => 'admin']);
+
         // $permissions = Permission::whereNotIn('category', ['Admin', 'Roles', 'Branch', 'OrderMethod', 'PaymentMethods', 'Setting', 'OrderStatus'])
         //     ->get();
         // $role->syncPermissions($permissions);

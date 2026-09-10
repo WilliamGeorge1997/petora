@@ -13,14 +13,14 @@ class CompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title_en'   => ['required', 'string'],
-            'title_ar'   => ['required', 'string'],
+            'title_en' => ['required', 'string'],
+            'title_ar' => ['required', 'string'],
             'description_en' => ['nullable', 'string'],
             'description_ar' => ['nullable', 'string'],
             'address_en' => ['nullable', 'string'],
             'address_ar' => ['nullable', 'string'],
-            'phone'      => ['nullable', 'string'],
-            'image'      => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:2048'],
+            'phone' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:2048'],
         ];
     }
 
@@ -42,8 +42,8 @@ class CompanyRequest extends FormRequest
             'description_ar' => __('company::attribute.description_ar'),
             'address_en' => __('company::attribute.address_en'),
             'address_ar' => __('company::attribute.address_ar'),
-            'phone'      => __('company::attribute.phone'),
-            'image'      => __('company::attribute.image'),
+            'phone' => __('company::attribute.phone'),
+            'image' => __('company::attribute.image'),
         ];
     }
 
@@ -52,22 +52,22 @@ class CompanyRequest extends FormRequest
     {
         return [
             'title_en.required' => __('company::message.title_en_required'),
-            'title_en.string'   => __('company::message.title_en_string'),
-            
+            'title_en.string' => __('company::message.title_en_string'),
+
             'title_ar.required' => __('company::message.title_ar_required'),
-            'title_ar.string'   => __('company::message.title_ar_string'),
-            
+            'title_ar.string' => __('company::message.title_ar_string'),
+
             'description_en.string' => __('company::message.description_en_string'),
             'description_ar.string' => __('company::message.description_ar_string'),
 
             'address_en.string' => __('company::message.address_en_string'),
             'address_ar.string' => __('company::message.address_ar_string'),
-            
-            'phone.string'      => __('company::message.phone_string'),
-            
-            'image.image'       => __('company::message.image_invalid'),
-            'image.mimes'       => __('company::message.image_mimes'),
-            'image.max'         => __('company::message.image_max'),
+
+            'phone.string' => __('company::message.phone_string'),
+
+            'image.image' => __('company::message.image_invalid'),
+            'image.mimes' => __('company::message.image_mimes'),
+            'image.max' => __('company::message.image_max'),
         ];
     }
 }

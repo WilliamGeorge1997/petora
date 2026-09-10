@@ -7,7 +7,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Modules\Admin\Enums\AdminRole;
 use Modules\Community\Models\Follow;
 use Modules\Community\Services\FollowService;
 
@@ -25,12 +24,14 @@ class FollowController extends Controller
         if ($request->ajax()) {
             return success(true, __('community::general.follow.fetched'), $follows->items());
         }
+
         return view('community::follows.index', compact('follows'));
     }
 
     public function destroy(Follow $follow)
     {
         $this->followService->delete($follow);
+
         return success(true, __('community::general.follow.deleted'));
     }
 }

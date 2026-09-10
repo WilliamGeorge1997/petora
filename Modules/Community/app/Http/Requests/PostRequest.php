@@ -24,12 +24,12 @@ class PostRequest extends FormRequest
     {
         return [
             'client_id' => ['required', 'integer', 'exists:clients,id'],
-            'pet_id'    => ['nullable', 'integer', 'exists:pets,id'],
-            'content'   => ['required_without:media', 'nullable', 'string'],
-            'media'     => ['required_without:content', 'nullable', 'array'],
+            'pet_id' => ['nullable', 'integer', 'exists:pets,id'],
+            'content' => ['required_without:media', 'nullable', 'string'],
+            'media' => ['required_without:content', 'nullable', 'array'],
             'media.*.file' => ['file', 'mimes:jpeg,png,jpg,webp,svg,gif,mp4,mov,avi', 'max:20480'],
             'media.*.is_video' => ['required_with:media', 'boolean'],
-            'hashtags'   => ['nullable', 'array'],
+            'hashtags' => ['nullable', 'array'],
             'hashtags.*' => ['string', 'max:100'],
         ];
     }

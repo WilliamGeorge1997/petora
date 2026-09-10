@@ -5,10 +5,9 @@ use Modules\Store\Http\Controllers\StoreController;
 use Modules\Store\Http\Controllers\StoreDeliveryScheduleController;
 use Modules\Store\Http\Controllers\StoreProductController;
 
-
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('stores/{store}/activate', [StoreController::class, 'activate'])->name('store.activate');
-    
+
     // Store Products Routes
     Route::get('stores/{store}/products', [StoreProductController::class, 'index'])->name('store.products.index');
     Route::get('stores/{store}/products/export', [StoreProductController::class, 'export'])->name('store.products.export');

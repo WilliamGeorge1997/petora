@@ -13,10 +13,11 @@ class StoryFeedResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'                   => $this->id,
-            'name'                 => $this->name,
-            'image'                => $this->image,
-            'stories_count' => (int) ($this->stories_count ?? 0),
+            'id' => $this->id,
+            'name' => $this->name,
+            'image' => $this->image,
+            'is_me' => $this->is_me,
+            'stories_count' => (int) $this->stories_count,
         ];
     }
 }

@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Modules\Client\Models\Client;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Comment extends Model
 {
@@ -34,7 +34,7 @@ class Comment extends Model
         'client_id',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -45,13 +45,13 @@ class Comment extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -66,7 +66,7 @@ class Comment extends Model
         });
     }
 
-    //Scopes
+    // Scopes
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when($filters['content'] ?? null, function ($query, $content) {
@@ -83,7 +83,7 @@ class Comment extends Model
             });
     }
 
-    //Relations
+    // Relations
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);

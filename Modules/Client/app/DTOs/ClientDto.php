@@ -24,12 +24,13 @@ readonly class ClientDto
     public static function fromRegisterRequest(ClientRegisterRequest $request): self
     {
         $verifyCode = app()->environment('local') ? '999999' : (string) rand(100000, 999999);
+
         return self::mapRequestToDto($request, false, $verifyCode);
     }
 
     public static function fromAdminRequest(FormRequest $request): self
     {
-        return self::mapRequestToDto($request,  $request->boolean('is_active'));
+        return self::mapRequestToDto($request, $request->boolean('is_active'));
     }
 
     public static function fromClientRequest(FormRequest $request): self
@@ -49,7 +50,7 @@ readonly class ClientDto
         );
     }
 
-    //Helper
+    // Helper
     private static function mapRequestToDto(FormRequest $request, ?bool $isActive, ?string $verifyCode = null): self
     {
         return new self(

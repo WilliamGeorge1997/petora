@@ -8,17 +8,17 @@ class CommonController extends Controller
 {
     public function terms(string $lang)
     {
-        return success(true, 'Terms Data  ', getSetting('terms_' . $lang));
+        return success(true, 'Terms Data  ', getSetting('terms_'.$lang));
     }
 
     public function privacy(string $lang)
     {
-        return success(true, 'Privacy Data  ', getSetting('privacy_' . $lang));
+        return success(true, 'Privacy Data  ', getSetting('privacy_'.$lang));
     }
 
     public function about(string $lang)
     {
-        return success(true, 'About Data  ', getSetting('about_' . $lang));
+        return success(true, 'About Data  ', getSetting('about_'.$lang));
     }
 
     public function tax()
@@ -29,6 +29,7 @@ class CommonController extends Controller
     public function socialLinks()
     {
         $socialLinks = getSettings(['facebook', 'twitter', 'instagram', 'whatsapp', 'telegram', 'snapchat', 'tiktok']);
+
         return success(true, 'Social media links fetched successfully', $socialLinks);
     }
 }

@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Modules\Client\Models\Client;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Story extends Model
 {
@@ -29,7 +29,7 @@ class Story extends Model
         'expires_at' => 'datetime',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -40,25 +40,27 @@ class Story extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Getters
+    // Getters
     public function getMediaAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
             if (filter_var($value, FILTER_VALIDATE_URL)) {
                 return $value;
             }
+
             return asset('storage/uploads/story/' . $value);
         }
+
         return $value;
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true)
@@ -79,7 +81,7 @@ class Story extends Model
 
     public function scopeFilter(Builder $query, array $filters)
     {
-        if (!empty($filters['following_only']) && auth('client')->check()) {
+        if (! empty($filters['following_only']) && auth('client')->check()) {
             /** @var Client $client */
             $client = auth('client')->user();
 
@@ -94,7 +96,7 @@ class Story extends Model
             });
     }
 
-    //Relations
+    // Relations
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);

@@ -26,6 +26,7 @@ class CategoryService
                 return $query->where('is_active', (bool) $data['is_active']);
             })
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -37,12 +38,14 @@ class CategoryService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -60,28 +63,35 @@ class CategoryService
     {
         $data = $dto->toArray();
         if ($dto->image) {
-            if ($category->image) $this->deleteImage($category->image, 'category');
+            if ($category->image) {
+                $this->deleteImage($category->image, 'category');
+            }
 
             $data['image'] = $this->uploadImage($dto->image, 'category');
         }
 
         $category->update($data);
+
         return $category;
     }
 
     public function delete(Category $category): bool
     {
-        if ($category->image) $this->deleteImage($category->image, 'category');
+        if ($category->image) {
+            $this->deleteImage($category->image, 'category');
+        }
+
         return $category->delete();
     }
 
     public function activate(Category $category): Category
     {
-        $category->update(['is_active' => !$category->is_active]);
+        $category->update(['is_active' => ! $category->is_active]);
+
         return $category;
     }
 
-    //For API
+    // For API
     public function categoriesHaveProducts(string $sellerType, int $sellerId, $data = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $type = $sellerType == 'store' ? 'stores' : 'clinics';
@@ -93,6 +103,7 @@ class CategoryService
                             ->where('product_sellers.is_active', true);
                     });
             });
+
         return getCaseCollection($query, $data, $columns);
     }
 }

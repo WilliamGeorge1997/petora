@@ -13,8 +13,8 @@ class BlockRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'blocker_id'  => ['required', 'integer', 'exists:clients,id'],
-            'blocked_id'  => ['required', 'integer', 'exists:clients,id'],
+            'blocker_id' => ['required', 'integer', 'exists:clients,id'],
+            'blocked_id' => ['required', 'integer', 'exists:clients,id'],
         ];
     }
 
@@ -40,11 +40,11 @@ class BlockRequest extends FormRequest
     {
         return [
             'blocker_id.required' => __('community::message.blocker_id_required'),
-            'blocker_id.integer'  => __('community::message.blocker_id_integer'),
-            'blocker_id.exists'   => __('community::message.blocker_id_exists'),
+            'blocker_id.integer' => __('community::message.blocker_id_integer'),
+            'blocker_id.exists' => __('community::message.blocker_id_exists'),
             'blocked_id.required' => __('community::message.blocked_id_required'),
-            'blocked_id.integer'  => __('community::message.blocked_id_integer'),
-            'blocked_id.exists'   => __('community::message.blocked_id_exists'),
+            'blocked_id.integer' => __('community::message.blocked_id_integer'),
+            'blocked_id.exists' => __('community::message.blocked_id_exists'),
         ];
     }
 }

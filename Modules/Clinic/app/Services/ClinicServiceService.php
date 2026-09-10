@@ -20,6 +20,7 @@ class ClinicServiceService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -36,29 +37,31 @@ class ClinicServiceService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
     public function importAll(Clinic $clinic): void
     {
-        $activeServices = (new ServiceService(new Service()))->active();
+        $activeServices = (new ServiceService(new Service))->active();
         $syncData = [];
 
         foreach ($activeServices as $service) {
             $syncData[$service->id] = [
-                'price'     => (float) $service->price,
-                'duration'  => $service->duration !== null ? (int) $service->duration : null,
+                'price' => (float) $service->price,
+                'duration' => $service->duration !== null ? (int) $service->duration : null,
                 'is_active' => true,
             ];
         }
 
-        if (!empty($syncData)) {
+        if (! empty($syncData)) {
             $clinic->services()->syncWithoutDetaching($syncData);
         }
     }
@@ -67,19 +70,22 @@ class ClinicServiceService
     {
         $clinicService = $this->resolveModel($clinicServiceOrId);
         $clinicService->update($dto->toArray());
+
         return $clinicService;
     }
 
     public function delete(int|ClinicService $clinicServiceOrId): bool
     {
         $clinicService = $this->resolveModel($clinicServiceOrId);
+
         return $clinicService->delete();
     }
 
     public function activate(int|ClinicService $clinicServiceOrId): ClinicService
     {
         $clinicService = $this->resolveModel($clinicServiceOrId);
-        $clinicService->update(['is_active' => !$clinicService->is_active]);
+        $clinicService->update(['is_active' => ! $clinicService->is_active]);
+
         return $clinicService;
     }
 }

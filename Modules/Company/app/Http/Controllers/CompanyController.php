@@ -7,12 +7,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Modules\Admin\Enums\AdminRole;
+use Illuminate\Support\Facades\Gate;
 use Modules\Company\DTOs\CompanyDto;
 use Modules\Company\Http\Requests\CompanyRequest;
 use Modules\Company\Models\Company;
 use Modules\Company\Services\CompanyService;
-use Illuminate\Support\Facades\Gate;
 
 #[Middleware('auth:admin')]
 #[Middleware('permission:Index-company|Create-company|Edit-company|Delete-company', only: ['index', 'store'])]
@@ -30,6 +29,7 @@ class CompanyController extends Controller
         if ($request->ajax()) {
             return success(true, __('company::message.fetched'), $companies->items());
         }
+
         return view('company::companies.index', compact('companies'));
     }
 
@@ -42,12 +42,14 @@ class CompanyController extends Controller
     {
         $dto = CompanyDto::fromRequest($request);
         $this->companyService->save($dto);
+
         return to_route('admin.company.index')->with('success', __('company::message.created'));
     }
 
     public function edit(Company $company)
     {
         Gate::authorize('update', $company);
+
         return view('company::companies.edit', compact('company'));
     }
 
@@ -56,21 +58,24 @@ class CompanyController extends Controller
         Gate::authorize('update', $company);
         $dto = CompanyDto::fromRequest($request);
         $this->companyService->update($company, $dto);
+
         return to_route('admin.company.index')->with('success', __('company::message.updated'));
     }
 
     public function destroy(Company $company)
     {
         $this->companyService->delete($company);
+
         return success(true, __('company::message.deleted'));
     }
 
     public function activate(Company $company)
     {
         $company = $this->companyService->activate($company);
+
         return success(
             true,
-            $company->is_active ?  __('company::message.activated') :  __('company::message.deactivated'),
+            $company->is_active ? __('company::message.activated') : __('company::message.deactivated'),
             $company
         );
     }

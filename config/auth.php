@@ -3,7 +3,6 @@
 use Modules\Admin\Models\Admin;
 use Modules\Client\Models\Client;
 
-
 return [
 
     /*

@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Modules\Client\Models\Client;
 use Modules\Pet\Models\Pet;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Post extends Model
 {
@@ -31,10 +31,10 @@ class Post extends Model
 
     protected $hidden = [
         'pet_id',
-        'client_id'
+        'client_id',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -45,13 +45,13 @@ class Post extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -82,7 +82,7 @@ class Post extends Model
             });
     }
 
-    //Relations
+    // Relations
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);

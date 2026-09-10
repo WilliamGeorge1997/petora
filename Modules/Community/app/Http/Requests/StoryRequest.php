@@ -48,3 +48,13 @@ class StoryRequest extends FormRequest
     public function messages()
     {
         return [
+            'client_id.required' => __('community::message.client_id_required'),
+            'client_id.integer' => __('community::message.client_id_integer'),
+            'client_id.exists' => __('community::message.client_id_exists'),
+
+            'media.required' => __('community::message.media_required'),
+            'media.mimes' => __('community::message.media_mimes'),
+            'media.max' => __('community::message.media_max'),
+        ];
+    }
+}

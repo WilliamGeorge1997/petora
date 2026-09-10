@@ -2,17 +2,18 @@
 
 namespace Modules\Service\Http\Controllers;
 
+use App\Exports\ServiceExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Modules\Admin\Enums\AdminRole;
+use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Service\DTOs\ServiceDto;
 use Modules\Service\Http\Requests\ServiceRequest;
 use Modules\Service\Models\Service;
 use Modules\Service\Services\ServiceService;
-use Illuminate\Support\Facades\Gate;
 
 #[Middleware('auth:admin')]
 #[Middleware('permission:Index-service|Create-service|Edit-service|Delete-service', only: ['index', 'export', 'store'])]
@@ -30,6 +31,7 @@ class ServiceController extends Controller
         if ($request->ajax()) {
             return success(true, __('service::message.fetched'), $services->items());
         }
+
         return view('service::services.index', compact('services'));
     }
 
@@ -42,12 +44,14 @@ class ServiceController extends Controller
     {
         $dto = ServiceDto::fromRequest($request);
         $this->serviceService->save($dto);
+
         return to_route('admin.service.index')->with('success', __('service::message.created'));
     }
 
     public function edit(Service $service)
     {
         Gate::authorize('update', $service);
+
         return view('service::services.edit', compact('service'));
     }
 
@@ -56,23 +60,26 @@ class ServiceController extends Controller
         Gate::authorize('update', $service);
         $dto = ServiceDto::fromRequest($request);
         $this->serviceService->update($service, $dto);
+
         return to_route('admin.service.index')->with('success', __('service::message.updated'));
     }
 
     public function destroy(Service $service)
     {
         $this->serviceService->delete($service);
+
         return success(true, __('service::message.deleted'));
     }
 
     public function export()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ServiceExport(), 'services.xlsx');
+        return Excel::download(new ServiceExport, 'services.xlsx');
     }
 
     public function activate(Service $service)
     {
         $service = $this->serviceService->activate($service);
+
         return success(
             true,
             $service->is_active ? __('service::message.activated') : __('service::message.deactivated'),

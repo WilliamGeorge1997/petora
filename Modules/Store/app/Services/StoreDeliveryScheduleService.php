@@ -55,10 +55,10 @@ class StoreDeliveryScheduleService
             /** @var StoreDeliverySchedule $schedule */
             $schedule = $this->model::create([
                 'store_id' => $storeId,
-                'day'      => $dto->day,
+                'day' => $dto->day,
             ]);
 
-            if (!empty($dto->times)) {
+            if (! empty($dto->times)) {
                 $this->syncTimes($schedule, $dto->times);
             }
 
@@ -73,7 +73,7 @@ class StoreDeliveryScheduleService
         return DB::transaction(function () use ($schedule, $dto) {
             $schedule->update($dto->toArray());
 
-            if (!empty($dto->times)) {
+            if (! empty($dto->times)) {
                 $this->syncTimes($schedule, $dto->times);
             }
 
@@ -90,16 +90,16 @@ class StoreDeliveryScheduleService
                 continue;
             }
 
-            if (!empty($item['id'])) {
+            if (! empty($item['id'])) {
                 $schedule->times()->where('id', $item['id'])->update([
                     'from' => $item['from'],
-                    'to'   => $item['to'],
+                    'to' => $item['to'],
                 ]);
                 $keptIds[] = (int) $item['id'];
             } else {
                 $created = $schedule->times()->create([
                     'from' => $item['from'],
-                    'to'   => $item['to'],
+                    'to' => $item['to'],
                 ]);
                 $keptIds[] = $created->id;
             }

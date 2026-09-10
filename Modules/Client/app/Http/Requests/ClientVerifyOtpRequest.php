@@ -10,8 +10,8 @@ class ClientVerifyOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone'     => ['required', 'string', 'exists:clients,phone'],
-            'otp'       => ['required', 'numeric'],
+            'phone' => ['required', 'string', 'exists:clients,phone'],
+            'otp' => ['required', 'numeric'],
             'fcm_token' => ['nullable', 'string'],
         ];
     }
@@ -25,8 +25,8 @@ class ClientVerifyOtpRequest extends FormRequest
     public function attributes()
     {
         return [
-            'phone'     => __('client::attribute.phone'),
-            'otp'       => __('client::attribute.otp'),
+            'phone' => __('client::attribute.phone'),
+            'otp' => __('client::attribute.otp'),
             'fcm_token' => __('client::attribute.fcm_token'),
         ];
     }
@@ -35,11 +35,11 @@ class ClientVerifyOtpRequest extends FormRequest
     public function messages()
     {
         return [
-            'phone.required'    => __('client::message.phone_required'),
-            'phone.string'      => __('client::message.phone_string'),
-            'phone.exists'      => __('client::message.phone_not_found'),
-            'otp.required'      => __('client::message.otp_required'),
-            'otp.numeric'       => __('client::message.otp_numeric'),
+            'phone.required' => __('client::message.phone_required'),
+            'phone.string' => __('client::message.phone_string'),
+            'phone.exists' => __('client::message.phone_not_found'),
+            'otp.required' => __('client::message.otp_required'),
+            'otp.numeric' => __('client::message.otp_numeric'),
         ];
     }
 }

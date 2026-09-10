@@ -19,6 +19,7 @@ readonly class ClinicDto
         public ?int $zoneId = null,
         public ?string $latitude = null,
         public ?string $longitude = null,
+        public ?array $workingHours = null,
     ) {}
 
     public static function fromRequest(ClinicRequest $request): self
@@ -44,6 +45,7 @@ readonly class ClinicDto
             zoneId: $request->validated('zone_id'),
             latitude: $request->validated('latitude'),
             longitude: $request->validated('longitude'),
+            workingHours: $request->validated('working_hours'),
         );
     }
 

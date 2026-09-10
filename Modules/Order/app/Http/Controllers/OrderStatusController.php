@@ -28,6 +28,7 @@ class OrderStatusController extends Controller
         if ($request->ajax()) {
             return success(true, __('order::message.fetched'), $orderStatuses->items());
         }
+
         return view('order::order_statuses.index', compact('orderStatuses'));
     }
 
@@ -40,6 +41,7 @@ class OrderStatusController extends Controller
     {
         $dto = OrderStatusDto::fromRequest($request);
         $this->orderStatusService->save($dto);
+
         return to_route('admin.order_status.index')->with('success', __('order::message.created'));
     }
 
@@ -52,18 +54,21 @@ class OrderStatusController extends Controller
     {
         $dto = OrderStatusDto::fromRequest($request);
         $this->orderStatusService->update($orderStatus, $dto);
+
         return to_route('admin.order_status.index')->with('success', __('order::message.updated'));
     }
 
     public function destroy(OrderStatus $orderStatus)
     {
         $this->orderStatusService->delete($orderStatus);
+
         return success(true, __('order::message.deleted'));
     }
 
     public function activate(OrderStatus $orderStatus)
     {
         $orderStatus = $this->orderStatusService->activate($orderStatus);
+
         return success(
             true,
             $orderStatus->is_active ? __('order::message.activated') : __('order::message.deactivated'),

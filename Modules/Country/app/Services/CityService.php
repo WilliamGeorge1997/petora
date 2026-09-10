@@ -26,6 +26,7 @@ class CityService
                 return $query->where('is_active', (bool) $data['is_active']);
             })
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -34,10 +35,10 @@ class CityService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
@@ -57,9 +58,10 @@ class CityService
         return $cityOrId instanceof City ? $cityOrId : $this->findById($cityOrId);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -76,19 +78,22 @@ class CityService
         $data = $dto->toArray();
 
         $city->update($data);
+
         return $city;
     }
 
     public function delete(int|City $cityOrId): bool
     {
         $city = $this->resolveModel($cityOrId);
+
         return $city->delete();
     }
 
     public function activate(int|City $cityOrId): City
     {
         $city = $this->resolveModel($cityOrId);
-        $city->update(['is_active' => !$city->is_active]);
+        $city->update(['is_active' => ! $city->is_active]);
+
         return $city;
     }
 }

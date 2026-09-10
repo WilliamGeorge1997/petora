@@ -13,13 +13,14 @@ class ProductImage extends Model
     ];
 
     protected $hidden = ['product_id'];
-    //Date serialization
+
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -27,13 +28,13 @@ class ProductImage extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/product/' . $value);
+            return asset('storage/uploads/product/'.$value);
         }
 
         return $value;
     }
 
-    //Relations
+    // Relations
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

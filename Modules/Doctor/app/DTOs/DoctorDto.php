@@ -36,10 +36,10 @@ readonly class DoctorDto
     {
         $data = [
             'clinic_id' => $this->clinicId,
-            'name'      => $this->name,
+            'name' => $this->name,
             'specialty' => $this->specialty,
             'is_active' => $this->isActive,
-            'image'     => $this->image,
+            'image' => $this->image,
         ];
 
         if (is_null($this->image)) {

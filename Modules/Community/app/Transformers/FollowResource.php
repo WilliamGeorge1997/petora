@@ -14,7 +14,7 @@ class FollowResource extends JsonResource
     {
         $client = $this->relationLoaded('follower') ? $this->follower : $this->following;
 
-        if (!$client) {
+        if (! $client) {
             return [];
         }
 

@@ -16,10 +16,11 @@ class ClinicController extends Controller
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $clinics = $this->clinicService->active($data);
+
         return success(true, __('clinic::message.fetched'), $clinics);
     }
 
-    //Screen after select clinic
+    // Screen after select clinic
     public function show(int $clinic_id, CategoryService $categoryService)
     {
         $relations = ['doctors' => function ($q) {

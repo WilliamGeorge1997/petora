@@ -1,55 +1,50 @@
 <?php
 
-
-use \Illuminate\Contracts\Pagination\CursorPaginator;
-use \Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Modules\Common\Models\Setting;
 
-
-
-
-
-if (!function_exists('allStatusCode')) {
+if (! function_exists('allStatusCode')) {
     function allStatusCode()
     {
         return [
-            "ok" => 200,
-            "created" => 201,
-            "accepted" => 202,
-            "no_content" => 204,
-            "moved" => 301,
-            "found" => 302,
-            "see_other" => 303,
-            "not_modified" => 304,
-            "temporary_redirect" => 307,
-            "bad_request" => 400,
-            "unauthorized" => 401,
-            "forbidden" => 403,
-            "not_found" => 404,
-            "method_not_allowed" => 405,
-            "not_acceptable" => 406,
-            "precondition_failed" => 412,
-            "unsupported_media_type" => 415,
-            "validation_error" => 422,
-            "server_error" => 500,
-            "not_implemented" => 501,
+            'ok' => 200,
+            'created' => 201,
+            'accepted' => 202,
+            'no_content' => 204,
+            'moved' => 301,
+            'found' => 302,
+            'see_other' => 303,
+            'not_modified' => 304,
+            'temporary_redirect' => 307,
+            'bad_request' => 400,
+            'unauthorized' => 401,
+            'forbidden' => 403,
+            'not_found' => 404,
+            'method_not_allowed' => 405,
+            'not_acceptable' => 406,
+            'precondition_failed' => 412,
+            'unsupported_media_type' => 415,
+            'validation_error' => 422,
+            'server_error' => 500,
+            'not_implemented' => 501,
         ];
     }
 }
 
-if (!function_exists('getStatusCode')) {
-    function getStatusCode($type = "ok")
+if (! function_exists('getStatusCode')) {
+    function getStatusCode($type = 'ok')
     {
         return allStatusCode()[strtolower($type)] ?? 200;
     }
 }
 
-if (!function_exists('success')) {
+if (! function_exists('success')) {
     function success(bool $status, string $message, $data = null, string $status_string = 'ok'): JsonResponse
     {
         return response()->json([
@@ -60,7 +55,7 @@ if (!function_exists('success')) {
     }
 }
 
-if (!function_exists('fail')) {
+if (! function_exists('fail')) {
     function fail(bool $status, string $message, mixed $errors = null, string $status_string = 'bad_request'): JsonResponse
     {
         return response()->json([
@@ -71,23 +66,24 @@ if (!function_exists('fail')) {
     }
 }
 
-if (!function_exists('paginatedResource')) {
+if (! function_exists('paginatedResource')) {
     function paginatedResource(LengthAwarePaginator|CursorPaginator|Collection $data, string $resourceClass)
     {
         if ($data instanceof Paginator || $data instanceof CursorPaginator) {
-            $data->getCollection()->transform(fn($item) => (new $resourceClass($item))->resolve());
+            $data->getCollection()->transform(fn ($item) => (new $resourceClass($item))->resolve());
+
             return $data;
         }
 
         if ($data instanceof Collection) {
-            return $data->map(fn($item) => (new $resourceClass($item))->resolve());
+            return $data->map(fn ($item) => (new $resourceClass($item))->resolve());
         }
 
         return $data;
     }
 }
 
-if (!function_exists('getCaseCollection')) {
+if (! function_exists('getCaseCollection')) {
     function getCaseCollection(Builder $builder, array $data, array $columns = ['*'])
     {
         if ($data['paginated'] ?? null) {
@@ -103,25 +99,26 @@ if (!function_exists('getCaseCollection')) {
 
             return $builder->paginate($perPage, $columns);
         }
+
         return $builder->get($columns);
     }
 }
 
-if (!function_exists('getSetting')) {
+if (! function_exists('getSetting')) {
     function getSetting(string $key)
     {
         return Setting::where('key', $key)->value('value');
     }
 }
 
-if (!function_exists('getSettings')) {
+if (! function_exists('getSettings')) {
     function getSettings(array $keys)
     {
         return Setting::whereIn('key', $keys)->pluck('value', 'key')->toArray();
     }
 }
 
-if (!function_exists('haversineSql')) {
+if (! function_exists('haversineSql')) {
     function haversineSql(string $latitudeColumn = 'latitude', string $longitudeColumn = 'longitude'): string
     {
         return "( 
@@ -136,7 +133,7 @@ if (!function_exists('haversineSql')) {
     }
 }
 
-if (!function_exists('nearest')) {
+if (! function_exists('nearest')) {
     function nearest(
         Builder $query,
         float|string $latitude,
@@ -146,7 +143,7 @@ if (!function_exists('nearest')) {
         string $longitudeColumn = 'longitude'
     ): Builder {
 
-        $radius = $radius ?? 50;
+        $radius = $radius ?? 1000;
         $sql = haversineSql($latitudeColumn, $longitudeColumn);
 
         return $query->whereNotNull($latitudeColumn)
@@ -157,44 +154,19 @@ if (!function_exists('nearest')) {
     }
 }
 
-// if (!function_exists('isVideo')) {
-//     function isVideo(UploadedFile $file): bool
-//     {
-//         if ($file instanceof UploadedFile) {
-//             return str_starts_with($file->getMimeType(), 'video/');
-//         }
-
-//         if (is_string($file)) {
-//             $extension = strtolower(pathinfo(parse_url($file, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
-//             return in_array($extension, ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm', '3gp', 'm4v'], true);
-//         }
-
-//         return false;
-//     }
-// }
-
 if (!function_exists('isVideo')) {
     function isVideo(UploadedFile $file): bool
     {
-        dd([
-            'class' => get_class($file),
+        if ($file instanceof UploadedFile) {
+            return str_starts_with($file->getMimeType(), 'video/');
+        }
 
-            'original_name' => $file->getClientOriginalName(),
-            'original_extension' => $file->getClientOriginalExtension(),
+        if (is_string($file)) {
+            $extension = strtolower(pathinfo(parse_url($file, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
+            return in_array($extension, ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm', '3gp', 'm4v'], true);
+        }
 
-            'client_mime' => $file->getClientMimeType(),
-            'detected_mime' => $file->getMimeType(),
-
-            'guessed_extension' => $file->guessExtension(),
-
-            'real_path' => $file->getRealPath(),
-            'size' => $file->getSize(),
-
-            'finfo_mime' => (new \finfo(FILEINFO_MIME_TYPE))
-                ->file($file->getRealPath()),
-        ]);
-
-        return str_starts_with($file->getMimeType(), 'video/');
+        return false;
     }
 }
 

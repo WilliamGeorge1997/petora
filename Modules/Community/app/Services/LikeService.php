@@ -4,9 +4,9 @@ namespace Modules\Community\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Community\DTOs\LikeDto;
 use Modules\Community\Models\Like;
-use Illuminate\Pagination\CursorPaginator;
 
 class LikeService
 {
@@ -15,6 +15,7 @@ class LikeService
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -53,6 +54,7 @@ class LikeService
 
         if ($like) {
             $this->delete($like);
+
             return null;
         }
 

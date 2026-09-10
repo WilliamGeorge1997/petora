@@ -8,6 +8,6 @@ class DoctorViewModel
 {
     public function clinics()
     {
-        return (new ClinicService())->active(columns: ['id', 'title']);
+        return (new ClinicService)->active(columns: ['id', 'title']);
     }
 }

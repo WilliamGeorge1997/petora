@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'done'  => 'احسنت!',
+    'done' => 'احسنت!',
     'error' => 'حدث خطأ',
     'location_on_map' => 'الموقع على الخريطة',
     'search_location' => 'ابحث عن موقع أو عنوان...',
@@ -29,12 +29,12 @@ return [
     'create' => 'إنشاء',
     'update' => 'تعديل',
     'days' => [
-        'saturday'  => 'السبت',
-        'sunday'    => 'الأحد',
-        'monday'    => 'الاثنين',
-        'tuesday'   => 'الثلاثاء',
+        'saturday' => 'السبت',
+        'sunday' => 'الأحد',
+        'monday' => 'الاثنين',
+        'tuesday' => 'الثلاثاء',
         'wednesday' => 'الأربعاء',
-        'thursday'  => 'الخميس',
-        'friday'    => 'الجمعة',
+        'thursday' => 'الخميس',
+        'friday' => 'الجمعة',
     ],
 ];

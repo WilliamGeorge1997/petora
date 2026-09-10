@@ -22,7 +22,7 @@ class SellerProductImport implements ToCollection, WithHeadingRow
 
         foreach ($rows as $row) {
             $productId = $row['id'] ?? null;
-            if (!$productId) {
+            if (! $productId) {
                 continue;
             }
 
@@ -35,8 +35,8 @@ class SellerProductImport implements ToCollection, WithHeadingRow
             }
         }
 
-        if (!empty($syncData)) {
-            // using syncWithoutDetaching to not drop existing products if not in excel, 
+        if (! empty($syncData)) {
+            // using syncWithoutDetaching to not drop existing products if not in excel,
             // but the user might want a full sync. Let's use syncWithoutDetaching by default.
             $this->seller->products()->syncWithoutDetaching($syncData);
         }

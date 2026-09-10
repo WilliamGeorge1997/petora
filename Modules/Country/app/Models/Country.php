@@ -25,7 +25,7 @@ class Country extends Model
         'is_active' => 'boolean',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -36,19 +36,19 @@ class Country extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    //Relations
+    // Relations
     public function cities(): HasMany
     {
         return $this->hasMany(City::class);

@@ -14,6 +14,7 @@ class CityController extends Controller
     {
         $conditions = ['country_id' => $country_id, 'is_active' => true];
         $cities = $this->cityService->findByConditions($conditions, $request->all());
+
         return success(true, __('country::message.fetched'), $cities);
     }
 }

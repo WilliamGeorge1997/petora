@@ -4,19 +4,20 @@ namespace Modules\Community\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Facades\DB;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Community\DTOs\PostDto;
 use Modules\Community\Models\Hashtag;
 use Modules\Community\Models\Post;
-use Illuminate\Pagination\CursorPaginator;
-use Illuminate\Support\Facades\DB;
 
 class PostService
 {
     use UploaderHelper;
 
     private string $model = Post::class;
-
+    private string $uploadFolder = 'post';
+    
     public function findAll(array $data, array $relations = [], array $counts = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
@@ -44,6 +45,7 @@ class PostService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
@@ -68,7 +70,7 @@ class PostService
                 foreach ($dto->media as $item) {
                     if (isset($item['file'])) {
                         $isVideo = $item['is_video'] ?? false;
-                        $mediaPath = $isVideo ? $this->uploadFile($item['file'], 'community/post') : $this->uploadImage($item['file'], 'community/post');
+                        $mediaPath = $isVideo ? $this->uploadFile($item['file'], $this->uploadFolder) : $this->uploadImage($item['file'], $this->uploadFolder);
 
                         $post->media()->create([
                             'media' => $mediaPath,
@@ -94,7 +96,7 @@ class PostService
                 // Delete old media
                 foreach ($post->media as $postMedia) {
                     if ($postMedia->media) {
-                        $this->deleteImage($postMedia->getRawOriginal('media'), 'community/post');
+                        $this->deleteImage($postMedia->getRawOriginal('media'), $this->uploadFolder);
                     }
                     $postMedia->delete();
                 }
@@ -103,7 +105,7 @@ class PostService
                 foreach ($dto->media as $item) {
                     if (isset($item['file'])) {
                         $isVideo = $item['is_video'] ?? false;
-                        $mediaPath = $isVideo ? $this->uploadFile($item['file'], 'community/post') : $this->uploadImage($item['file'], 'community/post');
+                        $mediaPath = $isVideo ? $this->uploadFile($item['file'], $this->uploadFolder) : $this->uploadImage($item['file'], $this->uploadFolder);
 
                         $post->media()->create([
                             'media' => $mediaPath,
@@ -127,7 +129,7 @@ class PostService
 
         $hashtagIds = [];
         foreach ($hashtags as $tag) {
-            if (!is_string($tag)) {
+            if (! is_string($tag)) {
                 continue;
             }
 
@@ -147,21 +149,22 @@ class PostService
         $post = $this->resolveModel($postOrId);
         foreach ($post->media as $postMedia) {
             if ($postMedia->media) {
-                $this->deleteImage($postMedia->getRawOriginal('media'), 'community/post');
+                $this->deleteImage($postMedia->getRawOriginal('media'), $this->uploadFolder);
             }
         }
+
         return $post->delete();
     }
 
     public function activate(int|Post $postOrId): Post
     {
         $post = $this->resolveModel($postOrId);
-        $post->update(['is_active' => !$post->is_active]);
+        $post->update(['is_active' => ! $post->is_active]);
+
         return $post;
     }
 
-
-    //Helpers
+    // Helpers
     public function postRelations(bool $includeComments = true, ?int $commentsLimit = null, ?int $repliesLimit = null): array
     {
         $relations = [

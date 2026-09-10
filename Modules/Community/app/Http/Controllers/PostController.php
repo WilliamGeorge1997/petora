@@ -25,27 +25,31 @@ class PostController extends Controller
         if ($request->ajax()) {
             return success(true, __('community::general.post.fetched'), $posts->items());
         }
+
         return view('community::posts.index', compact('posts'));
     }
 
     public function show(Post $post): View
     {
         $post->load(['client', 'pet', 'media', 'hashtags']);
+
         return view('community::posts.show', compact('post'));
     }
 
     public function destroy(Post $post)
     {
         $this->postService->delete($post);
+
         return success(true, __('community::general.post.deleted'));
     }
 
     public function activate(Post $post)
     {
         $post = $this->postService->activate($post);
+
         return success(
             true,
-            $post->is_active ?  __('community::general.post.activated') :  __('community::general.post.deactivated'),
+            $post->is_active ? __('community::general.post.activated') : __('community::general.post.deactivated'),
             $post
         );
     }

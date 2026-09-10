@@ -29,12 +29,14 @@ class PetController extends Controller
         if ($request->ajax()) {
             return success(true, __('pet::message.fetched'), $pets->items());
         }
+
         return view('pet::pets.index', compact('pets'));
     }
 
     public function create()
     {
-        $viewModel = new PetViewModel();
+        $viewModel = new PetViewModel;
+
         return view('pet::pets.create', compact('viewModel'));
     }
 
@@ -42,12 +44,14 @@ class PetController extends Controller
     {
         $dto = PetDto::fromRequest($request);
         $this->petService->save($dto);
+
         return to_route('admin.pet.index')->with('success', __('pet::message.created'));
     }
 
     public function edit(Pet $pet)
     {
-        $viewModel = new PetViewModel();
+        $viewModel = new PetViewModel;
+
         return view('pet::pets.edit', compact('viewModel', 'pet'));
     }
 
@@ -55,12 +59,14 @@ class PetController extends Controller
     {
         $dto = PetDto::fromRequest($request);
         $this->petService->update($pet, $dto);
+
         return to_route('admin.pet.index')->with('success', __('pet::message.updated'));
     }
 
     public function destroy(Pet $pet)
     {
         $this->petService->delete($pet);
+
         return success(true, __('pet::message.deleted'));
     }
 }

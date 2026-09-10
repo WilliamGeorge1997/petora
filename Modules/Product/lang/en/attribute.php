@@ -11,6 +11,6 @@ return [
     'select_category' => 'Select Category',
     'price' => 'Price',
     'is_active' => 'Is Active',
-    'images'     => 'Images',
+    'images' => 'Images',
     'created_at' => 'Created At',
 ];

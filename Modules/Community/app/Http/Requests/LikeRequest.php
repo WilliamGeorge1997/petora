@@ -32,16 +32,16 @@ class LikeRequest extends FormRequest
     public function rules(): array
     {
         $table = match ($this->likeable_type) {
-            Post::class    => 'posts',
+            Post::class => 'posts',
             Comment::class => 'comments',
-            Story::class   => 'stories',
-            default        => null,
+            Story::class => 'stories',
+            default => null,
         };
 
         return [
-            'client_id'     => ['required', 'integer', 'exists:clients,id'],
+            'client_id' => ['required', 'integer', 'exists:clients,id'],
             'likeable_type' => ['required', 'string'],
-            'likeable_id'   => [
+            'likeable_id' => [
                 'required',
                 'integer',
                 $table ? "exists:{$table},id" : '',
@@ -71,11 +71,11 @@ class LikeRequest extends FormRequest
     public function messages()
     {
         return [
-            'client_id.required'     => __('community::message.client_id_required'),
-            'client_id.integer'      => __('community::message.client_id_integer'),
-            'client_id.exists'       => __('community::message.client_id_exists'),
-            'likeable_id.required'   => __('community::message.likeable_id_required'),
-            'likeable_id.exists'     => __('community::message.likeable_id_exists'),
+            'client_id.required' => __('community::message.client_id_required'),
+            'client_id.integer' => __('community::message.client_id_integer'),
+            'client_id.exists' => __('community::message.client_id_exists'),
+            'likeable_id.required' => __('community::message.likeable_id_required'),
+            'likeable_id.exists' => __('community::message.likeable_id_exists'),
             'likeable_type.required' => __('community::message.likeable_type_required'),
         ];
     }

@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithUpserts;
 use Modules\Clinic\Models\Clinic;
 use Modules\Service\Models\ClinicService;
 
-class ClinicServiceImport implements ToModel, WithHeadingRow, WithUpserts, WithUpsertColumns, SkipsEmptyRows
+class ClinicServiceImport implements SkipsEmptyRows, ToModel, WithHeadingRow, WithUpsertColumns, WithUpserts
 {
     public function __construct(protected Clinic $clinic) {}
 
@@ -21,11 +21,11 @@ class ClinicServiceImport implements ToModel, WithHeadingRow, WithUpserts, WithU
         }
 
         return new ClinicService([
-            'clinic_id'  => $this->clinic->id,
+            'clinic_id' => $this->clinic->id,
             'service_id' => $row['id'],
-            'price'      => $row['price'],
-            'duration'   => $row['duration'] ?? null,
-            'is_active'  => $row['is_active'],
+            'price' => $row['price'],
+            'duration' => $row['duration'] ?? null,
+            'is_active' => $row['is_active'],
         ]);
     }
 

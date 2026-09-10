@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Modules\Admin\Http\Controllers\AdminAuthController;
 use Modules\Admin\Http\Controllers\AdminController;
 
-
-
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');

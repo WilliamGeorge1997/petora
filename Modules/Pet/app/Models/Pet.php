@@ -30,7 +30,7 @@ class Pet extends Model
         'weight' => 'decimal:2',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -41,13 +41,13 @@ class Pet extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when($filters['name'] ?? null, function ($query, $name) {
@@ -64,7 +64,7 @@ class Pet extends Model
             });
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -72,13 +72,13 @@ class Pet extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/pet/' . $value);
+            return asset('storage/uploads/pet/'.$value);
         }
 
         return $value;
     }
 
-    //Relations
+    // Relations
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);

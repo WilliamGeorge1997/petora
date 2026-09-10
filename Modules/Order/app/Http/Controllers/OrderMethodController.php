@@ -28,6 +28,7 @@ class OrderMethodController extends Controller
         if ($request->ajax()) {
             return success(true, __('order::message.fetched'), $orderMethods->items());
         }
+
         return view('order::order_methods.index', compact('orderMethods'));
     }
 
@@ -40,6 +41,7 @@ class OrderMethodController extends Controller
     {
         $dto = OrderMethodDto::fromRequest($request);
         $this->orderMethodService->save($dto);
+
         return to_route('admin.order_method.index')->with('success', __('order::message.created'));
     }
 
@@ -52,18 +54,21 @@ class OrderMethodController extends Controller
     {
         $dto = OrderMethodDto::fromRequest($request);
         $this->orderMethodService->update($orderMethod, $dto);
+
         return to_route('admin.order_method.index')->with('success', __('order::message.updated'));
     }
 
     public function destroy(OrderMethod $orderMethod)
     {
         $this->orderMethodService->delete($orderMethod);
+
         return success(true, __('order::message.deleted'));
     }
 
     public function activate(OrderMethod $orderMethod)
     {
         $orderMethod = $this->orderMethodService->activate($orderMethod);
+
         return success(
             true,
             $orderMethod->is_active ? __('order::message.activated') : __('order::message.deactivated'),

@@ -2,8 +2,8 @@
 
 namespace Modules\Common\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
@@ -14,8 +14,9 @@ class Setting extends Model
     public function getValueAttribute($value)
     {
         if ($value != null && $value != '' && $this->type == 'file') {
-            return asset('storage/uploads/setting/' . $value);
+            return asset('storage/uploads/setting/'.$value);
         }
+
         return $value;
     }
 }

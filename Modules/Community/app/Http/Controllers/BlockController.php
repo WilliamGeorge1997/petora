@@ -7,7 +7,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Modules\Admin\Enums\AdminRole;
 use Modules\Community\Models\Block;
 use Modules\Community\Services\BlockService;
 
@@ -25,12 +24,14 @@ class BlockController extends Controller
         if ($request->ajax()) {
             return success(true, __('community::general.block.fetched'), $blocks->items());
         }
+
         return view('community::blocks.index', compact('blocks'));
     }
 
     public function destroy(Block $block)
     {
         $this->blockService->delete($block);
+
         return success(true, __('community::general.block.deleted'));
     }
 }

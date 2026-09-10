@@ -24,13 +24,13 @@ class PostMedia extends Model
         'is_video' => 'boolean',
     ];
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -41,19 +41,21 @@ class PostMedia extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Getters
+    // Getters
     public function getMediaAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
             if (filter_var($value, FILTER_VALIDATE_URL)) {
                 return $value;
             }
+
             return asset('storage/uploads/post/' . $value);
         }
+
         return $value;
     }
 
-    //Relations
+    // Relations
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);

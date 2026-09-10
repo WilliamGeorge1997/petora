@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Clinic\Models\Clinic;
-use Modules\Service\Models\ClinicService;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
@@ -34,7 +33,7 @@ class Service extends Model
         'is_active' => 'boolean',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -45,13 +44,13 @@ class Service extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -67,7 +66,7 @@ class Service extends Model
             });
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -75,13 +74,13 @@ class Service extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/service/' . $value);
+            return asset('storage/uploads/service/'.$value);
         }
 
         return $value;
     }
 
-    //Relations
+    // Relations
     public function clinics(): BelongsToMany
     {
         return $this->belongsToMany(Clinic::class, 'clinic_services')

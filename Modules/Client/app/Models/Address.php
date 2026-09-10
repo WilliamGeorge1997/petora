@@ -2,14 +2,14 @@
 
 namespace Modules\Client\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Country\Models\City;
+use Modules\Country\Models\Country;
+use Modules\Country\Models\Zone;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
-use Modules\Country\Models\Country;
-use Modules\Country\Models\City;
-use Modules\Country\Models\Zone;
 
 class Address extends Model
 {
@@ -30,14 +30,21 @@ class Address extends Model
         'notes',
         'latitude',
         'longitude',
-        'default',
+        'is_default',
     ];
 
     protected $casts = [
-        'default' => 'boolean',
+        'is_default' => 'boolean',
     ];
 
-    //Activity log options
+    protected $hidden = [
+        'city_id',
+        'zone_id',
+        'country_id',
+        'client_id',
+    ];
+
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -48,13 +55,13 @@ class Address extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
-        return $date->format('Y-m-d H:i:s');
+        return $date->format('Y-m-d H:i A');
     }
 
-    //Relations
+    // Relations
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
@@ -74,5 +81,4 @@ class Address extends Model
     {
         return $this->belongsTo(Zone::class);
     }
-
 }

@@ -19,13 +19,13 @@ class Follow extends Model
         'following_id',
     ];
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -36,18 +36,18 @@ class Follow extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Scopes
+    // Scopes
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when(isset($filters['follower_id']), function ($query) use ($filters) {
             $query->where('follower_id', $filters['follower_id']);
         })
-        ->when(isset($filters['following_id']), function ($query) use ($filters) {
-            $query->where('following_id', $filters['following_id']);
-        });
+            ->when(isset($filters['following_id']), function ($query) use ($filters) {
+                $query->where('following_id', $filters['following_id']);
+            });
     }
 
-    //Relations
+    // Relations
     public function follower(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'follower_id');

@@ -24,7 +24,7 @@ readonly class StoryDto
             clientId: $request->validated('client_id'),
             media: $media,
             isVideo: $isVideo,
-            expiresAt:  now()->addHours(24)->toDateTimeString(),
+            expiresAt: now()->addHours(24)->toDateTimeString(),
             isActive: auth('admin')->check() ? $request->boolean('is_active') : null,
         );
     }

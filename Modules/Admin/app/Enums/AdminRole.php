@@ -14,7 +14,7 @@ enum AdminRole: string
      */
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::SuperAdmin => __('admin::role.super_admin'),
             self::CompanyManager => __('admin::role.company_manager'),
             self::StoreManager => __('admin::role.store_manager'),
@@ -37,6 +37,7 @@ enum AdminRole: string
     {
         return array_reduce(self::cases(), function (array $carry, AdminRole $role) {
             $carry[$role->value] = $role->label();
+
             return $carry;
         }, []);
     }

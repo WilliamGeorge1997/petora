@@ -28,6 +28,7 @@ class PetTypeController extends Controller
         if ($request->ajax()) {
             return success(true, __('pet::message.type_fetched'), $petTypes->items());
         }
+
         return view('pet::pet_types.index', compact('petTypes'));
     }
 
@@ -40,6 +41,7 @@ class PetTypeController extends Controller
     {
         $dto = PetTypeDto::fromRequest($request);
         $this->petTypeService->save($dto);
+
         return to_route('admin.pet_type.index')->with('success', __('pet::message.created'));
     }
 
@@ -52,18 +54,21 @@ class PetTypeController extends Controller
     {
         $dto = PetTypeDto::fromRequest($request);
         $this->petTypeService->update($petType, $dto);
+
         return to_route('admin.pet_type.index')->with('success', __('pet::message.updated'));
     }
 
     public function destroy(PetType $petType)
     {
         $this->petTypeService->delete($petType);
+
         return success(true, __('pet::message.deleted'));
     }
 
     public function activate(PetType $petType)
     {
         $petType = $this->petTypeService->activate($petType);
+
         return success(
             true,
             $petType->is_active ? __('pet::message.activated') : __('pet::message.deactivated'),

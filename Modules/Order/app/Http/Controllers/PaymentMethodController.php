@@ -28,6 +28,7 @@ class PaymentMethodController extends Controller
         if ($request->ajax()) {
             return success(true, __('order::message.fetched'), $paymentMethods->items());
         }
+
         return view('order::payment_methods.index', compact('paymentMethods'));
     }
 
@@ -40,6 +41,7 @@ class PaymentMethodController extends Controller
     {
         $dto = PaymentMethodDto::fromRequest($request);
         $this->paymentMethodService->save($dto);
+
         return to_route('admin.payment_method.index')->with('success', __('order::message.created'));
     }
 
@@ -52,18 +54,21 @@ class PaymentMethodController extends Controller
     {
         $dto = PaymentMethodDto::fromRequest($request);
         $this->paymentMethodService->update($paymentMethod, $dto);
+
         return to_route('admin.payment_method.index')->with('success', __('order::message.updated'));
     }
 
     public function destroy(PaymentMethod $paymentMethod)
     {
         $this->paymentMethodService->delete($paymentMethod);
+
         return success(true, __('order::message.deleted'));
     }
 
     public function activate(PaymentMethod $paymentMethod)
     {
         $paymentMethod = $this->paymentMethodService->activate($paymentMethod);
+
         return success(
             true,
             $paymentMethod->is_active ? __('order::message.activated') : __('order::message.deactivated'),

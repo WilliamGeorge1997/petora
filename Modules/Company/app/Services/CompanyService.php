@@ -26,6 +26,7 @@ class CompanyService
                 return $query->where('is_active', (bool) $data['is_active']);
             })
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -42,12 +43,14 @@ class CompanyService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -66,26 +69,33 @@ class CompanyService
         $company = $this->resolveModel($companyOrId);
         $data = $dto->toArray();
         if ($dto->image) {
-            if ($company->image) $this->deleteImage($company->image, 'company');
+            if ($company->image) {
+                $this->deleteImage($company->image, 'company');
+            }
 
             $data['image'] = $this->uploadImage($dto->image, 'company');
         }
 
         $company->update($data);
+
         return $company;
     }
 
     public function delete(int|Company $companyOrId): bool
     {
         $company = $this->resolveModel($companyOrId);
-        if ($company->image) $this->deleteImage($company->image, 'company');
+        if ($company->image) {
+            $this->deleteImage($company->image, 'company');
+        }
+
         return $company->delete();
     }
 
     public function activate(int|Company $companyOrId): Company
     {
         $company = $this->resolveModel($companyOrId);
-        $company->update(['is_active' => !$company->is_active]);
+        $company->update(['is_active' => ! $company->is_active]);
+
         return $company;
     }
 }

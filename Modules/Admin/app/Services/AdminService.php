@@ -19,6 +19,7 @@ class AdminService
     public function findAll(array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model->query()->with($relations)->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -27,15 +28,17 @@ class AdminService
         return $this->model->with($relations)->findOrFail($id);
     }
 
-    public function findBy(string $key, mixed $value, array $data,  array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $key, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model->query()->with($relations)->where($key, $value);
+
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model->query()->with($relations)->active();
+
         return getCaseCollection($query, $data);
     }
 
@@ -81,7 +84,7 @@ class AdminService
     public function activate(int $id): void
     {
         $admin = $this->findById($id);
-        $admin->is_active = !$admin->is_active;
+        $admin->is_active = ! $admin->is_active;
         $admin->save();
     }
 

@@ -30,4 +30,3 @@ class LikeController extends Controller
         return success(true, $message, $like);
     }
 }
-

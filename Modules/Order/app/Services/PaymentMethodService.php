@@ -17,6 +17,7 @@ class PaymentMethodService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -33,18 +34,21 @@ class PaymentMethodService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
     public function save(PaymentMethodDto $dto): PaymentMethod
     {
         $data = $dto->toArray();
+
         return $this->model::create($data);
     }
 
@@ -54,19 +58,22 @@ class PaymentMethodService
         $data = $dto->toArray();
 
         $paymentMethod->update($data);
+
         return $paymentMethod;
     }
 
     public function delete(int|PaymentMethod $paymentMethodOrId): bool
     {
         $paymentMethod = $this->resolveModel($paymentMethodOrId);
+
         return $paymentMethod->delete();
     }
 
     public function activate(int|PaymentMethod $paymentMethodOrId): PaymentMethod
     {
         $paymentMethod = $this->resolveModel($paymentMethodOrId);
-        $paymentMethod->update(['is_active' => !$paymentMethod->is_active]);
+        $paymentMethod->update(['is_active' => ! $paymentMethod->is_active]);
+
         return $paymentMethod;
     }
 }

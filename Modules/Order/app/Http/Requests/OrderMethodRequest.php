@@ -13,8 +13,8 @@ class OrderMethodRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title_en'  => ['required', 'string', 'max:255'],
-            'title_ar'  => ['required', 'string', 'max:255'],
+            'title_en' => ['required', 'string', 'max:255'],
+            'title_ar' => ['required', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
         ];
     }
@@ -31,8 +31,8 @@ class OrderMethodRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'title_en'  => __('order::attribute.title_en'),
-            'title_ar'  => __('order::attribute.title_ar'),
+            'title_en' => __('order::attribute.title_en'),
+            'title_ar' => __('order::attribute.title_ar'),
             'is_active' => __('order::attribute.is_active'),
         ];
     }
@@ -42,12 +42,12 @@ class OrderMethodRequest extends FormRequest
     {
         return [
             'title_en.required' => __('order::message.title_en_required'),
-            'title_en.string'   => __('order::message.title_en_string'),
-            'title_en.max'      => __('order::message.title_en_max'),
+            'title_en.string' => __('order::message.title_en_string'),
+            'title_en.max' => __('order::message.title_en_max'),
 
             'title_ar.required' => __('order::message.title_ar_required'),
-            'title_ar.string'   => __('order::message.title_ar_string'),
-            'title_ar.max'      => __('order::message.title_ar_max'),
+            'title_ar.string' => __('order::message.title_ar_string'),
+            'title_ar.max' => __('order::message.title_ar_max'),
 
             'is_active.boolean' => __('order::message.is_active_boolean'),
         ];

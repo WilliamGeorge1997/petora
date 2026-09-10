@@ -53,15 +53,17 @@ class CommentService
     public function save(Post $post, CommentDto $dto): Comment
     {
         $data = array_merge($dto->toArray(), ['post_id' => $post->id]);
+
         return $this->model::create($data);
     }
 
     public function reply(Comment $parent, CommentDto $dto): Comment
     {
         $data = array_merge($dto->toArray(), [
-            'post_id'   => $parent->post_id,
+            'post_id' => $parent->post_id,
             'parent_id' => $parent->id,
         ]);
+
         return $this->model::create($data);
     }
 
@@ -69,6 +71,7 @@ class CommentService
     {
         $comment = $this->resolveModel($commentOrId);
         $comment->update($dto->toArray());
+
         return $comment;
     }
 
@@ -80,7 +83,8 @@ class CommentService
     public function activate(int|Comment $commentOrId): Comment
     {
         $comment = $this->resolveModel($commentOrId);
-        $comment->update(['is_active' => !$comment->is_active]);
+        $comment->update(['is_active' => ! $comment->is_active]);
+
         return $comment;
     }
 }

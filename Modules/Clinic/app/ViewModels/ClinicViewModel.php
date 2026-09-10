@@ -8,6 +8,6 @@ class ClinicViewModel
 {
     public function countries()
     {
-        return (new CountryService())->active(columns: ['id', 'title']);
+        return (new CountryService)->active(columns: ['id', 'title']);
     }
 }

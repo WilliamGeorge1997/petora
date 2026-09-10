@@ -17,7 +17,7 @@ class ProductController extends Controller
         $relations = ['images'];
         $sellerType = $request->is('*stores*') ? 'store' : 'clinic';
         $products = $this->productService->byCategoryAndSeller($category_id, $sellerType, $seller_id, $data, $relations);
-        
+
         return success(true, __('product::message.fetched'), paginatedResource($products, ProductResource::class));
     }
 
@@ -31,7 +31,7 @@ class ProductController extends Controller
                 'images',
                 $type => function ($q) use ($type, $seller_id) {
                     $q->where("$type.id", $seller_id);
-                }
+                },
             ]
         );
 

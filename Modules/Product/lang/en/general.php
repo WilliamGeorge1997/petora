@@ -2,9 +2,9 @@
 
 return [
     'products' => 'Products',
-    'index'    => 'Products',
-    'create'   => 'Create a new product',
-    'edit'     => 'Edit product data',
+    'index' => 'Products',
+    'create' => 'Create a new product',
+    'edit' => 'Edit product data',
     'create_product' => 'Create a new product',
     'edit_product' => 'Edit product data',
     'main_data' => 'Main Data',

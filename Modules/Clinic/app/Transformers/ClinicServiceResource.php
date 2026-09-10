@@ -25,7 +25,7 @@ class ClinicServiceResource extends JsonResource
             'duration' => $this->duration,
             'schedules' => $this->whenLoaded('schedules'),
             'created_at' => $this->created_at->format('Y-m-d h:i A'),
-            'updated_at' => $this->updated_at->format('Y-m-d h:i A')
+            'updated_at' => $this->updated_at->format('Y-m-d h:i A'),
         ];
     }
 }

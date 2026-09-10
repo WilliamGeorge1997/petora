@@ -24,7 +24,7 @@ class CommentRequest extends FormRequest
     {
         return [
             'client_id' => ['required', 'integer', 'exists:clients,id'],
-            'content'   => ['required', 'string'],
+            'content' => ['required', 'string'],
         ];
     }
 
@@ -51,10 +51,10 @@ class CommentRequest extends FormRequest
     {
         return [
             'client_id.required' => __('community::message.client_id_required'),
-            'client_id.integer'  => __('community::message.client_id_integer'),
-            'client_id.exists'   => __('community::message.client_id_exists'),
-            'content.required'   => __('community::message.content_required'),
-            'content.string'     => __('community::message.content_string'),
+            'client_id.integer' => __('community::message.client_id_integer'),
+            'client_id.exists' => __('community::message.client_id_exists'),
+            'content.required' => __('community::message.content_required'),
+            'content.string' => __('community::message.content_string'),
         ];
     }
 }

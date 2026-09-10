@@ -30,6 +30,7 @@ class PetController extends Controller
     {
         $dto = PetDto::fromRequest($request);
         $pet = $this->petService->save($dto);
+
         return success(true, __('pet::message.created'), $pet);
     }
 
@@ -37,6 +38,7 @@ class PetController extends Controller
     {
         $pet = $this->petService->findById($pet_id, ['type']);
         Gate::authorize('view', $pet);
+
         return success(true, __('pet::message.fetched'), new PetResource($pet));
     }
 
@@ -45,6 +47,7 @@ class PetController extends Controller
         Gate::authorize('update', $pet);
         $dto = PetDto::fromRequest($request);
         $pet = $this->petService->update($pet, $dto);
+
         return success(true, __('pet::message.updated'), $pet);
     }
 
@@ -52,6 +55,7 @@ class PetController extends Controller
     {
         Gate::authorize('delete', $pet);
         $this->petService->delete($pet);
+
         return success(true, __('pet::message.deleted'));
     }
 }

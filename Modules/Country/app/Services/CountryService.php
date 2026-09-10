@@ -26,6 +26,7 @@ class CountryService
                 return $query->where('is_active', (bool) $data['is_active']);
             })
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -39,15 +40,17 @@ class CountryService
         return $countryOrId instanceof Country ? $countryOrId : $this->findById($countryOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations)->latest('id');
+
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -64,19 +67,22 @@ class CountryService
         $data = $dto->toArray();
 
         $country->update($data);
+
         return $country;
     }
 
     public function delete(int|Country $countryOrId): bool
     {
         $country = $this->resolveModel($countryOrId);
+
         return $country->delete();
     }
 
     public function activate(int|Country $countryOrId): Country
     {
         $country = $this->resolveModel($countryOrId);
-        $country->update(['is_active' => !$country->is_active]);
+        $country->update(['is_active' => ! $country->is_active]);
+
         return $country;
     }
 }

@@ -4,7 +4,6 @@ use Laravel\Telescope\Http\Middleware\Authorize;
 use Laravel\Telescope\Watchers;
 use Modules\Admin\Enums\AdminRole;
 
-
 return [
 
     /*
@@ -97,7 +96,7 @@ return [
     'middleware' => [
         'web',
         Authorize::class,
-        'role:' . AdminRole::SuperAdmin->value
+        'role:'.AdminRole::SuperAdmin->value,
     ],
 
     /*

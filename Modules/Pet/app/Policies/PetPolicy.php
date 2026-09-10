@@ -32,7 +32,7 @@ class PetPolicy
         if ($user instanceof Admin) {
             return $user->hasRole(AdminRole::SuperAdmin->value) || $user->can('Index-pet');
         }
-        
+
         if ($user instanceof Client) {
             return $pet->client_id === $user->id;
         }

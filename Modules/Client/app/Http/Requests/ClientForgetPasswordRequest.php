@@ -32,8 +32,8 @@ class ClientForgetPasswordRequest extends FormRequest
     {
         return [
             'phone.required' => __('client::message.phone_required'),
-            'phone.string'   => __('client::message.phone_string'),
-            'phone.exists'   => __('client::message.phone_not_found'),
+            'phone.string' => __('client::message.phone_string'),
+            'phone.exists' => __('client::message.phone_not_found'),
         ];
     }
 }

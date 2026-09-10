@@ -14,11 +14,11 @@ class ReplyRequest extends CommentRequest
         return [
             function (Validator $validator) {
                 $comment = $this->route('comment');
-                
+
                 if ($comment && $comment->parent_id !== null) {
                     $validator->errors()->add('parent_id', __('community::message.parent_id_max_depth'));
                 }
-            }
+            },
         ];
     }
 }

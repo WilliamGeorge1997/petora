@@ -2,10 +2,10 @@
 
 namespace Modules\Category\Policies;
 
-use Modules\Admin\Models\Admin;
-use Modules\Category\Models\Category;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Admin\Enums\AdminRole;
+use Modules\Admin\Models\Admin;
+use Modules\Category\Models\Category;
 
 class CategoryPolicy
 {

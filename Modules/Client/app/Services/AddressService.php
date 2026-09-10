@@ -18,9 +18,9 @@ class AddressService
         $query = $this->model::query()
             ->with($relations)
             ->where($column, $value)
-            ->orderByDesc('default')
+            ->orderByDesc('is_default')
             ->latest('id');
-            
+
         return getCaseCollection($query, $data);
     }
 
@@ -35,7 +35,7 @@ class AddressService
         /** @var Address $address */
         $address = $this->model::create($data);
 
-        if ($data['default']) {
+        if ($data['is_default']) {
             $this->removeDefaultFromOtherAddresses($address);
         }
 
@@ -47,7 +47,7 @@ class AddressService
         $data = $dto->toArray();
         $address->update($data);
 
-        if ($data['default']) {
+        if ($data['is_default']) {
             $this->removeDefaultFromOtherAddresses($address);
         }
 
@@ -56,9 +56,9 @@ class AddressService
 
     public function makeDefault(Address $address): Address
     {
-        $address->update(['default' => 1]);
+        $address->update(['is_default' => true]);
         $this->removeDefaultFromOtherAddresses($address);
-        
+
         return $address;
     }
 
@@ -66,7 +66,7 @@ class AddressService
     {
         $this->model::where('client_id', $address->client_id)
             ->where('id', '!=', $address->id)
-            ->update(['default' => 0]);
+            ->update(['is_default' => false]);
     }
 
     public function delete(Address $address): void
@@ -75,7 +75,7 @@ class AddressService
         // if (class_exists(Order::class) && Order::query()->where('address_id', $address->id)->exists()) {
         //     throw new Exception(__('client::message.address_cannot_be_deleted'));
         // }
-        
+
         $address->delete();
     }
 }

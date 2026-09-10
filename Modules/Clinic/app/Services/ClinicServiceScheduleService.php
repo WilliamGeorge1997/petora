@@ -48,10 +48,10 @@ class ClinicServiceScheduleService
             /** @var ClinicServiceSchedule $schedule */
             $schedule = $this->model::create([
                 'clinic_service_id' => $clinicServiceId,
-                'day'               => $dto->day,
+                'day' => $dto->day,
             ]);
 
-            if (!empty($dto->times)) {
+            if (! empty($dto->times)) {
                 $this->syncTimes($schedule, $dto->times);
             }
 
@@ -66,7 +66,7 @@ class ClinicServiceScheduleService
         return DB::transaction(function () use ($schedule, $dto) {
             $schedule->update($dto->toArray());
 
-            if (!empty($dto->times)) {
+            if (! empty($dto->times)) {
                 $this->syncTimes($schedule, $dto->times);
             }
 
@@ -84,12 +84,12 @@ class ClinicServiceScheduleService
             }
 
             $timeData = [
-                'from'     => $item['from'],
-                'to'       => $item['to'],
-                'capacity' => !empty($item['capacity']) ? (int) $item['capacity'] : null,
+                'from' => $item['from'],
+                'to' => $item['to'],
+                'capacity' => ! empty($item['capacity']) ? (int) $item['capacity'] : null,
             ];
 
-            if (!empty($item['id'])) {
+            if (! empty($item['id'])) {
                 $schedule->times()->where('id', $item['id'])->update($timeData);
                 $keptIds[] = (int) $item['id'];
             } else {

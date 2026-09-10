@@ -7,11 +7,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Modules\Doctor\DTOs\DoctorDto;
 use Modules\Doctor\Http\Requests\DoctorRequest;
 use Modules\Doctor\Models\Doctor;
 use Modules\Doctor\Services\DoctorService;
-use Illuminate\Support\Facades\Gate;
 use Modules\Doctor\ViewModels\DoctorViewModel;
 
 #[Middleware('auth:admin')]
@@ -30,12 +30,14 @@ class DoctorController extends Controller
         if ($request->ajax()) {
             return success(true, __('doctor::message.fetched'), $doctors->items());
         }
+
         return view('doctor::doctors.index', compact('doctors'));
     }
 
     public function create()
     {
-        $viewModel = new DoctorViewModel();
+        $viewModel = new DoctorViewModel;
+
         return view('doctor::doctors.create', compact('viewModel'));
     }
 
@@ -43,13 +45,15 @@ class DoctorController extends Controller
     {
         $dto = DoctorDto::fromRequest($request);
         $this->doctorService->save($dto);
+
         return to_route('admin.doctor.index')->with('success', __('doctor::message.created'));
     }
 
     public function edit(Doctor $doctor)
     {
         Gate::authorize('update', $doctor);
-        $viewModel = new DoctorViewModel();
+        $viewModel = new DoctorViewModel;
+
         return view('doctor::doctors.edit', compact('viewModel', 'doctor'));
     }
 
@@ -58,21 +62,24 @@ class DoctorController extends Controller
         Gate::authorize('update', $doctor);
         $dto = DoctorDto::fromRequest($request);
         $this->doctorService->update($doctor, $dto);
+
         return to_route('admin.doctor.index')->with('success', __('doctor::message.updated'));
     }
 
     public function destroy(Doctor $doctor)
     {
         $this->doctorService->delete($doctor);
+
         return success(true, __('doctor::message.deleted'));
     }
 
     public function activate(Doctor $doctor)
     {
         $doctor = $this->doctorService->activate($doctor);
+
         return success(
             true,
-            $doctor->is_active ?  __('doctor::message.activated') :  __('doctor::message.deactivated'),
+            $doctor->is_active ? __('doctor::message.activated') : __('doctor::message.deactivated'),
             $doctor
         );
     }

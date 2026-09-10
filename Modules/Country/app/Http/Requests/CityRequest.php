@@ -14,8 +14,8 @@ class CityRequest extends FormRequest
     {
         return [
             'country_id' => ['required', 'integer', 'exists:countries,id'],
-            'title_en'   => ['required', 'string'],
-            'title_ar'   => ['required', 'string'],
+            'title_en' => ['required', 'string'],
+            'title_ar' => ['required', 'string'],
         ];
     }
 
@@ -32,8 +32,8 @@ class CityRequest extends FormRequest
     {
         return [
             'country_id' => __('country::attribute.country_id'),
-            'title_en'   => __('country::attribute.title_en'),
-            'title_ar'   => __('country::attribute.title_ar'),
+            'title_en' => __('country::attribute.title_en'),
+            'title_ar' => __('country::attribute.title_ar'),
         ];
     }
 
@@ -42,14 +42,14 @@ class CityRequest extends FormRequest
     {
         return [
             'country_id.required' => __('country::message.country_id_required'),
-            'country_id.integer'  => __('country::message.country_id_integer'),
-            'country_id.exists'   => __('country::message.country_id_exists'),
+            'country_id.integer' => __('country::message.country_id_integer'),
+            'country_id.exists' => __('country::message.country_id_exists'),
 
             'title_en.required' => __('country::message.title_en_required'),
-            'title_en.string'   => __('country::message.title_en_string'),
-            
+            'title_en.string' => __('country::message.title_en_string'),
+
             'title_ar.required' => __('country::message.title_ar_required'),
-            'title_ar.string'   => __('country::message.title_ar_string'),
+            'title_ar.string' => __('country::message.title_ar_string'),
         ];
     }
 }

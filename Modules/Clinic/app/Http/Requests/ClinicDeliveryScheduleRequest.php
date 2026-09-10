@@ -13,11 +13,11 @@ class ClinicDeliveryScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'day'            => ['required', 'string', 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday'],
-            'times'          => ['required', 'array', 'min:1'],
-            'times.*.id'     => ['nullable', 'integer'],
-            'times.*.from'   => ['required'],
-            'times.*.to'     => ['required'],
+            'day' => ['required', 'string', 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday'],
+            'times' => ['required', 'array', 'min:1'],
+            'times.*.id' => ['nullable', 'integer'],
+            'times.*.from' => ['required'],
+            'times.*.to' => ['required'],
         ];
     }
 
@@ -33,10 +33,10 @@ class ClinicDeliveryScheduleRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'day'          => __('clinic::attribute.day'),
-            'times'        => __('clinic::attribute.times'),
+            'day' => __('clinic::attribute.day'),
+            'times' => __('clinic::attribute.times'),
             'times.*.from' => __('clinic::attribute.from'),
-            'times.*.to'   => __('clinic::attribute.to'),
+            'times.*.to' => __('clinic::attribute.to'),
         ];
     }
 
@@ -44,14 +44,14 @@ class ClinicDeliveryScheduleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'day.required'          => __('clinic::message.day_required'),
-            'day.string'            => __('clinic::message.day_string'),
-            'day.in'                => __('clinic::message.day_in'),
-            'times.required'        => __('clinic::message.times_required'),
-            'times.array'           => __('clinic::message.times_array'),
-            'times.min'             => __('clinic::message.times_min'),
+            'day.required' => __('clinic::message.day_required'),
+            'day.string' => __('clinic::message.day_string'),
+            'day.in' => __('clinic::message.day_in'),
+            'times.required' => __('clinic::message.times_required'),
+            'times.array' => __('clinic::message.times_array'),
+            'times.min' => __('clinic::message.times_min'),
             'times.*.from.required' => __('clinic::message.times_from_required'),
-            'times.*.to.required'   => __('clinic::message.times_to_required'),
+            'times.*.to.required' => __('clinic::message.times_to_required'),
         ];
     }
 }

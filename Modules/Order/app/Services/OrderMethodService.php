@@ -17,6 +17,7 @@ class OrderMethodService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -33,18 +34,21 @@ class OrderMethodService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
     public function save(OrderMethodDto $dto): OrderMethod
     {
         $data = $dto->toArray();
+
         return $this->model::create($data);
     }
 
@@ -54,19 +58,22 @@ class OrderMethodService
         $data = $dto->toArray();
 
         $orderMethod->update($data);
+
         return $orderMethod;
     }
 
     public function delete(int|OrderMethod $orderMethodOrId): bool
     {
         $orderMethod = $this->resolveModel($orderMethodOrId);
+
         return $orderMethod->delete();
     }
 
     public function activate(int|OrderMethod $orderMethodOrId): OrderMethod
     {
         $orderMethod = $this->resolveModel($orderMethodOrId);
-        $orderMethod->update(['is_active' => !$orderMethod->is_active]);
+        $orderMethod->update(['is_active' => ! $orderMethod->is_active]);
+
         return $orderMethod;
     }
 }

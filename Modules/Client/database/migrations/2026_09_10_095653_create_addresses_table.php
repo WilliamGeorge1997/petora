@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('notes')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
-            $table->boolean('default')->default(0);
+            $table->boolean('is_default')->default(0);
             $table->timestamps();
         });
     }

@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Country\Http\Controllers\CountryController;
 use Modules\Country\Http\Controllers\CityController;
+use Modules\Country\Http\Controllers\CountryController;
 use Modules\Country\Http\Controllers\ZoneController;
 
 Route::prefix('admin')->name('admin.')->group(function () {

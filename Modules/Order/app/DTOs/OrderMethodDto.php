@@ -28,7 +28,7 @@ readonly class OrderMethodDto
             'title' => $this->title,
             'is_active' => $this->isActive,
         ];
-        
+
         return $data;
     }
 }

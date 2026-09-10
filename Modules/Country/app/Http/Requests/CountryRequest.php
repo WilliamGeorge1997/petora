@@ -13,8 +13,8 @@ class CountryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title_en'   => ['required', 'string'],
-            'title_ar'   => ['required', 'string'],
+            'title_en' => ['required', 'string'],
+            'title_ar' => ['required', 'string'],
         ];
     }
 
@@ -30,8 +30,8 @@ class CountryRequest extends FormRequest
     public function attributes()
     {
         return [
-            'title_en'   => __('country::attribute.title_en'),
-            'title_ar'   => __('country::attribute.title_ar'),
+            'title_en' => __('country::attribute.title_en'),
+            'title_ar' => __('country::attribute.title_ar'),
         ];
     }
 
@@ -40,10 +40,10 @@ class CountryRequest extends FormRequest
     {
         return [
             'title_en.required' => __('country::message.title_en_required'),
-            'title_en.string'   => __('country::message.title_en_string'),
-            
+            'title_en.string' => __('country::message.title_en_string'),
+
             'title_ar.required' => __('country::message.title_ar_required'),
-            'title_ar.string'   => __('country::message.title_ar_string'),
+            'title_ar.string' => __('country::message.title_ar_string'),
         ];
     }
 }

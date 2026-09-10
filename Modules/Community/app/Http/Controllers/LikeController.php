@@ -7,7 +7,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Modules\Admin\Enums\AdminRole;
 use Modules\Community\Models\Like;
 use Modules\Community\Services\LikeService;
 
@@ -25,12 +24,14 @@ class LikeController extends Controller
         if ($request->ajax()) {
             return success(true, __('community::general.like.fetched'), $likes->items());
         }
+
         return view('community::likes.index', compact('likes'));
     }
 
     public function destroy(Like $like)
     {
         $this->likeService->delete($like);
+
         return success(true, __('community::general.like.deleted'));
     }
 }

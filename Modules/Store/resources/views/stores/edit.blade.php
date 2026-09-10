@@ -384,12 +384,12 @@
                                     <div class="working-hours-repeater">
                                         <div data-repeater-list="working_hours">
                                             @if (!empty($initialWorkingHours))
-                                                @foreach ($initialWorkingHours as $item)
+                                                @foreach ($initialWorkingHours as $index => $item)
                                                     <div data-repeater-item class="row mb-1 align-items-center">
                                                         <div class="col-md-3 col-12 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('store::general.day') }}</small></label>
-                                                            <select class="form-select" name="day" required>
+                                                            <select class="form-select @error("working_hours.$index.day") is-invalid @enderror" name="day" required>
                                                                 <option value="" disabled
                                                                     {{ empty($item['day']) ? 'selected' : '' }}>
                                                                     {{ __('store::general.select_day') }}</option>
@@ -400,30 +400,45 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            @error("working_hours.$index.day")
+                                                                <div class="invalid-feedback d-block">
+                                                                    <small>{{ $message }}</small>
+                                                                </div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('store::general.from') }}</small></label>
-                                                            <div class="input-group input-group-merge">
+                                                            <div class="input-group input-group-merge @error("working_hours.$index.from") is-invalid @enderror">
                                                                 <span class="input-group-text"><i
                                                                         data-feather="clock"></i></span>
                                                                 <input type="time" name="from"
-                                                                    class="form-control time-input"
+                                                                    class="form-control time-input @error("working_hours.$index.from") is-invalid @enderror"
                                                                     value="{{ $item['from'] ?? '' }}"
                                                                     {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
+                                                            @error("working_hours.$index.from")
+                                                                <div class="invalid-feedback d-block">
+                                                                    <small>{{ $message }}</small>
+                                                                </div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('store::general.to') }}</small></label>
-                                                            <div class="input-group input-group-merge">
+                                                            <div class="input-group input-group-merge @error("working_hours.$index.to") is-invalid @enderror">
                                                                 <span class="input-group-text"><i
                                                                         data-feather="clock"></i></span>
                                                                 <input type="time" name="to"
-                                                                    class="form-control time-input"
+                                                                    class="form-control time-input @error("working_hours.$index.to") is-invalid @enderror"
                                                                     value="{{ $item['to'] ?? '' }}"
                                                                     {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
+                                                            @error("working_hours.$index.to")
+                                                                <div class="invalid-feedback d-block">
+                                                                    <small>{{ $message }}</small>
+                                                                </div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-2 col-8 mb-50">
                                                             <div class="form-check mt-2">
@@ -434,6 +449,11 @@
                                                                 <label
                                                                     class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
                                                             </div>
+                                                            @error("working_hours.$index.is_open_24_hours")
+                                                                <div class="invalid-feedback d-block">
+                                                                    <small>{{ $message }}</small>
+                                                                </div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-1 col-4 mb-50 text-end pt-2">
                                                             <button type="button" class="btn btn-outline-danger btn-icon"

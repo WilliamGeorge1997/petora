@@ -2,17 +2,17 @@
 
 namespace Modules\Clinic\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Modules\Clinic\Models\Clinic;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductExport;
+use App\Http\Controllers\Controller;
 use App\Imports\SellerProductImport;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Admin\Enums\AdminRole;
+use Modules\Clinic\Models\Clinic;
 
 #[Middleware('auth:admin')]
-#[Middleware('role:' . AdminRole::SuperAdmin->value)]
+#[Middleware('role:'.AdminRole::SuperAdmin->value)]
 #[Middleware('permission:Edit-clinic')] // editing clinic's products requires edit clinic permission
 class ClinicProductController extends Controller
 {
@@ -22,6 +22,7 @@ class ClinicProductController extends Controller
             return success(true, 'Fetched', $clinic->products);
         }
         $products = $clinic->products()->paginate(50);
+
         return view('clinic::products.index', compact('clinic', 'products'));
     }
 
@@ -33,7 +34,7 @@ class ClinicProductController extends Controller
     public function import(Request $request, Clinic $clinic)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         Excel::import(new SellerProductImport($clinic), $request->file('file'));

@@ -18,6 +18,7 @@ class CommonController extends Controller
     public function index()
     {
         $settings = $this->commonService->findAll();
+
         return view('common::settings.index', compact('settings'));
     }
 
@@ -25,6 +26,7 @@ class CommonController extends Controller
     {
         $data = $request->except(['_token']);
         $this->commonService->save($data);
+
         return back()->with('updated', 'updated');
     }
 
@@ -32,6 +34,7 @@ class CommonController extends Controller
     {
         $data = ['paginated' => 50];
         $logs = $this->commonService->logs($data);
+
         return view('common::logs.index', compact('logs'));
     }
 }

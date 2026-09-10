@@ -2,3 +2,8 @@
   height: 320px;
   width: 100%;
 }
+
+.working-hours-repeater select option:disabled {
+  color: #a8aaae !important;
+  background-color: #f8f8f8 !important;
+}

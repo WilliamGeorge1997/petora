@@ -37,6 +37,7 @@ class CommonService
     public function logs(array $data): Collection
     {
         $query = Activity::with('causer')->latest();
+
         return getCaseCollection($query, $data);
     }
 
@@ -45,6 +46,7 @@ class CommonService
         if (file_exists(public_path($path))) {
             return unlink(public_path($path));
         }
+
         return false;
     }
 }

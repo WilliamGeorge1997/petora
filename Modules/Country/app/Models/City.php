@@ -27,7 +27,7 @@ class City extends Model
         'is_active' => 'boolean',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -38,19 +38,19 @@ class City extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    //Relations
+    // Relations
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);

@@ -29,7 +29,7 @@ class Doctor extends Model
         'is_active' => 'boolean',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -40,13 +40,13 @@ class Doctor extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -62,7 +62,7 @@ class Doctor extends Model
             });
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -70,13 +70,13 @@ class Doctor extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/doctor/' . $value);
+            return asset('storage/uploads/doctor/'.$value);
         }
 
         return $value;
     }
 
-    //Relations
+    // Relations
     public function clinic(): BelongsTo
     {
         return $this->belongsTo(Clinic::class);

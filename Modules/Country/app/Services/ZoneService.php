@@ -26,6 +26,7 @@ class ZoneService
                 return $query->where('is_active', (bool) $data['is_active']);
             })
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -34,9 +35,10 @@ class ZoneService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
@@ -56,10 +58,10 @@ class ZoneService
         return $zoneOrId instanceof Zone ? $zoneOrId : $this->findById($zoneOrId);
     }
 
-
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -76,19 +78,22 @@ class ZoneService
         $data = $dto->toArray();
 
         $zone->update($data);
+
         return $zone;
     }
 
     public function delete(int|Zone $zoneOrId): bool
     {
         $zone = $this->resolveModel($zoneOrId);
+
         return $zone->delete();
     }
 
     public function activate(int|Zone $zoneOrId): Zone
     {
         $zone = $this->resolveModel($zoneOrId);
-        $zone->update(['is_active' => !$zone->is_active]);
+        $zone->update(['is_active' => ! $zone->is_active]);
+
         return $zone;
     }
 }

@@ -4,9 +4,9 @@ namespace Modules\Community\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Community\DTOs\HashtagDto;
 use Modules\Community\Models\Hashtag;
-use Illuminate\Pagination\CursorPaginator;
 
 class HashtagService
 {
@@ -17,6 +17,7 @@ class HashtagService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -33,12 +34,14 @@ class HashtagService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -51,19 +54,22 @@ class HashtagService
     {
         $hashtag = $this->resolveModel($hashtagOrId);
         $hashtag->update($dto->toArray());
+
         return $hashtag;
     }
 
     public function delete(int|Hashtag $hashtagOrId): bool
     {
         $hashtag = $this->resolveModel($hashtagOrId);
+
         return $hashtag->delete();
     }
 
     public function activate(int|Hashtag $hashtagOrId): Hashtag
     {
         $hashtag = $this->resolveModel($hashtagOrId);
-        $hashtag->update(['is_active' => !$hashtag->is_active]);
+        $hashtag->update(['is_active' => ! $hashtag->is_active]);
+
         return $hashtag;
     }
 }

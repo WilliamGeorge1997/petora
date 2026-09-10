@@ -72,8 +72,8 @@ return [
 
     'parent_id_required' => 'حقل التعليق الأصلي مطلوب.',
     'parent_id_integer' => 'اختيار التعليق الأصلي غير صالح.',
-    'parent_id_exists'     => 'التعليق الأصلي المحدد غير موجود.',
-    'parent_id_max_depth'  => 'يمكنك الرد على تعليق فقط، وليس على رد.',
+    'parent_id_exists' => 'التعليق الأصلي المحدد غير موجود.',
+    'parent_id_max_depth' => 'يمكنك الرد على تعليق فقط، وليس على رد.',
 
     'content_required' => 'حقل المحتوى مطلوب.',
     'content_or_media_required' => 'يجب إدخال نص المنشور أو وسائط على الأقل.',

@@ -2,10 +2,10 @@
 
 namespace Modules\Clinic\Policies;
 
-use Modules\Admin\Models\Admin;
-use Modules\Clinic\Models\Clinic;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Admin\Enums\AdminRole;
+use Modules\Admin\Models\Admin;
+use Modules\Clinic\Models\Clinic;
 
 class ClinicPolicy
 {

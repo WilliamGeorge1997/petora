@@ -12,8 +12,8 @@ class PetTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title_en'  => ['required', 'string', 'max:255'],
-            'title_ar'  => ['required', 'string', 'max:255'],
+            'title_en' => ['required', 'string', 'max:255'],
+            'title_ar' => ['required', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
         ];
     }
@@ -30,8 +30,8 @@ class PetTypeRequest extends FormRequest
     public function attributes()
     {
         return [
-            'title_en'  => __('pet::attribute.title_en'),
-            'title_ar'  => __('pet::attribute.title_ar'),
+            'title_en' => __('pet::attribute.title_en'),
+            'title_ar' => __('pet::attribute.title_ar'),
             'is_active' => __('pet::attribute.is_active'),
         ];
     }
@@ -41,12 +41,12 @@ class PetTypeRequest extends FormRequest
     {
         return [
             'title_en.required' => __('pet::message.title_en_required'),
-            'title_en.string'   => __('pet::message.title_en_string'),
-            'title_en.max'      => __('pet::message.title_en_max'),
+            'title_en.string' => __('pet::message.title_en_string'),
+            'title_en.max' => __('pet::message.title_en_max'),
 
             'title_ar.required' => __('pet::message.title_ar_required'),
-            'title_ar.string'   => __('pet::message.title_ar_string'),
-            'title_ar.max'      => __('pet::message.title_ar_max'),
+            'title_ar.string' => __('pet::message.title_ar_string'),
+            'title_ar.max' => __('pet::message.title_ar_max'),
 
             'is_active.boolean' => __('pet::message.is_active_boolean'),
         ];

@@ -8,6 +8,6 @@ class ZoneViewModel
 {
     public function cities()
     {
-        return (new CityService())->active(columns: ['id', 'title']);
+        return (new CityService)->active(columns: ['id', 'title']);
     }
 }

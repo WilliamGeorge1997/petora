@@ -14,7 +14,7 @@ class PetTypeController extends Controller
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $petTypes = $this->petTypeService->active($data);
-        
+
         return success(true, __('pet::message.type_fetched'), $petTypes);
     }
 }

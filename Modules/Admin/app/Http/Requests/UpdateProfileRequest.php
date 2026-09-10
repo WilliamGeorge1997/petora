@@ -13,7 +13,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:admins,email,' . auth('admin')->id()],
+            'email' => ['required', 'email', 'max:255', 'unique:admins,email,'.auth('admin')->id()],
             'phone' => ['required', 'string'],
             'password' => ['nullable', 'string', 'confirmed'],
             'image' => ['nullable', 'image', 'max:1024'],

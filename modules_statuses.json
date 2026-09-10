@@ -12,5 +12,6 @@
     "Order": true,
     "Pet": true,
     "Service": true,
-    "Community": true
+    "Community": true,
+    "Driver": true
 }

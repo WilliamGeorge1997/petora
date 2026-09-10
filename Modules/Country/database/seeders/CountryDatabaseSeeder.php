@@ -59,7 +59,7 @@ class CountryDatabaseSeeder extends Seeder
             ['en' => 'Kafr El Sheikh', 'ar' => 'كفر الشيخ'],
             ['en' => 'Arish', 'ar' => 'العريش'],
             ['en' => 'Damanhur', 'ar' => 'دمنهور'],
-            ['en' => 'Sharm El Sheikh', 'ar' => 'شرم الشيخ']
+            ['en' => 'Sharm El Sheikh', 'ar' => 'شرم الشيخ'],
         ];
 
         foreach ($cities as $cityTitle) {

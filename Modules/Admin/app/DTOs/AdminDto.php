@@ -50,6 +50,6 @@ class AdminDto
             'company_id' => $this->company_id,
             'store_id' => $this->store_id,
             'clinic_id' => $this->clinic_id,
-        ], fn($value) => $value !== null);
+        ], fn ($value) => $value !== null);
     }
 }

@@ -12,7 +12,6 @@ Route::prefix('auth')->group(function () {
     Route::post('logout', [ClientAuthController::class, 'logout']);
     Route::get('me', [ClientAuthController::class, 'me']);
 
-
     Route::post('forget-password', [ClientAuthController::class, 'forgetPassword']);
     Route::post('verify-forget-password', [ClientAuthController::class, 'verifyForgetPassword']);
     Route::post('new-password', [ClientAuthController::class, 'newPassword']);
@@ -20,5 +19,6 @@ Route::prefix('auth')->group(function () {
     Route::post('edit-profile', [ClientController::class, 'editProfile']);
 });
 
-Route::apiResource('addresses', AddressController::class);
-Route::put('addresses/{address}/default', [AddressController::class, 'default']);
+Route::post('addresses/{address}/default', [AddressController::class, 'default']);
+Route::post('addresses/{address}', [AddressController::class, 'update']);
+Route::apiResource('addresses', AddressController::class)->except(['update']);

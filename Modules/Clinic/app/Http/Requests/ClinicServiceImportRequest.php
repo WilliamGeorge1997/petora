@@ -32,7 +32,7 @@ class ClinicServiceImportRequest extends FormRequest
     {
         return [
             'file.required' => __('clinic::message.file_required'),
-            'file.mimes'    => __('clinic::message.file_mimes'),
+            'file.mimes' => __('clinic::message.file_mimes'),
         ];
     }
 }

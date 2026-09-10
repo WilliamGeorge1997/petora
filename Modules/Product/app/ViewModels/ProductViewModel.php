@@ -8,6 +8,6 @@ class ProductViewModel
 {
     public function categories()
     {
-        return (new CategoryService())->active(columns: ['id', 'title']);
+        return (new CategoryService)->active(columns: ['id', 'title']);
     }
 }

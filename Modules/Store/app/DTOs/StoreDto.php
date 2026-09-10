@@ -20,6 +20,7 @@ readonly class StoreDto
         public ?int $zoneId = null,
         public ?string $latitude = null,
         public ?string $longitude = null,
+        public ?array $workingHours = null,
     ) {}
 
     public static function fromRequest(StoreRequest $request): self
@@ -46,6 +47,7 @@ readonly class StoreDto
             latitude: $request->validated('latitude'),
             longitude: $request->validated('longitude'),
             isActive: $request->boolean('is_active'),
+            workingHours: $request->validated('working_hours'),
         );
     }
 

@@ -7,12 +7,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Modules\Admin\Enums\AdminRole;
+use Illuminate\Support\Facades\Gate;
 use Modules\Client\DTOs\ClientDto;
 use Modules\Client\Http\Requests\ClientRequest;
 use Modules\Client\Models\Client;
 use Modules\Client\Services\ClientService;
-use Illuminate\Support\Facades\Gate;
 
 #[Middleware('auth:admin')]
 #[Middleware('permission:Index-client|Create-client|Edit-client|Delete-client', only: ['index', 'store'])]
@@ -30,6 +29,7 @@ class ClientController extends Controller
         if ($request->ajax()) {
             return success(true, __('client::message.fetched'), $clients->items());
         }
+
         return view('client::clients.index', compact('clients'));
     }
 
@@ -42,6 +42,7 @@ class ClientController extends Controller
     {
         $dto = ClientDto::fromAdminRequest($request);
         $this->clientService->save($dto);
+
         return to_route('admin.client.index')->with('success', __('client::message.created'));
     }
 
@@ -56,18 +57,21 @@ class ClientController extends Controller
         // Gate::authorize('update', $client);
         $dto = ClientDto::fromAdminRequest($request);
         $this->clientService->update($client, $dto);
+
         return to_route('admin.client.index')->with('success', __('client::message.updated'));
     }
 
     public function destroy(Client $client)
     {
         $this->clientService->delete($client);
+
         return success(true, __('client::message.deleted'));
     }
 
     public function activate(Client $client)
     {
         $client = $this->clientService->activate($client);
+
         return success(
             true,
             $client->is_active ? __('client::message.activated') : __('client::message.deactivated'),

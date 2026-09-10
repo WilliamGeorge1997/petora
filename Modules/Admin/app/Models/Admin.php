@@ -12,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Admin extends Authenticatable
 {
-    use HasApiTokens, Notifiable, HasRoles, LogsActivity;
+    use HasApiTokens, HasRoles, LogsActivity, Notifiable;
 
     protected $fillable = ['name', 'email', 'password', 'phone', 'image', 'locale', 'is_active'];
 
@@ -20,10 +20,10 @@ class Admin extends Authenticatable
 
     protected $casts = [
         'password' => 'hashed',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -34,19 +34,19 @@ class Admin extends Authenticatable
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query)
     {
         return $query->where('is_active', 1);
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -54,7 +54,7 @@ class Admin extends Authenticatable
                 return $value;
             }
 
-            return asset('storage/uploads/admin/' . $value);
+            return asset('storage/uploads/admin/'.$value);
         }
 
         return $value;

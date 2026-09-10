@@ -5,11 +5,12 @@ namespace Modules\Category\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Product\Models\Product;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Modules\Product\Models\Product;
+
 class Category extends Model
 {
     use HasFactory, HasTranslations, LogsActivity;
@@ -26,7 +27,7 @@ class Category extends Model
         'is_active' => 'boolean',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -37,19 +38,19 @@ class Category extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -57,13 +58,13 @@ class Category extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/category/' . $value);
+            return asset('storage/uploads/category/'.$value);
         }
 
         return $value;
     }
 
-    //Relations
+    // Relations
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

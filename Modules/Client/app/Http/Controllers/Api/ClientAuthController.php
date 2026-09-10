@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 use Modules\Client\DTOs\ClientDto;
 use Modules\Client\Http\Requests\ClientForgetPasswordRequest;
 use Modules\Client\Http\Requests\ClientLoginRequest;
@@ -26,19 +27,18 @@ class ClientAuthController extends Controller
         return success(true, __('client::message.registered'), $client);
     }
 
-
     public function login(ClientLoginRequest $request, ClientService $clientService)
     {
         $credentials = $request->validated();
 
-        /**@var Client $client */
+        /** @var Client $client */
         $client = $clientService->findBy('phone', $credentials['phone'])->first();
 
-        if (!$client || !Hash::check($credentials['password'], $client->password)) {
+        if (! $client || ! Hash::check($credentials['password'], $client->password)) {
             return fail(false, __('client::message.unauthorized'), null, 'unauthorized');
         }
 
-        if (!$client->is_active) {
+        if (! $client->is_active) {
             return fail(false, __('client::message.not_active'), null, 'unauthorized');
         }
 
@@ -52,12 +52,11 @@ class ClientAuthController extends Controller
         return $this->respondWithToken($client, $token);
     }
 
-
     public function verify(ClientVerifyOtpRequest $request, ClientService $clientService)
     {
         $data = $request->validated();
 
-        /**@var Client $client */
+        /** @var Client $client */
         $client = $clientService->findBy('phone', $data['phone'])->first();
 
         if ($client && $client->is_active) {
@@ -74,6 +73,7 @@ class ClientAuthController extends Controller
             $client->update($updateData);
 
             $token = $client->createToken('client_token')->plainTextToken;
+
             return $this->respondWithToken($client, $token);
         }
 
@@ -128,7 +128,7 @@ class ClientAuthController extends Controller
         /** @var Client $client */
         $client = $request->user('client');
 
-        /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+        /** @var PersonalAccessToken $token */
         $token = $client->currentAccessToken();
         $token->delete();
 
@@ -142,6 +142,7 @@ class ClientAuthController extends Controller
             'token_type' => 'bearer',
             'client' => $client,
         ];
+
         return success(true, __('client::message.authenticated'), $data);
     }
 }

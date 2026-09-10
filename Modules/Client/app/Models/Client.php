@@ -31,15 +31,15 @@ class Client extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
         'is_active' => 'boolean',
-        'allow_notification' => 'boolean'
+        'allow_notification' => 'boolean',
     ];
 
     protected $hidden = [
         'password',
-        'verify_code'
+        'verify_code',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -50,13 +50,13 @@ class Client extends Authenticatable
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -79,7 +79,7 @@ class Client extends Authenticatable
             });
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -87,13 +87,13 @@ class Client extends Authenticatable
                 return $value;
             }
 
-            return asset('storage/uploads/client/' . $value);
+            return asset('storage/uploads/client/'.$value);
         }
 
         return $value;
     }
 
-    //Relations
+    // Relations
     public function followers()
     {
         return $this->hasMany(Follow::class, 'following_id');

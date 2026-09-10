@@ -2,10 +2,10 @@
 
 namespace Modules\Company\Policies;
 
-use Modules\Admin\Models\Admin;
-use Modules\Company\Models\Company;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Admin\Enums\AdminRole;
+use Modules\Admin\Models\Admin;
+use Modules\Company\Models\Company;
 
 class CompanyPolicy
 {

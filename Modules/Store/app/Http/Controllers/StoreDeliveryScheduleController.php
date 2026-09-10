@@ -32,7 +32,7 @@ class StoreDeliveryScheduleController extends Controller
         }
 
         return view('store::delivery-schedules.index', [
-            'store'     => $store,
+            'store' => $store,
             'schedules' => $schedules,
         ]);
     }
@@ -42,7 +42,7 @@ class StoreDeliveryScheduleController extends Controller
         $schedules = $this->scheduleService->findBy('store_id', $store->id);
 
         return view('store::delivery-schedules.create', [
-            'store'     => $store,
+            'store' => $store,
             'schedules' => $schedules,
         ]);
     }
@@ -62,7 +62,7 @@ class StoreDeliveryScheduleController extends Controller
         $schedule = $this->scheduleService->findById($schedule_id, $relations);
 
         return view('store::delivery-schedules.edit', [
-            'store'    => $store,
+            'store' => $store,
             'schedule' => $schedule,
         ]);
     }

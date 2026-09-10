@@ -15,11 +15,11 @@ class ClientRequest extends FormRequest
         $clientId = $this->route('client') ? $this->route('client')->id : null;
 
         return [
-            'name'      => ['required', 'string', 'max:255'],
-            'email'     => ['nullable', 'email', 'max:255', 'unique:clients,email,' . $clientId],
-            'phone'     => ['required', 'string', 'max:20', 'unique:clients,phone,' . $clientId],
-            'password'  => $clientId ? ['nullable', 'string'] : ['required', 'string'],
-            'image'     => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:2048'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255', 'unique:clients,email,'.$clientId],
+            'phone' => ['required', 'string', 'max:20', 'unique:clients,phone,'.$clientId],
+            'password' => $clientId ? ['nullable', 'string'] : ['required', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:2048'],
         ];
     }
 
@@ -35,11 +35,11 @@ class ClientRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name'     => __('client::attribute.name'),
-            'email'    => __('client::attribute.email'),
-            'phone'    => __('client::attribute.phone'),
+            'name' => __('client::attribute.name'),
+            'email' => __('client::attribute.email'),
+            'phone' => __('client::attribute.phone'),
             'password' => __('client::attribute.password'),
-            'image'    => __('client::attribute.image'),
+            'image' => __('client::attribute.image'),
         ];
     }
 
@@ -47,22 +47,22 @@ class ClientRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required'     => __('client::message.name_required'),
-            'name.string'       => __('client::message.name_string'),
-            
-            'email.email'       => __('client::message.email_email'),
-            'email.unique'      => __('client::message.email_unique'),
-            
-            'phone.required'    => __('client::message.phone_required'),
-            'phone.string'      => __('client::message.phone_string'),
-            'phone.unique'      => __('client::message.phone_unique'),
-            
+            'name.required' => __('client::message.name_required'),
+            'name.string' => __('client::message.name_string'),
+
+            'email.email' => __('client::message.email_email'),
+            'email.unique' => __('client::message.email_unique'),
+
+            'phone.required' => __('client::message.phone_required'),
+            'phone.string' => __('client::message.phone_string'),
+            'phone.unique' => __('client::message.phone_unique'),
+
             'password.required' => __('client::message.password_required'),
-            'password.string'   => __('client::message.password_string'),
-            
-            'image.image'       => __('client::message.image_invalid'),
-            'image.mimes'       => __('client::message.image_mimes'),
-            'image.max'         => __('client::message.image_max'),
+            'password.string' => __('client::message.password_string'),
+
+            'image.image' => __('client::message.image_invalid'),
+            'image.mimes' => __('client::message.image_mimes'),
+            'image.max' => __('client::message.image_max'),
         ];
     }
 }

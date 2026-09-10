@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Country\Http\Controllers\Api\CountryController;
 use Modules\Country\Http\Controllers\Api\CityController;
+use Modules\Country\Http\Controllers\Api\CountryController;
 use Modules\Country\Http\Controllers\Api\ZoneController;
 
 Route::get('countries', [CountryController::class, 'index']);

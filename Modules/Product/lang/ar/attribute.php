@@ -11,6 +11,6 @@ return [
     'select_category' => 'اختر القسم',
     'price' => 'السعر',
     'is_active' => 'التفعيل',
-    'images'     => 'الصور',
+    'images' => 'الصور',
     'created_at' => 'التاريخ',
 ];

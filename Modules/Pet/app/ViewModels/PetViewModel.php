@@ -10,11 +10,11 @@ class PetViewModel
 {
     public function clients()
     {
-        return (new ClientService(new Client()))->active(columns: ['id', 'name', 'phone']);
+        return (new ClientService(new Client))->active(columns: ['id', 'name', 'phone']);
     }
 
     public function petTypes()
     {
-        return (new PetTypeService())->active(columns: ['id', 'title']);
+        return (new PetTypeService)->active(columns: ['id', 'title']);
     }
 }

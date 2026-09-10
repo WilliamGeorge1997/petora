@@ -18,13 +18,13 @@ class Block extends Model
         'blocked_id',
     ];
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -35,7 +35,7 @@ class Block extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Relations
+    // Relations
     public function blocker(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'blocker_id');

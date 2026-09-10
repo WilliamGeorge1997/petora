@@ -4,10 +4,10 @@ namespace Modules\Service\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Service\DTOs\ServiceDto;
 use Modules\Service\Models\Service;
-use Illuminate\Pagination\CursorPaginator;
 
 class ServiceService
 {
@@ -20,6 +20,7 @@ class ServiceService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -33,18 +34,20 @@ class ServiceService
         return $serviceOrId instanceof Service ? $serviceOrId : $this->findById($serviceOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
-    
+
     public function save(ServiceDto $dto): Service
     {
         $data = $dto->toArray();
@@ -60,26 +63,33 @@ class ServiceService
         $service = $this->resolveModel($serviceOrId);
         $data = $dto->toArray();
         if ($dto->image) {
-            if ($service->image) $this->deleteImage($service->image, 'service');
+            if ($service->image) {
+                $this->deleteImage($service->image, 'service');
+            }
 
             $data['image'] = $this->uploadImage($dto->image, 'service');
         }
 
         $service->update($data);
+
         return $service;
     }
 
     public function delete(int|Service $serviceOrId): bool
     {
         $service = $this->resolveModel($serviceOrId);
-        if ($service->image) $this->deleteImage($service->image, 'service');
+        if ($service->image) {
+            $this->deleteImage($service->image, 'service');
+        }
+
         return $service->delete();
     }
 
     public function activate(int|Service $serviceOrId): Service
     {
         $service = $this->resolveModel($serviceOrId);
-        $service->update(['is_active' => !$service->is_active]);
+        $service->update(['is_active' => ! $service->is_active]);
+
         return $service;
     }
 }

@@ -24,8 +24,8 @@ class ClinicService extends Model
     ];
 
     protected $casts = [
-        'price'     => 'decimal:2',
-        'duration'  => 'integer',
+        'price' => 'decimal:2',
+        'duration' => 'integer',
         'is_active' => 'boolean',
     ];
 

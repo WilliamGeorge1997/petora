@@ -24,7 +24,7 @@ class ClinicServiceScheduleController extends Controller
     {
         $data = $request->merge(['clinic_service_id' => $clinic_service->id])->all();
         $relations = ['times'];
-        
+
         $schedules = $this->scheduleService->findAll($data, $relations);
 
         if ($request->ajax()) {

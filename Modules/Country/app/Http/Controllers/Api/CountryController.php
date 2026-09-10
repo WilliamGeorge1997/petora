@@ -13,6 +13,7 @@ class CountryController extends Controller
     public function index(Request $request)
     {
         $countries = $this->countryService->active($request->all());
+
         return success(true, __('country::message.fetched'), $countries);
     }
 }

@@ -5,20 +5,17 @@ namespace Modules\Community\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Modules\Community\DTOs\StoryDto;
 use Modules\Community\Http\Requests\StoryRequest;
 use Modules\Community\Models\Story;
 use Modules\Community\Services\StoryService;
-use Modules\Community\Transformers\StoryResource;
 use Modules\Community\Transformers\StoryFeedResource;
-use Illuminate\Support\Facades\Gate;
+use Modules\Community\Transformers\StoryResource;
 
 #[Middleware('auth:client')]
 class StoryController extends Controller
 {
-    /**
-     * @var StoryService
-     */
     private StoryService $storyService;
 
     public function __construct(StoryService $storyService)
@@ -30,6 +27,7 @@ class StoryController extends Controller
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $clients = $this->storyService->feed($data);
+
         return success(true, __('community::message.story.fetched'), paginatedResource($clients, StoryFeedResource::class));
     }
 
@@ -40,12 +38,14 @@ class StoryController extends Controller
             'client_id' => $client_id,
         ])->all();
         $stories = $this->storyService->active($data, counts: $this->storyService->storyCounts());
+
         return success(true, __('community::message.story.fetched'), paginatedResource($stories, StoryResource::class));
     }
 
     public function show(int $story_id)
     {
         $story = $this->storyService->findById($story_id, ['client'], $this->storyService->storyCounts());
+
         return success(true, __('community::message.story.fetched'), new StoryResource($story));
     }
 
@@ -53,6 +53,7 @@ class StoryController extends Controller
     {
         $data = StoryDto::fromRequest($request);
         $story = $this->storyService->save($data);
+
         return success(true, __('community::message.story.created'), new StoryResource($story->load('client')));
     }
 
@@ -60,6 +61,7 @@ class StoryController extends Controller
     {
         Gate::authorize('delete', $story);
         $this->storyService->delete($story);
+
         return success(true, __('community::message.story.deleted'));
     }
 }

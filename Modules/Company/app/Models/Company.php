@@ -30,7 +30,7 @@ class Company extends Model
         'is_active' => 'boolean',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -41,19 +41,19 @@ class Company extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -61,13 +61,13 @@ class Company extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/company/' . $value);
+            return asset('storage/uploads/company/'.$value);
         }
 
         return $value;
     }
 
-    //Relations
+    // Relations
     public function stores(): HasMany
     {
         return $this->hasMany(Store::class);

@@ -18,7 +18,7 @@ readonly class AddressDto
         public ?string $notes,
         public ?string $latitude,
         public ?string $longitude,
-        public bool $default,
+        public bool $isDefault,
     ) {}
 
     public static function fromRequest(AddressRequest $request): self
@@ -35,7 +35,7 @@ readonly class AddressDto
             notes: $request->validated('notes'),
             latitude: $request->validated('latitude'),
             longitude: $request->validated('longitude'),
-            default: (bool) $request->validated('default', false),
+            isDefault: (bool) $request->validated('is_default', false),
         );
     }
 
@@ -53,7 +53,7 @@ readonly class AddressDto
             'notes' => $this->notes,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'default' => $this->default,
+            'is_default' => $this->isDefault,
         ];
     }
 }

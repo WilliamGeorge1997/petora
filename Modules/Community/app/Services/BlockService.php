@@ -4,9 +4,9 @@ namespace Modules\Community\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Community\DTOs\BlockDto;
 use Modules\Community\Models\Block;
-use Illuminate\Pagination\CursorPaginator;
 
 class BlockService
 {
@@ -15,6 +15,7 @@ class BlockService
     public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -47,15 +48,17 @@ class BlockService
     {
         $block = $this->firstBy([
             'blocker_id' => $blocker_id,
-            'blocked_id' => $blocked_id
+            'blocked_id' => $blocked_id,
         ]);
 
         if ($block) {
             $this->delete($block);
+
             return null;
         }
 
         $dto = new BlockDto($blocker_id, $blocked_id);
+
         return $this->save($dto);
     }
 }

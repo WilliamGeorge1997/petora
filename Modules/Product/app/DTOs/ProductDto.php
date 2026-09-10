@@ -2,7 +2,6 @@
 
 namespace Modules\Product\DTOs;
 
-use Illuminate\Http\UploadedFile;
 use Modules\Product\Http\Requests\ProductRequest;
 
 readonly class ProductDto
@@ -37,11 +36,11 @@ readonly class ProductDto
     public function toArray(): array
     {
         $data = [
-            'title'       => $this->title,
+            'title' => $this->title,
             'description' => $this->description,
             'category_id' => $this->categoryId,
-            'price'       => $this->price,
-            'is_active'   => $this->isActive,
+            'price' => $this->price,
+            'is_active' => $this->isActive,
         ];
 
         return $data;

@@ -1,7 +1,11 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\EnvKitTrustProxies;
+use App\Providers\TelescopeServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\TelescopeServiceProvider::class,
-    App\Providers\EnvKitTrustProxies::class,
+    AppServiceProvider::class,
+    TelescopeServiceProvider::class,
+    EnvKitTrustProxies::class,
 ];

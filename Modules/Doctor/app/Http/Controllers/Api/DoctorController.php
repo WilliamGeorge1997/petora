@@ -14,6 +14,7 @@ class DoctorController extends Controller
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $doctors = $this->doctorService->active($data);
+
         return success(true, __('doctor::message.fetched'), $doctors);
     }
 }

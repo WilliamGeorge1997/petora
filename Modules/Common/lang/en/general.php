@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'done'  => 'Well Done!',
+    'done' => 'Well Done!',
     'error' => 'An error occurred',
     'location_on_map' => 'Location on map',
     'search_location' => 'Search for a location or address...',
@@ -29,12 +29,12 @@ return [
     'create' => 'Create',
     'update' => 'Update',
     'days' => [
-        'saturday'  => 'Saturday',
-        'sunday'    => 'Sunday',
-        'monday'    => 'Monday',
-        'tuesday'   => 'Tuesday',
+        'saturday' => 'Saturday',
+        'sunday' => 'Sunday',
+        'monday' => 'Monday',
+        'tuesday' => 'Tuesday',
         'wednesday' => 'Wednesday',
-        'thursday'  => 'Thursday',
-        'friday'    => 'Friday',
+        'thursday' => 'Thursday',
+        'friday' => 'Friday',
     ],
 ];

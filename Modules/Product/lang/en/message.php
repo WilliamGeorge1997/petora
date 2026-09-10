@@ -18,11 +18,11 @@ return [
     'description_en_string' => 'English description must be a string.',
     'description_ar_string' => 'Arabic description must be a string.',
     'price_required' => 'Price is required.',
-    'price_numeric'  => 'Price must be a number.',
-    'price_min'      => 'Price must be at least 0.',
+    'price_numeric' => 'Price must be a number.',
+    'price_min' => 'Price must be at least 0.',
 
-    'images_array'   => 'Images must be an array.',
+    'images_array' => 'Images must be an array.',
     'images_invalid' => 'Each file must be a valid image.',
-    'images_mimes'   => 'Images must be of type: jpeg, png, jpg, webp, svg, gif.',
-    'images_max'     => 'Each image may not be greater than 2MB.',
+    'images_mimes' => 'Images must be of type: jpeg, png, jpg, webp, svg, gif.',
+    'images_max' => 'Each image may not be greater than 2MB.',
 ];

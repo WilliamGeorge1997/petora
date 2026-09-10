@@ -32,10 +32,10 @@ class ToggleFollowRequest extends FormRequest
     {
         return [
             'client_id' => [
-                'required', 
-                'integer', 
-                'exists:clients,id', 
-                'not_in:' . auth('client')->id()
+                'required',
+                'integer',
+                'exists:clients,id',
+                'not_in:'.auth('client')->id(),
             ],
         ];
     }
@@ -49,6 +49,4 @@ class ToggleFollowRequest extends FormRequest
             'client_id.not_in' => __('community::message.follow_self'),
         ];
     }
-
-
 }

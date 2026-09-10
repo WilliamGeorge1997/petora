@@ -2,10 +2,10 @@
 
 namespace Modules\Doctor\Policies;
 
-use Modules\Admin\Models\Admin;
-use Modules\Doctor\Models\Doctor;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Admin\Enums\AdminRole;
+use Modules\Admin\Models\Admin;
+use Modules\Doctor\Models\Doctor;
 
 class DoctorPolicy
 {

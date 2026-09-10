@@ -32,7 +32,7 @@ class PostPolicy
         if ($user instanceof Admin) {
             return $user->hasRole(AdminRole::SuperAdmin->value) || $user->can('Index-post');
         }
-        
+
         if ($user instanceof Client) {
             return $post->client_id === $user->id;
         }

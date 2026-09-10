@@ -13,8 +13,9 @@ class HashtagRequest extends FormRequest
     public function rules(): array
     {
         $id = $this->route('hashtag')?->id;
+
         return [
-            'text' => ['required', 'string', 'unique:hashtags,text,' . $id],
+            'text' => ['required', 'string', 'unique:hashtags,text,'.$id],
         ];
     }
 
@@ -39,8 +40,8 @@ class HashtagRequest extends FormRequest
     {
         return [
             'text.required' => __('community::message.text_required'),
-            'text.string'   => __('community::message.text_string'),
-            'text.unique'   => __('community::message.text_unique'),
+            'text.string' => __('community::message.text_string'),
+            'text.unique' => __('community::message.text_unique'),
         ];
     }
 }

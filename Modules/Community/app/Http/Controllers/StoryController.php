@@ -7,7 +7,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Modules\Admin\Enums\AdminRole;
 use Modules\Community\Models\Story;
 use Modules\Community\Services\StoryService;
 
@@ -26,27 +25,31 @@ class StoryController extends Controller
         if ($request->ajax()) {
             return success(true, __('community::general.story.fetched'), $stories->items());
         }
+
         return view('community::stories.index', compact('stories'));
     }
 
     public function show(Story $story): View
     {
         $story->load('client');
+
         return view('community::stories.show', compact('story'));
     }
 
     public function destroy(Story $story)
     {
         $this->storyService->delete($story);
+
         return success(true, __('community::general.story.deleted'));
     }
 
     public function activate(Story $story)
     {
         $story = $this->storyService->activate($story);
+
         return success(
             true,
-            $story->is_active ?  __('community::general.story.activated') :  __('community::general.story.deactivated'),
+            $story->is_active ? __('community::general.story.activated') : __('community::general.story.deactivated'),
             $story
         );
     }

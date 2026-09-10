@@ -247,7 +247,8 @@
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="city_id" id="city_id" required disabled
                                         data-fetch-url="{{ route('admin.ajax.zones') }}" data-ajax-col="city_id"
-                                        data-ajax-target="#zone_id" data-selected="{{ old('city_id', $clinic->city_id) }}">
+                                        data-ajax-target="#zone_id"
+                                        data-selected="{{ old('city_id', $clinic->city_id) }}">
                                         <option value="" disabled selected>{{ __('clinic::attribute.select_city') }}
                                         </option>
                                     </select>
@@ -352,57 +353,71 @@
                                         <div data-repeater-list="working_hours">
                                             @if (!empty($initialWorkingHours))
                                                 @foreach ($initialWorkingHours as $index => $item)
-                                                    <div data-repeater-item class="row mb-1 align-items-center">
+                                                    <div data-repeater-item class="row mb-1 align-items-start">
                                                         <div class="col-md-3 col-12 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('clinic::general.day') }}</small></label>
-                                                            <select class="form-select" name="day" required>
+                                                            <select
+                                                                class="form-select @error("working_hours.$index.day") is-invalid @enderror"
+                                                                name="day" required>
                                                                 <option value="" disabled
                                                                     {{ empty($item['day']) ? 'selected' : '' }}>
-                                                                    {{ __('clinic::general.select_day') }}</option>
+                                                                    {{ __('clinic::general.select_day') }}
+                                                                </option>
                                                                 @foreach ($days as $dayValue => $dayLabel)
                                                                     <option value="{{ $dayValue }}"
+                                                                        data-label="{{ $dayLabel }}"
                                                                         {{ ($item['day'] ?? '') === $dayValue ? 'selected' : '' }}>
                                                                         {{ $dayLabel }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
                                                             @error("working_hours.$index.day")
-                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                                <div class="invalid-feedback d-block">
+                                                                    <small>{{ $message }}</small>
+                                                                </div>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('clinic::general.from') }}</small></label>
-                                                            <div class="input-group input-group-merge">
+                                                            <div
+                                                                class="input-group input-group-merge @error("working_hours.$index.from") is-invalid @enderror">
                                                                 <span class="input-group-text"><i
                                                                         data-feather="clock"></i></span>
                                                                 <input type="time" name="from"
-                                                                    class="form-control time-input"
+                                                                    class="form-control time-input @error("working_hours.$index.from") is-invalid @enderror"
                                                                     value="{{ $item['from'] ?? '' }}"
                                                                     {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
                                                             @error("working_hours.$index.from")
-                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                                <div class="invalid-feedback d-block">
+                                                                    <small>{{ $message }}</small>
+                                                                </div>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('clinic::general.to') }}</small></label>
-                                                            <div class="input-group input-group-merge">
+                                                            <div
+                                                                class="input-group input-group-merge @error("working_hours.$index.to") is-invalid @enderror">
                                                                 <span class="input-group-text"><i
                                                                         data-feather="clock"></i></span>
                                                                 <input type="time" name="to"
-                                                                    class="form-control time-input"
+                                                                    class="form-control time-input @error("working_hours.$index.to") is-invalid @enderror"
                                                                     value="{{ $item['to'] ?? '' }}"
                                                                     {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
                                                             @error("working_hours.$index.to")
-                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                                <div class="invalid-feedback d-block">
+                                                                    <small>{{ $message }}</small>
+                                                                </div>
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-2 col-8 mb-50">
-                                                            <div class="form-check mt-2">
+                                                            <label
+                                                                class="form-label d-none d-md-block"><small>&nbsp;</small></label>
+                                                            <div class="form-check mt-50">
                                                                 <input type="checkbox" name="is_open_24_hours"
                                                                     value="1"
                                                                     class="form-check-input open-24-hours-check"
@@ -410,18 +425,28 @@
                                                                 <label
                                                                     class="form-check-label"><small>{{ __('clinic::general.open_24_hours') }}</small></label>
                                                             </div>
+                                                            @error("working_hours.$index.is_open_24_hours")
+                                                                <div class="invalid-feedback d-block">
+                                                                    <small>{{ $message }}</small>
+                                                                </div>
+                                                            @enderror
                                                         </div>
-                                                        <div class="col-md-1 col-4 mb-50 text-end pt-2">
-                                                            <button type="button" class="btn btn-outline-danger btn-icon"
-                                                                data-repeater-delete
-                                                                title="{{ __('common::general.delete') }}">
-                                                                <i data-feather="trash-2"></i>
-                                                            </button>
+                                                        <div class="col-md-1 col-4 mb-50 text-end">
+                                                            <label
+                                                                class="form-label d-none d-md-block"><small>&nbsp;</small></label>
+                                                            <div>
+                                                                <button type="button"
+                                                                    class="btn btn-outline-danger btn-icon"
+                                                                    data-repeater-delete
+                                                                    title="{{ __('common::general.delete') }}">
+                                                                    <i data-feather="trash-2"></i>
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 @endforeach
                                             @else
-                                                <div data-repeater-item class="row mb-1 align-items-center">
+                                                <div data-repeater-item class="row mb-1 align-items-start">
                                                     <div class="col-md-3 col-12 mb-50">
                                                         <label
                                                             class="form-label"><small>{{ __('clinic::general.day') }}</small></label>
@@ -429,7 +454,8 @@
                                                             <option value="" disabled selected>
                                                                 {{ __('clinic::general.select_day') }}</option>
                                                             @foreach ($days as $dayValue => $dayLabel)
-                                                                <option value="{{ $dayValue }}">{{ $dayLabel }}
+                                                                <option value="{{ $dayValue }}"
+                                                                    data-label="{{ $dayLabel }}">{{ $dayLabel }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -455,19 +481,25 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2 col-8 mb-50">
-                                                        <div class="form-check mt-2">
+                                                        <label
+                                                            class="form-label d-none d-md-block"><small>&nbsp;</small></label>
+                                                        <div class="form-check mt-50">
                                                             <input type="checkbox" name="is_open_24_hours" value="1"
                                                                 class="form-check-input open-24-hours-check" />
                                                             <label
                                                                 class="form-check-label"><small>{{ __('clinic::general.open_24_hours') }}</small></label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-1 col-4 mb-50 text-end pt-2">
-                                                        <button type="button" class="btn btn-outline-danger btn-icon"
-                                                            data-repeater-delete
-                                                            title="{{ __('common::general.delete') }}">
-                                                            <i data-feather="trash-2"></i>
-                                                        </button>
+                                                    <div class="col-md-1 col-4 mb-50 text-end">
+                                                        <label
+                                                            class="form-label d-none d-md-block"><small>&nbsp;</small></label>
+                                                        <div>
+                                                            <button type="button" class="btn btn-outline-danger btn-icon"
+                                                                data-repeater-delete
+                                                                title="{{ __('common::general.delete') }}">
+                                                                <i data-feather="trash-2"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endif
@@ -530,24 +562,92 @@
                 });
             }
 
-            // Working Hours Repeater
+            var alreadySelectedText = "{{ __('clinic::general.already_selected') }}";
+
+            // Working Hours Repeater & Duplicate Day Prevention
+            function syncDayOptions() {
+                var $repeater = $('.working-hours-repeater');
+                var $items = $repeater.find('[data-repeater-item]:not([data-repeater-deleted="true"])');
+                var selectedDays = [];
+
+                // Collect all selected day values
+                $items.each(function() {
+                    var val = $(this).find('select[name$="[day]"], select[name="day"]').val();
+                    if (val) {
+                        selectedDays.push(val);
+                    }
+                });
+
+                // Disable options that are selected in another row and visually indicate them
+                $items.each(function() {
+                    var $select = $(this).find('select[name$="[day]"], select[name="day"]');
+                    var currentVal = $select.val();
+
+                    $select.find('option').each(function() {
+                        var optVal = $(this).val();
+                        if (!optVal) return;
+
+                        var baseLabel = $(this).attr('data-label');
+                        if (!baseLabel) {
+                            baseLabel = $(this).text().replace(/\s*\(.*?\)$/, '').trim();
+                            $(this).attr('data-label', baseLabel);
+                        }
+
+                        if (selectedDays.includes(optVal) && optVal !== currentVal) {
+                            $(this).prop('disabled', true);
+                            $(this).text(baseLabel + ' (' + alreadySelectedText + ')');
+                        } else {
+                            $(this).prop('disabled', false);
+                            $(this).text(baseLabel);
+                        }
+                    });
+                });
+
+                // Disable create button when all 7 days are used or 7 items exist
+                var $createBtn = $('[data-repeater-create]');
+                if ($items.length >= 7 || selectedDays.length >= 7) {
+                    $createBtn.prop('disabled', true).addClass('disabled');
+                } else {
+                    $createBtn.prop('disabled', false).removeClass('disabled');
+                }
+            }
+
             $('.working-hours-repeater').repeater({
                 show: function() {
-                    $(this).slideDown();
-                    $(this).find('.time-input').prop('disabled', false);
-                    $(this).find('.open-24-hours-check').prop('checked', false);
+                    var $row = $(this);
+                    $row.slideDown();
+                    $row.find('.time-input').prop('disabled', false);
+                    $row.find('.open-24-hours-check').prop('checked', false);
+                    $row.find('.is-invalid').removeClass('is-invalid');
+                    $row.find('.invalid-feedback').remove();
+                    $row.find('select[name$="[day]"], select[name="day"]').val('');
                     if (feather) {
                         feather.replace({
                             width: 14,
                             height: 14
                         });
                     }
+                    syncDayOptions();
                 },
                 hide: function(deleteElement) {
-                    $(this).slideUp(deleteElement);
+                    var $row = $(this);
+                    $row.attr('data-repeater-deleted', 'true');
+                    syncDayOptions();
+                    $row.slideUp(function() {
+                        deleteElement();
+                        syncDayOptions();
+                    });
                 },
                 isFirstItemUndeletable: false
             });
+
+            $(document).on('change',
+                '.working-hours-repeater select[name$="[day]"], .working-hours-repeater select[name="day"]',
+                function() {
+                    syncDayOptions();
+                });
+
+            syncDayOptions();
 
             $(document).on('change', '.open-24-hours-check', function() {
                 var isChecked = $(this).is(':checked');

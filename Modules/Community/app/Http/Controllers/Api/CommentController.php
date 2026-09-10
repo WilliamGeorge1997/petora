@@ -22,7 +22,8 @@ class CommentController extends Controller
     public function index(Request $request, Post $post)
     {
         $data = $request->merge(['pagination_type' => 'cursor', 'post_id' => $post->id, 'parent_id' => null])->all();
-        $comments = $this->commentService->active($data, ['client'], ['replies' => fn($q) => $q->active()]);
+        $comments = $this->commentService->active($data, ['client'], ['replies' => fn ($q) => $q->active()]);
+
         return success(true, __('community::message.comment.fetched'), paginatedResource($comments, CommentResource::class));
     }
 
@@ -30,6 +31,7 @@ class CommentController extends Controller
     {
         $data = $request->merge(['pagination_type' => 'cursor', 'parent_id' => $comment->id])->all();
         $replies = $this->commentService->active($data, ['client']);
+
         return success(true, __('community::message.comment.fetched'), paginatedResource($replies, CommentResource::class));
     }
 
@@ -37,6 +39,7 @@ class CommentController extends Controller
     {
         $data = CommentDto::fromRequest($request);
         $comment = $this->commentService->save($post, $data);
+
         return success(true, __('community::message.comment.created'), $comment);
     }
 
@@ -44,6 +47,7 @@ class CommentController extends Controller
     {
         $data = CommentDto::fromRequest($request);
         $reply = $this->commentService->reply($comment, $data);
+
         return success(true, __('community::message.comment.created'), $reply);
     }
 
@@ -52,6 +56,7 @@ class CommentController extends Controller
         Gate::authorize('update', $comment);
         $data = CommentDto::fromRequest($request);
         $comment = $this->commentService->update($comment, $data);
+
         return success(true, __('community::message.comment.updated'), $comment);
     }
 
@@ -59,6 +64,7 @@ class CommentController extends Controller
     {
         Gate::authorize('delete', $comment);
         $this->commentService->delete($comment);
+
         return success(true, __('community::message.comment.deleted'));
     }
 }

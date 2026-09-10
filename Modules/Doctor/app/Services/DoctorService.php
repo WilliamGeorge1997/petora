@@ -4,10 +4,10 @@ namespace Modules\Doctor\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\CursorPaginator;
 use Modules\Common\Helpers\UploaderHelper;
 use Modules\Doctor\DTOs\DoctorDto;
 use Modules\Doctor\Models\Doctor;
-use Illuminate\Pagination\CursorPaginator;
 
 class DoctorService
 {
@@ -20,6 +20,7 @@ class DoctorService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -33,18 +34,20 @@ class DoctorService
         return $doctorOrId instanceof Doctor ? $doctorOrId : $this->findById($doctorOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
-    
+
     public function save(DoctorDto $dto): Doctor
     {
         $data = $dto->toArray();
@@ -60,26 +63,33 @@ class DoctorService
         $doctor = $this->resolveModel($doctorOrId);
         $data = $dto->toArray();
         if ($dto->image) {
-            if ($doctor->image) $this->deleteImage($doctor->image, 'doctor');
+            if ($doctor->image) {
+                $this->deleteImage($doctor->image, 'doctor');
+            }
 
             $data['image'] = $this->uploadImage($dto->image, 'doctor');
         }
 
         $doctor->update($data);
+
         return $doctor;
     }
 
     public function delete(int|Doctor $doctorOrId): bool
     {
         $doctor = $this->resolveModel($doctorOrId);
-        if ($doctor->image) $this->deleteImage($doctor->image, 'doctor');
+        if ($doctor->image) {
+            $this->deleteImage($doctor->image, 'doctor');
+        }
+
         return $doctor->delete();
     }
 
     public function activate(int|Doctor $doctorOrId): Doctor
     {
         $doctor = $this->resolveModel($doctorOrId);
-        $doctor->update(['is_active' => !$doctor->is_active]);
+        $doctor->update(['is_active' => ! $doctor->is_active]);
+
         return $doctor;
     }
 }

@@ -7,16 +7,16 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Store\DTOs\StoreDto;
 use Modules\Store\Http\Requests\StoreRequest;
 use Modules\Store\Models\Store;
 use Modules\Store\Services\StoreService;
-use Illuminate\Support\Facades\Gate;
 use Modules\Store\ViewModels\StoreViewModel;
 
 #[Middleware('auth:admin')]
-#[Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update'])]
+#[Middleware('role:'.AdminRole::SuperAdmin->value, except: ['edit', 'update'])]
 #[Middleware('permission:Index-store|Create-store|Edit-store|Delete-store', only: ['index', 'store'])]
 #[Middleware('permission:Create-store', only: ['create', 'store'])]
 #[Middleware('permission:Edit-store', only: ['edit', 'update', 'activate'])]
@@ -32,12 +32,14 @@ class StoreController extends Controller
         if ($request->ajax()) {
             return success(true, __('store::message.fetched'), $stores->items());
         }
+
         return view('store::stores.index', compact('stores'));
     }
 
     public function create()
     {
-        $viewModel = new StoreViewModel();
+        $viewModel = new StoreViewModel;
+
         return view('store::stores.create', compact('viewModel'));
     }
 
@@ -45,6 +47,7 @@ class StoreController extends Controller
     {
         $dto = StoreDto::fromRequest($request);
         $this->storeService->save($dto);
+
         return to_route('admin.store.index')->with('success', __('store::message.created'));
     }
 
@@ -53,7 +56,8 @@ class StoreController extends Controller
         $relations = ['workingHours'];
         $store = $this->storeService->findById($store_id, $relations);
         Gate::authorize('update', $store);
-        $viewModel = new StoreViewModel();
+        $viewModel = new StoreViewModel;
+
         return view('store::stores.edit', compact('viewModel', 'store'));
     }
 
@@ -62,21 +66,24 @@ class StoreController extends Controller
         Gate::authorize('update', $store);
         $dto = StoreDto::fromRequest($request);
         $this->storeService->update($store, $dto);
+
         return to_route('admin.store.index')->with('success', __('store::message.updated'));
     }
 
     public function destroy(Store $store)
     {
         $this->storeService->delete($store);
+
         return success(true, __('store::message.deleted'));
     }
 
     public function activate(Store $store)
     {
         $store = $this->storeService->activate($store);
+
         return success(
             true,
-            $store->is_active ?  __('store::message.activated') :  __('store::message.deactivated'),
+            $store->is_active ? __('store::message.activated') : __('store::message.deactivated'),
             $store
         );
     }

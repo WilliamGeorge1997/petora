@@ -17,6 +17,7 @@ class OrderStatusService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -33,18 +34,21 @@ class OrderStatusService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
+
         return getCaseCollection($query, $data, $columns);
     }
 
     public function save(OrderStatusDto $dto): OrderStatus
     {
         $data = $dto->toArray();
+
         return $this->model::create($data);
     }
 
@@ -54,19 +58,22 @@ class OrderStatusService
         $data = $dto->toArray();
 
         $orderStatus->update($data);
+
         return $orderStatus;
     }
 
     public function delete(int|OrderStatus $orderStatusOrId): bool
     {
         $orderStatus = $this->resolveModel($orderStatusOrId);
+
         return $orderStatus->delete();
     }
 
     public function activate(int|OrderStatus $orderStatusOrId): OrderStatus
     {
         $orderStatus = $this->resolveModel($orderStatusOrId);
-        $orderStatus->update(['is_active' => !$orderStatus->is_active]);
+        $orderStatus->update(['is_active' => ! $orderStatus->is_active]);
+
         return $orderStatus;
     }
 }

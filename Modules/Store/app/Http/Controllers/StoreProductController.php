@@ -2,17 +2,17 @@
 
 namespace Modules\Store\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Modules\Store\Models\Store;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductExport;
+use App\Http\Controllers\Controller;
 use App\Imports\SellerProductImport;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Admin\Enums\AdminRole;
+use Modules\Store\Models\Store;
 
 #[Middleware('auth:admin')]
-#[Middleware('role:' . AdminRole::SuperAdmin->value)]
+#[Middleware('role:'.AdminRole::SuperAdmin->value)]
 #[Middleware('permission:Edit-store')] // editing store's products requires edit store permission
 class StoreProductController extends Controller
 {
@@ -22,6 +22,7 @@ class StoreProductController extends Controller
             return success(true, 'Fetched', $store->products);
         }
         $products = $store->products()->paginate(50);
+
         return view('store::products.index', compact('store', 'products'));
     }
 
@@ -33,7 +34,7 @@ class StoreProductController extends Controller
     public function import(Request $request, Store $store)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         Excel::import(new SellerProductImport($store), $request->file('file'));

@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\Company\Models\Company;
 use Modules\Country\Models\City;
 use Modules\Country\Models\Country;
 use Modules\Country\Models\Zone;
-use Spatie\Activitylog\Support\LogOptions;
-use Spatie\Activitylog\Models\Concerns\LogsActivity;
-use Spatie\Translatable\HasTranslations;
 use Modules\Product\Models\Product;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Translatable\HasTranslations;
 
 class Store extends Model
 {
@@ -42,7 +42,7 @@ class Store extends Model
         'is_active' => 'boolean',
     ];
 
-    //Activity log options
+    // Activity log options
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -53,13 +53,13 @@ class Store extends Model
             ->dontLogEmptyChanges();
     }
 
-    //Date serialization
+    // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d h:i A');
     }
 
-    //Scopes
+    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -87,7 +87,7 @@ class Store extends Model
             });
     }
 
-    //Getters
+    // Getters
     public function getImageAttribute(?string $value): ?string
     {
         if ($value !== null && $value !== '') {
@@ -95,13 +95,13 @@ class Store extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/store/' . $value);
+            return asset('storage/uploads/store/'.$value);
         }
 
         return $value;
     }
 
-    //Relations
+    // Relations
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

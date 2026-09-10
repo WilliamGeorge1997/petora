@@ -32,7 +32,7 @@ class ClinicDeliveryScheduleController extends Controller
         }
 
         return view('clinic::delivery-schedules.index', [
-            'clinic'    => $clinic,
+            'clinic' => $clinic,
             'schedules' => $schedules,
         ]);
     }
@@ -42,7 +42,7 @@ class ClinicDeliveryScheduleController extends Controller
         $schedules = $this->scheduleService->findBy('clinic_id', $clinic->id);
 
         return view('clinic::delivery-schedules.create', [
-            'clinic'    => $clinic,
+            'clinic' => $clinic,
             'schedules' => $schedules,
         ]);
     }
@@ -62,7 +62,7 @@ class ClinicDeliveryScheduleController extends Controller
         $schedule = $this->scheduleService->findById($schedule_id, $relations);
 
         return view('clinic::delivery-schedules.edit', [
-            'clinic'   => $clinic,
+            'clinic' => $clinic,
             'schedule' => $schedule,
         ]);
     }

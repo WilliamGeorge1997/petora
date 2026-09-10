@@ -7,11 +7,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Modules\Country\DTOs\CountryDto;
 use Modules\Country\Http\Requests\CountryRequest;
 use Modules\Country\Models\Country;
 use Modules\Country\Services\CountryService;
-use Illuminate\Support\Facades\Gate;
 
 #[Middleware('auth:admin')]
 #[Middleware('permission:Index-country|Create-country|Edit-country|Delete-country', only: ['index', 'store'])]
@@ -22,8 +22,6 @@ class CountryController extends Controller
 {
     public function __construct(private CountryService $countryService) {}
 
-
-
     public function index(Request $request): View|JsonResponse
     {
         $data = $request->merge(['paginated' => 50])->all();
@@ -31,6 +29,7 @@ class CountryController extends Controller
         if ($request->ajax()) {
             return success(true, __('country::message.fetched'), $countries->items());
         }
+
         return view('country::country.index', compact('countries'));
     }
 
@@ -43,12 +42,14 @@ class CountryController extends Controller
     {
         $dto = CountryDto::fromRequest($request);
         $this->countryService->save($dto);
+
         return to_route('admin.countries.index')->with('success', __('country::message.created'));
     }
 
     public function edit(Country $country)
     {
         Gate::authorize('update', $country);
+
         return view('country::country.edit', compact('country'));
     }
 
@@ -57,21 +58,24 @@ class CountryController extends Controller
         Gate::authorize('update', $country);
         $dto = CountryDto::fromRequest($request);
         $this->countryService->update($country, $dto);
+
         return to_route('admin.countries.index')->with('success', __('country::message.updated'));
     }
 
     public function destroy(Country $country)
     {
         $this->countryService->delete($country);
+
         return success(true, __('country::message.deleted'));
     }
 
     public function activate(Country $country)
     {
         $country = $this->countryService->activate($country);
+
         return success(
             true,
-            $country->is_active ?  __('country::message.activated') :  __('country::message.deactivated'),
+            $country->is_active ? __('country::message.activated') : __('country::message.deactivated'),
             $country
         );
     }

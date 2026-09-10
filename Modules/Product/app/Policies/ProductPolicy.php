@@ -3,8 +3,8 @@
 namespace Modules\Product\Policies;
 
 use App\Models\Admin;
-use Modules\Product\Models\Product;
 use Modules\Admin\Enums\AdminRole;
+use Modules\Product\Models\Product;
 
 class ProductPolicy
 {

@@ -43,6 +43,7 @@ enum WeekDay: string
     {
         return array_reduce(self::cases(), function (array $carry, WeekDay $day) {
             $carry[$day->value] = $day->label();
+
             return $carry;
         }, []);
     }

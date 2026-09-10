@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Modules\Admin\Enums\AdminRole;
 use Modules\Clinic\DTOs\ClinicDto;
 use Modules\Clinic\Http\Requests\ClinicRequest;
 use Modules\Clinic\Models\Clinic;
 use Modules\Clinic\Services\ClinicService;
 use Modules\Clinic\ViewModels\ClinicViewModel;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Routing\Attributes\Controllers\Middleware;
 
 #[Middleware('auth:admin')]
-#[Middleware('role:' . AdminRole::SuperAdmin->value, except: ['edit', 'update'])]
+#[Middleware('role:'.AdminRole::SuperAdmin->value, except: ['edit', 'update'])]
 #[Middleware('permission:Index-clinic|Create-clinic|Edit-clinic|Delete-clinic', only: ['index', 'store'])]
 #[Middleware('permission:Create-clinic', only: ['create', 'store'])]
 #[Middleware('permission:Edit-clinic', only: ['edit', 'update', 'activate'])]
@@ -32,12 +32,14 @@ class ClinicController extends Controller
         if ($request->ajax()) {
             return success(true, __('clinic::message.fetched'), $clinics->items());
         }
+
         return view('clinic::clinics.index', compact('clinics'));
     }
 
     public function create()
     {
-        $viewModel = new ClinicViewModel();
+        $viewModel = new ClinicViewModel;
+
         return view('clinic::clinics.create', compact('viewModel'));
     }
 
@@ -45,6 +47,7 @@ class ClinicController extends Controller
     {
         $dto = ClinicDto::fromRequest($request);
         $this->clinicService->save($dto);
+
         return to_route('admin.clinic.index')->with('success', __('clinic::message.created'));
     }
 
@@ -53,7 +56,8 @@ class ClinicController extends Controller
         $relations = ['workingHours'];
         $clinic = $this->clinicService->findById($clinic_id, $relations);
         Gate::authorize('update', $clinic);
-        $viewModel = new ClinicViewModel();
+        $viewModel = new ClinicViewModel;
+
         return view('clinic::clinics.edit', compact('clinic', 'viewModel'));
     }
 
@@ -62,21 +66,24 @@ class ClinicController extends Controller
         Gate::authorize('update', $clinic);
         $dto = ClinicDto::fromRequest($request);
         $this->clinicService->update($clinic, $dto);
+
         return to_route('admin.clinic.index')->with('success', __('clinic::message.updated'));
     }
 
     public function destroy(Clinic $clinic)
     {
         $this->clinicService->delete($clinic);
+
         return success(true, __('clinic::message.deleted'));
     }
 
     public function activate(Clinic $clinic)
     {
         $clinic = $this->clinicService->activate($clinic);
+
         return success(
             true,
-            $clinic->is_active ?  __('clinic::message.activated') :  __('clinic::message.deactivated'),
+            $clinic->is_active ? __('clinic::message.activated') : __('clinic::message.deactivated'),
             $clinic
         );
     }

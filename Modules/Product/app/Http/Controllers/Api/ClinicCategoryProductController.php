@@ -13,6 +13,7 @@ class ClinicCategoryProductController extends Controller
     public function index(Request $request, int $seller_id, int $category_id)
     {
         $products = $this->productService->byCategoryAndSeller($category_id, $seller_id, 'clinic', $request->all());
+
         return success(true, __('product::message.fetched'), $products);
     }
 }

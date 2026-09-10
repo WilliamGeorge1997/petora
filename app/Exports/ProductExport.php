@@ -2,15 +2,14 @@
 
 namespace App\Exports;
 
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Modules\Product\Models\Product;
-use Illuminate\Support\Collection;
 
 class ProductExport implements FromCollection, WithHeadings, WithMapping
 {
-
     public function collection(): Collection
     {
         return Product::query()->active()->latest('id')->get(['id', 'title', 'price', 'is_active']);

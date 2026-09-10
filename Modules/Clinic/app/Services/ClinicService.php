@@ -3,13 +3,12 @@
 namespace Modules\Clinic\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Facades\DB;
 use Modules\Clinic\DTOs\ClinicDto;
 use Modules\Clinic\Models\Clinic;
 use Modules\Common\Helpers\UploaderHelper;
-use Illuminate\Support\Facades\DB;
 
 class ClinicService
 {
@@ -22,6 +21,7 @@ class ClinicService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
+
         return getCaseCollection($query, $data);
     }
 
@@ -35,21 +35,23 @@ class ClinicService
         return $clinicOrId instanceof Clinic ? $clinicOrId : $this->findById($clinicOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []):  LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
+
         return getCaseCollection($query, $data);
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']):  LengthAwarePaginator|CursorPaginator|Collection
+    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->active()->filter($data)->with($relations)->latest('id');;
+        $query = $this->model::query()->active()->filter($data)->with($relations)->latest('id');
+
         return getCaseCollection($query, $data, $columns);
     }
-    
+
     public function save(ClinicDto $dto): Clinic
     {
-        return DB::transaction(function () use ($dto, $workingHours) {
+        return DB::transaction(function () use ($dto) {
             $data = $dto->toArray();
             if ($dto->image) {
                 $data['image'] = $this->uploadImage($dto->image, 'clinic');
@@ -58,19 +60,19 @@ class ClinicService
             /** @var Clinic $clinic */
             $clinic = $this->model::create($data);
 
-            if (!empty($workingHours)) {
-                $this->syncWorkingHours($clinic, $workingHours);
+            if (! empty($dto->workingHours)) {
+                $this->syncWorkingHours($clinic, $dto->workingHours);
             }
 
             return $clinic;
         });
     }
 
-    public function update(int|Clinic $clinicOrId, ClinicDto $dto, ?array $workingHours = null): Clinic
+    public function update(int|Clinic $clinicOrId, ClinicDto $dto): Clinic
     {
         $clinic = $this->resolveModel($clinicOrId);
 
-        return DB::transaction(function () use ($clinic, $dto, $workingHours) {
+        return DB::transaction(function () use ($clinic, $dto) {
             $data = $dto->toArray();
             if ($dto->image) {
                 if ($clinic->image) {
@@ -82,8 +84,8 @@ class ClinicService
 
             $clinic->update($data);
 
-            if ($workingHours !== null) {
-                $this->syncWorkingHours($clinic, $workingHours);
+            if ($dto->workingHours !== null) {
+                $this->syncWorkingHours($clinic, $dto->workingHours);
             }
 
             return $clinic;
@@ -105,8 +107,8 @@ class ClinicService
                 ['day' => $item['day']],
                 [
                     'is_open_24_hours' => $isOpen24,
-                    'from'             => $isOpen24 ? null : ($item['from'] ?? null),
-                    'to'               => $isOpen24 ? null : ($item['to'] ?? null),
+                    'from' => $isOpen24 ? null : ($item['from'] ?? null),
+                    'to' => $isOpen24 ? null : ($item['to'] ?? null),
                 ]
             );
 
@@ -119,14 +121,18 @@ class ClinicService
     public function delete(int|Clinic $clinicOrId): bool
     {
         $clinic = $this->resolveModel($clinicOrId);
-        if ($clinic->image) $this->deleteImage($clinic->image, 'clinic');
+        if ($clinic->image) {
+            $this->deleteImage($clinic->image, 'clinic');
+        }
+
         return $clinic->delete();
     }
 
     public function activate(int|Clinic $clinicOrId): Clinic
     {
         $clinic = $this->resolveModel($clinicOrId);
-        $clinic->update(['is_active' => !$clinic->is_active]);
+        $clinic->update(['is_active' => ! $clinic->is_active]);
+
         return $clinic;
     }
 }

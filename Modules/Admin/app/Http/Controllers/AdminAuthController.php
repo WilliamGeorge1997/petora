@@ -31,20 +31,24 @@ class AdminAuthController extends Controller
         }
         if (Auth::guard('admin')->attempt(array_merge($credentials, ['is_active' => 1]), $request->boolean('remember'))) {
             $request->session()->regenerate();
+
             return redirect()->intended(route('admin.dashboard'));
         }
+
         return redirect()->back()->withInput($request->only('email', 'remember'))->withErrors(['email' => __('admin::admin.invalid_credentials')]);
     }
 
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
+
         return redirect()->route('admin.login');
     }
 
     public function EditProfile()
     {
-        $admin = (new AdminService())->findById(Auth::id());
+        $admin = (new AdminService)->findById(Auth::id());
+
         return view('admin::editProfile', compact('admin'));
     }
 

@@ -21,17 +21,16 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="name">{{ __('client::attribute.name') }}</label>
+                                    <label class="col-form-label" for="name">{{ __('client::attribute.name') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="user"></i></span>
-                                        <input type="text" id="name"
-                                            value="{{ $client->name }}" class="form-control"
-                                            name="name" placeholder="{{ __('client::attribute.name') }}" required />
+                                        <input type="text" id="name" value="{{ $client->name }}"
+                                            class="form-control" name="name"
+                                            placeholder="{{ __('client::attribute.name') }}" required />
                                         @error('name')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -42,17 +41,16 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="email">{{ __('client::attribute.email') }}</label>
+                                    <label class="col-form-label" for="email">{{ __('client::attribute.email') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="mail"></i></span>
-                                        <input type="email" id="email"
-                                            value="{{ $client->email }}" class="form-control"
-                                            name="email" placeholder="{{ __('client::attribute.email') }}" />
+                                        <input type="email" id="email" value="{{ $client->email }}"
+                                            class="form-control" name="email"
+                                            placeholder="{{ __('client::attribute.email') }}" />
                                         @error('email')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -73,7 +71,7 @@
                                             class="form-control" name="phone"
                                             placeholder="{{ __('client::attribute.phone') }}" required />
                                         @error('phone')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -90,13 +88,14 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="lock"></i></span>
-                                        <input type="password" id="password" class="form-control"
-                                            name="password" placeholder="{{ __('client::attribute.password') }}" />
+                                        <input type="password" id="password" class="form-control" name="password"
+                                            placeholder="{{ __('client::attribute.password') }}" />
                                         @error('password')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
-                                    <small class="text-muted">{{ __('client::general.leave_blank_to_keep_current') }}</small>
+                                    <small
+                                        class="text-muted">{{ __('client::general.leave_blank_to_keep_current') }}</small>
                                 </div>
                             </div>
                         </div>
@@ -114,23 +113,21 @@
                                         <input type="file" id="image" class="form-control" name="image"
                                             placeholder="{{ __('client::attribute.image') }}" accept="image/*" />
                                         @error('image')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
                                 @if ($client->image != null)
                                     <div class="col-sm-3 text-center">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <img class="rounded border width-100 height-100 cursor-pointer"
-                                                role="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#clientImageModal"
-                                                src="{{ asset($client->image) }}"
-                                                alt="{{ $client->name }}">
+                                            <img class="rounded border width-100 height-100 cursor-pointer" role="button"
+                                                data-bs-toggle="modal" data-bs-target="#clientImageModal"
+                                                src="{{ asset($client->image) }}" alt="{{ $client->name }}">
                                         </div>
                                     </div>
                                     <x-common::modal id="clientImageModal" :title="$client->name" body-class="text-center">
-                                        <img src="{{ asset($client->image) }}" class="img-fluid rounded border" alt="{{ $client->name }}">
+                                        <img src="{{ asset($client->image) }}" class="img-fluid rounded border"
+                                            alt="{{ $client->name }}">
                                     </x-common::modal>
                                 @endif
                             </div>
@@ -150,7 +147,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('client::general.update') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>{{ __('client::general.update') }}</button>
                         </div>
                     </div>
                 </form>

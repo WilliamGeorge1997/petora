@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title">{{ __('company::general.edit') }}</h4>
-                    {{ $company->getTranslation('title', 'ar') }}</h4>
+                {{ $company->getTranslation('title', 'ar') }}</h4>
             </div>
             <div class="card-body">
                 <form class="form form-horizontal" action="{{ route('admin.company.update', $company->id) }}" method="POST"
@@ -30,7 +30,7 @@
                                             name="title_ar" placeholder="{{ __('company::attribute.title_ar') }}"
                                             required />
                                         @error('title_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -52,7 +52,7 @@
                                             name="title_en" placeholder="{{ __('company::attribute.title_en') }}"
                                             required />
                                         @error('title_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                         <span class="input-group-text"><i data-feather="file-text"></i></span>
                                         <textarea class="form-control" name="description_ar" placeholder="{{ __('company::attribute.description_ar') }}">{{ $company->getTranslation('description', 'ar', false) }}</textarea>
                                         @error('description_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -92,7 +92,7 @@
                                         <span class="input-group-text"><i data-feather="file-text"></i></span>
                                         <textarea class="form-control" name="description_en" placeholder="{{ __('company::attribute.description_en') }}">{{ $company->getTranslation('description', 'en', false) }}</textarea>
                                         @error('description_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <textarea class="form-control" name="address_ar" required placeholder="{{ __('company::attribute.address_ar') }}">{{ $company->getTranslation('address', 'ar') }}</textarea>
                                         @error('address_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -130,7 +130,7 @@
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <textarea class="form-control" name="address_en" required placeholder="{{ __('company::attribute.address_en') }}">{{ $company->getTranslation('address', 'en') }}</textarea>
                                         @error('address_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                                             class="form-control" name="phone"
                                             placeholder="{{ __('company::attribute.phone') }}" required />
                                         @error('phone')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -171,23 +171,22 @@
                                         <input type="file" id="image" class="form-control" name="image"
                                             placeholder="{{ __('company::attribute.image') }}" accept="image/*" />
                                         @error('image')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
                                 @if ($company->image != null)
                                     <div class="col-sm-3 text-center">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <img class="rounded border width-100 height-100 cursor-pointer"
-                                                role="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#companyImageModal"
+                                            <img class="rounded border width-100 height-100 cursor-pointer" role="button"
+                                                data-bs-toggle="modal" data-bs-target="#companyImageModal"
                                                 src="{{ asset($company->image) }}"
                                                 alt="{{ $company->getTranslation('title', app()->getLocale()) }}">
                                         </div>
                                     </div>
                                     <x-common::modal id="companyImageModal" :title="$company->getTranslation('title', app()->getLocale())" body-class="text-center">
-                                        <img src="{{ asset($company->image) }}" class="img-fluid rounded border" alt="{{ $company->getTranslation('title', app()->getLocale()) }}">
+                                        <img src="{{ asset($company->image) }}" class="img-fluid rounded border"
+                                            alt="{{ $company->getTranslation('title', app()->getLocale()) }}">
                                     </x-common::modal>
                                 @endif
                             </div>
@@ -207,8 +206,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit"
-                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('company::general.update') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>{{ __('company::general.update') }}</button>
                         </div>
                     </div>
                 </form>

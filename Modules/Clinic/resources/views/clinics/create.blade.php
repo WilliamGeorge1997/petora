@@ -1,14 +1,6 @@
 @php
     $locale = app()->getLocale();
-    $days = [
-        'saturday'  => __('clinic::general.days.saturday'),
-        'sunday'    => __('clinic::general.days.sunday'),
-        'monday'    => __('clinic::general.days.monday'),
-        'tuesday'   => __('clinic::general.days.tuesday'),
-        'wednesday' => __('clinic::general.days.wednesday'),
-        'thursday'  => __('clinic::general.days.thursday'),
-        'friday'    => __('clinic::general.days.friday'),
-    ];
+    $days = \Modules\Common\Enums\WeekDay::options();
     $initialWorkingHours = old('working_hours') ?? [];
 @endphp
 @extends('common::layouts.master')
@@ -227,7 +219,8 @@
                                     <select class="form-select select2" name="city_id" id="city_id" required disabled
                                         data-fetch-url="{{ route('admin.ajax.zones') }}"
                                         data-ajax-col="city_id"
-                                        data-ajax-target="#zone_id">
+                                        data-ajax-target="#zone_id"
+                                        data-selected="{{ old('city_id') }}">
                                         <option value="" disabled selected>{{ __('clinic::attribute.select_city') }}</option>
                                     </select>
                                     @error('city_id')
@@ -245,7 +238,7 @@
                                         for="zone_id">{{ __('clinic::attribute.zone_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-select select2" name="zone_id" id="zone_id" required disabled>
+                                    <select class="form-select select2" name="zone_id" id="zone_id" required disabled data-selected="{{ old('zone_id') }}">
                                         <option value="" disabled selected>{{ __('clinic::attribute.select_zone') }}</option>
                                     </select>
                                     @error('zone_id')
@@ -330,18 +323,21 @@
                                     <div class="working-hours-repeater">
                                         <div data-repeater-list="working_hours">
                                             @if(!empty($initialWorkingHours))
-                                                @foreach($initialWorkingHours as $item)
+                                                @foreach($initialWorkingHours as $index => $item)
                                                     <div data-repeater-item class="row mb-1 align-items-center">
                                                         <div class="col-md-3 col-12 mb-50">
                                                             <label class="form-label"><small>{{ __('clinic::general.day') }}</small></label>
                                                             <select class="form-select" name="day" required>
                                                                 <option value="" disabled {{ empty($item['day']) ? 'selected' : '' }}>{{ __('clinic::general.select_day') }}</option>
-                                                                @foreach ($days as $dayKey => $dayLabel)
-                                                                    <option value="{{ $dayKey }}" {{ ($item['day'] ?? '') === $dayKey ? 'selected' : '' }}>
+                                                                @foreach ($days as $dayValue => $dayLabel)
+                                                                    <option value="{{ $dayValue }}" {{ ($item['day'] ?? '') === $dayValue ? 'selected' : '' }}>
                                                                         {{ $dayLabel }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            @error("working_hours.$index.day")
+                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
                                                             <label class="form-label"><small>{{ __('clinic::general.from') }}</small></label>
@@ -349,6 +345,9 @@
                                                                 <span class="input-group-text"><i data-feather="clock"></i></span>
                                                                 <input type="time" name="from" class="form-control time-input" value="{{ $item['from'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
+                                                            @error("working_hours.$index.from")
+                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
                                                             <label class="form-label"><small>{{ __('clinic::general.to') }}</small></label>
@@ -356,6 +355,9 @@
                                                                 <span class="input-group-text"><i data-feather="clock"></i></span>
                                                                 <input type="time" name="to" class="form-control time-input" value="{{ $item['to'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
+                                                            @error("working_hours.$index.to")
+                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-2 col-8 mb-50">
                                                             <div class="form-check mt-2">
@@ -376,8 +378,8 @@
                                                         <label class="form-label"><small>{{ __('clinic::general.day') }}</small></label>
                                                         <select class="form-select" name="day">
                                                             <option value="" disabled selected>{{ __('clinic::general.select_day') }}</option>
-                                                            @foreach ($days as $dayKey => $dayLabel)
-                                                                <option value="{{ $dayKey }}">{{ $dayLabel }}</option>
+                                                            @foreach ($days as $dayValue => $dayLabel)
+                                                                <option value="{{ $dayValue }}">{{ $dayLabel }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>

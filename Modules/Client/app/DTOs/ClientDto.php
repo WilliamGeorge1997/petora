@@ -18,7 +18,7 @@ readonly class ClientDto
         public ?string $fcmToken = null,
         public ?string $locale = null,
         public ?string $verifyCode = null,
-        public bool $isActive = false,
+        public ?bool $isActive = null,
     ) {}
 
     public static function fromRegisterRequest(ClientRegisterRequest $request): self
@@ -29,7 +29,7 @@ readonly class ClientDto
 
     public static function fromAdminRequest(FormRequest $request): self
     {
-        return self::mapRequestToDto($request, $request->boolean('is_active'));
+        return self::mapRequestToDto($request,  $request->boolean('is_active'));
     }
 
     public static function fromClientRequest(FormRequest $request): self
@@ -41,23 +41,23 @@ readonly class ClientDto
             phone: $request->validated('phone'),
             password: $newPassword ? Hash::make($newPassword) : null,
             email: $request->validated('email'),
-            image: $request->hasFile('image') ? $request->file('image') : null,
+            image: $request->file('image'),
             fcmToken: $request->validated('fcm_token'),
             locale: $request->validated('locale'),
             verifyCode: null,
-            isActive: true,
+            isActive: null,
         );
     }
 
     //Helper
-    private static function mapRequestToDto(FormRequest $request, bool $isActive, ?string $verifyCode = null): self
+    private static function mapRequestToDto(FormRequest $request, ?bool $isActive, ?string $verifyCode = null): self
     {
         return new self(
             name: $request->validated('name'),
             phone: $request->validated('phone'),
             password: $request->validated('password') ? Hash::make($request->validated('password')) : null,
             email: $request->validated('email'),
-            image: $request->hasFile('image') ? $request->file('image') : null,
+            image: $request->file('image'),
             fcmToken: $request->validated('fcm_token'),
             locale: $request->validated('locale'),
             verifyCode: $verifyCode,
@@ -79,7 +79,7 @@ readonly class ClientDto
             'is_active' => $this->isActive,
         ];
 
-        $nullableFields = ['image', 'locale', 'password'];
+        $nullableFields = ['image', 'locale', 'password', 'is_active'];
 
         foreach ($nullableFields as $key) {
             if (is_null($data[$key])) {

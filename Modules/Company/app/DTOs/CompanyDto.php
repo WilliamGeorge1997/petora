@@ -9,7 +9,7 @@ readonly class CompanyDto
 {
     public function __construct(
         public array $title,
-        public bool $isActive,
+        public ?bool $isActive = null,
         public ?string $phone = null,
         public ?array $address = null,
         public ?array $description = null,
@@ -32,7 +32,7 @@ readonly class CompanyDto
                 'en' => $request->input('description_en'),
                 'ar' => $request->input('description_ar'),
             ] : null,
-            image: $request->hasFile('image') ? $request->file('image') : null,
+            image: $request->file('image'),
             isActive: $request->boolean('is_active'),
         );
     }

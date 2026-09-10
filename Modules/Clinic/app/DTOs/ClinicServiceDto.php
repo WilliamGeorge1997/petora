@@ -9,7 +9,7 @@ readonly class ClinicServiceDto
     public function __construct(
         public float $price,
         public ?int $duration = null,
-        public bool $isActive = false,
+        public ?bool $isActive = null,
     ) {}
 
     public static function fromRequest(ClinicServiceUpdateRequest $request): self

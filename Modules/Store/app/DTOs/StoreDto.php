@@ -10,7 +10,7 @@ readonly class StoreDto
     public function __construct(
         public int $companyId,
         public array $title,
-        public bool $isActive,
+        public ?bool $isActive = null,
         public ?string $phone = null,
         public ?array $address = null,
         public ?array $description = null,
@@ -25,27 +25,27 @@ readonly class StoreDto
     public static function fromRequest(StoreRequest $request): self
     {
         return new self(
-            companyId: $request->validated('company_id'),
             title: [
                 'en' => $request->validated('title_en'),
                 'ar' => $request->validated('title_ar'),
             ],
-            isActive: $request->boolean('is_active'),
-            phone: $request->validated('phone'),
-            address: ($request->validated('address_en') || $request->validated('address_ar')) ? [
-                'en' => $request->validated('address_en'),
-                'ar' => $request->validated('address_ar'),
-            ] : null,
             description: ($request->validated('description_en') || $request->validated('description_ar')) ? [
                 'en' => $request->validated('description_en'),
                 'ar' => $request->validated('description_ar'),
             ] : null,
-            image: $request->hasFile('image') ? $request->file('image') : null,
+            address: ($request->validated('address_en') || $request->validated('address_ar')) ? [
+                'en' => $request->validated('address_en'),
+                'ar' => $request->validated('address_ar'),
+            ] : null,
+            companyId: $request->validated('company_id'),
+            phone: $request->validated('phone'),
+            image: $request->file('image'),
             countryId: $request->validated('country_id'),
             cityId: $request->validated('city_id'),
             zoneId: $request->validated('zone_id'),
             latitude: $request->validated('latitude'),
             longitude: $request->validated('longitude'),
+            isActive: $request->boolean('is_active'),
         );
     }
 

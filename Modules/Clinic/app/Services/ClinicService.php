@@ -47,7 +47,7 @@ class ClinicService
         return getCaseCollection($query, $data, $columns);
     }
     
-    public function save(ClinicDto $dto, array $workingHours = []): Clinic
+    public function save(ClinicDto $dto): Clinic
     {
         return DB::transaction(function () use ($dto, $workingHours) {
             $data = $dto->toArray();

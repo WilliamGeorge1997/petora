@@ -157,18 +157,44 @@ if (!function_exists('nearest')) {
     }
 }
 
+// if (!function_exists('isVideo')) {
+//     function isVideo(UploadedFile $file): bool
+//     {
+//         if ($file instanceof UploadedFile) {
+//             return str_starts_with($file->getMimeType(), 'video/');
+//         }
+
+//         if (is_string($file)) {
+//             $extension = strtolower(pathinfo(parse_url($file, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
+//             return in_array($extension, ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm', '3gp', 'm4v'], true);
+//         }
+
+//         return false;
+//     }
+// }
+
 if (!function_exists('isVideo')) {
     function isVideo(UploadedFile $file): bool
     {
-        if ($file instanceof UploadedFile) {
-            return str_starts_with($file->getMimeType(), 'video/');
-        }
+        dd([
+            'class' => get_class($file),
 
-        if (is_string($file)) {
-            $extension = strtolower(pathinfo(parse_url($file, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
-            return in_array($extension, ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm', '3gp', 'm4v'], true);
-        }
+            'original_name' => $file->getClientOriginalName(),
+            'original_extension' => $file->getClientOriginalExtension(),
 
-        return false;
+            'client_mime' => $file->getClientMimeType(),
+            'detected_mime' => $file->getMimeType(),
+
+            'guessed_extension' => $file->guessExtension(),
+
+            'real_path' => $file->getRealPath(),
+            'size' => $file->getSize(),
+
+            'finfo_mime' => (new \finfo(FILEINFO_MIME_TYPE))
+                ->file($file->getRealPath()),
+        ]);
+
+        return str_starts_with($file->getMimeType(), 'video/');
     }
 }
+

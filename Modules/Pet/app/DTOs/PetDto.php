@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Pet\Classes\DTOs;
+namespace Modules\Pet\DTOs;
 
 use Illuminate\Http\UploadedFile;
 use Modules\Pet\Http\Requests\PetRequest;
@@ -26,9 +26,9 @@ class PetDto
             name: $request->validated('name'),
             breed: $request->validated('breed'),
             dateOfBirth: $request->validated('date_of_birth'),
-            weight: $request->validated('weight') ? (float) $request->validated('weight') : null,
+            weight: (float) $request->validated('weight'),
             gender: $request->validated('gender'),
-            image: $request->hasFile('image') ? $request->file('image') : null,
+            image: $request->file('image'),
         );
     }
 

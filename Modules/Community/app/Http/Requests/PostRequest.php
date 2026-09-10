@@ -13,7 +13,6 @@ class PostRequest extends FormRequest
         if (auth('client')->check()) {
             $this->merge([
                 'client_id' => auth('client')->id(),
-                'is_active' => true,
             ]);
         }
     }

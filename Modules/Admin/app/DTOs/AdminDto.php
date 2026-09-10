@@ -29,7 +29,7 @@ class AdminDto
             is_active: $request->has('is_active') ? 1 : 0,
             password: (string) $request->filled('password') ? Hash::make($request->input('password')) : null,
             phone: (string) $request->input('phone'),
-            image: $request->hasFile('image') ? $request->file('image') : null,
+            image: $request->file('image'),
             role: (int) $request->input('role'),
             company_id: $request->filled('company_id') ? (int) $request->input('company_id') : null,
             store_id: $request->filled('store_id') ? (int) $request->input('store_id') : null,

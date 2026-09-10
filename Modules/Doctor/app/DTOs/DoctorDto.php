@@ -11,7 +11,7 @@ readonly class DoctorDto
         public int $clinicId,
         public array $name,
         public array $specialty,
-        public bool $isActive,
+        public ?bool $isActive = null,
         public ?UploadedFile $image = null,
     ) {}
 
@@ -27,8 +27,8 @@ readonly class DoctorDto
                 'en' => $request->validated('specialty_en'),
                 'ar' => $request->validated('specialty_ar'),
             ],
+            image: $request->file('image'),
             isActive: $request->boolean('is_active'),
-            image: $request->hasFile('image') ? $request->file('image') : null,
         );
     }
 

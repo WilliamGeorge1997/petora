@@ -41,15 +41,6 @@ return [
     'to'            => 'إلى',
     'day'           => 'اليوم',
     'closed'        => 'مغلق',
-    'days'          => [
-        'saturday'  => 'السبت',
-        'sunday'    => 'الأحد',
-        'monday'    => 'الاثنين',
-        'tuesday'   => 'الثلاثاء',
-        'wednesday' => 'الأربعاء',
-        'thursday'  => 'الخميس',
-        'friday'    => 'الجمعة',
-    ],
     'delivery_schedules' => 'مواعيد التوصيل',
     'delivery_schedule' => [
         'title'     => 'مواعيد التوصيل',

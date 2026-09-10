@@ -20,8 +20,6 @@ class ClinicPolicy
             return true;
         }
 
-        // Add additional role checks if required (e.g., ClinicManager)
-
         return false;
     }
 }

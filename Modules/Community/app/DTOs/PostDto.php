@@ -8,7 +8,7 @@ readonly class PostDto
 {
     public function __construct(
         public int $clientId,
-        public bool $isActive,
+        public ?bool $isActive = null,
         public ?int $petId = null,
         public ?string $content = null,
         public ?array $media = null,
@@ -19,21 +19,27 @@ readonly class PostDto
     {
         return new self(
             clientId: $request->validated('client_id'),
-            isActive: $request->boolean('is_active'),
             petId: $request->validated('pet_id'),
             content: $request->validated('content'),
             media: $request->validated('media'),
             hashtags: $request->validated('hashtags'),
+            isActive: auth('admin')->check() ? $request->boolean('is_active') : null,
         );
     }
 
     public function toArray(): array
     {
-        return [
+        $data = [
             'client_id' => $this->clientId,
             'pet_id' => $this->petId,
             'content' => $this->content,
             'is_active' => $this->isActive,
         ];
+
+        if (is_null($this->isActive)) {
+            unset($data['is_active']);
+        }
+
+        return $data;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Client\Http\Controllers\Api\AddressController;
 use Modules\Client\Http\Controllers\Api\ClientAuthController;
 use Modules\Client\Http\Controllers\Api\ClientController;
 
@@ -18,3 +19,6 @@ Route::prefix('auth')->group(function () {
 
     Route::post('edit-profile', [ClientController::class, 'editProfile']);
 });
+
+Route::apiResource('addresses', AddressController::class);
+Route::put('addresses/{address}/default', [AddressController::class, 'default']);

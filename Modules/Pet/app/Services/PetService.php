@@ -5,7 +5,7 @@ namespace Modules\Pet\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Common\Helpers\UploaderHelper;
-use Modules\Pet\Classes\DTOs\PetDto;
+use Modules\Pet\DTOs\PetDto;
 use Modules\Pet\Models\Pet;
 use Illuminate\Pagination\CursorPaginator;
 

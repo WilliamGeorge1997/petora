@@ -29,9 +29,10 @@
                                         <span class="input-group-text"><i data-feather="user"></i></span>
                                         <input type="text" id="title_ar"
                                             value="{{ $country->getTranslation('title', 'ar') }}" class="form-control"
-                                            name="title_ar" placeholder="{{ __('country::attribute.title_ar') }}" required />
+                                            name="title_ar" placeholder="{{ __('country::attribute.title_ar') }}"
+                                            required />
                                         @error('title_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -50,9 +51,10 @@
                                         <span class="input-group-text"><i data-feather="user"></i></span>
                                         <input type="text" id="title_en"
                                             value="{{ $country->getTranslation('title', 'en') }}" class="form-control"
-                                            name="title_en" placeholder="{{ __('country::attribute.title_en') }}" required />
+                                            name="title_en" placeholder="{{ __('country::attribute.title_en') }}"
+                                            required />
                                         @error('title_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -73,8 +75,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit"
-                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('country::general.edit') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>{{ __('country::general.edit') }}</button>
                         </div>
                     </div>
                 </form>

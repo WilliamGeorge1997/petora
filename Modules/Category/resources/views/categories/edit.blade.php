@@ -33,7 +33,7 @@
                                             name="title_ar" placeholder="{{ __('category::attribute.title_ar') }}"
                                             required />
                                         @error('title_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                             name="title_en" placeholder="{{ __('category::attribute.title_en') }}"
                                             required />
                                         @error('title_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -78,23 +78,22 @@
                                         <input type="file" id="image" class="form-control" name="image"
                                             placeholder="{{ __('category::attribute.image') }}" accept="image/*" />
                                         @error('image')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
                                 @if ($category->image != null)
                                     <div class="col-sm-3 text-center">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <img class="rounded border width-100 height-100 cursor-pointer"
-                                                role="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#categoryImageModal"
+                                            <img class="rounded border width-100 height-100 cursor-pointer" role="button"
+                                                data-bs-toggle="modal" data-bs-target="#categoryImageModal"
                                                 src="{{ asset($category->image) }}"
                                                 alt="{{ $category->getTranslation('title', $locale) }}">
                                         </div>
                                     </div>
                                     <x-common::modal id="categoryImageModal" :title="$category->getTranslation('title', $locale)" body-class="text-center">
-                                        <img src="{{ asset($category->image) }}" class="img-fluid rounded border" alt="{{ $category->getTranslation('title', $locale) }}">
+                                        <img src="{{ asset($category->image) }}" class="img-fluid rounded border"
+                                            alt="{{ $category->getTranslation('title', $locale) }}">
                                     </x-common::modal>
                                 @endif
                             </div>
@@ -115,8 +114,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit"
-                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('category::general.update') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>{{ __('category::general.update') }}</button>
                         </div>
                     </div>
                 </form>

@@ -11,7 +11,7 @@ readonly class ProductDto
         public int $categoryId,
         public array $title,
         public float $price,
-        public bool $isActive,
+        public ?bool $isActive = null,
         public ?array $description = null,
         public ?array $images = null,
     ) {}
@@ -19,30 +19,31 @@ readonly class ProductDto
     public static function fromRequest(ProductRequest $request): self
     {
         return new self(
-            categoryId: $request->validated('category_id'),
             title: [
                 'en' => $request->validated('title_en'),
                 'ar' => $request->validated('title_ar'),
             ],
-            price: $request->validated('price'),
-            isActive: $request->boolean('is_active'),
             description: ($request->validated('description_en') || $request->validated('description_ar')) ? [
                 'en' => $request->validated('description_en'),
                 'ar' => $request->validated('description_ar'),
             ] : null,
-            images: $request->hasFile('images') ? $request->file('images') : null,
+            categoryId: $request->validated('category_id'),
+            price: $request->validated('price'),
+            images: $request->file('images'),
+            isActive: $request->boolean('is_active'),
         );
     }
 
     public function toArray(): array
     {
-        return [
-            'category_id' => $this->categoryId,
+        $data = [
             'title'       => $this->title,
             'description' => $this->description,
+            'category_id' => $this->categoryId,
             'price'       => $this->price,
             'is_active'   => $this->isActive,
         ];
+
+        return $data;
     }
 }
-

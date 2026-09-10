@@ -14,7 +14,8 @@
   - **When writing explicit routes / controller actions:**
     - **Eager Loading Relations:** If relationships WILL be eager-loaded inside the route/action, do **NOT** use Route Model Binding (which queries the model without relations first and causes redundant database queries). Instead, pass only the ID named `{model_name}_id` in the route (e.g., `{schedule_id}`, `{clinic_id}`) and method signature (`int $schedule_id`), and fetch the model with its eager-loaded relations inside the action/service (e.g., `$service->findById($schedule_id, ['times'])`). Do not use a generic `{id}` in nested/custom routes.
     - **No Relations Needed:** If NO relationships need to be eager-loaded (e.g., simple updates, deletes, status toggles), use **Route Model Binding** named `{model_name}` in the route (e.g., `{clinic_service}`, `{schedule}`) and typed `Model $model` in the method for cleaner, easier syntax.
-  - **Imports in Routes:** Always import controller classes at the top of route files via `use` statements. Never use inline FQCNs.
+  - **Imports:** Always import classes at the top of files via `use` statements. Never use inline FQCNs (Fully Qualified Class Names) anywhere in the code.
+- **Database Migrations:** When adding a foreign key, always prefer using `foreignIdFor(Model::class)` over manual integer/foreign definitions.
 
 <laravel-boost-guidelines>
 === foundation rules ===

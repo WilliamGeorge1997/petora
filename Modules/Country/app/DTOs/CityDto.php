@@ -9,7 +9,7 @@ readonly class CityDto
     public function __construct(
         public int $countryId,
         public array $title,
-        public bool $isActive,
+        public ?bool $isActive = null,
     ) {}
 
     public static function fromRequest(CityRequest $request): self
@@ -26,10 +26,12 @@ readonly class CityDto
 
     public function toArray(): array
     {
-        return [
+        $data = [
             'country_id' => $this->countryId,
             'title' => $this->title,
             'is_active' => $this->isActive,
         ];
+
+        return $data;
     }
 }

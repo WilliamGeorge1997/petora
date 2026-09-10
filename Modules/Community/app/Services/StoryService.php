@@ -56,8 +56,9 @@ class StoryService
         return getCaseCollection($query, $data, $columns);
     }
 
-    public function feed(int $authId, array $data = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function feed(array $data = []): LengthAwarePaginator|CursorPaginator|Collection
     {
+        $authId = auth('client')->id();
         $query = Client::selectRaw('id, name, image, (id = ?) as is_me', [$authId])
             ->whereHas('stories', fn ($q) => $q->active())
             ->withCount(['stories' => fn ($q) => $q->active()])

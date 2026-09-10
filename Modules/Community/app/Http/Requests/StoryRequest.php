@@ -7,13 +7,13 @@ use Override;
 
 class StoryRequest extends FormRequest
 {
-    #[Override]
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'client_id' => auth('client')->id(),
-            'is_active' => true,
-        ]);
+        if (auth('client')->check()) {
+            $this->merge([
+                'client_id' => auth('client')->id(),
+            ]);
+        }
     }
 
     /**
@@ -48,10 +48,3 @@ class StoryRequest extends FormRequest
     public function messages()
     {
         return [
-            'client_id.required' => __('community::message.client_id_required'),
-            'client_id.integer'  => __('community::message.client_id_integer'),
-            'client_id.exists'   => __('community::message.client_id_exists'),
-            'media.required'     => __('community::message.media_required'),
-        ];
-    }
-}

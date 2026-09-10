@@ -86,22 +86,20 @@
                                             placeholder="image" accept="image/*" />
                                     </div>
                                     @error('image')
-                                        <p class="alert alert-danger">{{ $message }}</p>
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 @if ($admin->image != null)
                                     <div class="col-sm-3 text-center">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <img class="rounded border width-100 height-100 cursor-pointer"
-                                                role="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#adminImageModal"
-                                                src="{{ $admin->image }}"
-                                                alt="{{ $admin->name }}">
+                                            <img class="rounded border width-100 height-100 cursor-pointer" role="button"
+                                                data-bs-toggle="modal" data-bs-target="#adminImageModal"
+                                                src="{{ $admin->image }}" alt="{{ $admin->name }}">
                                         </div>
                                     </div>
                                     <x-common::modal id="adminImageModal" :title="$admin->name" body-class="text-center">
-                                        <img src="{{ $admin->image }}" class="img-fluid rounded border" alt="{{ $admin->name }}">
+                                        <img src="{{ $admin->image }}" class="img-fluid rounded border"
+                                            alt="{{ $admin->name }}">
                                     </x-common::modal>
                                 @endif
                             </div>
@@ -161,7 +159,8 @@
                             </div>
                         </div>
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>تعديل بيانات المدير</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>تعديل بيانات المدير</button>
                         </div>
                     </div>
                 </form>

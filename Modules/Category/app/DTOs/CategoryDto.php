@@ -9,7 +9,7 @@ readonly class CategoryDto
 {
     public function __construct(
         public array $title,
-        public bool $isActive,
+        public ?bool $isActive = null,
         public ?UploadedFile $image = null,
     ) {}
 
@@ -17,11 +17,11 @@ readonly class CategoryDto
     {
         return new self(
             title: [
-                'en' => $request->input('title_en'),
-                'ar' => $request->input('title_ar'),
+                'en' => $request->validated('title_en'),
+                'ar' => $request->validated('title_ar'),
             ],
             isActive: $request->boolean('is_active'),
-            image: $request->hasFile('image') ? $request->file('image') : null,
+            image: $request->file('image'),
         );
     }
 

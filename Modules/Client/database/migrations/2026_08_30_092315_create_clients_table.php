@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('fcm_token')->nullable();
             $table->string('locale')->default('en');
             $table->boolean('allow_notification')->default(true);
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

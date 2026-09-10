@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Modules\Pet\Classes\DTOs\PetTypeDto;
+use Modules\Pet\DTOs\PetTypeDto;
 use Modules\Pet\Http\Requests\PetTypeRequest;
 use Modules\Pet\Models\PetType;
 use Modules\Pet\Services\PetTypeService;

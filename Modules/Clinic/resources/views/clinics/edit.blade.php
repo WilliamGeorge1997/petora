@@ -1,20 +1,20 @@
 @php
     $locale = app()->getLocale();
-    $days = [
-        'saturday'  => __('clinic::general.days.saturday'),
-        'sunday'    => __('clinic::general.days.sunday'),
-        'monday'    => __('clinic::general.days.monday'),
-        'tuesday'   => __('clinic::general.days.tuesday'),
-        'wednesday' => __('clinic::general.days.wednesday'),
-        'thursday'  => __('clinic::general.days.thursday'),
-        'friday'    => __('clinic::general.days.friday'),
-    ];
-    $initialWorkingHours = old('working_hours') ?? ($clinic->workingHours ? $clinic->workingHours->map(fn($wh) => [
-        'day'              => $wh->day,
-        'from'             => $wh->from ? substr($wh->from, 0, 5) : '',
-        'to'               => $wh->to ? substr($wh->to, 0, 5) : '',
-        'is_open_24_hours' => $wh->is_open_24_hours,
-    ])->toArray() : []);
+    $days = \Modules\Common\Enums\WeekDay::options();
+    $initialWorkingHours =
+        old('working_hours') ??
+        ($clinic->workingHours
+            ? $clinic->workingHours
+                ->map(
+                    fn($wh) => [
+                        'day' => $wh->day,
+                        'from' => $wh->from ? substr($wh->from, 0, 5) : '',
+                        'to' => $wh->to ? substr($wh->to, 0, 5) : '',
+                        'is_open_24_hours' => $wh->is_open_24_hours,
+                    ],
+                )
+                ->toArray()
+            : []);
 @endphp
 @extends('common::layouts.master')
 
@@ -50,7 +50,7 @@
                                             value="{{ $clinic->getTranslation('title', 'ar') }}" class="form-control"
                                             name="title_ar" placeholder="{{ __('clinic::attribute.title_ar') }}" required />
                                         @error('title_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                             name="title_en" placeholder="{{ __('clinic::attribute.title_en') }}"
                                             required />
                                         @error('title_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                                         <span class="input-group-text"><i data-feather="file-text"></i></span>
                                         <textarea class="form-control" name="description_ar" placeholder="{{ __('clinic::attribute.description_ar') }}">{{ $clinic->getTranslation('description', 'ar', false) }}</textarea>
                                         @error('description_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@
                                         <span class="input-group-text"><i data-feather="file-text"></i></span>
                                         <textarea class="form-control" name="description_en" placeholder="{{ __('clinic::attribute.description_en') }}">{{ $clinic->getTranslation('description', 'en', false) }}</textarea>
                                         @error('description_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <textarea class="form-control" name="address_ar" required placeholder="{{ __('clinic::attribute.address_ar') }}">{{ $clinic->getTranslation('address', 'ar') }}</textarea>
                                         @error('address_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -148,7 +148,7 @@
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <textarea class="form-control" name="address_en" required placeholder="{{ __('clinic::attribute.address_en') }}">{{ $clinic->getTranslation('address', 'en') }}</textarea>
                                         @error('address_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@
                                             class="form-control" name="phone"
                                             placeholder="{{ __('clinic::attribute.phone') }}" required />
                                         @error('phone')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -189,7 +189,7 @@
                                         <input type="file" id="image" class="form-control" name="image"
                                             placeholder="{{ __('clinic::attribute.image') }}" accept="image/*" />
                                         @error('image')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -247,7 +247,7 @@
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="city_id" id="city_id" required disabled
                                         data-fetch-url="{{ route('admin.ajax.zones') }}" data-ajax-col="city_id"
-                                        data-ajax-target="#zone_id" data-selected="{{ $clinic->city_id }}">
+                                        data-ajax-target="#zone_id" data-selected="{{ old('city_id', $clinic->city_id) }}">
                                         <option value="" disabled selected>{{ __('clinic::attribute.select_city') }}
                                         </option>
                                     </select>
@@ -267,7 +267,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="zone_id" id="zone_id" required disabled
-                                        data-selected="{{ $clinic->zone_id }}">
+                                        data-selected="{{ old('zone_id', $clinic->zone_id) }}">
                                         <option value="" disabled selected>{{ __('clinic::attribute.select_zone') }}
                                         </option>
                                     </select>
@@ -350,42 +350,71 @@
                                 <div class="col-sm-9">
                                     <div class="working-hours-repeater">
                                         <div data-repeater-list="working_hours">
-                                            @if(!empty($initialWorkingHours))
-                                                @foreach($initialWorkingHours as $item)
+                                            @if (!empty($initialWorkingHours))
+                                                @foreach ($initialWorkingHours as $index => $item)
                                                     <div data-repeater-item class="row mb-1 align-items-center">
                                                         <div class="col-md-3 col-12 mb-50">
-                                                            <label class="form-label"><small>{{ __('clinic::general.day') }}</small></label>
+                                                            <label
+                                                                class="form-label"><small>{{ __('clinic::general.day') }}</small></label>
                                                             <select class="form-select" name="day" required>
-                                                                <option value="" disabled {{ empty($item['day']) ? 'selected' : '' }}>{{ __('clinic::general.select_day') }}</option>
-                                                                @foreach ($days as $dayKey => $dayLabel)
-                                                                    <option value="{{ $dayKey }}" {{ ($item['day'] ?? '') === $dayKey ? 'selected' : '' }}>
+                                                                <option value="" disabled
+                                                                    {{ empty($item['day']) ? 'selected' : '' }}>
+                                                                    {{ __('clinic::general.select_day') }}</option>
+                                                                @foreach ($days as $dayValue => $dayLabel)
+                                                                    <option value="{{ $dayValue }}"
+                                                                        {{ ($item['day'] ?? '') === $dayValue ? 'selected' : '' }}>
                                                                         {{ $dayLabel }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            @error("working_hours.$index.day")
+                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
-                                                            <label class="form-label"><small>{{ __('clinic::general.from') }}</small></label>
+                                                            <label
+                                                                class="form-label"><small>{{ __('clinic::general.from') }}</small></label>
                                                             <div class="input-group input-group-merge">
-                                                                <span class="input-group-text"><i data-feather="clock"></i></span>
-                                                                <input type="time" name="from" class="form-control time-input" value="{{ $item['from'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
+                                                                <span class="input-group-text"><i
+                                                                        data-feather="clock"></i></span>
+                                                                <input type="time" name="from"
+                                                                    class="form-control time-input"
+                                                                    value="{{ $item['from'] ?? '' }}"
+                                                                    {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
+                                                            @error("working_hours.$index.from")
+                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
-                                                            <label class="form-label"><small>{{ __('clinic::general.to') }}</small></label>
+                                                            <label
+                                                                class="form-label"><small>{{ __('clinic::general.to') }}</small></label>
                                                             <div class="input-group input-group-merge">
-                                                                <span class="input-group-text"><i data-feather="clock"></i></span>
-                                                                <input type="time" name="to" class="form-control time-input" value="{{ $item['to'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
+                                                                <span class="input-group-text"><i
+                                                                        data-feather="clock"></i></span>
+                                                                <input type="time" name="to"
+                                                                    class="form-control time-input"
+                                                                    value="{{ $item['to'] ?? '' }}"
+                                                                    {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
+                                                            @error("working_hours.$index.to")
+                                                                <div class="text-danger mt-50"><small>{{ $message }}</small></div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-2 col-8 mb-50">
                                                             <div class="form-check mt-2">
-                                                                <input type="checkbox" name="is_open_24_hours" value="1" class="form-check-input open-24-hours-check" {{ !empty($item['is_open_24_hours']) ? 'checked' : '' }} />
-                                                                <label class="form-check-label"><small>{{ __('clinic::general.open_24_hours') }}</small></label>
+                                                                <input type="checkbox" name="is_open_24_hours"
+                                                                    value="1"
+                                                                    class="form-check-input open-24-hours-check"
+                                                                    {{ !empty($item['is_open_24_hours']) ? 'checked' : '' }} />
+                                                                <label
+                                                                    class="form-check-label"><small>{{ __('clinic::general.open_24_hours') }}</small></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-1 col-4 mb-50 text-end pt-2">
-                                                            <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
+                                                            <button type="button" class="btn btn-outline-danger btn-icon"
+                                                                data-repeater-delete
+                                                                title="{{ __('common::general.delete') }}">
                                                                 <i data-feather="trash-2"></i>
                                                             </button>
                                                         </div>
@@ -394,36 +423,49 @@
                                             @else
                                                 <div data-repeater-item class="row mb-1 align-items-center">
                                                     <div class="col-md-3 col-12 mb-50">
-                                                        <label class="form-label"><small>{{ __('clinic::general.day') }}</small></label>
+                                                        <label
+                                                            class="form-label"><small>{{ __('clinic::general.day') }}</small></label>
                                                         <select class="form-select" name="day">
-                                                            <option value="" disabled selected>{{ __('clinic::general.select_day') }}</option>
-                                                            @foreach ($days as $dayKey => $dayLabel)
-                                                                <option value="{{ $dayKey }}">{{ $dayLabel }}</option>
+                                                            <option value="" disabled selected>
+                                                                {{ __('clinic::general.select_day') }}</option>
+                                                            @foreach ($days as $dayValue => $dayLabel)
+                                                                <option value="{{ $dayValue }}">{{ $dayLabel }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-6 mb-50">
-                                                        <label class="form-label"><small>{{ __('clinic::general.from') }}</small></label>
+                                                        <label
+                                                            class="form-label"><small>{{ __('clinic::general.from') }}</small></label>
                                                         <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i data-feather="clock"></i></span>
-                                                            <input type="time" name="from" class="form-control time-input" value="09:00" />
+                                                            <span class="input-group-text"><i
+                                                                    data-feather="clock"></i></span>
+                                                            <input type="time" name="from"
+                                                                class="form-control time-input" value="09:00" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3 col-6 mb-50">
-                                                        <label class="form-label"><small>{{ __('clinic::general.to') }}</small></label>
+                                                        <label
+                                                            class="form-label"><small>{{ __('clinic::general.to') }}</small></label>
                                                         <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i data-feather="clock"></i></span>
-                                                            <input type="time" name="to" class="form-control time-input" value="17:00" />
+                                                            <span class="input-group-text"><i
+                                                                    data-feather="clock"></i></span>
+                                                            <input type="time" name="to"
+                                                                class="form-control time-input" value="17:00" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2 col-8 mb-50">
                                                         <div class="form-check mt-2">
-                                                            <input type="checkbox" name="is_open_24_hours" value="1" class="form-check-input open-24-hours-check" />
-                                                            <label class="form-check-label"><small>{{ __('clinic::general.open_24_hours') }}</small></label>
+                                                            <input type="checkbox" name="is_open_24_hours" value="1"
+                                                                class="form-check-input open-24-hours-check" />
+                                                            <label
+                                                                class="form-check-label"><small>{{ __('clinic::general.open_24_hours') }}</small></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-1 col-4 mb-50 text-end pt-2">
-                                                        <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
+                                                        <button type="button" class="btn btn-outline-danger btn-icon"
+                                                            data-repeater-delete
+                                                            title="{{ __('common::general.delete') }}">
                                                             <i data-feather="trash-2"></i>
                                                         </button>
                                                     </div>
@@ -433,8 +475,10 @@
 
                                         <div class="row">
                                             <div class="col-12">
-                                                <button type="button" class="btn btn-sm btn-outline-primary" data-repeater-create>
-                                                    <i data-feather="plus" class="me-50"></i> {{ __('clinic::general.add_working_hours') }}
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                    data-repeater-create>
+                                                    <i data-feather="plus" class="me-50"></i>
+                                                    {{ __('clinic::general.add_working_hours') }}
                                                 </button>
                                             </div>
                                         </div>
@@ -488,21 +532,24 @@
 
             // Working Hours Repeater
             $('.working-hours-repeater').repeater({
-                show: function () {
+                show: function() {
                     $(this).slideDown();
                     $(this).find('.time-input').prop('disabled', false);
                     $(this).find('.open-24-hours-check').prop('checked', false);
                     if (feather) {
-                        feather.replace({ width: 14, height: 14 });
+                        feather.replace({
+                            width: 14,
+                            height: 14
+                        });
                     }
                 },
-                hide: function (deleteElement) {
+                hide: function(deleteElement) {
                     $(this).slideUp(deleteElement);
                 },
                 isFirstItemUndeletable: false
             });
 
-            $(document).on('change', '.open-24-hours-check', function () {
+            $(document).on('change', '.open-24-hours-check', function() {
                 var isChecked = $(this).is(':checked');
                 var $row = $(this).closest('[data-repeater-item]');
                 var $timeInputs = $row.find('.time-input');

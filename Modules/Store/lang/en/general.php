@@ -41,15 +41,6 @@ return [
     'to'            => 'To',
     'day'           => 'Day',
     'closed'        => 'Closed',
-    'days'          => [
-        'saturday'  => 'Saturday',
-        'sunday'    => 'Sunday',
-        'monday'    => 'Monday',
-        'tuesday'   => 'Tuesday',
-        'wednesday' => 'Wednesday',
-        'thursday'  => 'Thursday',
-        'friday'    => 'Friday',
-    ],
     'delivery_schedules' => 'Delivery Schedules',
     'delivery_schedule' => [
         'title'     => 'Delivery Schedules',

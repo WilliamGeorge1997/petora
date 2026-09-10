@@ -8,7 +8,7 @@ readonly class CountryDto
 {
     public function __construct(
         public array $title,
-        public bool $isActive,
+        public ?bool $isActive = null,
     ) {}
 
     public static function fromRequest(CountryRequest $request): self
@@ -24,9 +24,11 @@ readonly class CountryDto
 
     public function toArray(): array
     {
-        return [
+        $data = [
             'title' => $this->title,
             'is_active' => $this->isActive,
         ];
+
+        return $data;
     }
 }

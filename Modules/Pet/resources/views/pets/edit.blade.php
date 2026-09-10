@@ -25,18 +25,17 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="name">{{ __('pet::attribute.name') }}</label>
+                                    <label class="col-form-label" for="name">{{ __('pet::attribute.name') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="user"></i></span>
-                                        <input type="text" id="name"
-                                            value="{{ old('name', $pet->name) }}" class="form-control"
-                                            name="name" placeholder="{{ __('pet::attribute.name') }}" required />
+                                        <input type="text" id="name" value="{{ old('name', $pet->name) }}"
+                                            class="form-control" name="name"
+                                            placeholder="{{ __('pet::attribute.name') }}" required />
                                     </div>
                                     @error('name')
-                                        <p class="alert alert-danger">{{ $message }}</p>
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -46,8 +45,7 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="breed">{{ __('pet::attribute.breed') }}</label>
+                                    <label class="col-form-label" for="breed">{{ __('pet::attribute.breed') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
@@ -72,7 +70,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="client_id" id="client_id" required>
-                                        <option value="" disabled selected>{{ __('pet::attribute.select_client') }}</option>
+                                        <option value="" disabled selected>{{ __('pet::attribute.select_client') }}
+                                        </option>
                                         @foreach ($viewModel->clients() as $client)
                                             <option value="{{ $client->id }}"
                                                 {{ $pet->client_id == $client->id ? 'selected' : '' }}>
@@ -96,7 +95,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="pet_type_id" id="pet_type_id" required>
-                                        <option value="" disabled selected>{{ __('pet::attribute.select_type') }}</option>
+                                        <option value="" disabled selected>{{ __('pet::attribute.select_type') }}
+                                        </option>
                                         @foreach ($viewModel->petTypes() as $type)
                                             <option value="{{ $type->id }}"
                                                 {{ $pet->pet_type_id == $type->id ? 'selected' : '' }}>
@@ -115,13 +115,14 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="gender">{{ __('pet::attribute.gender') }}</label>
+                                    <label class="col-form-label" for="gender">{{ __('pet::attribute.gender') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select" name="gender" id="gender" required>
-                                        <option value="m" {{ $pet->gender === 'm' ? 'selected' : '' }}>{{ __('pet::general.male') }}</option>
-                                        <option value="f" {{ $pet->gender === 'f' ? 'selected' : '' }}>{{ __('pet::general.female') }}</option>
+                                        <option value="m" {{ $pet->gender === 'm' ? 'selected' : '' }}>
+                                            {{ __('pet::general.male') }}</option>
+                                        <option value="f" {{ $pet->gender === 'f' ? 'selected' : '' }}>
+                                            {{ __('pet::general.female') }}</option>
                                     </select>
                                     @error('gender')
                                         <p class="text-danger">{{ $message }}</p>
@@ -151,8 +152,7 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="weight">{{ __('pet::attribute.weight') }}</label>
+                                    <label class="col-form-label" for="weight">{{ __('pet::attribute.weight') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <input type="number" step="0.01" class="form-control" name="weight"
@@ -168,8 +168,7 @@
                         <div class="col-12">
                             <div class="mb-1 row align-items-center">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="image">{{ __('pet::attribute.image') }}</label>
+                                    <label class="col-form-label" for="image">{{ __('pet::attribute.image') }}</label>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="input-group input-group-merge">
@@ -177,23 +176,21 @@
                                         <input type="file" id="image" class="form-control" name="image"
                                             accept="image/*" />
                                         @error('image')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
                                 @if ($pet->image != null)
                                     <div class="col-sm-3 text-center">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <img class="rounded border width-100 height-100 cursor-pointer"
-                                                role="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#petImageModal"
-                                                src="{{ asset($pet->image) }}"
-                                                alt="{{ $pet->name }}">
+                                            <img class="rounded border width-100 height-100 cursor-pointer" role="button"
+                                                data-bs-toggle="modal" data-bs-target="#petImageModal"
+                                                src="{{ asset($pet->image) }}" alt="{{ $pet->name }}">
                                         </div>
                                     </div>
                                     <x-common::modal id="petImageModal" :title="$pet->name" body-class="text-center">
-                                        <img src="{{ asset($pet->image) }}" class="img-fluid rounded border" alt="{{ $pet->name }}">
+                                        <img src="{{ asset($pet->image) }}" class="img-fluid rounded border"
+                                            alt="{{ $pet->name }}">
                                     </x-common::modal>
                                 @endif
                             </div>
@@ -201,7 +198,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('pet::general.edit') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>{{ __('pet::general.edit') }}</button>
                         </div>
                     </div>
                 </form>
@@ -216,7 +214,7 @@
         $(document).ready(function() {
             var select = $('.select2');
             if (select.length) {
-                select.each(function () {
+                select.each(function() {
                     var $this = $(this);
                     $this.wrap('<div class="position-relative"></div>');
                     $this.select2({

@@ -6,7 +6,7 @@
 @section('title', __('country::general.edit_city'))
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{asset('admin/vendors/css/forms/select/select2.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/vendors/css/forms/select/select2.min.css') }}">
 @endsection
 
 @section('content')
@@ -33,9 +33,10 @@
                                         <span class="input-group-text"><i data-feather="user"></i></span>
                                         <input type="text" id="title_ar"
                                             value="{{ $city->getTranslation('title', 'ar') }}" class="form-control"
-                                            name="title_ar" placeholder="{{ __('country::attribute.title_ar') }}" required />
+                                            name="title_ar" placeholder="{{ __('country::attribute.title_ar') }}"
+                                            required />
                                         @error('title_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -54,9 +55,10 @@
                                         <span class="input-group-text"><i data-feather="user"></i></span>
                                         <input type="text" id="title_en"
                                             value="{{ $city->getTranslation('title', 'en') }}" class="form-control"
-                                            name="title_en" placeholder="{{ __('country::attribute.title_en') }}" required />
+                                            name="title_en" placeholder="{{ __('country::attribute.title_en') }}"
+                                            required />
                                         @error('title_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -72,7 +74,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="select2 form-select" name="country_id" id="country_id" required>
-                                        <option value="" disabled selected>{{ __('country::general.select_country') }}</option>
+                                        <option value="" disabled selected>
+                                            {{ __('country::general.select_country') }}</option>
                                         @foreach ($viewModel->countries() as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ $city->country_id == $country->id ? 'selected' : '' }}>
@@ -81,7 +84,7 @@
                                         @endforeach
                                     </select>
                                     @error('country_id')
-                                        <p class="alert alert-danger">{{ $message }}</p>
+                                        <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -101,8 +104,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit"
-                                class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('country::general.edit_city') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>{{ __('country::general.edit_city') }}</button>
                         </div>
                     </div>
                 </form>
@@ -112,12 +115,12 @@
 @endsection
 
 @section('js')
-    <script src="{{asset('admin/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script src="{{ asset('admin/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             var select = $('.select2');
             if (select.length) {
-                select.each(function () {
+                select.each(function() {
                     var $this = $(this);
                     $this.wrap('<div class="position-relative"></div>');
                     $this.select2({

@@ -3,6 +3,8 @@
 namespace Modules\Clinic\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Modules\Common\Enums\WeekDay;
 use Override;
 
 class ClinicRequest extends FormRequest
@@ -13,21 +15,21 @@ class ClinicRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title_en'   => ['required', 'string'],
-            'title_ar'   => ['required', 'string'],
+            'title_en'       => ['required', 'string'],
+            'title_ar'       => ['required', 'string'],
             'description_en' => ['nullable', 'string'],
             'description_ar' => ['nullable', 'string'],
-            'address_en' => ['nullable', 'string'],
-            'address_ar' => ['nullable', 'string'],
-            'phone'      => ['nullable', 'string'],
-            'image'      => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:2048'],
-            'country_id' => ['nullable', 'integer', 'exists:countries,id'],
-            'city_id'    => ['nullable', 'integer', 'exists:cities,id'],
-            'zone_id'    => ['nullable', 'integer', 'exists:zones,id'],
-            'latitude'   => ['nullable', 'numeric'],
-            'longitude'  => ['nullable', 'numeric'],
-            'working_hours' => ['nullable', 'array'],
-            'working_hours.*.day' => ['required', 'string', 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday'],
+            'address_en'     => ['nullable', 'string'],
+            'address_ar'     => ['nullable', 'string'],
+            'phone'          => ['nullable', 'string'],
+            'image'          => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:2048'],
+            'country_id'     => ['nullable', 'integer', 'exists:countries,id'],
+            'city_id'        => ['nullable', 'integer', 'exists:cities,id'],
+            'zone_id'        => ['nullable', 'integer', 'exists:zones,id'],
+            'latitude'       => ['nullable', 'numeric'],
+            'longitude'      => ['nullable', 'numeric'],
+            'working_hours'  => ['nullable', 'array'],
+            'working_hours.*.day' => ['required_with:working_hours', 'string', Rule::in(WeekDay::values())],
             'working_hours.*.is_open_24_hours' => ['nullable', 'boolean'],
             'working_hours.*.from' => ['nullable', 'date_format:H:i'],
             'working_hours.*.to' => ['nullable', 'date_format:H:i'],

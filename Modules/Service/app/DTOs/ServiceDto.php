@@ -9,7 +9,7 @@ readonly class ServiceDto
 {
     public function __construct(
         public array $title,
-        public bool $isActive,
+        public ?bool $isActive = null,
         public float $price = 0,
         public ?int $duration = null,
         public ?array $description = null,
@@ -23,14 +23,14 @@ readonly class ServiceDto
                 'en' => $request->validated('title_en'),
                 'ar' => $request->validated('title_ar'),
             ],
-            isActive: $request->boolean('is_active'),
-            price: (float) $request->validated('price', 0),
-            duration: $request->validated('duration'),
             description: ($request->validated('description_en') || $request->validated('description_ar')) ? [
                 'en' => $request->validated('description_en'),
                 'ar' => $request->validated('description_ar'),
             ] : null,
-            image: $request->hasFile('image') ? $request->file('image') : null,
+            price: (float) $request->validated('price'),
+            duration: $request->validated('duration'),
+            image: $request->file('image'),
+            isActive: $request->boolean('is_active'),
         );
     }
 

@@ -29,9 +29,10 @@
                                         <span class="input-group-text"><i data-feather="user"></i></span>
                                         <input type="text" id="title_ar"
                                             value="{{ $service->getTranslation('title', 'ar') }}" class="form-control"
-                                            name="title_ar" placeholder="{{ __('service::attribute.title_ar') }}" required />
+                                            name="title_ar" placeholder="{{ __('service::attribute.title_ar') }}"
+                                            required />
                                         @error('title_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -50,9 +51,10 @@
                                         <span class="input-group-text"><i data-feather="user"></i></span>
                                         <input type="text" id="title_en"
                                             value="{{ $service->getTranslation('title', 'en') }}" class="form-control"
-                                            name="title_en" placeholder="{{ __('service::attribute.title_en') }}" required />
+                                            name="title_en" placeholder="{{ __('service::attribute.title_en') }}"
+                                            required />
                                         @error('title_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -71,7 +73,7 @@
                                         <span class="input-group-text"><i data-feather="file-text"></i></span>
                                         <textarea class="form-control" name="description_ar" placeholder="{{ __('service::attribute.description_ar') }}">{{ $service->getTranslation('description', 'ar', false) }}</textarea>
                                         @error('description_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -90,7 +92,7 @@
                                         <span class="input-group-text"><i data-feather="file-text"></i></span>
                                         <textarea class="form-control" name="description_en" placeholder="{{ __('service::attribute.description_en') }}">{{ $service->getTranslation('description', 'en', false) }}</textarea>
                                         @error('description_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -110,23 +112,22 @@
                                         <input type="file" id="image" class="form-control" name="image"
                                             placeholder="{{ __('service::attribute.image') }}" accept="image/*" />
                                         @error('image')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
                                 @if ($service->image != null)
                                     <div class="col-sm-3 text-center">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <img class="rounded border width-100 height-100 cursor-pointer"
-                                                role="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#serviceImageModal"
+                                            <img class="rounded border width-100 height-100 cursor-pointer" role="button"
+                                                data-bs-toggle="modal" data-bs-target="#serviceImageModal"
                                                 src="{{ asset($service->image) }}"
                                                 alt="{{ $service->getTranslation('title', $locale) }}">
                                         </div>
                                     </div>
                                     <x-common::modal id="serviceImageModal" :title="$service->getTranslation('title', $locale)" body-class="text-center">
-                                        <img src="{{ asset($service->image) }}" class="img-fluid rounded border" alt="{{ $service->getTranslation('title', $locale) }}">
+                                        <img src="{{ asset($service->image) }}" class="img-fluid rounded border"
+                                            alt="{{ $service->getTranslation('title', $locale) }}">
                                     </x-common::modal>
                                 @endif
                             </div>
@@ -142,8 +143,10 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="dollar-sign"></i></span>
-                                        <input type="number" step="0.01" min="0" id="price" class="form-control" name="price"
-                                            placeholder="{{ __('service::attribute.price') }}" value="{{ old('price', $service->price) }}" required />
+                                        <input type="number" step="0.01" min="0" id="price"
+                                            class="form-control" name="price"
+                                            placeholder="{{ __('service::attribute.price') }}"
+                                            value="{{ old('price', $service->price) }}" required />
                                     </div>
                                     @error('price')
                                         <p class="text-danger">{{ $message }}</p>
@@ -162,8 +165,9 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="clock"></i></span>
-                                        <input type="number" min="1" id="duration" class="form-control" name="duration"
-                                            placeholder="{{ __('service::attribute.duration') }}" value="{{ old('duration', $service->duration) }}" />
+                                        <input type="number" min="1" id="duration" class="form-control"
+                                            name="duration" placeholder="{{ __('service::attribute.duration') }}"
+                                            value="{{ old('duration', $service->duration) }}" />
                                     </div>
                                     @error('duration')
                                         <p class="text-danger">{{ $message }}</p>
@@ -186,7 +190,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('service::general.edit') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>{{ __('service::general.edit') }}</button>
                         </div>
                     </div>
                 </form>

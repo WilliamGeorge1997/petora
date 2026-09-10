@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pet_types', function (Blueprint $table) {
             $table->id();
             $table->json('title');
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

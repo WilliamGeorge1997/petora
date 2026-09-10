@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Pet\Classes\DTOs;
+namespace Modules\Pet\DTOs;
 
 use Modules\Pet\Http\Requests\PetTypeRequest;
 
@@ -8,7 +8,7 @@ class PetTypeDto
 {
     public function __construct(
         public array $title,
-        public bool $isActive,
+        public ?bool $isActive = null,
     ) {}
 
     public static function fromRequest(PetTypeRequest $request): self
@@ -24,9 +24,11 @@ class PetTypeDto
 
     public function toArray(): array
     {
-        return [
+        $data = [
             'title' => $this->title,
             'is_active' => $this->isActive,
         ];
+
+        return $data;
     }
 }

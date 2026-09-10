@@ -20,8 +20,7 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="title_ar">{{ __('pet::attribute.title_ar') }}</label>
+                                    <label class="col-form-label" for="title_ar">{{ __('pet::attribute.title_ar') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
@@ -30,7 +29,7 @@
                                             value="{{ $petType->getTranslation('title', 'ar') }}" class="form-control"
                                             name="title_ar" placeholder="{{ __('pet::attribute.title_ar') }}" required />
                                         @error('title_ar')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -41,8 +40,7 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label"
-                                        for="title_en">{{ __('pet::attribute.title_en') }}</label>
+                                    <label class="col-form-label" for="title_en">{{ __('pet::attribute.title_en') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
@@ -51,7 +49,7 @@
                                             value="{{ $petType->getTranslation('title', 'en') }}" class="form-control"
                                             name="title_en" placeholder="{{ __('pet::attribute.title_en') }}" required />
                                         @error('title_en')
-                                            <p class="alert alert-danger">{{ $message }}</p>
+                                            <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -62,8 +60,9 @@
                         <div class="col-sm-9 offset-sm-3">
                             <div class="mb-1">
                                 <div class="form-check">
-                                    <input type="checkbox" value="1" {{ old('is_active', $petType->is_active) ? 'checked' : '' }}
-                                        name="is_active" class="form-check-input" id="customCheck2" />
+                                    <input type="checkbox" value="1"
+                                        {{ old('is_active', $petType->is_active) ? 'checked' : '' }} name="is_active"
+                                        class="form-check-input" id="customCheck2" />
                                     <label class="form-check-label"
                                         for="customCheck2">{{ __('pet::attribute.is_active') }}</label>
                                 </div>
@@ -72,7 +71,8 @@
 
                         {{-- Submit Button --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit" class="me-50"></i>{{ __('pet::general.edit_type') }}</button>
+                            <button type="submit" class="btn btn-primary me-1"><i data-feather="edit"
+                                    class="me-50"></i>{{ __('pet::general.edit_type') }}</button>
                         </div>
                     </div>
                 </form>

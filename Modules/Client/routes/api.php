@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Client\Http\Controllers\Api\AddressController;
 use Modules\Client\Http\Controllers\Api\ClientAuthController;
 use Modules\Client\Http\Controllers\Api\ClientController;
+use Modules\Client\Http\Controllers\Api\FavouriteController;
 
 Route::prefix('auth')->group(function () {
     Route::post('register', [ClientAuthController::class, 'register']);
@@ -22,3 +23,7 @@ Route::prefix('auth')->group(function () {
 Route::post('addresses/{address}/default', [AddressController::class, 'default']);
 Route::post('addresses/{address}', [AddressController::class, 'update']);
 Route::apiResource('addresses', AddressController::class)->except(['update']);
+
+Route::post('favourites/toggle', [FavouriteController::class, 'toggle']);
+Route::get('favourites', [FavouriteController::class, 'index']);
+

@@ -127,7 +127,8 @@ class ClientAuthController extends Controller
     {
         /** @var Client $client */
         $client = $request->user('client');
-
+        $client->update(['fcm_token' => null]);
+        
         /** @var PersonalAccessToken $token */
         $token = $client->currentAccessToken();
         $token->delete();

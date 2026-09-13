@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'id' => 'الرقم التعريفي',
+    'name' => 'الاسم',
+    'phone' => 'رقم الهاتف',
+    'password' => 'كلمة المرور',
+    'license_id' => 'رقم الرخصة',
+    'image' => 'الصورة',
+    'store_id' => 'المتجر',
+    'clinic_id' => 'العيادة',
+    'country_id' => 'الدولة',
+    'city_id' => 'المدينة',
+    'zone_id' => 'المنطقة',
+    'latitude' => 'خط العرض',
+    'longitude' => 'خط الطول',
+    'is_available' => 'التوفر',
+    'is_active' => 'الحالة',
+    'created_at' => 'تاريخ الإنشاء',
+    'select_store' => 'اختر المتجر',
+    'select_clinic' => 'اختر العيادة',
+    'select_country' => 'اختر الدولة',
+    'select_city' => 'اختر المدينة',
+    'select_zone' => 'اختر المنطقة',
+    'old_password' => 'كلمة المرور القديمة',
+    'new_password' => 'كلمة المرور الجديدة',
+];

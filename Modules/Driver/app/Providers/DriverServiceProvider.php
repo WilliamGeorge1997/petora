@@ -3,7 +3,6 @@
 namespace Modules\Driver\Providers;
 
 use Nwidart\Modules\Support\ModuleServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
 
 class DriverServiceProvider extends ModuleServiceProvider
 {
@@ -36,11 +35,19 @@ class DriverServiceProvider extends ModuleServiceProvider
 
     /**
      * Define module schedules.
-     * 
-     * @param $schedule
+     *
+     * @param  $schedule
      */
     // protected function configureSchedules(Schedule $schedule): void
     // {
     //     $schedule->command('inspire')->hourly();
     // }
+
+    protected function registerTranslations(): void
+    {
+        $langPath = module_path($this->name, 'lang');
+
+        $this->loadTranslationsFrom($langPath, $this->nameLower);
+        $this->loadJsonTranslationsFrom($langPath);
+    }
 }

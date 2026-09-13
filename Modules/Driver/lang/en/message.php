@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'name_required' => 'The name is required.',
+    'phone_required' => 'The phone number is required.',
+    'phone_unique' => 'The phone number has already been taken.',
+    'password_required' => 'The password is required.',
+    'password_min' => 'The password must be at least 6 characters.',
+    'image_invalid' => 'The file must be an image.',
+    'image_mimes' => 'The image must be a file of type: jpeg, png, jpg, webp, svg, gif.',
+    'image_max' => 'The image must not be greater than 2048 kilobytes.',
+    'store_id_exists' => 'The selected store is invalid.',
+    'clinic_id_exists' => 'The selected clinic is invalid.',
+    'country_id_exists' => 'The selected country is invalid.',
+    'city_id_exists' => 'The selected city is invalid.',
+    'zone_id_exists' => 'The selected zone is invalid.',
+
+    'created' => 'Driver has been created successfully.',
+    'updated' => 'Driver has been updated successfully.',
+    'deleted' => 'Driver has been deleted successfully.',
+    'fetched' => 'Drivers have been fetched successfully.',
+    'activated' => 'Driver has been activated successfully.',
+    'deactivated' => 'Driver has been deactivated successfully.',
+    'unauthorized' => 'Invalid phone number or password.',
+    'not_active' => 'Your account is deactivated. Please contact support.',
+    'logged_user' => 'Driver details retrieved successfully.',
+    'logged_out' => 'Driver has been logged out successfully.',
+    'availability_changed' => 'Availability changed successfully.',
+    'password_changed' => 'Password changed successfully.',
+    'wrong_old_password' => 'The old password is incorrect.',
+    'authenticated' => 'Driver authenticated successfully.',
+];

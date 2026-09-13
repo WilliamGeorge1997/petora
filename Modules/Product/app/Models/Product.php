@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\Category\Models\Category;
 use Modules\Clinic\Models\Clinic;
 use Modules\Store\Models\Store;
@@ -81,16 +81,16 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    public function stores(): MorphToMany
+    public function stores(): BelongsToMany
     {
-        return $this->morphedByMany(Store::class, 'sellerable', 'product_sellers')
+        return $this->belongsToMany(Store::class, 'product_sellers', 'product_id', 'store_id')
             ->withPivot(['price', 'is_active'])
             ->withTimestamps();
     }
 
-    public function clinics(): MorphToMany
+    public function clinics(): BelongsToMany
     {
-        return $this->morphedByMany(Clinic::class, 'sellerable', 'product_sellers')
+        return $this->belongsToMany(Clinic::class, 'product_sellers', 'product_id', 'clinic_id')
             ->withPivot(['price', 'is_active'])
             ->withTimestamps();
     }

@@ -87,4 +87,25 @@ return [
     'longitude_max' => 'يجب ألا يتجاوز خط الطول 255 حرفاً.',
 
     'is_default_boolean' => 'حالة الافتراضي غير صالحة.',
+
+    'favourite' => [
+        'fetched' => 'تم جلب المفضلة بنجاح.',
+        'added' => 'تمت إضافة المنتج إلى المفضلة بنجاح.',
+        'removed' => 'تمت إزالة المنتج من المفضلة بنجاح.',
+        'deleted' => 'تم حذف المفضلة بنجاح.',
+    ],
+
+    // Favourite Validation Messages
+    'product_id_required' => 'اختيار المنتج مطلوب.',
+    'product_id_integer' => 'اختيار المنتج غير صالح.',
+    'product_id_exists' => 'المنتج المحدد غير موجود.',
+
+    'store_id_integer' => 'اختيار المتجر غير صالح.',
+    'store_id_exists' => 'المتجر المحدد غير موجود.',
+
+    'clinic_id_integer' => 'اختيار العيادة غير صالح.',
+    'clinic_id_exists' => 'العيادة المحددة غير موجودة.',
+
+    'store_or_clinic_required' => 'يجب تحديد المتجر أو العيادة.',
+    'store_and_clinic_prohibited' => 'لا يمكن تحديد المتجر والعيادة معاً.',
 ];

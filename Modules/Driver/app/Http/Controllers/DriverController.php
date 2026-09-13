@@ -3,54 +3,85 @@
 namespace Modules\Driver\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
+use Modules\Driver\DTOs\DriverDto;
+use Modules\Driver\Http\Requests\DriverRequest;
+use Modules\Driver\Models\Driver;
+use Modules\Driver\Services\DriverService;
+use Modules\Driver\ViewModels\DriverViewModel;
 
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-driver|Create-driver|Edit-driver|Delete-driver', only: ['index', 'store'])]
+#[Middleware('permission:Create-driver', only: ['create', 'store'])]
+#[Middleware('permission:Edit-driver', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-driver', only: ['destroy'])]
 class DriverController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private DriverService $driverService) {}
+
+    public function index(Request $request): View|JsonResponse
     {
-        return view('driver::index');
+        $data = $request->merge(['paginated' => 50])->all();
+        $drivers = $this->driverService->findAll($data, ['store', 'clinic']);
+        if ($request->ajax()) {
+            return success(true, __('driver::message.fetched'), $drivers->items());
+        }
+
+        return view('driver::drivers.index', compact('drivers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): View
     {
-        return view('driver::create');
+        $viewModel = new DriverViewModel;
+
+        return view('driver::drivers.create', compact('viewModel'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function store(DriverRequest $request): RedirectResponse
     {
-        return view('driver::show');
+        $dto = DriverDto::fromRequest($request);
+        $this->driverService->save($dto);
+
+        return to_route('admin.driver.index')->with('success', __('driver::message.created'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function edit(Driver $driver): View
     {
-        return view('driver::edit');
+        Gate::authorize('update', $driver);
+        $viewModel = new DriverViewModel;
+
+        return view('driver::drivers.edit', compact('viewModel', 'driver'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
+    public function update(DriverRequest $request, Driver $driver): RedirectResponse
+    {
+        Gate::authorize('update', $driver);
+        $dto = DriverDto::fromRequest($request);
+        $this->driverService->update($driver, $dto);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+        return to_route('admin.driver.index')->with('success', __('driver::message.updated'));
+    }
+
+    public function destroy(Driver $driver): JsonResponse
+    {
+        $this->driverService->delete($driver);
+
+        return success(true, __('driver::message.deleted'));
+    }
+
+    public function activate(Driver $driver): JsonResponse
+    {
+        $driver = $this->driverService->activate($driver);
+
+        return success(
+            true,
+            $driver->is_active ? __('driver::message.activated') : __('driver::message.deactivated'),
+            $driver
+        );
+    }
 }

@@ -15,4 +15,8 @@ return [
     'locale' => 'اللغة',
     'is_active' => 'التفعيل',
     'created_at' => 'التاريخ',
+    'client_id' => 'العميل',
+    'product_id' => 'المنتج',
+    'store_id' => 'المتجر',
+    'clinic_id' => 'العيادة',
 ];

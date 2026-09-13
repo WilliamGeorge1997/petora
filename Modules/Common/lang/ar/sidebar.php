@@ -6,6 +6,7 @@ return [
     'user_management' => 'ادارة العضويات',
     'admins' => 'المديرين',
     'clients' => 'العملاء',
+    'drivers' => 'السائقين',
     'general_settings' => 'الاعدادات العامة',
     'store_management' => 'إدارة المتاجر',
     'product_management' => 'إدارة المنتجات',

@@ -73,9 +73,9 @@
                 <i data-feather="more-horizontal"></i>
             </li>
 
-            @canany(['Index-admin', 'Index-client'])
+            @canany(['Index-admin', 'Index-client', 'Index-driver'])
                 <li
-                    class="nav-item {{ Route::is('admin.admins.*', 'admin.client.*', 'admin.users.*') ? 'sidebar-group-active open' : '' }}">
+                    class="nav-item {{ Route::is('admin.admins.*', 'admin.client.*', 'admin.driver.*', 'admin.users.*') ? 'sidebar-group-active open' : '' }}">
                     <a class="d-flex align-items-center" href="#">
                         <i data-feather="users"></i>
                         <span class="menu-title text-truncate">{{ __('common::sidebar.user_management') }}</span>
@@ -94,6 +94,14 @@
                                 <a class="d-flex align-items-center" href="{{ route('admin.client.index') }}">
                                     <i data-feather="user"></i>
                                     <span class="menu-item text-truncate">{{ __('common::sidebar.clients') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('Index-driver')
+                            <li class="nav-item {{ Route::is('admin.driver.*') ? 'active' : '' }}">
+                                <a class="d-flex align-items-center" href="{{ route('admin.driver.index') }}">
+                                    <i data-feather="truck"></i>
+                                    <span class="menu-item text-truncate">{{ __('driver::general.drivers') }}</span>
                                 </a>
                             </li>
                         @endcan

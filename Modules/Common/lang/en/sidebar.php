@@ -6,6 +6,7 @@ return [
     'user_management' => 'User Management',
     'admins' => 'Admins',
     'clients' => 'Clients',
+    'drivers' => 'Drivers',
     'general_settings' => 'General Settings',
     'store_management' => 'Store Management',
     'product_management' => 'Product Management',

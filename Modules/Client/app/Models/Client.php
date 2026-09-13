@@ -4,6 +4,7 @@ namespace Modules\Client\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Community\Models\Follow;
@@ -107,5 +108,10 @@ class Client extends Authenticatable
     public function stories()
     {
         return $this->hasMany(Story::class);
+    }
+
+    public function favourites(): HasMany
+    {
+        return $this->hasMany(Favourite::class);
     }
 }

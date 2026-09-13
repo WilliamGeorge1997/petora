@@ -2,6 +2,7 @@
 
 use Modules\Admin\Models\Admin;
 use Modules\Client\Models\Client;
+use Modules\Driver\Models\Driver;
 
 return [
 
@@ -81,7 +82,7 @@ return [
         ],
         'drivers' => [
             'driver' => 'eloquent',
-            // 'model' => Driver::class,
+            'model' => Driver::class,
         ],
     ],
 

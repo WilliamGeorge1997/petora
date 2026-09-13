@@ -87,4 +87,25 @@ return [
     'longitude_max' => 'Longitude must not exceed 255 characters.',
 
     'is_default_boolean' => 'Invalid default status.',
+
+    'favourite' => [
+        'fetched' => 'Favourites fetched successfully.',
+        'added' => 'Product added to favourites successfully.',
+        'removed' => 'Product removed from favourites successfully.',
+        'deleted' => 'Favourite deleted successfully.',
+    ],
+
+    // Favourite Validation Messages
+    'product_id_required' => 'Product selection is required.',
+    'product_id_integer' => 'Invalid product selection.',
+    'product_id_exists' => 'Selected product does not exist.',
+
+    'store_id_integer' => 'Invalid store selection.',
+    'store_id_exists' => 'Selected store does not exist.',
+
+    'clinic_id_integer' => 'Invalid clinic selection.',
+    'clinic_id_exists' => 'Selected clinic does not exist.',
+
+    'store_or_clinic_required' => 'Either store or clinic is required.',
+    'store_and_clinic_prohibited' => 'Cannot select both store and clinic.',
 ];

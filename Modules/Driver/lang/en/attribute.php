@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'id' => 'ID',
+    'name' => 'Name',
+    'phone' => 'Phone',
+    'password' => 'Password',
+    'license_id' => 'License ID',
+    'image' => 'Image',
+    'store_id' => 'Store',
+    'clinic_id' => 'Clinic',
+    'country_id' => 'Country',
+    'city_id' => 'City',
+    'zone_id' => 'Zone',
+    'latitude' => 'Latitude',
+    'longitude' => 'Longitude',
+    'is_available' => 'Available',
+    'is_active' => 'Active',
+    'created_at' => 'Created At',
+    'select_store' => 'Select Store',
+    'select_clinic' => 'Select Clinic',
+    'select_country' => 'Select Country',
+    'select_city' => 'Select City',
+    'select_zone' => 'Select Zone',
+    'old_password' => 'Old Password',
+    'new_password' => 'New Password',
+];

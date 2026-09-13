@@ -15,4 +15,8 @@ return [
     'locale' => 'Locale',
     'is_active' => 'Status',
     'created_at' => 'Date',
+    'client_id' => 'Client',
+    'product_id' => 'Product',
+    'store_id' => 'Store',
+    'clinic_id' => 'Clinic',
 ];

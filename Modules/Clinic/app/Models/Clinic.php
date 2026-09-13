@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\Country\Models\City;
 use Modules\Country\Models\Country;
 use Modules\Country\Models\Zone;
@@ -127,9 +126,9 @@ class Clinic extends Model
         return $this->hasMany(Doctor::class);
     }
 
-    public function products(): MorphToMany
+    public function products(): BelongsToMany
     {
-        return $this->morphToMany(Product::class, 'sellerable', 'product_sellers')
+        return $this->belongsToMany(Product::class, 'product_sellers', 'clinic_id', 'product_id')
             ->withPivot(['price', 'is_active'])
             ->withTimestamps();
     }

@@ -13,7 +13,6 @@ class DriverLoginRequest extends FormRequest
             'phone' => ['required', 'string'],
             'password' => ['required', 'string'],
             'fcm_token' => ['nullable', 'string'],
-            'locale' => ['nullable', 'string', 'in:en,ar'],
         ];
     }
 
@@ -28,7 +27,7 @@ class DriverLoginRequest extends FormRequest
         return [
             'phone' => __('driver::attribute.phone'),
             'password' => __('driver::attribute.password'),
-            'fcm_token' => __('driver::attribute.fcm_token') ?? 'FCM Token',
+            'fcm_token' => __('driver::attribute.fcm_token'),
         ];
     }
 
@@ -37,9 +36,9 @@ class DriverLoginRequest extends FormRequest
     {
         return [
             'phone.required' => __('driver::message.phone_required'),
-            'phone.string' => __('driver::message.phone_string') ?? 'Phone must be a string.',
+            'phone.string' => __('driver::message.phone_string'),
             'password.required' => __('driver::message.password_required'),
-            'password.string' => __('driver::message.password_string') ?? 'Password must be a string.',
+            'password.string' => __('driver::message.password_string'),
         ];
     }
 }

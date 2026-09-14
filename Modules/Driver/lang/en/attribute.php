@@ -9,6 +9,8 @@ return [
     'image' => 'Image',
     'store_id' => 'Store',
     'clinic_id' => 'Clinic',
+    'store' => 'Store',
+    'clinic' => 'Clinic',
     'country_id' => 'Country',
     'city_id' => 'City',
     'zone_id' => 'Zone',
@@ -24,4 +26,8 @@ return [
     'select_zone' => 'Select Zone',
     'old_password' => 'Old Password',
     'new_password' => 'New Password',
+    'affiliation' => 'Affiliation',
+    'none' => 'None',
+    'locale' => 'Language',
+    'fcm_token' => 'FCM Token',
 ];

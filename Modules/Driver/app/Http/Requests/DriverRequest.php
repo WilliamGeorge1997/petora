@@ -29,7 +29,7 @@ class DriverRequest extends FormRequest
             'zone_id' => ['nullable', 'integer', 'exists:zones,id'],
             'latitude' => ['nullable', 'numeric'],
             'longitude' => ['nullable', 'numeric'],
-            'locale' => ['nullable', 'string', 'in:en,ar'],
+            'locale' => ['required', 'string', 'in:en,ar'],
         ];
     }
 
@@ -57,6 +57,7 @@ class DriverRequest extends FormRequest
             'zone_id' => __('driver::attribute.zone_id'),
             'latitude' => __('driver::attribute.latitude'),
             'longitude' => __('driver::attribute.longitude'),
+            'locale' => __('driver::attribute.locale'),
         ];
     }
 

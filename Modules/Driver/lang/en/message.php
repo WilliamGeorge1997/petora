@@ -15,6 +15,9 @@ return [
     'city_id_exists' => 'The selected city is invalid.',
     'zone_id_exists' => 'The selected zone is invalid.',
 
+    'phone_string' => 'The phone number must be a string.',
+    'password_string' => 'The password must be a string.',
+
     'created' => 'Driver has been created successfully.',
     'updated' => 'Driver has been updated successfully.',
     'deleted' => 'Driver has been deleted successfully.',
@@ -24,9 +27,9 @@ return [
     'unauthorized' => 'Invalid phone number or password.',
     'not_active' => 'Your account is deactivated. Please contact support.',
     'logged_user' => 'Driver details retrieved successfully.',
-    'logged_out' => 'Driver has been logged out successfully.',
+    'logged_out' => 'Logged out successfully.',
     'availability_changed' => 'Availability changed successfully.',
     'password_changed' => 'Password changed successfully.',
     'wrong_old_password' => 'The old password is incorrect.',
-    'authenticated' => 'Driver authenticated successfully.',
+    'authenticated' => 'Logged in successfully.',
 ];

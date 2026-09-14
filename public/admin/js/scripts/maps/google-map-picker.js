@@ -10,8 +10,10 @@ $(function () {
             var $lng = $($this.data('lng-input') || '#longitude');
             var $search = $($this.data('search-input') || '#map-search');
 
-            var lat = parseFloat($lat.val()) || 24.7136;
-            var lng = parseFloat($lng.val()) || 46.6753;
+            var defaultLat = parseFloat($this.data('default-lat')) || 30.0444;
+            var defaultLng = parseFloat($this.data('default-lng')) || 31.2357;
+            var lat = parseFloat($lat.val()) || defaultLat;
+            var lng = parseFloat($lng.val()) || defaultLng;
             var center = { lat: lat, lng: lng };
 
             var map = new google.maps.Map(this, {

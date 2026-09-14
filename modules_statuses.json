@@ -13,5 +13,6 @@
     "Pet": true,
     "Service": true,
     "Community": true,
-    "Driver": true
+    "Driver": true,
+    "Coupon": true
 }

@@ -25,9 +25,9 @@ return new class extends Migration
             $table->string('block')->nullable();
             $table->string('street')->nullable();
             $table->string('house_number')->nullable();
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
             $table->string('notes')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
             $table->boolean('is_default')->default(0);
             $table->timestamps();
         });

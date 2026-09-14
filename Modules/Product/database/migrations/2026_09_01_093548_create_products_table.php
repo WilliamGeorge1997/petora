@@ -17,7 +17,7 @@ return new class extends Migration
             $table->json('title');
             $table->json('description')->nullable();
             $table->foreignIdFor(Category::class)->index()->constrained()->restrictOnDelete();
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 10, 2)->unsigned()->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

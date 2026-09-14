@@ -35,11 +35,6 @@ class DriverAuthController extends Controller
             $updateData['fcm_token'] = $credentials['fcm_token'];
         }
 
-        $locale = $credentials['locale'] ?? $credentials['lang'] ?? null;
-        if ($locale) {
-            $updateData['locale'] = $locale;
-        }
-
         if (! empty($updateData)) {
             $driver->update($updateData);
         }

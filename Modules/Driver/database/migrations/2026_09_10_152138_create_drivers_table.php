@@ -28,8 +28,8 @@ return new class extends Migration
             $table->foreignIdFor(Country::class)->nullable()->index()->constrained()->nullOnDelete();
             $table->foreignIdFor(City::class)->nullable()->index()->constrained()->nullOnDelete();
             $table->foreignIdFor(Zone::class)->nullable()->index()->constrained()->nullOnDelete();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
             $table->string('fcm_token')->nullable();
             $table->string('locale')->default('en');
             $table->boolean('allow_notification')->default(true);

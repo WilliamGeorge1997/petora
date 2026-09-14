@@ -10,7 +10,7 @@ return [
     'actions' => 'الإجراءات',
     'date' => 'التاريخ',
     'status' => 'الحالة',
-    'availability' => 'التوفر',
+    'availability' => 'متاح',
     'available' => 'متاح',
     'unavailable' => 'غير متاح',
     'main_data' => 'البيانات الرئيسية',

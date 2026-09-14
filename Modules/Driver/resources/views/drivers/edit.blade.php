@@ -101,8 +101,66 @@
                             </div>
                         </div>
 
-                        {{-- Store --}}
+                        {{-- Locale --}}
                         <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label" for="locale">{{ __('driver::attribute.locale') }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="globe"></i></span>
+                                        <select class="form-select" name="locale" id="locale" required>
+                                            <option value="en" {{ old('locale', $driver->locale) == 'en' ? 'selected' : '' }}>English</option>
+                                            <option value="ar" {{ old('locale', $driver->locale) == 'ar' ? 'selected' : '' }}>العربية</option>
+                                        </select>
+                                    </div>
+                                    @error('locale')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Affiliation Type Radio --}}
+                        @php
+                            $selectedType = old('entity_type');
+                            if (!$selectedType) {
+                                if (old('clinic_id', $driver->clinic_id)) {
+                                    $selectedType = 'clinic';
+                                } elseif (old('store_id', $driver->store_id)) {
+                                    $selectedType = 'store';
+                                } else {
+                                    $selectedType = 'none';
+                                }
+                            }
+                        @endphp
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label">{{ __('driver::attribute.affiliation') ?? 'الجهة التابعة' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="d-flex flex-wrap gap-2 mt-50">
+                                        <div class="form-check me-2">
+                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_none" value="none" {{ $selectedType === 'none' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="entity_type_none">{{ __('driver::attribute.none') ?? 'لا يوجد' }}</label>
+                                        </div>
+                                        <div class="form-check me-2">
+                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_store" value="store" {{ $selectedType === 'store' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="entity_type_store">{{ __('driver::attribute.store_id') }}</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_clinic" value="clinic" {{ $selectedType === 'clinic' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="entity_type_clinic">{{ __('driver::attribute.clinic_id') }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Store --}}
+                        <div class="col-12" id="store_wrapper" style="{{ $selectedType === 'store' ? '' : 'display: none;' }}">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label" for="store_id">{{ __('driver::attribute.store_id') }}</label>
@@ -125,7 +183,7 @@
                         </div>
 
                         {{-- Clinic --}}
-                        <div class="col-12">
+                        <div class="col-12" id="clinic_wrapper" style="{{ $selectedType === 'clinic' ? '' : 'display: none;' }}">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label" for="clinic_id">{{ __('driver::attribute.clinic_id') }}</label>
@@ -220,25 +278,64 @@
                             </div>
                         </div>
 
-                        {{-- Latitude & Longitude Map Picker --}}
-                        <input type="hidden" name="latitude" id="latitude"
-                            value="{{ old('latitude', $driver->latitude) }}" />
-                        <input type="hidden" name="longitude" id="longitude"
-                            value="{{ old('longitude', $driver->longitude) }}" />
+                        {{-- Location on Map --}}
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
+                                    <label
+                                        class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group mb-1">
                                         <span class="input-group-text"><i data-feather="search"></i></span>
                                         <input type="text" id="map-search" class="form-control"
-                                            placeholder="{{ __('common::general.search_location') ?? 'ابحث عن موقع...' }}" />
+                                            placeholder="{{ __('common::general.search_location') ?? 'ابحث عن موقع أو عنوان...' }}" />
                                     </div>
                                     <div id="google-map-picker" class="map-picker-container rounded border"
                                         data-google-map-picker data-lat-input="#latitude" data-lng-input="#longitude"
-                                        data-search-input="#map-search" style="height: 300px;"></div>
+                                        data-search-input="#map-search"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Latitude --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="latitude">{{ __('driver::attribute.latitude') ?? 'خط العرض' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
+                                        <input type="text" id="latitude" class="form-control" name="latitude"
+                                            placeholder="{{ __('driver::attribute.latitude') ?? 'خط العرض' }}"
+                                            value="{{ old('latitude', $driver->latitude) }}" readonly />
+                                    </div>
+                                    @error('latitude')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Longitude --}}
+                        <div class="col-12">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3 text-center">
+                                    <label class="col-form-label"
+                                        for="longitude">{{ __('driver::attribute.longitude') ?? 'خط الطول' }}</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i data-feather="map-pin"></i></span>
+                                        <input type="text" id="longitude" class="form-control" name="longitude"
+                                            placeholder="{{ __('driver::attribute.longitude') ?? 'خط الطول' }}"
+                                            value="{{ old('longitude', $driver->longitude) }}" readonly />
+                                    </div>
+                                    @error('longitude')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -313,6 +410,49 @@
 @section('js')
     <script src="{{ asset('admin/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ asset('admin/js/scripts/forms/form-select2.js') }}"></script>
-    @include('common::includes.cascading_dropdowns')
-    @include('common::includes.map_picker')
+    <script>
+        $(document).ready(function() {
+            function toggleAffiliation(type, resetValue = true) {
+                if (type === 'store') {
+                    $('#clinic_wrapper').hide();
+                    if (resetValue) {
+                        $('#clinic_id').val('').trigger('change');
+                    }
+                    $('#clinic_id').prop('disabled', true);
+
+                    $('#store_wrapper').show();
+                    $('#store_id').prop('disabled', false);
+                } else if (type === 'clinic') {
+                    $('#store_wrapper').hide();
+                    if (resetValue) {
+                        $('#store_id').val('').trigger('change');
+                    }
+                    $('#store_id').prop('disabled', true);
+
+                    $('#clinic_wrapper').show();
+                    $('#clinic_id').prop('disabled', false);
+                } else {
+                    $('#store_wrapper').hide();
+                    if (resetValue) {
+                        $('#store_id').val('').trigger('change');
+                    }
+                    $('#store_id').prop('disabled', true);
+
+                    $('#clinic_wrapper').hide();
+                    if (resetValue) {
+                        $('#clinic_id').val('').trigger('change');
+                    }
+                    $('#clinic_id').prop('disabled', true);
+                }
+            }
+
+            $('.entity-type-radio').on('change', function() {
+                toggleAffiliation($(this).val(), true);
+            });
+
+            // Initialize state on page load
+            var initialType = $('.entity-type-radio:checked').val() || 'none';
+            toggleAffiliation(initialType, false);
+        });
+    </script>
 @endsection

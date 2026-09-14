@@ -24,8 +24,8 @@ return new class extends Migration
             $table->foreignIdFor(Country::class)->nullable()->index()->constrained()->nullOnDelete();
             $table->foreignIdFor(City::class)->nullable()->index()->constrained()->nullOnDelete();
             $table->foreignIdFor(Zone::class)->nullable()->index()->constrained()->nullOnDelete();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

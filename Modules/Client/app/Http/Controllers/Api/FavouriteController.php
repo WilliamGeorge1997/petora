@@ -18,9 +18,7 @@ class FavouriteController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $data = $request->merge([
-            'pagination_type' => 'cursor',
-        ])->all();
+        $data = $request->merge(['pagination_type' => 'cursor'])->all();
 
         $relations = ['product.images', 'store', 'clinic'];
         $favourites = $this->favouriteService->clientFavourites((int) auth('client')->id(), $data, $relations);
@@ -34,7 +32,7 @@ class FavouriteController extends Controller
         $result = $this->favouriteService->toggle($dto);
 
         $favouriteData = $result['favourite']
-            ? new FavouriteResource($result['favourite']->load(['product.images', 'store', 'clinic']))
+            ? new FavouriteResource($result['favourite'])
             : null;
 
         return success(true, $result['message'], $favouriteData);

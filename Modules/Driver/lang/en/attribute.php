@@ -26,6 +26,7 @@ return [
     'select_zone' => 'Select Zone',
     'old_password' => 'Old Password',
     'new_password' => 'New Password',
+    'new_password_confirmation' => 'New Password Confirmation',
     'affiliation' => 'Affiliation',
     'none' => 'None',
     'locale' => 'Language',

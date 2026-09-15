@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -30,6 +31,10 @@ class ApiExceptionHandler
         AccessDeniedHttpException::class => [
             'message' => 'common::message.forbidden',
             'status_string' => 'forbidden',
+        ],
+        ModelNotFoundException::class => [
+            'message' => 'common::message.not_found',
+            'status_string' => 'not_found',
         ],
         NotFoundHttpException::class => [
             'message' => 'common::message.not_found',

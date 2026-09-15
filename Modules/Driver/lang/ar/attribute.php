@@ -26,6 +26,7 @@ return [
     'select_zone' => 'اختر المنطقة',
     'old_password' => 'كلمة المرور القديمة',
     'new_password' => 'كلمة المرور الجديدة',
+    'new_password_confirmation' => 'تأكيد كلمة المرور الجديدة',
     'affiliation' => 'الجهة التابعة',
     'none' => 'لا يوجد',
     'locale' => 'اللغة',

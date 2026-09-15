@@ -6,6 +6,7 @@ return [
     'phone_unique' => 'The phone number has already been taken.',
     'password_required' => 'The password is required.',
     'password_min' => 'The password must be at least 6 characters.',
+    'password_confirmed' => 'The password confirmation does not match.',
     'image_invalid' => 'The file must be an image.',
     'image_mimes' => 'The image must be a file of type: jpeg, png, jpg, webp, svg, gif.',
     'image_max' => 'The image must not be greater than 2048 kilobytes.',

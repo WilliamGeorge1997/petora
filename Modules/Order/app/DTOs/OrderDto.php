@@ -2,33 +2,43 @@
 
 namespace Modules\Order\DTOs;
 
-use Illuminate\Http\UploadedFile;
+use Modules\Common\Helpers\SerialGenerator;
+use Modules\Order\Enums\OrderStatus as OrderStatusEnum;
 use Modules\Order\Http\Requests\OrderRequest;
+use Modules\Order\Models\Order;
 
 readonly class OrderDto
 {
     public function __construct(
         public int $clientId,
-        public ?int $paymentMethodId = null,
-        public ?int $addressId = null,
+        public int $addressId,
+        public int $paymentMethodId,
+        public int $orderMethodId,
+        public array $items,
+        public string $deliveryDate,
         public ?string $coupon = null,
-        public ?int $orderMethodId = null,
-        public ?array $items = null,
         public ?string $notes = null,
-        public ?bool $pointsDiscount = null,
+        public ?int $storeId = null,
+        public ?int $clinicId = null,
+        public ?int $storeDeliveryScheduleTimeId = null,
+        public ?int $clinicDeliveryScheduleTimeId = null,
     ) {}
 
     public static function fromRequest(OrderRequest $request): self
     {
         return new self(
             clientId: auth('client')->id(),
-            paymentMethodId: $request->validated('payment_method_id'),
             addressId: $request->validated('address_id'),
-            coupon: $request->validated('coupon'),
+            paymentMethodId: $request->validated('payment_method_id'),
             orderMethodId: $request->validated('order_method_id'),
+            deliveryDate: $request->validated('delivery_date'),
             items: $request->validated('items'),
+            coupon: $request->validated('coupon'),
             notes: $request->validated('notes'),
-            pointsDiscount: $request->boolean('points_discount'),
+            storeId: $request->validated('store_id'),
+            clinicId: $request->validated('clinic_id'),
+            storeDeliveryScheduleTimeId: $request->validated('store_delivery_schedule_time_id'),
+            clinicDeliveryScheduleTimeId: $request->validated('clinic_delivery_schedule_time_id'),
         );
     }
 
@@ -38,34 +48,31 @@ readonly class OrderDto
             'client_id' => $this->clientId,
             'payment_method_id' => $this->paymentMethodId,
             'address_id' => $this->addressId,
-            'coupon' => $this->coupon,
             'order_method_id' => $this->orderMethodId,
             'items' => $this->items,
             'notes' => $this->notes,
-            'points_discount' => $this->pointsDiscount,
+            'store_id' => $this->storeId,
+            'clinic_id' => $this->clinicId,
+            'delivery_date' => $this->deliveryDate,
+            'store_delivery_schedule_time_id' => $this->storeDeliveryScheduleTimeId,
+            'clinic_delivery_schedule_time_id' => $this->clinicDeliveryScheduleTimeId,
         ];
 
-        return array_filter($data, function($value) {
-            return !is_null($value) && $value !== '';
-        });
+        $data['order_no'] = SerialGenerator::generate(Order::class, 'ORD');
+        $data['order_status_id'] = OrderStatusEnum::Sent->value;
+
+        //Return only non falsy values
+        return array_filter($data);
     }
 
-    public function dataFromRequest(): array
+    public function getSellerContext(): ?array
     {
-        $data = $this->toArray();
-        $data['link_code'] = $this->generateLinkCode();
-        $data['order_status_id'] = 1;
-        // Delivery Date is no longer handled by 'today' or 'tomorrow' string.
-        // It will be handled natively or added later.
-
-        return $data;
-    }
-
-    private function generateLinkCode(): string
-    {
-        $serial = 'PH-';
-        $today = date("Ymd");
-        $rand = strtoupper(substr(uniqid(sha1(time())), 0, 4));
-        return $serial . $today . $rand;
+        if ($this->storeId) {
+            return ['relation' => 'stores', 'fk' => 'store_id', 'id' => $this->storeId];
+        }
+        if ($this->clinicId) {
+            return ['relation' => 'clinics', 'fk' => 'clinic_id', 'id' => $this->clinicId];
+        }
+        return null;
     }
 }

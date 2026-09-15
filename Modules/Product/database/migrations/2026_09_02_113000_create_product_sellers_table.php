@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Modules\Clinic\Models\Clinic;
 use Modules\Product\Models\Product;
@@ -26,6 +27,16 @@ return new class extends Migration
             $table->unique(['product_id', 'store_id']);
             $table->unique(['product_id', 'clinic_id']);
         });
+
+        DB::statement('
+            ALTER TABLE product_sellers
+            ADD CONSTRAINT seller_exclusive_check
+            CHECK (
+                (store_id IS NOT NULL AND clinic_id IS NULL)
+                OR
+                (store_id IS NULL AND clinic_id IS NOT NULL)
+            )
+        ');
     }
 
     /**
@@ -34,5 +45,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('product_sellers');
+        DB::statement('
+            ALTER TABLE product_sellers
+            DROP CONSTRAINT check_seller_exclusive
+        ');
     }
 };

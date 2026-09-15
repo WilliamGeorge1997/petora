@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->json('title');
             $table->foreignIdFor(City::class)->index()->constrained()->cascadeOnDelete();
+            $table->decimal('delivery_fee', 10, 2)->unsigned()->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

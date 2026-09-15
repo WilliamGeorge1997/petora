@@ -30,27 +30,10 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-        try {
-            $data = OrderDto::fromRequest($request)->dataFromRequest();
+        $dto = OrderDto::fromRequest($request);
+        $orderNos = $this->orderService->save($dto);
 
-            if (!empty($data['coupon'])) {
-                $data['coupon_id'] = $this->orderService->checkCoupon($data['coupon'], auth('client')->id());
-            }
-
-            $data['items'] = $this->orderService->prepareOrderDetails($data);
-
-            if (empty($data['items'])) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    'items' => __('order::message.no_items_available') ?? 'There are no available items in this moment'
-                ]);
-            }
-
-            $ids = $this->orderService->save($data);
-
-            return success(true, __('order::message.created'), $ids);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        return success(true, __('order::message.created'), $orderNos);
     }
 
     public function show(int $order_id)

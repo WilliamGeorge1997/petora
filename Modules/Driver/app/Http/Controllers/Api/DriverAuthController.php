@@ -86,10 +86,6 @@ class DriverAuthController extends Controller
         /** @var Driver $driver */
         $driver = $request->user('driver');
 
-        if (! Hash::check($request->validated('old_password'), $driver->password)) {
-            return fail(false, __('driver::message.wrong_old_password'), null, 'not_acceptable');
-        }
-
         $driver->update(['password' => Hash::make($request->validated('new_password'))]);
 
         return success(true, __('driver::message.password_changed'), $driver);

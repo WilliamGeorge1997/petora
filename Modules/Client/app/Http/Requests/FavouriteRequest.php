@@ -7,14 +7,6 @@ use Override;
 
 class FavouriteRequest extends FormRequest
 {
-    protected function prepareForValidation(): void
-    {
-        if (auth('client')->check()) {
-            $this->merge([
-                'client_id' => auth('client')->id(),
-            ]);
-        }
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -22,7 +14,6 @@ class FavouriteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'client_id' => ['required', 'integer', 'exists:clients,id'],
             'product_id' => ['required', 'integer', 'exists:products,id'],
             'store_id' => ['required_without:clinic_id', 'nullable', 'integer', 'exists:stores,id', 'prohibits:clinic_id'],
             'clinic_id' => ['required_without:store_id', 'nullable', 'integer', 'exists:clinics,id', 'prohibits:store_id'],
@@ -41,7 +32,6 @@ class FavouriteRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'client_id' => __('client::attribute.client_id'),
             'product_id' => __('client::attribute.product_id'),
             'store_id' => __('client::attribute.store_id'),
             'clinic_id' => __('client::attribute.clinic_id'),
@@ -52,10 +42,6 @@ class FavouriteRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'client_id.required' => __('client::message.client_id_required'),
-            'client_id.integer' => __('client::message.client_id_integer'),
-            'client_id.exists' => __('client::message.client_id_exists'),
-
             'product_id.required' => __('client::message.product_id_required'),
             'product_id.integer' => __('client::message.product_id_integer'),
             'product_id.exists' => __('client::message.product_id_exists'),

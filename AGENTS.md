@@ -16,6 +16,10 @@
     - **No Relations Needed:** If NO relationships need to be eager-loaded (e.g., simple updates, deletes, status toggles), use **Route Model Binding** named `{model_name}` in the route (e.g., `{clinic_service}`, `{schedule}`) and typed `Model $model` in the method for cleaner, easier syntax.
   - **Imports:** Always import classes at the top of files via `use` statements. Never use inline FQCNs (Fully Qualified Class Names) anywhere in the code.
 - **Database Migrations:** When adding a foreign key, always prefer using `foreignIdFor(Model::class)` over manual integer/foreign definitions.
+- **Domain Logic Encapsulation (YAGNI):** Do not create global helpers for domain-specific context resolution (e.g., resolving a seller from `store_id`/`clinic_id`). 
+  - **Stage 1**: Place the resolution method directly on the corresponding DTO (e.g., `OrderDto->getSellerContext()`).
+  - **Stage 2**: If no DTO exists, keep it as a private method in the relevant Service.
+  - **Stage 3**: Only extract to a dedicated global Resolver class if the logic is strictly proven to be shared across 3+ distinct modules.
 
 <laravel-boost-guidelines>
 === foundation rules ===

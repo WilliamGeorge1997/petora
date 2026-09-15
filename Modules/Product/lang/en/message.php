@@ -25,4 +25,11 @@ return [
     'images_invalid' => 'Each file must be a valid image.',
     'images_mimes' => 'Images must be of type: jpeg, png, jpg, webp, svg, gif.',
     'images_max' => 'Each image may not be greater than 2MB.',
+
+    'not_found' => 'Product with ID :id does not exist.',
+    'inactive' => 'The product ":title" is currently inactive.',
+    'not_available_store' => 'The product ":title" is not available in this store.',
+    'not_available_clinic' => 'The product ":title" is not available in this clinic.',
+    'seller_inactive_store' => 'The product ":title" is currently inactive in this store.',
+    'seller_inactive_clinic' => 'The product ":title" is currently inactive in this clinic.',
 ];

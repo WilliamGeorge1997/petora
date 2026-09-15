@@ -25,4 +25,11 @@ return [
     'images_invalid' => 'كل ملف يجب أن يكون صورة صالحة.',
     'images_mimes' => 'الصور يجب أن تكون من النوع: jpeg, png, jpg, webp, svg, gif.',
     'images_max' => 'حجم كل صورة يجب ألا يتجاوز 2 ميجابايت.',
+
+    'not_found' => 'المنتج ذو المعرف :id غير موجود.',
+    'inactive' => 'المنتج ":title" غير مفعل حالياً.',
+    'not_available_store' => 'المنتج ":title" غير متوفر في هذا المتجر.',
+    'not_available_clinic' => 'المنتج ":title" غير متوفر في هذه العيادة.',
+    'seller_inactive_store' => 'المنتج ":title" غير مفعل حالياً في هذا المتجر.',
+    'seller_inactive_clinic' => 'المنتج ":title" غير مفعل حالياً في هذه العيادة.',
 ];

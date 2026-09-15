@@ -6,6 +6,7 @@ return [
     'phone_unique' => 'رقم الهاتف مستخدم بالفعل.',
     'password_required' => 'كلمة المرور مطلوبة.',
     'password_min' => 'كلمة المرور يجب ألا تقل عن 6 أحرف.',
+    'password_confirmed' => 'تأكيد كلمة المرور غير متطابق.',
     'image_invalid' => 'الملف يجب أن يكون صورة.',
     'image_mimes' => 'يجب أن تكون الصورة من نوع: jpeg, png, jpg, webp, svg, gif.',
     'image_max' => 'حجم الصورة يجب ألا يتجاوز 2048 كيلوبايت.',

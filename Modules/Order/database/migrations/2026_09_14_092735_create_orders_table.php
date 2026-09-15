@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Modules\Client\Models\Address;
 use Modules\Client\Models\Client;
@@ -49,6 +50,22 @@ return new class extends Migration
             $table->string('notes')->nullable();
             $table->timestamps();
         });
+
+        DB::statement('
+            ALTER TABLE orders ADD CONSTRAINT orders_seller_and_schedule_check CHECK (
+                (
+                    store_id IS NOT NULL 
+                    AND clinic_id IS NULL 
+                    AND clinic_delivery_schedule_time_id IS NULL
+                ) 
+                OR 
+                (
+                    store_id IS NULL 
+                    AND clinic_id IS NOT NULL 
+                    AND store_delivery_schedule_time_id IS NULL
+                )
+            )
+        ');
     }
 
     /**

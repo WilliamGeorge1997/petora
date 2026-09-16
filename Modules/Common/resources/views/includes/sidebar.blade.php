@@ -241,14 +241,14 @@
                 <li class="nav-item {{ Route::is('admin.hashtags.*', 'admin.posts.*', 'admin.comments.*', 'admin.likes.*', 'admin.stories.*', 'admin.follows.*', 'admin.blocks.*') ? 'sidebar-group-active open' : '' }}">
                     <a class="d-flex align-items-center" href="#">
                         <i data-feather="message-circle"></i>
-                        <span class="menu-title text-truncate">Community</span>
+                        <span class="menu-title text-truncate">{{ __('community::general.community') }}</span>
                     </a>
                     <ul class="menu-content">
                         @can('Index-hashtag')
                             <li class="nav-item {{ Route::is('admin.hashtags.*') ? 'active' : '' }}">
                                 <a class="d-flex align-items-center" href="{{ route('admin.hashtags.index') }}">
                                     <i data-feather="hash"></i>
-                                    <span class="menu-item text-truncate">Hashtags</span>
+                                    <span class="menu-item text-truncate">{{ __('community::general.hashtag.index') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -256,7 +256,7 @@
                             <li class="nav-item {{ Route::is('admin.posts.*') ? 'active' : '' }}">
                                 <a class="d-flex align-items-center" href="{{ route('admin.posts.index') }}">
                                     <i data-feather="image"></i>
-                                    <span class="menu-item text-truncate">Posts</span>
+                                    <span class="menu-item text-truncate">{{ __('community::general.post.index') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -264,7 +264,7 @@
                             <li class="nav-item {{ Route::is('admin.comments.*') ? 'active' : '' }}">
                                 <a class="d-flex align-items-center" href="{{ route('admin.comments.index') }}">
                                     <i data-feather="message-square"></i>
-                                    <span class="menu-item text-truncate">Comments</span>
+                                    <span class="menu-item text-truncate">{{ __('community::general.comment.index') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -272,7 +272,7 @@
                             <li class="nav-item {{ Route::is('admin.likes.*') ? 'active' : '' }}">
                                 <a class="d-flex align-items-center" href="{{ route('admin.likes.index') }}">
                                     <i data-feather="thumbs-up"></i>
-                                    <span class="menu-item text-truncate">Likes</span>
+                                    <span class="menu-item text-truncate">{{ __('community::general.like.index') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -280,7 +280,7 @@
                             <li class="nav-item {{ Route::is('admin.stories.*') ? 'active' : '' }}">
                                 <a class="d-flex align-items-center" href="{{ route('admin.stories.index') }}">
                                     <i data-feather="clock"></i>
-                                    <span class="menu-item text-truncate">Stories</span>
+                                    <span class="menu-item text-truncate">{{ __('community::general.story.index') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -288,7 +288,7 @@
                             <li class="nav-item {{ Route::is('admin.follows.*') ? 'active' : '' }}">
                                 <a class="d-flex align-items-center" href="{{ route('admin.follows.index') }}">
                                     <i data-feather="users"></i>
-                                    <span class="menu-item text-truncate">Follows</span>
+                                    <span class="menu-item text-truncate">{{ __('community::general.follow.index') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -296,7 +296,7 @@
                             <li class="nav-item {{ Route::is('admin.blocks.*') ? 'active' : '' }}">
                                 <a class="d-flex align-items-center" href="{{ route('admin.blocks.index') }}">
                                     <i data-feather="slash"></i>
-                                    <span class="menu-item text-truncate">Blocks</span>
+                                    <span class="menu-item text-truncate">{{ __('community::general.block.index') }}</span>
                                 </a>
                             </li>
                         @endcan

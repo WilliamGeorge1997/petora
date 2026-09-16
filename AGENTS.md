@@ -1,5 +1,5 @@
 # Strict Execution Mode (NON-NEGOTIABLE)
-- NEVER innovate, predict, or suggest improvements. 
+- ALWAYS warn the user before any task implementation about best practices and best performance for the part being edited, offering suggestions before proceeding.
 - Do NOT "modernize" old code (e.g., do not upgrade JWT to Sanctum, do not change Traits to FormRequests unless explicitly told).
 - Do NOT attempt to integrate with new layouts (like `x-common` components) if it requires changing the reference template's UI.
 - If a referenced model or relation is missing, mock it or leave the code commented out. Do not delete the logic.

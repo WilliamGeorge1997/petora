@@ -2,21 +2,23 @@
 
 namespace Modules\Order\Services;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Modules\Client\Models\Client;
+use Modules\Client\Services\AddressService;
+use Modules\Country\Services\ZoneService;
+use Modules\Coupon\Enums\CouponDiscountOn;
 use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Services\CouponService;
 use Modules\Order\DTOs\OrderDto;
+use Modules\Order\Enums\DiscountType;
+use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
 use Modules\Order\Models\OrderDetail;
-use Modules\Order\Models\OrderHistory;
 use Modules\Order\Services\OrderHistoryService;
-use Modules\Product\Models\Product;
 use Modules\Product\Services\ProductService;
 
 class OrderService
@@ -77,20 +79,30 @@ class OrderService
     public function save(OrderDto $dto): array
     {
         $data = $dto->toArray();
+        $seller = $dto->resolveSeller();
 
         $coupon = $this->couponService->checkCoupon($dto->coupon, $dto->clientId);
         if (!empty($coupon)) $data['coupon_id'] = $coupon->id;
 
-        $items = $this->prepareOrderDetails($dto);
-        $data = $this->calcOrderDetails($data, $items, $coupon);
+        $items = $this->prepareOrderDetails($dto, $seller);
+
+        $orderDetails = $this->calcOrderDetails($items, $coupon, $seller, $dto->addressId);
+        $data = array_merge($data, $orderDetails);
 
         return DB::transaction(function () use ($data, $items) {
+
             $order = Order::create($data);
             $this->storeOrderDetails($order, $items);
 
-            (new OrderHistoryService())->log($order, $data['order_status_id'], $data['client_id'], Client::class, $data['notes']);
+            app(OrderHistoryService::class)->save(
+                $order,
+                $data['order_status_id'],
+                $data['client_id'],
+                Client::class,
+                $data['notes']
+            );
 
-            event(new \Modules\Order\Events\OrderCreated($order));
+            event(new OrderCreated($order));
 
             return [$order->order_no];
         });
@@ -98,32 +110,51 @@ class OrderService
 
 
     //Helpers=======================================
-    private function prepareOrderDetails(OrderDto $dto): Collection
+    private function prepareOrderDetails(OrderDto $dto, array $seller): Collection
     {
-        $sellerContext = $dto->getSellerContext();
-        $products = (new ProductService())->checkProducts($dto->items, $sellerContext);
+        $products = app(ProductService::class)->checkProducts($dto->items, $seller);
 
         $requestedItems = collect($dto->items)->keyBy('product_id');
 
-        return $products->map(function ($product) use ($requestedItems, $sellerContext) {
+        return $products->map(function ($product) use ($requestedItems, $seller) {
             $requestedItem = $requestedItems[$product->id];
             return [
                 'product_id' => $product->id,
                 'quantity'   => $requestedItem['quantity'],
-                'price'      => $product->{$sellerContext['relation']}->first()->pivot->price,
+                'price'      => $product->{$seller['relation']}->first()->pivot->price,
                 'note'       => $requestedItem['note'] ?? null,
             ];
         });
     }
 
 
-    private function calcOrderDetails(array $data, Collection $items, ?Coupon $coupon = null): array
+    private function calcOrderDetails(Collection $items, ?Coupon $coupon, ?array $seller, int $addressId): array
     {
-        $data['subtotal'] = $this->calcOrderSubTotal($items);
-        $data['quantity'] = $this->calcOrderQuantity($items);
-        $totals = $this->calcOrderTotal($data, $data['subtotal'], $coupon);
+        $subtotal = $this->calcOrderSubTotal($items);
+        $quantity = $this->calcOrderQuantity($items);
+        $totals = $this->calcOrderTotal($subtotal, $coupon, $seller, $addressId);
 
-        return array_merge($data, $totals);
+        return array_merge([
+            'subtotal' => $subtotal,
+            'quantity' => $quantity,
+        ], $totals);
+    }
+
+    private function calcOrderTotal(float $base_total, ?Coupon $coupon, ?array $seller, int $addressId): array
+    {
+        $tax = $this->calcTax($base_total);
+        $delivery_fee = $this->calcDeliveryFee($seller, $addressId);
+        $discountData = $this->calcDiscount($base_total, $delivery_fee, $coupon);
+
+        $total = $base_total + $tax + $delivery_fee - $discountData['discount'];
+
+        return [
+            'delivery_fee'  => $delivery_fee,
+            'tax'           => $tax,
+            'discount'      => $discountData['discount'],
+            'discount_type' => $discountData['discount_type'],
+            'total'         => $total,
+        ];
     }
 
 
@@ -140,40 +171,39 @@ class OrderService
         return $items->sum('quantity');
     }
 
-    private function calcOrderTotal(array $data, float $base_total, ?Coupon $coupon = null): array
-    {
-        $tax = $this->calcTax($base_total);
-        $delivery_fee = $this->calcDeliveryFee($data, $base_total);
-        $discountData = $this->calcDiscount($base_total, $delivery_fee, $coupon);
-
-        $total = $base_total + $tax + $delivery_fee - $discountData['discount'];
-
-        return [
-            'delivery_fee'  => $delivery_fee,
-            'tax'           => $tax,
-            'discount'      => $discountData['discount'],
-            'discount_type' => $discountData['discount_type'],
-            'total'         => $total,
-        ];
-    }
-
     private function calcTax(float $base_total): float
     {
         $base_tax = (float) getSetting('tax'); //Percent
         return ($base_total * $base_tax) / 100;
     }
 
-    private function calcDeliveryFee(array $data, $base_total)
+    private function calcDeliveryFee(?array $seller, int $addressId): float
     {
-        $delivery_fee = $this->getSellerDeliveryFee($data);
-        if (isset($data['delivery_date']) && Carbon::parse($data['delivery_date'])->isSameDay(Carbon::today())) {
-            $delivery_fee += (float) getSetting('today_fee', 0);
-        } else {
-            $delivery_fee += (float) getSetting('next_day_fee', 0);
-        }
+        $delivery_fee = 0;
 
-        if ($base_total >= (float) getSetting('free_delivery_limit', PHP_INT_MAX))
-            $delivery_fee = 0;
+        $address = app(AddressService::class)->findById($addressId);
+
+        if ($address && $seller) {
+            $sellerModel = app($seller['service'])->findById($seller['id']);
+
+            if ($sellerModel) {
+                //1. Case seller & client in the same zone
+                if ($sellerModel->zone_id && $address->zone_id && $sellerModel->zone_id == $address->zone_id) {
+                    $zone = app(ZoneService::class)->findById($sellerModel->zone_id);
+                    $delivery_fee = $zone ? (float) $zone->delivery_fee : 0;
+                } else {
+                    //2. Case client outside the seller zone
+                    $distance = calculateDistance(
+                        (float) $sellerModel->latitude,
+                        (float) $sellerModel->longitude,
+                        (float) $address->latitude,
+                        (float) $address->longitude
+                    );
+                    $fee_per_km = (float) (getSetting('delivery_fee_for_each_km') ?? 0);
+                    $delivery_fee = $distance * $fee_per_km;
+                }
+            }
+        }
 
         return $delivery_fee;
     }
@@ -184,20 +214,18 @@ class OrderService
         $discount_type = null;
 
         if ($coupon) {
-            $discount_type = 1; // DISCOUNT_WITH_COUPON
+            $discount_type = DiscountType::Coupon->value;
             switch ($coupon->discount_on) {
-                case ('subtotal'):
+                case CouponDiscountOn::Subtotal:
                     $discount = $coupon->discount($base_total);
                     break;
-                case ('delivery'):
+                case CouponDiscountOn::Delivery:
                     $discount = $coupon->discount($delivery_fee);
                     break;
-                case ('both'):
+                case CouponDiscountOn::Both:
                 default:
                     $discount = $coupon->discount($base_total + $delivery_fee);
             }
-        } else {
-            // Placeholder for points logic
         }
 
         return [

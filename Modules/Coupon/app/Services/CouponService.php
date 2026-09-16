@@ -2,20 +2,20 @@
 
 namespace Modules\Coupon\Services;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
+use Modules\Coupon\DTOs\CouponDto;
 use Modules\Coupon\Models\Coupon;
+use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 use Modules\Order\Models\Order;
 
 class CouponService
 {
     private string $model = Coupon::class;
 
-    public function findAll(array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function findAll(array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)
             ->filter($data)
@@ -29,7 +29,7 @@ class CouponService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-    public function findByCode(string $code, array $relations = []): ?Coupon
+    public function findByCode(string $code, array $relations = []): Coupon
     {
         return $this->model::with($relations)->where('code', $code)->firstOrFail();
     }
@@ -39,63 +39,34 @@ class CouponService
         return $couponOrId instanceof Coupon ? $couponOrId : $this->findById($couponOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function save(CouponDto $dto): Coupon
     {
-        $query = $this->model::query()->with($relations)->where($column, $value);
-
-        return getCaseCollection($query, $data);
+        return $this->model::create($dto->toArray());
     }
 
-    public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
-    {
-        $query = $this->model::query()->active()->with($relations);
-
-        return getCaseCollection($query, $data, $columns);
-    }
-
-    public function save(array $data): Coupon
-    {
-        return DB::transaction(function () use ($data) {
-            /** @var Coupon $coupon */
-            $coupon = $this->model::create($data);
-
-            if (isset($data['branches'])) {
-                $coupon->branches()->sync($data['branches']);
-            }
-
-            return $coupon;
-        });
-    }
-
-    public function update(int|Coupon $couponOrId, array $data): Coupon
+    public function update(int|Coupon $couponOrId, CouponDto $dto): Coupon
     {
         $coupon = $this->resolveModel($couponOrId);
+        $coupon->update($dto->toArray());
 
-        return DB::transaction(function () use ($coupon, $data) {
-            $coupon->update($data);
-
-            if (isset($data['branches'])) {
-                $coupon->branches()->sync($data['branches']);
-            }
-
-            return $coupon;
-        });
+        return $coupon;
     }
 
     public function delete(int|Coupon $couponOrId): bool
     {
         $coupon = $this->resolveModel($couponOrId);
-
         return $coupon->delete();
     }
 
     public function activate(int|Coupon $couponOrId): Coupon
     {
         $coupon = $this->resolveModel($couponOrId);
-        $coupon->update(['is_active' => ! $coupon->is_active]);
+        $coupon->update(['is_active' => !$coupon->is_active]);
 
         return $coupon;
     }
+
+
 
     public function checkCoupon(?string $code, int $client_id): ?Coupon
     {

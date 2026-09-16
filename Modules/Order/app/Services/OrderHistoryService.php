@@ -10,7 +10,7 @@ class OrderHistoryService
     /**
      * Log a new history entry for an order.
      */
-    public function log(Order $order, int $statusId, ?int $historibleId = null, ?string $historibleType = null, ?string $notes = null): OrderHistory
+    public function save(Order $order, int $statusId, ?int $historibleId = null, ?string $historibleType = null, ?string $notes = null): OrderHistory
     {
         return $order->histories()->create([
             'order_status_id' => $statusId,

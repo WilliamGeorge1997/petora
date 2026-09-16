@@ -28,7 +28,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a
-                                        href="{{ route('admin.dashboard') }}">{{ __('admin::general.home') ?? 'Home' }}</a></li>
+                                        href="{{ route('admin.dashboard') }}">{{ __('common::general.home') ?? 'Home' }}</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     {{ __('community::general.post.index') }}</li>
                             </ol>
@@ -52,15 +52,15 @@
                     <div class="col-md-3">
                         <label class="form-label">{{ __('community::attribute.is_active') }}</label>
                         <select name="is_active" class="form-select">
-                            <option value="">{{ __('admin::general.select_status') ?? 'All' }}</option>
+                            <option value="">{{ __('common::general.select_status') ?? 'All' }}</option>
                             <option value="1" {{ request('is_active') === '1' ? 'selected' : '' }}>Active</option>
                             <option value="0" {{ request('is_active') === '0' ? 'selected' : '' }}>Inactive</option>
                         </select>
                     </div>
                     <div class="col-md-4 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary me-1">{{ __('admin::general.search') ?? 'Search' }}</button>
+                        <button type="submit" class="btn btn-primary me-1">{{ __('common::general.search') ?? 'Search' }}</button>
                         <a href="{{ route('admin.posts.index') }}"
-                            class="btn btn-outline-secondary">{{ __('admin::general.reset') ?? 'Reset' }}</a>
+                            class="btn btn-outline-secondary">{{ __('common::general.reset') ?? 'Reset' }}</a>
                     </div>
                 </div>
             </form>
@@ -199,7 +199,7 @@
                         {
                             // Actions
                             targets: -1,
-                            title: 'Actions',
+                            title: '{{ __("common::general.actions") ?? "Actions" }}',
                             orderable: false,
                             render: function(data, type, full, meta) {
                                 return (
@@ -283,7 +283,7 @@
                         }
                     }
                 });
-                $('div.head-label').html('<h6 class="mb-0">Data</h6>');
+                $('div.head-label').html('<h6 class="mb-0">{{ __("common::general.main_data") ?? "Main Data" }}</h6>');
             }
 
             // Toggle Status

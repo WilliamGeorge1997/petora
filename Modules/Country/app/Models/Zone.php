@@ -18,6 +18,7 @@ class Zone extends Model
         'city_id',
         'title',
         'is_active',
+        'delivery_fee',
     ];
 
     public array $translatable = ['title'];

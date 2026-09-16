@@ -2,10 +2,11 @@
 
 namespace Modules\Order\DTOs;
 
-use Modules\Common\Helpers\SerialGenerator;
+use Modules\Clinic\Services\ClinicService;
 use Modules\Order\Enums\OrderStatus as OrderStatusEnum;
 use Modules\Order\Http\Requests\OrderRequest;
 use Modules\Order\Models\Order;
+use Modules\Store\Services\StoreService;
 
 readonly class OrderDto
 {
@@ -58,20 +59,28 @@ readonly class OrderDto
             'clinic_delivery_schedule_time_id' => $this->clinicDeliveryScheduleTimeId,
         ];
 
-        $data['order_no'] = SerialGenerator::generate(Order::class, 'ORD');
+        $data['order_no'] = generateSerial(Order::class, 'ORD');
         $data['order_status_id'] = OrderStatusEnum::Sent->value;
 
         //Return only non falsy values
         return array_filter($data);
     }
 
-    public function getSellerContext(): ?array
+    public function resolveSeller(): ?array
     {
         if ($this->storeId) {
-            return ['relation' => 'stores', 'fk' => 'store_id', 'id' => $this->storeId];
+            return [
+                'relation' => 'stores',
+                'service'  => StoreService::class,
+                'id'       => $this->storeId,
+            ];
         }
         if ($this->clinicId) {
-            return ['relation' => 'clinics', 'fk' => 'clinic_id', 'id' => $this->clinicId];
+            return [
+                'relation' => 'clinics',
+                'service'  => ClinicService::class,
+                'id'       => $this->clinicId,
+            ];
         }
         return null;
     }

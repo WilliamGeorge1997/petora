@@ -5,11 +5,13 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Modules\Admin\Database\Seeders\AdminDatabaseSeeder;
+use Modules\Booking\Database\Seeders\BookingStatusSeeder;
 use Modules\Common\Database\Seeders\CommonDatabaseSeeder;
 use Modules\Country\Database\Seeders\CountryDatabaseSeeder;
 use Modules\Order\Database\Seeders\OrderMethodDatabaseSeeder;
 use Modules\Order\Database\Seeders\OrderStatusDatabaseSeeder;
 use Modules\Order\Database\Seeders\PaymentMethodDatabaseSeeder;
+
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
@@ -26,6 +28,7 @@ class DatabaseSeeder extends Seeder
             OrderStatusDatabaseSeeder::class,
             OrderMethodDatabaseSeeder::class,
             PaymentMethodDatabaseSeeder::class,
+            BookingStatusSeeder::class,
         ]);
     }
 }

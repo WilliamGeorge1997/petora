@@ -27,7 +27,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a
-                                        href="{{ route('admin.dashboard') }}">{{ __('admin::general.home') ?? 'Home' }}</a></li>
+                                        href="{{ route('admin.dashboard') }}">{{ __('common::general.home') ?? 'Home' }}</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     {{ __('community::general.block.index') }}</li>
                             </ol>
@@ -151,7 +151,7 @@
                         {
                             // Actions
                             targets: -1,
-                            title: 'Actions',
+                            title: '{{ __("common::general.actions") ?? "Actions" }}',
                             orderable: false,
                             render: function(data, type, full, meta) {
                                 return (
@@ -227,7 +227,7 @@
                         }
                     }
                 });
-                $('div.head-label').html('<h6 class="mb-0">Data</h6>');
+                $('div.head-label').html('<h6 class="mb-0">{{ __("common::general.main_data") ?? "Main Data" }}</h6>');
             }
 
             // Delete Record

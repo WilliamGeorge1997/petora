@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'community' => 'Community',
     'hashtag' => [
         'index' => 'Hashtags',
         'fetched' => 'Hashtags fetched successfully',

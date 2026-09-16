@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'community' => 'المجتمع',
     'hashtag' => [
         'index' => 'الهاشتاجات',
         'fetched' => 'تم جلب الهاشتاجات بنجاح',

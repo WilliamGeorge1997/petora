@@ -8,6 +8,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Modules\Common\Models\Setting;
+use \Illuminate\Support\Carbon;
 
 if (! function_exists('allStatusCode')) {
     function allStatusCode()
@@ -70,13 +71,13 @@ if (! function_exists('paginatedResource')) {
     function paginatedResource(LengthAwarePaginator|CursorPaginator|Collection $data, string $resourceClass)
     {
         if ($data instanceof Paginator || $data instanceof CursorPaginator) {
-            $data->getCollection()->transform(fn ($item) => (new $resourceClass($item))->resolve());
+            $data->getCollection()->transform(fn($item) => (new $resourceClass($item))->resolve());
 
             return $data;
         }
 
         if ($data instanceof Collection) {
-            return $data->map(fn ($item) => (new $resourceClass($item))->resolve());
+            return $data->map(fn($item) => (new $resourceClass($item))->resolve());
         }
 
         return $data;
@@ -170,3 +171,28 @@ if (!function_exists('isVideo')) {
     }
 }
 
+if (! function_exists('calculateDistance')) {
+    function calculateDistance(float $lat1, float $lon1, float $lat2, float $lon2): float
+    {
+        $earthRadius = 6371; // km
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon / 2) * sin($dLon / 2);
+        return $earthRadius * 2 * atan2(sqrt($a), sqrt(1 - $a));
+    }
+}
+
+if (! function_exists('generateSerial')) {
+    function generateSerial(string $model, string $prefix): string
+    {
+        $todayCount = $model::whereDate('created_at', Carbon::today())->count() + 1;
+
+        return $prefix
+            . (100 - date('y'))
+            . (100 - date('m'))
+            . (100 - date('d'))
+            . str_pad($todayCount, 4, '0', STR_PAD_LEFT);
+    }
+}

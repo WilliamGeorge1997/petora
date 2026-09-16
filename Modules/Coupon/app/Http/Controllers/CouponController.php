@@ -3,54 +3,81 @@
 namespace Modules\Coupon\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
+use Modules\Admin\Enums\AdminRole;
+use Modules\Coupon\DTOs\CouponDto;
+use Modules\Coupon\Http\Requests\CouponRequest;
+use Modules\Coupon\Models\Coupon;
+use Modules\Coupon\Services\CouponService;
 
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-coupon|Create-coupon|Edit-coupon|Delete-coupon', only: ['index', 'store'])]
+#[Middleware('permission:Create-coupon', only: ['create', 'store'])]
+#[Middleware('permission:Edit-coupon', only: ['edit', 'update', 'activate'])]
+#[Middleware('permission:Delete-coupon', only: ['destroy'])]
 class CouponController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private CouponService $couponService) {}
+
+    public function index(Request $request): View|JsonResponse
     {
-        return view('coupon::index');
+        $data = $request->merge(['paginated' => 50])->all();
+        $coupons = $this->couponService->findAll($data);
+        
+        if ($request->ajax()) {
+            return success(true, __('coupon::message.fetched'), $coupons->items());
+        }
+
+        return view('coupon::coupons.index', compact('coupons'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('coupon::create');
+        return view('coupon::coupons.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function store(CouponRequest $request)
     {
-        return view('coupon::show');
+        $dto = CouponDto::fromRequest($request);
+        $this->couponService->save($dto);
+
+        return to_route('admin.coupon.index')->with('success', __('coupon::message.created'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function edit(int $coupon_id)
     {
-        return view('coupon::edit');
+        $coupon = $this->couponService->findById($coupon_id);
+        
+        return view('coupon::coupons.edit', compact('coupon'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
+    public function update(CouponRequest $request, Coupon $coupon)
+    {
+        $dto = CouponDto::fromRequest($request);
+        $this->couponService->update($coupon, $dto);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+        return to_route('admin.coupon.index')->with('success', __('coupon::message.updated'));
+    }
+
+    public function destroy(Coupon $coupon)
+    {
+        $this->couponService->delete($coupon);
+
+        return success(true, __('coupon::message.deleted'));
+    }
+
+    public function activate(Coupon $coupon)
+    {
+        $coupon = $this->couponService->activate($coupon);
+
+        return success(
+            true,
+            $coupon->is_active ? __('coupon::message.updated') : __('coupon::message.updated'),
+            $coupon
+        );
+    }
 }

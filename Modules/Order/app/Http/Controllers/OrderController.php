@@ -3,54 +3,65 @@
 namespace Modules\Order\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Modules\Order\DTOs\OrderUpdateDto;
+use Modules\Order\Enums\OrderStatus as OrderStatusEnum;
+use Modules\Order\Http\Requests\OrderUpdateRequest;
+use Modules\Order\Models\Order;
+use Modules\Order\Services\OrderService;
+use Modules\Order\ViewModels\OrderViewModel;
 
+#[Middleware('auth:admin')]
+#[Middleware('permission:Index-order|Edit-order', only: ['index'])]
+#[Middleware('permission:Edit-order', only: ['edit', 'update'])]
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private OrderService $orderService) {}
+
+    public function index(Request $request): View|JsonResponse
     {
-        return view('order::index');
+        $relations = ['store', 'clinic', 'paymentMethod', 'orderStatus', 'orderMethod', 'client', 'driver'];
+        $data = $request->merge(['paginated' => 50])->all();
+        $orders = $this->orderService->findAll($relations, $data);
+
+        if ($request->ajax()) {
+            return success(true, __('order::message.fetched'), $orders->items());
+        }
+
+        $totalCount = Order::count();
+        $sentCount = Order::where('order_status_id', OrderStatusEnum::Sent->value)->count();
+        $doneCount = Order::where('order_status_id', OrderStatusEnum::Done->value)->count();
+        $cancelCount = Order::where('order_status_id', OrderStatusEnum::Cancelled->value)->count();
+        $viewModel = new OrderViewModel;
+
+        return view('order::orders.index', compact('orders', 'totalCount', 'sentCount', 'doneCount', 'cancelCount', 'viewModel'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function edit(int $order_id): View
     {
-        return view('order::create');
+        $relations = ['orderStatus', 'driver', 'client', 'paymentMethod', 'orderMethod', 'store', 'clinic'];
+        $order = $this->orderService->findById($order_id, $relations);
+        $viewModel = new OrderViewModel;
+
+        return view('order::orders.edit', compact('order', 'viewModel'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function update(OrderUpdateRequest $request, Order $order): RedirectResponse
     {
-        return view('order::show');
+        $dto = OrderUpdateDto::fromRequest($request);
+        $this->orderService->update($order, $dto);
+
+        return to_route('admin.order.index')->with('success', __('order::message.updated'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function destroy(Order $order): JsonResponse
     {
-        return view('order::edit');
+        $this->orderService->delete($order->id);
+
+        return success(true, __('order::message.deleted'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
 }

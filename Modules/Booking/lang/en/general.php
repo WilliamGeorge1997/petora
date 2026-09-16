@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'booking' => [
+        'index' => 'Bookings',
+        'create' => 'Create Booking',
+        'edit' => 'Edit Booking',
+        'details' => 'Booking Details',
+        'financials' => 'Financial Details',
+        'history' => 'Status History',
+    ],
+    'status' => [
+        'index' => 'Booking Statuses',
+        'create' => 'Create Status',
+        'edit' => 'Edit Status',
+    ],
+    'actions' => 'Actions',
+    'date' => 'Date',
+    'update' => 'Update',
+    'main_data' => 'Main Data',
+    'activate' => 'Activate',
+    'deactivate' => 'Deactivate',
+    'delete' => 'Delete',
+    'cancel' => 'Cancel',
+    'sure_delete' => 'Are you sure you want to delete?',
+    'cant_revert' => 'You will not be able to revert this!',
+    'yes_delete' => 'Yes, delete it!',
+    'success' => 'Success!',
+    'done' => 'Well Done!',
+    'select_status' => 'Select status',
+    'home' => 'Home',
+    'search' => 'Search',
+    'reset' => 'Reset',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'submit' => 'Submit',
+    'edit' => 'Edit',
+];

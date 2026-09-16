@@ -15,8 +15,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::patch('order-statuses/{order_status}/activate', [OrderStatusController::class, 'activate'])->name('order_status.activate');
     Route::resource('order-statuses', OrderStatusController::class)->names('order_status')->except(['show']);
-});
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('orders', OrderController::class)->names('order');
+    Route::get('orders/{order_id}/edit', [OrderController::class, 'edit'])->name('order.edit');
+    Route::resource('orders', OrderController::class)->names('order')->except(['create', 'store', 'show', 'edit']);
 });

@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('order_no');
             $table->decimal('subtotal', 10, 2)->unsigned()->default(0);
             $table->decimal('discount', 10, 2)->unsigned()->default(0);
-            $table->tinyInteger('discount_type')->index()->nullable();
+            $table->unsignedTinyInteger('discount_type')->index()->nullable();
             $table->decimal('tax', 10, 2)->unsigned()->default(0);
             $table->decimal('delivery_fee', 10, 2)->unsigned()->default(0);
             $table->decimal('total', 10, 2)->unsigned()->default(0);

@@ -14,5 +14,6 @@
     "Service": true,
     "Community": true,
     "Driver": true,
-    "Coupon": true
+    "Coupon": true,
+    "Booking": true
 }

@@ -24,7 +24,7 @@ class OrderRequest extends FormRequest
             'coupon' => ['nullable', 'string'],
             'notes' => ['nullable', 'string'],
             'items' => ['required', 'array'],
-            'items.*.product_id' => ['required', 'integer', 'exists:products,id', 'distinct'],
+            'items.*.product_id' => ['required', 'integer', 'distinct'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
             'items.*.note' => ['nullable', 'string'],
         ];

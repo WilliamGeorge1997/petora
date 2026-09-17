@@ -5,10 +5,12 @@ namespace Modules\Client\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Community\Models\Follow;
 use Modules\Community\Models\Story;
+use Modules\Notification\Models\Notification;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
@@ -27,6 +29,7 @@ class Client extends Authenticatable
         'fcm_token',
         'verify_code',
         'is_active',
+        'allow_notification',
     ];
 
     protected $casts = [
@@ -88,7 +91,7 @@ class Client extends Authenticatable
                 return $value;
             }
 
-            return asset('storage/uploads/client/'.$value);
+            return asset('storage/uploads/client/' . $value);
         }
 
         return $value;
@@ -113,5 +116,10 @@ class Client extends Authenticatable
     public function favourites(): HasMany
     {
         return $this->hasMany(Favourite::class);
+    }
+
+    public function notifications(): MorphMany
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
     }
 }

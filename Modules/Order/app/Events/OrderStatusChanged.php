@@ -7,11 +7,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Modules\Order\Models\Order;
 
-class OrderCancelled
+class OrderStatusChanged
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public Order $order)
-    {
-    }
+    public function __construct($order, $previousStatus, $newStatus, $actor) {}
 }

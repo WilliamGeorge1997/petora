@@ -19,7 +19,21 @@
 - **Domain Logic Encapsulation (YAGNI):** Do not create global helpers for domain-specific context resolution (e.g., resolving a seller from `store_id`/`clinic_id`). 
   - **Stage 1**: Place the resolution method directly on the corresponding DTO (e.g., `OrderDto->getSellerContext()`).
   - **Stage 2**: If no DTO exists, keep it as a private method in the relevant Service.
-  - **Stage 3**: Only extract to a dedicated global Resolver class if the logic is strictly proven to be shared across 3+ distinct modules.
+- **Command & Directory Execution Constraints:**
+  - **Strict Directory Boundary:** All terminal commands must execute solely within the project root. Never use `cd ..`, never access external directories (like `C:\`, global drives, or temp directories), and never reference paths outside the workspace.
+  - **Strictly Prohibited Commands (NEVER run or propose):**
+    - Any delete or file removal commands (e.g., `rm`, `del`, `Remove-Item`, `rmdir`), even within the current project.
+    - Any `git` commands (e.g., `git push`, `git pull`, `git checkout`, `git reset`, `git status`, etc.).
+    - Any `composer` commands (e.g., `composer update`, `composer install`, `composer require`, etc.).
+    - Pint formatting commands (`vendor/bin/pint`, `php vendor/bin/pint`).
+    - Standard Laravel `php artisan make:*` commands targeting the root project.
+  - **Module Scaffolding Rule:**
+    - Never scaffold directly to the root project. ONLY use `php artisan module:make*` commands (e.g., `php artisan module:make-controller`, `php artisan module:make-model`) to ensure code resides strictly within its respective module.
+    - **Forbidden Directory Structure:** NEVER create or generate a `Classes` folder inside any `Modules/<Module>/app/` directory (e.g., avoid `app/Classes/Services/`, `app/Classes/DTOs/`, `app/Classes/`). Standard classes must always reside directly under their dedicated directories: `app/Services/`, `app/DTOs/`, `app/Models/`, etc., strictly mirroring the Store module.
+  - **Allowed Safe Commands:**
+    - Strictly limited to read-only local inspection and test commands (e.g., `php artisan route:list`).
+  - **File Deletion & Cleanup Policy:**
+    - The agent must NEVER delete any files or directories. If any files or directories become obsolete, redundant, or need deletion after finishing a task, the agent must explicitly list the exact file and directory paths in the final message to the user so the user can review and delete them manually.
 
 <laravel-boost-guidelines>
 === foundation rules ===

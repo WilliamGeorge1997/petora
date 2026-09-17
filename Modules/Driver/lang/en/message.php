@@ -33,4 +33,17 @@ return [
     'password_changed' => 'Password changed successfully.',
     'wrong_old_password' => 'The old password is incorrect.',
     'authenticated' => 'Logged in successfully.',
+
+    'all_orders' => 'All orders fetched successfully.',
+    'new_orders' => 'New orders fetched successfully.',
+    'open_orders' => 'Open orders fetched successfully.',
+    'closed_orders' => 'Closed orders fetched successfully.',
+    'order_details' => 'Order details fetched successfully.',
+    'order_accepted' => 'Order accepted successfully.',
+    'order_delivered' => 'Order delivered successfully.',
+    'order_refused' => 'Order refused successfully.',
+    'order_failed' => 'Order marked as failed successfully.',
+    'location_updated' => 'Driver location updated successfully.',
+    'locale_changed' => 'Language changed successfully.',
+    'driver_statistics' => 'Driver statistics fetched successfully.',
 ];

@@ -126,7 +126,7 @@ class DriverService
         return $driver->fcm_token;
     }
 
-    public function changeLang(int|Driver $driverOrId): Driver
+    public function changeLocale(int|Driver $driverOrId): Driver
     {
         $driver = $this->resolveModel($driverOrId);
         $locale = $driver->locale === 'en' ? 'ar' : 'en';

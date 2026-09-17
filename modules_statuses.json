@@ -15,5 +15,6 @@
     "Community": true,
     "Driver": true,
     "Coupon": true,
-    "Booking": true
+    "Booking": true,
+    "Notification": true
 }

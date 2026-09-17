@@ -4,7 +4,9 @@ namespace Modules\Order\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Modules\Client\Models\Client;
@@ -15,7 +17,9 @@ use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Services\CouponService;
 use Modules\Order\DTOs\OrderDto;
 use Modules\Order\Enums\DiscountType;
+use Modules\Order\Enums\OrderStatus;
 use Modules\Order\Events\OrderCreated;
+use Modules\Order\Events\OrderStatusChanged;
 use Modules\Order\Models\Order;
 use Modules\Order\Models\OrderDetail;
 use Modules\Order\Services\OrderHistoryService;
@@ -23,6 +27,7 @@ use Modules\Product\Services\ProductService;
 
 class OrderService
 {
+    private $model = Order::class;
     public function __construct(private CouponService $couponService) {}
 
     public function findAll(array $relations = [], array $data = []): LengthAwarePaginator|CursorPaginator|EloquentCollection
@@ -49,20 +54,72 @@ class OrderService
         return getCaseCollection($orders, $data);
     }
 
-    public function findById($id, array $relations = [])
+    public function findById(int $id, array $relations = [])
     {
-        return Order::with($relations)->findOrFail($id);
+        return $this->model::with($relations)->findOrFail($id);
     }
 
-    public function DriverOrders($driver_id, $order_Status_id = null, $paginate = 15, array $relations = [])
+    protected function resolveModel(int|Order $orderOrId): Order
     {
-        return Order::with($relations)->where('driver_id', $driver_id)
-            ->when($order_Status_id ?? null, function ($q) use ($order_Status_id) {
-                return $q->where('order_status_id', $order_Status_id);
-            })
-            ->orderByDesc('created_at')
-            ->paginate($paginate);
+        return $orderOrId instanceof Order ? $orderOrId : $this->findById($orderOrId);
     }
+
+    function driverOrders(int $driverId, ?int $orderStatusId = null, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|EloquentCollection
+    {
+        $query = $this->model::with($relations)->whereDriverId($driverId)
+            ->when($orderStatusId ?? null, function ($q) use ($orderStatusId) {
+                return $q->whereOrderStatusId($orderStatusId);
+            })
+            ->latest('id');
+        return getCaseCollection($query, $data);
+    }
+
+    public function driverStatistics(int $driverId, string $fromDate, string $toDate): array
+    {
+        $startDate = Carbon::parse($fromDate)->startOfDay();
+        $endDate = Carbon::parse($toDate)->endOfDay();
+
+        $stats = $this->model::query()
+            ->where('driver_id', $driverId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw("
+                COUNT(CASE WHEN order_status_id = ? THEN 1 END) as delivered_orders,
+                COUNT(CASE WHEN order_status_id = ? THEN 1 END) as refused_orders,
+                COUNT(CASE WHEN order_status_id = ? THEN 1 END) as failed_orders
+            ", [
+                OrderStatus::Done->value,
+                OrderStatus::RefusedByDriver->value,
+                OrderStatus::Fail->value,
+            ])
+            ->first();
+
+        return [
+            'DeliveredOrders' => (int) ($stats->delivered_orders ?? 0),
+            'RefusedOrders'   => (int) ($stats->refused_orders ?? 0),
+            'FailedOrders'    => (int) ($stats->failed_orders ?? 0),
+        ];
+    }
+
+    public function getOrderTrackingData(Order $order): array
+    {
+        $statusIds = $order->histories->pluck('order_status_id')->values()->all();
+        $lastStatus = $order->orderStatus ?? $order->histories->last()?->status;
+
+        return [
+            'order_id'          => $order->id,
+            'duration_time'     => $order->duration_time ?? ($order->delivery_time_from && $order->delivery_time_to ? "{$order->delivery_time_from} - {$order->delivery_time_to}" : null),
+            'status_ids'        => $statusIds,
+            'statuses'          => $order->histories,
+            'last_Status_title' => $lastStatus?->getTranslations('title') ?? [],
+        ];
+    }
+
+    public function historyStatusIds(int|Order $orderOrId): array
+    {
+        $order = $this->resolveModel($orderOrId);
+        return $order->histories()->pluck('order_status_id')->values()->all();
+    }
+
 
     public function findBy($key, $value, array $relations = [], $paginate = null)
     {
@@ -108,6 +165,45 @@ class OrderService
         });
     }
 
+    public function update(int|Order $orderOrId, OrderDto $dto)
+    {
+        $data = $dto->toArray();
+        $order = $this->resolveModel($orderOrId);
+        $order->update($data);
+        return $order;
+    }
+
+    public function delete(int|Order $orderOrId)
+    {
+        $order = $this->resolveModel($orderOrId);
+        $order->delete();
+    }
+
+    public function changeStatusTo(int|Order $orderOrId, OrderStatus $newStatus, Model $actor, ?string $notes = null, array $extraAttributes = []): Order
+    {
+        $order = $this->resolveModel($orderOrId);
+
+        return DB::transaction(function () use ($order, $newStatus, $actor, $notes) {
+            $previousStatus = $order->order_status_id;
+
+            // 1. Update order
+            $order->update(['order_status_id' => $newStatus->value]);
+
+            // 2. Synchronous Audit Trail
+            app(OrderHistoryService::class)->save(
+                order: $order,
+                statusId: $newStatus->value,
+                historibleId: $actor->getKey(),
+                historibleType: $actor->getMorphClass(),
+                notes: $notes
+            );
+
+            // 3. Dispatch event for notifications & external services
+            broadcast(OrderStatusChanged::class)->toOthers();
+
+            return $order;
+        });
+    }
 
     //Helpers=======================================
     private function prepareOrderDetails(OrderDto $dto, array $seller): Collection
@@ -118,6 +214,7 @@ class OrderService
 
         return $products->map(function ($product) use ($requestedItems, $seller) {
             $requestedItem = $requestedItems[$product->id];
+
             return [
                 'product_id' => $product->id,
                 'quantity'   => $requestedItem['quantity'],
@@ -157,14 +254,12 @@ class OrderService
         ];
     }
 
-
     private function calcOrderSubTotal(Collection $items): float
     {
         return $items->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
     }
-
 
     private function calcOrderQuantity(Collection $items): int
     {
@@ -253,22 +348,6 @@ class OrderService
         })->toArray();
 
         OrderDetail::insert($insertData);
-    }
-
-
-    public function update($id, $data)
-    {
-        $Order = $this->findById($id);
-        if (isset($data['order_status_id']) && $data['order_status_id'] == 5 && $Order['client_id'] ?? null) {
-        }
-        $Order->update($data);
-        return $Order;
-    }
-
-    public function delete($id)
-    {
-        $Order = $this->findById($id);
-        $Order->delete();
     }
 
     // public function updateOrderItemPrice(int $orderId, int $orderDetailId, float $price): OrderDetail

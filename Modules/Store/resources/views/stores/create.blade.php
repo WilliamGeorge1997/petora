@@ -1,14 +1,6 @@
 @php
     $locale = app()->getLocale();
-    $days = [
-        'saturday'  => __('store::general.days.saturday'),
-        'sunday'    => __('store::general.days.sunday'),
-        'monday'    => __('store::general.days.monday'),
-        'tuesday'   => __('store::general.days.tuesday'),
-        'wednesday' => __('store::general.days.wednesday'),
-        'thursday'  => __('store::general.days.thursday'),
-        'friday'    => __('store::general.days.friday'),
-    ];
+    $days = \Modules\Common\Enums\WeekDay::options();
     $initialWorkingHours = old('working_hours') ?? [];
 @endphp
 @extends('common::layouts.master')

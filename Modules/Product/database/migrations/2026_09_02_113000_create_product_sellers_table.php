@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->index()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Store::class)->nullable()->index()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Clinic::class)->nullable()->index()->constrained()->cascadeOnDelete();
+            $table->json('title')->nullable();
+            $table->json('description')->nullable();
             $table->decimal('price', 10, 2)->unsigned()->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

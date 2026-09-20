@@ -100,7 +100,7 @@ class OrderService
         ];
     }
 
-    public function getOrderTrackingData(Order $order): array
+    public function track(Order $order): array
     {
         $statusIds = $order->histories->pluck('order_status_id')->values()->all();
         $lastStatus = $order->orderStatus ?? $order->histories->last()?->status;
@@ -161,7 +161,7 @@ class OrderService
 
             event(new OrderCreated($order));
 
-            return [$order->order_no];
+            return ["order_no" =>  $order->order_no];
         });
     }
 

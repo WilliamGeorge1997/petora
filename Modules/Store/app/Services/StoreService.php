@@ -30,9 +30,9 @@ class StoreService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-    protected function resolveModel(int|Store $storeOrId): Store
+    protected function resolveModel(int|Store $storeOrId, array $relations = []): Store
     {
-        return $storeOrId instanceof Store ? $storeOrId : $this->findById($storeOrId);
+        return $storeOrId instanceof Store ? $storeOrId : $this->findById($storeOrId, $relations);
     }
 
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection

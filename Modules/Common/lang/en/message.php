@@ -10,4 +10,5 @@ return [
     'page_not_found_desc' => 'Oops! 😖 The requested URL was not found on this server.',
     'back_to_home' => 'Back to home',
     'method_not_allowed' => 'Method not allowed.',
+    'imported_successfully' => 'Imported successfully.',
 ];

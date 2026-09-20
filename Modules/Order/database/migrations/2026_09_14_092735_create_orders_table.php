@@ -52,17 +52,15 @@ return new class extends Migration
         });
 
         DB::statement('
-            ALTER TABLE orders ADD CONSTRAINT orders_seller_and_schedule_check CHECK (
+            ALTER TABLE orders ADD CONSTRAINT orders_seller_exclusive_check CHECK (
                 (
                     store_id IS NOT NULL 
                     AND clinic_id IS NULL 
-                    AND clinic_delivery_schedule_time_id IS NULL
                 ) 
                 OR 
                 (
                     store_id IS NULL 
                     AND clinic_id IS NOT NULL 
-                    AND store_delivery_schedule_time_id IS NULL
                 )
             )
         ');

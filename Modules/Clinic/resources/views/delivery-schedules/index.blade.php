@@ -78,19 +78,9 @@
             var token = $('meta[name="csrf-token"]').attr('content');
             var url = new URL(window.location.href);
             var page = url.searchParams.get("page");
-            var ajaxRequest = "{{ route('admin.clinic.delivery-schedules.index', $clinic->id) }}";
-            if (page != null) {
-                ajaxRequest += (ajaxRequest.indexOf('?') !== -1 ? '&' : '?') + "page=" + page;
-            }
-            var dayTranslations = {
-                'saturday': '{{ __('clinic::general.schedule.days.saturday') }}',
-                'sunday': '{{ __('clinic::general.schedule.days.sunday') }}',
-                'monday': '{{ __('clinic::general.schedule.days.monday') }}',
-                'tuesday': '{{ __('clinic::general.schedule.days.tuesday') }}',
-                'wednesday': '{{ __('clinic::general.schedule.days.wednesday') }}',
-                'thursday': '{{ __('clinic::general.schedule.days.thursday') }}',
-                'friday': '{{ __('clinic::general.schedule.days.friday') }}'
-            };
+            var ajaxRequest = "{{ route('admin.clinic.delivery-schedules.index', $clinic->id) }}?";
+            if (page != null) ajaxRequest += "page=" + page;
+            var dayTranslations = @json(\Modules\Common\Enums\WeekDay::options());
 
             var dt_basic_table = $('.datatables-basic'),
                 dt_date_table = $('.dt-date');

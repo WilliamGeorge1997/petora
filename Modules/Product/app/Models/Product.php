@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Modules\Category\Models\Category;
 use Modules\Clinic\Models\Clinic;
 use Modules\Store\Models\Store;
@@ -20,9 +21,9 @@ class Product extends Model
     use HasFactory, HasTranslations, LogsActivity;
 
     protected $fillable = [
-        'category_id',
         'title',
         'description',
+        'category_id',
         'price',
         'is_active',
     ];
@@ -30,8 +31,8 @@ class Product extends Model
     public array $translatable = ['title', 'description'];
 
     protected $casts = [
-        'is_active' => 'boolean',
         'price' => 'decimal:2',
+        'is_active' => 'boolean',
     ];
 
     // Activity log options
@@ -84,14 +85,28 @@ class Product extends Model
     public function stores(): BelongsToMany
     {
         return $this->belongsToMany(Store::class, 'product_sellers', 'product_id', 'store_id')
-            ->withPivot(['price', 'is_active'])
+            ->using(ProductSeller::class)
+            ->withPivot(['id', 'title', 'description', 'price', 'is_active'])
             ->withTimestamps();
     }
 
     public function clinics(): BelongsToMany
     {
         return $this->belongsToMany(Clinic::class, 'product_sellers', 'product_id', 'clinic_id')
-            ->withPivot(['price', 'is_active'])
+            ->using(ProductSeller::class)
+            ->withPivot(['id', 'title', 'description', 'price', 'is_active'])
             ->withTimestamps();
+    }
+
+    public function sellerImages(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            ProductSellerImage::class,
+            ProductSeller::class,
+            'product_id',
+            'product_seller_id',
+            'id',
+            'id'
+        );
     }
 }

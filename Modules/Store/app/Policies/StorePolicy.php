@@ -30,4 +30,12 @@ class StorePolicy
 
         return false;
     }
+
+    /**
+     * Determine whether the admin can view the store's products.
+     */
+    public function viewProducts(Admin $admin, Store $store): bool
+    {
+        return $this->update($admin, $store);
+    }
 }

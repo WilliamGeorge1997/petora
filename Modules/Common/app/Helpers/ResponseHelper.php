@@ -3,6 +3,7 @@
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
@@ -85,7 +86,7 @@ if (! function_exists('paginatedResource')) {
 }
 
 if (! function_exists('getCaseCollection')) {
-    function getCaseCollection(Builder $builder, array $data, array $columns = ['*'])
+    function getCaseCollection(Builder|Relation $builder, array $data, array $columns = ['*'])
     {
         if ($data['paginated'] ?? null) {
             $type = $data['pagination_type'] ?? 'default';
@@ -190,6 +191,7 @@ if (! function_exists('generateSerial')) {
         $todayCount = $model::whereDate('created_at', Carbon::today())->count() + 1;
 
         return $prefix
+            . '-'
             . (100 - date('y'))
             . (100 - date('m'))
             . (100 - date('d'))

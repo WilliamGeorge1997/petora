@@ -1,15 +1,7 @@
 @php
     $locale = app()->getLocale();
     $serviceTitle = $clinicService->service ? $clinicService->service->getTranslation('title', $locale) : '-';
-    $days = [
-        'saturday'  => __('clinic::general.schedule.days.saturday'),
-        'sunday'    => __('clinic::general.schedule.days.sunday'),
-        'monday'    => __('clinic::general.schedule.days.monday'),
-        'tuesday'   => __('clinic::general.schedule.days.tuesday'),
-        'wednesday' => __('clinic::general.schedule.days.wednesday'),
-        'thursday'  => __('clinic::general.schedule.days.thursday'),
-        'friday'    => __('clinic::general.schedule.days.friday'),
-    ];
+    $days = \Modules\Common\Enums\WeekDay::options();
 
     $initialTimes = old('times') ?? $schedule->times->map(fn($time) => [
         'id'       => $time->id,

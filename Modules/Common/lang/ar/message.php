@@ -10,4 +10,5 @@ return [
     'page_not_found_desc' => 'عفواً! 😖 الصفحة التي تبحث عنها غير موجودة على هذا الخادم.',
     'back_to_home' => 'العودة للرئيسية',
     'method_not_allowed' => 'الطريقة غير مسموح بها.',
+    'imported_successfully' => 'تم الاستيراد بنجاح.',
 ];

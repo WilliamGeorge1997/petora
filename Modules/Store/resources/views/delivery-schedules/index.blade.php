@@ -78,19 +78,9 @@
             var token = $('meta[name="csrf-token"]').attr('content');
             var url = new URL(window.location.href);
             var page = url.searchParams.get("page");
-            var ajaxRequest = "{{ route('admin.store.delivery-schedules.index', $store->id) }}";
-            if (page != null) {
-                ajaxRequest += (ajaxRequest.indexOf('?') !== -1 ? '&' : '?') + "page=" + page;
-            }
-            var dayTranslations = {
-                'saturday': '{{ __('store::general.days.saturday') }}',
-                'sunday': '{{ __('store::general.days.sunday') }}',
-                'monday': '{{ __('store::general.days.monday') }}',
-                'tuesday': '{{ __('store::general.days.tuesday') }}',
-                'wednesday': '{{ __('store::general.days.wednesday') }}',
-                'thursday': '{{ __('store::general.days.thursday') }}',
-                'friday': '{{ __('store::general.days.friday') }}'
-            };
+            var ajaxRequest = "{{ route('admin.store.delivery-schedules.index', $store->id) }}?";
+            if (page != null) ajaxRequest += "page=" + page;
+            var dayTranslations = @json(\Modules\Common\Enums\WeekDay::options());
 
             var dt_basic_table = $('.datatables-basic'),
                 dt_date_table = $('.dt-date');

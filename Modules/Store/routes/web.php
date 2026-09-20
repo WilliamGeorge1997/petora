@@ -12,6 +12,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stores/{store}/products', [StoreProductController::class, 'index'])->name('store.products.index');
     Route::get('stores/{store}/products/export', [StoreProductController::class, 'export'])->name('store.products.export');
     Route::post('stores/{store}/products/import', [StoreProductController::class, 'import'])->name('store.products.import');
+    Route::post('stores/{store}/products/import-all', [StoreProductController::class, 'importAll'])->name('store.products.import-all');
+    Route::patch('stores/{store}/products/{product}/activate', [StoreProductController::class, 'activate'])->name('store.products.activate');
+    Route::get('stores/{store}/products/{product_id}/edit', [StoreProductController::class, 'edit'])->name('store.products.edit');
+    Route::put('stores/{store}/products/{product_id}', [StoreProductController::class, 'update'])->name('store.products.update');
+    Route::delete('stores/{store}/products/{product}', [StoreProductController::class, 'destroy'])->name('store.products.destroy');
+    Route::delete('stores/{store}/products/{product_id}/images/{image_id}', [StoreProductController::class, 'destroyImage'])->name('store.products.images.destroy');
 
     // Store Delivery Schedules Routes
     Route::get('stores/{store}/delivery-schedules', [StoreDeliveryScheduleController::class, 'index'])->name('store.delivery-schedules.index');

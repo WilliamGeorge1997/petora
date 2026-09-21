@@ -6,9 +6,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Modules\Store\DTOs\StoreDeliveryScheduleDto;
 use Modules\Store\Models\Store;
 use Modules\Store\Models\StoreDeliverySchedule;
+use Modules\Store\Models\StoreDeliveryScheduleTime;
 
 class StoreDeliveryScheduleService
 {
@@ -35,16 +37,8 @@ class StoreDeliveryScheduleService
 
     public function findBy(string $column, mixed $value, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->with($relations)->where($column, $value);
-
+        $query = $this->model::query()->with($relations)->where($column, $value)->latest('id');
         return getCaseCollection($query, $data);
-    }
-
-    public function getSchedulesForStore(Store|int $storeOrId): Collection
-    {
-        $storeId = $storeOrId instanceof Store ? $storeOrId->id : (int) $storeOrId;
-
-        return $this->model::query()->where('store_id', $storeId)->with('times')->get();
     }
 
     public function save(Store|int $storeOrId, StoreDeliveryScheduleDto $dto): StoreDeliverySchedule
@@ -106,6 +100,19 @@ class StoreDeliveryScheduleService
         }
 
         $schedule->times()->whereNotIn('id', $keptIds)->delete();
+    }
+
+    public function getTimes(int $scheduleTimeId, int $storeId): array
+    {
+        $scheduleTime = StoreDeliveryScheduleTime::findOrFail($scheduleTimeId);
+
+        if ($scheduleTime->schedule->store_id !== $storeId) {
+            throw ValidationException::withMessages([
+                'store_delivery_schedule_time_id' => __('order::message.store_delivery_schedule_time_id_invalid'),
+            ]);
+        }
+
+        return ['delivery_time_from' => $scheduleTime->from, 'delivery_time_to' => $scheduleTime->to];
     }
 
     public function delete(int|StoreDeliverySchedule $scheduleOrId): bool

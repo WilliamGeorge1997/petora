@@ -4,18 +4,17 @@ namespace Modules\Store\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Modules\Store\Models\Store;
 use Modules\Store\Services\StoreDeliveryScheduleService;
 use Modules\Store\Transformers\StoreDeliveryScheduleResource;
 
 class StoreDeliveryScheduleController extends Controller
 {
-    public function __construct(private StoreDeliveryScheduleService $scheduleService) {}
+    public function __construct(private StoreDeliveryScheduleService $storeDeliveryScheduleService) {}
 
-    public function index(Store $store): JsonResponse
+    public function index(int $store_id): JsonResponse
     {
-        $schedules = $this->scheduleService->getSchedulesForStore($store);
-
+        $relations = ['times'];
+        $schedules = $this->storeDeliveryScheduleService->findBy('store_id', $store_id, relations: $relations);
         return success(true, __('store::message.fetched'), StoreDeliveryScheduleResource::collection($schedules));
     }
 }

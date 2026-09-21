@@ -22,4 +22,12 @@ class ClinicPolicy
 
         return false;
     }
+
+    /**
+     * Determine whether the admin can view the clinic's products.
+     */
+    public function viewProducts(Admin $admin, Clinic $clinic): bool
+    {
+        return $this->update($admin, $clinic);
+    }
 }

@@ -1,15 +1,26 @@
 <?php
 
 return [
-    'fetched' => 'Payment methods fetched successfully.',
-    'order_methods_fetched' => 'Order methods fetched successfully.',
-    'payment_methods_fetched' => 'Payment methods fetched successfully.',
-    'order_statuses_fetched' => 'Order statuses fetched successfully.',
-    'created' => 'Payment method created successfully.',
-    'updated' => 'Payment method updated successfully.',
-    'deleted' => 'Payment method deleted successfully.',
-    'activated' => 'Payment method activated successfully.',
-    'deactivated' => 'Payment method deactivated successfully.',
+    'order' => [
+        'fetched' => 'Order fetched successfully.',
+        'created' => 'Order created successfully.',
+        'updated' => 'Order updated successfully.',
+        'deleted' => 'Order deleted successfully.',
+    ],
+    'order_method' => [
+        'fetched' => 'Order methods fetched successfully.',
+    ],
+    'payment_method' => [
+        'fetched' => 'Payment methods fetched successfully.',
+        'created' => 'Payment method created successfully.',
+        'updated' => 'Payment method updated successfully.',
+        'deleted' => 'Payment method deleted successfully.',
+        'activated' => 'Payment method activated successfully.',
+        'deactivated' => 'Payment method deactivated successfully.',
+    ],
+    'order_status' => [
+        'fetched' => 'Order statuses fetched successfully.',
+    ],
 
     'title_en_required' => 'Title in English is required.',
     'title_en_string' => 'Invalid Title in English format.',
@@ -45,4 +56,6 @@ return [
     'clinic_delivery_schedule_time_id_required_with' => 'Clinic delivery time is required when clinic is selected.',
     'clinic_delivery_schedule_time_id_exists' => 'Selected clinic delivery time is invalid.',
     'product_id_distinct' => 'Each product can only be added once.',
+    'store_delivery_schedule_time_id_invalid'  => 'The selected delivery time does not belong to the chosen store.',
+    'clinic_delivery_schedule_time_id_invalid'  => 'The selected delivery time does not belong to the chosen clinic.',
 ];

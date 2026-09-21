@@ -36,18 +36,8 @@ class OrderController extends Controller
             'sub_zone',
             'order_request'
         ];
-
         $orders = $this->orderService->findBy('client_id', auth('client')->id(), $data, $relations);
-
         return success(true, __('order::message.fetched'), $orders);
-    }
-
-    public function store(OrderRequest $request)
-    {
-        $dto = OrderDto::fromRequest($request);
-        $orderNo = $this->orderService->save($dto);
-
-        return success(true, __('order::message.created'), $orderNo);
     }
 
     public function show(int $order_id)
@@ -64,43 +54,42 @@ class OrderController extends Controller
             'order_request'
         ]);
         Gate::authorize('view', $order);
+        return success(true, __('order::message.order.fetched'), $order);
+    }
 
-        return success(true, __('order::message.fetched'), $order);
+    public function store(OrderRequest $request)
+    {
+        $dto = OrderDto::fromRequest($request);
+        $orderNo = $this->orderService->save($dto);
+        return success(true, __('order::message.order.created'), $orderNo);
     }
 
     public function update(OrderRequest $request, Order $order)
     {
         Gate::authorize('update', $order);
-
         $dto = OrderDto::fromRequest($request);
         $order = $this->orderService->update($order, $dto);
-
-        return success(true, __('order::message.updated'), $order);
+        return success(true, __('order::message.order.updated'), $order);
     }
 
     public function destroy(Order $order)
     {
         Gate::authorize('delete', $order);
-
         $this->orderService->delete($order);
-
-        return success(true, __('order::message.deleted'));
+        return success(true, __('order::message.order.deleted'));
     }
 
     public function cancel(Request $request, Order $order)
     {
         Gate::authorize('update', $order);
-
         /** @var Client $client */
         $client = auth('client')->user();
-
         $order = $this->orderService->changeStatusTo(
-            orderOrId: $order,
-            newStatus: OrderStatus::Cancelled,
-            actor: $client,
-            notes: $request->input('notes')
+            $order,
+            OrderStatus::Cancelled,
+            $client,
+            $request->input('notes')
         );
-
         return success(true, __('order::message.cancelled'));
     }
 
@@ -108,9 +97,7 @@ class OrderController extends Controller
     {
         $order = $this->orderService->findById($order_id);
         Gate::authorize('view', $order);
-
         $histories = $orderHistoryService->history($order_id);
-
         return success(true, __('order::message.fetched'), HistoryResource::collection($histories));
     }
 
@@ -118,9 +105,7 @@ class OrderController extends Controller
     {
         $order = $this->orderService->findById($order_id, ['histories.status', 'orderStatus']);
         Gate::authorize('view', $order);
-
         $data = $this->orderService->track($order);
-
         return success(true, __('order::message.fetched'), $data);
     }
 }

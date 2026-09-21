@@ -16,6 +16,6 @@ class PaymentMethodController extends Controller
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $paymentMethods = $this->paymentMethodService->active($data);
 
-        return success(true, __('order::message.payment_methods_fetched'), $paymentMethods);
+        return success(true, __('order::message.payment_method.fetched'), $paymentMethods);
     }
 }

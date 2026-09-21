@@ -1,15 +1,26 @@
 <?php
 
 return [
-    'fetched' => 'تم جلب طرق الدفع بنجاح.',
-    'order_methods_fetched' => 'تم جلب طرق الطلب بنجاح.',
-    'payment_methods_fetched' => 'تم جلب طرق الدفع بنجاح.',
-    'order_statuses_fetched' => 'تم جلب حالات الطلب بنجاح.',
-    'created' => 'تم إنشاء طريقة الدفع بنجاح.',
-    'updated' => 'تم تحديث طريقة الدفع بنجاح.',
-    'deleted' => 'تم حذف طريقة الدفع بنجاح.',
-    'activated' => 'تم تفعيل طريقة الدفع بنجاح.',
-    'deactivated' => 'تم إلغاء تفعيل طريقة الدفع بنجاح.',
+    'order' => [
+        'fetched' => 'تم جلب الطلب بنجاح.',
+        'created' => 'تم إنشاء الطلب بنجاح.',
+        'updated' => 'تم تحديث الطلب بنجاح.',
+        'deleted' => 'تم حذف الطلب بنجاح.',
+    ],
+    'order_method' => [
+        'fetched' => 'تم جلب طرق الطلب بنجاح.',
+    ],
+    'payment_method' => [
+        'fetched' => 'تم جلب طرق الدفع بنجاح.',
+        'created' => 'تم إنشاء طريقة الدفع بنجاح.',
+        'updated' => 'تم تحديث طريقة الدفع بنجاح.',
+        'deleted' => 'تم حذف طريقة الدفع بنجاح.',
+        'activated' => 'تم تفعيل طريقة الدفع بنجاح.',
+        'deactivated' => 'تم إلغاء تفعيل طريقة الدفع بنجاح.',
+    ],
+    'order_status' => [
+        'fetched' => 'تم جلب حالات الطلب بنجاح.',
+    ],
 
     'title_en_required' => 'حقل الاسم باللغة الإنجليزية مطلوب.',
     'title_en_string' => 'تنسيق الاسم باللغة الإنجليزية غير صالح.',
@@ -45,4 +56,6 @@ return [
     'clinic_delivery_schedule_time_id_required_with' => 'وقت توصيل العيادة مطلوب عند اختيار العيادة.',
     'clinic_delivery_schedule_time_id_exists' => 'وقت توصيل العيادة المحدد غير صالح.',
     'product_id_distinct' => 'لا يمكن إضافة المنتج أكثر من مرة.',
+    'store_delivery_schedule_time_id_invalid'  => 'الوقت المحدد لا ينتمي إلى المتجر المحدد.',
+    'clinic_delivery_schedule_time_id_invalid'  => 'الوقت المحدد لا ينتمي إلى العيادة المحددة.',
 ];

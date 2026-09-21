@@ -11,6 +11,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Modules\Client\Models\Client;
 use Modules\Client\Services\AddressService;
+use Modules\Clinic\Services\ClinicDeliveryScheduleService;
+use Modules\Clinic\Services\ClinicService;
 use Modules\Country\Services\ZoneService;
 use Modules\Coupon\Enums\CouponDiscountOn;
 use Modules\Coupon\Models\Coupon;
@@ -18,36 +20,27 @@ use Modules\Coupon\Services\CouponService;
 use Modules\Order\DTOs\OrderDto;
 use Modules\Order\Enums\DiscountType;
 use Modules\Order\Enums\OrderStatus;
+use Modules\Order\Enums\SellerType;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Events\OrderStatusChanged;
 use Modules\Order\Models\Order;
 use Modules\Order\Models\OrderDetail;
 use Modules\Order\Services\OrderHistoryService;
+use Modules\Product\Models\Product;
 use Modules\Product\Services\ProductService;
+use Modules\Store\Services\StoreDeliveryScheduleService;
+use Modules\Store\Services\StoreService;
 
 class OrderService
 {
     private $model = Order::class;
-    public function __construct(private CouponService $couponService) {}
+
 
     public function findAll(array $relations = [], array $data = []): LengthAwarePaginator|CursorPaginator|EloquentCollection
     {
         $orders = Order::query()
-            ->when($data['store_id'] ?? null, function ($q) use ($data) {
-                $q->where('store_id', $data['store_id']);
-            })
-            ->when($data['clinic_id'] ?? null, function ($q) use ($data) {
-                $q->where('clinic_id', $data['clinic_id']);
-            })
-            ->when($data['order_status_id'] ?? null, function ($q) use ($data) {
-                $q->where('order_status_id', $data['order_status_id']);
-            })
-            ->when($data['client_id'] ?? null, function ($q) use ($data) {
-                $q->where('client_id', $data['client_id']);
-            })
-            ->when($data['order_no'] ?? null, function ($q) use ($data) {
-                $q->where('order_no', $data['order_no']);
-            })
+            ->available()
+            ->filter($data)
             ->with($relations)
             ->orderByDesc('id');
 
@@ -133,36 +126,27 @@ class OrderService
         })->get();
     }
 
-    public function save(OrderDto $dto): array
+    public function save(OrderDto $dto): Order
     {
         $data = $dto->toArray();
         $seller = $dto->resolveSeller();
 
-        $coupon = $this->couponService->checkCoupon($dto->coupon, $dto->clientId);
+        $coupon = app(CouponService::class)->checkCoupon($dto->coupon, $dto->clientId);
         if (!empty($coupon)) $data['coupon_id'] = $coupon->id;
 
         $items = $this->prepareOrderDetails($dto, $seller);
+        $data = array_merge($data, $this->calcOrderDetails($items, $coupon, $seller, $dto->addressId));
+        $data = array_merge($data, $this->prepareOrderTimes($seller));
 
-        $orderDetails = $this->calcOrderDetails($items, $coupon, $seller, $dto->addressId);
-        $data = array_merge($data, $orderDetails);
-
-        return DB::transaction(function () use ($data, $items) {
-
+        $order =  DB::transaction(function () use ($data, $items) {
             $order = Order::create($data);
             $this->storeOrderDetails($order, $items);
-
-            app(OrderHistoryService::class)->save(
-                $order,
-                $data['order_status_id'],
-                $data['client_id'],
-                Client::class,
-                $data['notes']
-            );
-
-            event(new OrderCreated($order));
-
-            return ["order_no" =>  $order->order_no];
+            app(OrderHistoryService::class)->save($order, $data['order_status_id'], $data['client_id'], Client::class, @$data['notes']);
+            return $order;
         });
+
+        event(new OrderCreated($order));
+        return $order;
     }
 
     public function update(int|Order $orderOrId, OrderDto $dto)
@@ -179,51 +163,74 @@ class OrderService
         $order->delete();
     }
 
-    public function changeStatusTo(int|Order $orderOrId, OrderStatus $newStatus, Model $actor, ?string $notes = null, array $extraAttributes = []): Order
-    {
+    public function changeStatusTo(
+        int|Order $orderOrId,
+        OrderStatus $newStatus,
+        Model $actor,
+        ?int $driverId = null,
+        ?string $notes = null
+    ): Order {
         $order = $this->resolveModel($orderOrId);
 
-        return DB::transaction(function () use ($order, $newStatus, $actor, $notes) {
-            $previousStatus = $order->order_status_id;
+        $order = DB::transaction(function () use ($order, $newStatus, $actor, $notes, $driverId) {
+            $data = ['order_status_id' => $newStatus->value];
+            if (!is_null($driverId)) $data['driver_id'] = $driverId;
 
             // 1. Update order
-            $order->update(['order_status_id' => $newStatus->value]);
+            $order->update($data);
 
             // 2. Synchronous Audit Trail
-            app(OrderHistoryService::class)->save(
-                order: $order,
-                statusId: $newStatus->value,
-                historibleId: $actor->getKey(),
-                historibleType: $actor->getMorphClass(),
-                notes: $notes
-            );
-
-            // 3. Dispatch event for notifications & external services
-            broadcast(OrderStatusChanged::class)->toOthers();
+            app(OrderHistoryService::class)->save($order, $newStatus->value, $actor->getKey(), $actor->getMorphClass(), $notes);
 
             return $order;
         });
+
+        // 3. Dispatch event for notifications & external services
+        broadcast(new OrderStatusChanged($order))->toOthers();
+
+        return $order;
     }
 
     //Helpers=======================================
     private function prepareOrderDetails(OrderDto $dto, array $seller): Collection
     {
         $products = app(ProductService::class)->checkProducts($dto->items, $seller);
-
         $requestedItems = collect($dto->items)->keyBy('product_id');
-
         return $products->map(function ($product) use ($requestedItems, $seller) {
             $requestedItem = $requestedItems[$product->id];
-
             return [
                 'product_id' => $product->id,
                 'quantity'   => $requestedItem['quantity'],
-                'price'      => $product->{$seller['relation']}->first()->pivot->price,
+                'price'      => $this->getProductPrice($product, $seller),
                 'note'       => $requestedItem['note'] ?? null,
             ];
         });
     }
 
+    private function getProductPrice(Product $product, array $seller): float
+    {
+        return match ($seller['type']) {
+            SellerType::Store  => (float) $product->stores->first()?->pivot?->price,
+            SellerType::Clinic => (float) $product->clinics->first()?->pivot?->price,
+        };
+    }
+
+    private function prepareOrderTimes(?array $seller): array
+    {
+        if (empty($seller['slotId'])) return [];
+
+        if ($seller['type'] === SellerType::Store) {
+            $service = app(StoreDeliveryScheduleService::class);
+            return $service->getTimes($seller['slotId'], $seller['id']);
+        }
+
+        if ($seller['type'] === SellerType::Clinic) {
+            $service = app(ClinicDeliveryScheduleService::class);
+            return $service->getTimes($seller['slotId'], $seller['id']);
+        }
+
+        return [];
+    }
 
     private function calcOrderDetails(Collection $items, ?Coupon $coupon, ?array $seller, int $addressId): array
     {
@@ -279,7 +286,12 @@ class OrderService
         $address = app(AddressService::class)->findById($addressId);
 
         if ($address && $seller) {
-            $sellerModel = app($seller['service'])->findById($seller['id']);
+            $serviceClass = match ($seller['type']) {
+                SellerType::Store  => StoreService::class,
+                SellerType::Clinic => ClinicService::class,
+            };
+
+            $sellerModel = app($serviceClass)->findById($seller['id']);
 
             if ($sellerModel) {
                 //1. Case seller & client in the same zone
@@ -294,7 +306,7 @@ class OrderService
                         (float) $address->latitude,
                         (float) $address->longitude
                     );
-                    $fee_per_km = (float) (getSetting('delivery_fee_for_each_km') ?? 0);
+                    $fee_per_km = (float) (getSetting('delivery_fee_per_km') ?? 0);
                     $delivery_fee = $distance * $fee_per_km;
                 }
             }

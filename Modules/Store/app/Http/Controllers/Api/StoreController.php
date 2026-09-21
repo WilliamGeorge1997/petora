@@ -14,7 +14,6 @@ class StoreController extends Controller
     {
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $stores = $this->storeService->active($data);
-
         return success(true, __('store::message.fetched'), $stores);
     }
 }

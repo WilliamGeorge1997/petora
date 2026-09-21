@@ -34,17 +34,16 @@ class DoctorService
         return $doctorOrId instanceof Doctor ? $doctorOrId : $this->findById($doctorOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string $column, mixed $value, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->with($relations)->where($column, $value);
+        $query = $this->model::query()->with($relations)->where($column, $value)->active()->latest('id');
 
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->active()->with($relations);
-
+        $query = $this->model::query()->active()->filter($data)->with($relations)->latest('id');
         return getCaseCollection($query, $data, $columns);
     }
 

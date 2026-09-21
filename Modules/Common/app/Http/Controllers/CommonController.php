@@ -27,7 +27,7 @@ class CommonController extends Controller
         $data = $request->except(['_token']);
         $this->commonService->save($data);
 
-        return back()->with('updated', 'updated');
+        return back()->with('success', __('common::general.done'))->with('updated', 'updated');
     }
 
     public function logs()

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Admin\Enums\AdminRole;
+use Modules\Admin\Models\Admin;
 use Modules\Client\Models\Address;
 use Modules\Client\Models\Client;
 use Modules\Clinic\Models\Clinic;
@@ -54,7 +56,21 @@ class Order extends Model
         'total' => 'decimal:2',
         'discount_type' => 'integer',
         'quantity' => 'integer',
-        'delivery_date' => 'date',
+        'delivery_date' => 'datetime:Y-m-d',
+    ];
+
+    protected $hidden = [
+        'client_id',
+        'store_id',
+        'store_delivery_schedule_time_id',
+        'clinic_id',
+        'clinic_delivery_schedule_time_id',
+        'address_id',
+        'coupon_id',
+        'driver_id',
+        'order_method_id',
+        'payment_method_id',
+        'order_status_id',
     ];
 
     // Date serialization
@@ -64,35 +80,70 @@ class Order extends Model
     }
 
     // Scopes
-    public function scopeFilter(Builder $query, array $filters)
+    public function scopeFilter(Builder $query, array $filters = []): Builder
     {
-        $query->when($filters['order_no'] ?? null, function ($query, $orderNo) {
-            $query->where('order_no', 'LIKE', "%{$orderNo}%");
-        })
-            ->when($filters['client_id'] ?? null, function ($query, $clientId) {
+        return $query
+            ->when($filters['order_no'] ?? null, function (Builder $query, $orderNo) {
+                $query->where('order_no', $orderNo);
+            })
+            ->when($filters['client_id'] ?? null, function (Builder $query, $clientId) {
                 $query->where('client_id', $clientId);
             })
-            ->when($filters['store_id'] ?? null, function ($query, $storeId) {
+            ->when($filters['store_id'] ?? null, function (Builder $query, $storeId) {
                 $query->where('store_id', $storeId);
             })
-            ->when($filters['driver_id'] ?? null, function ($query, $driverId) {
+            ->when($filters['clinic_id'] ?? null, function (Builder $query, $clinicId) {
+                $query->where('clinic_id', $clinicId);
+            })
+            ->when($filters['driver_id'] ?? null, function (Builder $query, $driverId) {
                 $query->where('driver_id', $driverId);
             })
-            ->when($filters['order_status_id'] ?? null, function ($query, $statusId) {
+            ->when($filters['order_status_id'] ?? null, function (Builder $query, $statusId) {
                 $query->where('order_status_id', $statusId);
             })
-            ->when($filters['delivery_date_from'] ?? null, function ($query, $dateFrom) {
+            ->when($filters['order_status_ids'] ?? null, function (Builder $query, $statusIds) {
+                $query->whereIn('order_status_id', (array) $statusIds);
+            })
+            ->when($filters['delivery_date_from'] ?? null, function (Builder $query, $dateFrom) {
                 $query->whereDate('delivery_date', '>=', $dateFrom);
             })
-            ->when($filters['delivery_date_to'] ?? null, function ($query, $dateTo) {
+            ->when($filters['delivery_date_to'] ?? null, function (Builder $query, $dateTo) {
                 $query->whereDate('delivery_date', '<=', $dateTo);
             })
-            ->when($filters['created_at_from'] ?? null, function ($query, $dateFrom) {
-                $query->whereDate('created_at', '>=', $dateFrom);
+            ->when($filters['from'] ?? null, function (Builder $query, $from) {
+                $query->whereDate('created_at', '>=', $from);
             })
-            ->when($filters['created_at_to'] ?? null, function ($query, $dateTo) {
-                $query->whereDate('created_at', '<=', $dateTo);
+            ->when($filters['to'] ?? null, function (Builder $query, $to) {
+                $query->whereDate('created_at', '<=', $to);
             });
+    }
+
+    public function scopeAvailable(Builder $query): Builder
+    {
+        /** @var Admin|null $admin */
+        $admin = auth('admin')->user();
+
+        if ($admin) {
+            if ($admin->hasRole(AdminRole::SuperAdmin->value)) {
+                return $query;
+            }
+
+            if ($admin->hasRole(AdminRole::CompanyManager->value) && $admin->company_id) {
+                return $query->whereRelation('store', 'company_id', $admin->company_id);
+            }
+
+            if ($admin->hasRole(AdminRole::StoreManager->value) && $admin->store_id) {
+                return $query->where('store_id', $admin->store_id);
+            }
+
+            if ($admin->hasRole(AdminRole::ClinicManager->value) && $admin->clinic_id) {
+                return $query->where('clinic_id', $admin->clinic_id);
+            }
+
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query;
     }
 
     // Relations

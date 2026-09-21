@@ -67,7 +67,7 @@ class OrderRequest extends FormRequest
 
             'address_id.required' => __('order::message.address_id_required'),
             'address_id.exists' => __('order::message.address_id_exists'),
-            
+
             'delivery_date.required' => __('order::message.delivery_date_required'),
             'delivery_date.date' => __('order::message.delivery_date_date'),
             'delivery_date.after_or_equal' => __('order::message.delivery_date_after_or_equal'),
@@ -85,14 +85,14 @@ class OrderRequest extends FormRequest
             'store_id.required_without' => __('order::message.store_id_required_without'),
             'store_id.exists' => __('order::message.store_id_exists'),
             'store_id.prohibits' => __('order::message.store_id_prohibits'),
-            
+
             'store_delivery_schedule_time_id.required_with' => __('order::message.store_delivery_schedule_time_id_required_with'),
             'store_delivery_schedule_time_id.exists' => __('order::message.store_delivery_schedule_time_id_exists'),
 
             'clinic_id.required_without' => __('order::message.clinic_id_required_without'),
             'clinic_id.exists' => __('order::message.clinic_id_exists'),
             'clinic_id.prohibits' => __('order::message.clinic_id_prohibits'),
-            
+
             'clinic_delivery_schedule_time_id.required_with' => __('order::message.clinic_delivery_schedule_time_id_required_with'),
             'clinic_delivery_schedule_time_id.exists' => __('order::message.clinic_delivery_schedule_time_id_exists'),
         ];

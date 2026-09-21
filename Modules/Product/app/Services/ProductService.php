@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Validation\ValidationException;
 use Modules\Common\Helpers\UploaderHelper;
+use Modules\Order\Enums\SellerType;
 use Modules\Product\DTOs\ProductDto;
 use Modules\Product\Models\Product;
 
@@ -21,7 +22,6 @@ class ProductService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
-
         return getCaseCollection($query, $data);
     }
 
@@ -38,21 +38,18 @@ class ProductService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
-
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
-
         return getCaseCollection($query, $data, $columns);
     }
 
     public function save(ProductDto $dto): Product
     {
         $product = $this->model::create($dto->toArray());
-
         if ($dto->images) {
             foreach ($dto->images as $image) {
                 $product->images()->create([
@@ -60,7 +57,6 @@ class ProductService
                 ]);
             }
         }
-
         return $product;
     }
 
@@ -68,13 +64,11 @@ class ProductService
     {
         $product = $this->resolveModel($productOrId);
         $product->update($dto->toArray());
-
         if ($dto->images) {
             foreach ($product->images as $oldImage) {
                 $this->deleteImage($oldImage->getRawOriginal('image'), 'product');
             }
             $product->images()->delete();
-
             foreach ($dto->images as $image) {
                 $product->images()->create([
                     'image' => $this->uploadImage($image, 'product'),
@@ -88,12 +82,10 @@ class ProductService
     public function delete(int|Product $productOrId): bool
     {
         $product = $this->resolveModel($productOrId);
-
         foreach ($product->images as $image) {
             $this->deleteImage($image->getRawOriginal('image'), 'product');
         }
         $product->images()->delete();
-
         return $product->delete();
     }
 
@@ -124,11 +116,17 @@ class ProductService
         $products = $this->model::select('id', 'title', 'is_active')
             ->whereIn('id', collect($items)->pluck('product_id')->toArray())
             ->when($seller, function ($q) use ($seller) {
-                $relation = $seller['relation']; // 'stores' or 'clinics'
-
-                return $q->with([$relation => function ($sq) use ($seller, $relation) {
-                    $sq->where($relation . '.id', $seller['id']);
-                }]);
+                if ($seller['type'] === SellerType::Store) {
+                    return $q->with(['stores' => function ($sq) use ($seller) {
+                        $sq->where('stores.id', $seller['id']);
+                    }]);
+                }
+                
+                if ($seller['type'] === SellerType::Clinic) {
+                    return $q->with(['clinics' => function ($sq) use ($seller) {
+                        $sq->where('clinics.id', $seller['id']);
+                    }]);
+                }
             })
             ->get();
 
@@ -140,29 +138,26 @@ class ProductService
     private function validateForOrdering(Collection $products, array $items, ?array $seller): void
     {
         $errors = [];
-
         foreach ($items as $item) {
             $product = $products->firstWhere('id', $item['product_id']);
-
             if (!$product) {
                 $errors[] = __('product::message.not_found', ['id' => $item['product_id']]);
                 continue;
             }
-
             if (!$product->is_active) {
                 $errors[] = __('product::message.inactive', ['title' => $product->title]);
                 continue;
             }
-
             if ($seller) {
-                $sellerData = $product->{$seller['relation']}->first();
-                $sellerType = $seller['relation'] === 'stores' ? 'store' : 'clinic';
-
+                $sellerData = $seller['type'] === SellerType::Store
+                    ? $product->stores->first()
+                    : $product->clinics->first();
+                    
+                $sellerType = $seller['type']->value;
                 if (!$sellerData) {
                     $errors[] = __('product::message.not_available_' . $sellerType, ['title' => $product->title]);
                     continue;
                 }
-
                 if (!$sellerData->pivot->is_active) {
                     $errors[] = __('product::message.seller_inactive_' . $sellerType, ['title' => $product->title]);
                     continue;

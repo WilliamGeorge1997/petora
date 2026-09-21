@@ -371,6 +371,14 @@
                     <span>{{ __('common::sidebar.system_tools') }}</span>
                     <i data-feather="more-horizontal"></i>
                 </li>
+                @can('Index-setting')
+                    <li class="nav-item {{ Route::is('admin.settings.*') ? 'active' : '' }}">
+                        <a class="d-flex align-items-center" href="{{ route('admin.settings.index') }}">
+                            <i data-feather="settings"></i>
+                            <span class="menu-title text-truncate">{{ __('common::sidebar.general_settings') }}</span>
+                        </a>
+                    </li>
+                @endcan
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="{{ url('admin/telescope') }}" target="_blank">
                         <i data-feather="monitor"></i>

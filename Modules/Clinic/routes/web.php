@@ -14,6 +14,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('clinics/{clinic}/products', [ClinicProductController::class, 'index'])->name('clinic.products.index');
     Route::get('clinics/{clinic}/products/export', [ClinicProductController::class, 'export'])->name('clinic.products.export');
     Route::post('clinics/{clinic}/products/import', [ClinicProductController::class, 'import'])->name('clinic.products.import');
+    Route::post('clinics/{clinic}/products/import-all', [ClinicProductController::class, 'importAll'])->name('clinic.products.import-all');
+    Route::patch('clinics/{clinic}/products/{product}/activate', [ClinicProductController::class, 'activate'])->name('clinic.products.activate');
+    Route::get('clinics/{clinic}/products/{product_id}/edit', [ClinicProductController::class, 'edit'])->name('clinic.products.edit');
+    Route::put('clinics/{clinic}/products/{product_id}', [ClinicProductController::class, 'update'])->name('clinic.products.update');
+    Route::delete('clinics/{clinic}/products/{product}', [ClinicProductController::class, 'destroy'])->name('clinic.products.destroy');
+    Route::delete('clinics/{clinic}/products/{product_id}/images/{image_id}', [ClinicProductController::class, 'destroyImage'])->name('clinic.products.images.destroy');
 
     // Clinic Services Routes
     Route::get('clinics/{clinic}/services', [ClinicServiceController::class, 'index'])->name('clinic.services.index');

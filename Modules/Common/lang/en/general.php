@@ -28,6 +28,11 @@ return [
     'import' => 'Import',
     'create' => 'Create',
     'update' => 'Update',
+    'general_settings' => 'General Settings',
+    'financial_settings' => 'Financial & Delivery',
+    'social_settings' => 'Social Media Links',
+    'policies_settings' => 'Pages & Policies',
+    'other_settings' => 'Other Settings',
     'days' => [
         'saturday' => 'Saturday',
         'sunday' => 'Sunday',
@@ -38,3 +43,4 @@ return [
         'friday' => 'Friday',
     ],
 ];
+

@@ -84,7 +84,7 @@ class Store extends Model
                 $query->where('is_active', (bool) $filters['is_active']);
             })
             ->when(($filters['latitude'] ?? null) && ($filters['longitude'] ?? null), function ($query) use ($filters) {
-                nearest($query, $filters['latitude'], $filters['longitude'], $filters['distance'] ?? null);
+                nearest($query, $filters['latitude'], $filters['longitude'], @$filters['distance']);
             });
     }
 

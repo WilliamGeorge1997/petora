@@ -25,7 +25,6 @@ class StoreProductController extends Controller
     public function index(Request $request, Store $store)
     {
         Gate::authorize('viewProducts', $store);
-
         $data = $request->merge(['paginated' => 50])->all();
         $relations = [
             'images',
@@ -42,20 +41,16 @@ class StoreProductController extends Controller
     public function export(Store $store)
     {
         Gate::authorize('viewProducts', $store);
-
         return Excel::download(new ProductExport($store), 'store_products.xlsx');
     }
 
     public function import(Request $request, Store $store)
     {
         Gate::authorize('update', $store);
-
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
-
         Excel::import(new SellerProductImport($store), $request->file('file'));
-
         return back()->with('success', __('common::message.imported_successfully'));
     }
 
@@ -69,29 +64,23 @@ class StoreProductController extends Controller
     public function edit(Store $store, int $product_id)
     {
         Gate::authorize('update', $store);
-
         $product = app(ProductService::class)->findById($product_id, ['images', 'category']);
         $sellerProduct = $this->storeProductService->findProductSeller($store, $product_id, ['images']);
-
         return view('store::products.edit', compact('store', 'product', 'sellerProduct'));
     }
 
     public function update(StoreProductRequest $request, Store $store, int $product_id)
     {
         Gate::authorize('update', $store);
-
         $dto = StoreProductDto::fromRequest($request);
         $this->storeProductService->updateProductSeller($store, $product_id, $dto);
-
         return redirect()->route('admin.store.products.index', $store->id)->with('success', __('common::message.updated_successfully'));
     }
 
     public function activate(Store $store, Product $product)
     {
         Gate::authorize('update', $store);
-
         $sellerProduct = $this->storeProductService->activate($store, $product);
-
         return success(
             true,
             $sellerProduct->is_active ? __('store::message.activated') : __('store::message.deactivated'),
@@ -103,7 +92,6 @@ class StoreProductController extends Controller
     {
         Gate::authorize('update', $store);
         $this->storeProductService->detachProduct($store, $product);
-
         return success(true, __('product::message.deleted'));
     }
 
@@ -111,7 +99,6 @@ class StoreProductController extends Controller
     {
         Gate::authorize('update', $store);
         $this->storeProductService->deleteProductSellerImage($image_id);
-
         return success(true, __('product::message.deleted'));
     }
 }

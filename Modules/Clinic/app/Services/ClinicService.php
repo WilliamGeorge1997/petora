@@ -45,7 +45,6 @@ class ClinicService
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->filter($data)->with($relations)->latest('id');
-
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -56,14 +55,11 @@ class ClinicService
             if ($dto->image) {
                 $data['image'] = $this->uploadImage($dto->image, 'clinic');
             }
-
             /** @var Clinic $clinic */
             $clinic = $this->model::create($data);
-
             if (! empty($dto->workingHours)) {
                 $this->syncWorkingHours($clinic, $dto->workingHours);
             }
-
             return $clinic;
         });
     }
@@ -71,7 +67,6 @@ class ClinicService
     public function update(int|Clinic $clinicOrId, ClinicDto $dto): Clinic
     {
         $clinic = $this->resolveModel($clinicOrId);
-
         return DB::transaction(function () use ($clinic, $dto) {
             $data = $dto->toArray();
             if ($dto->image) {
@@ -81,9 +76,7 @@ class ClinicService
 
                 $data['image'] = $this->uploadImage($dto->image, 'clinic');
             }
-
             $clinic->update($data);
-
             if ($dto->workingHours !== null) {
                 $this->syncWorkingHours($clinic, $dto->workingHours);
             }
@@ -95,14 +88,11 @@ class ClinicService
     public function syncWorkingHours(Clinic $clinic, array $workingHours): void
     {
         $days = [];
-
         foreach ($workingHours as $item) {
             if (empty($item['day'])) {
                 continue;
             }
-
             $isOpen24 = (bool) ($item['is_open_24_hours'] ?? false);
-
             $clinic->workingHours()->updateOrCreate(
                 ['day' => $item['day']],
                 [
@@ -111,7 +101,6 @@ class ClinicService
                     'to' => $isOpen24 ? null : ($item['to'] ?? null),
                 ]
             );
-
             $days[] = $item['day'];
         }
 
@@ -124,7 +113,6 @@ class ClinicService
         if ($clinic->image) {
             $this->deleteImage($clinic->image, 'clinic');
         }
-
         return $clinic->delete();
     }
 
@@ -132,7 +120,6 @@ class ClinicService
     {
         $clinic = $this->resolveModel($clinicOrId);
         $clinic->update(['is_active' => ! $clinic->is_active]);
-
         return $clinic;
     }
 }

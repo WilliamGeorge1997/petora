@@ -16,6 +16,6 @@ class OrderMethodController extends Controller
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $orderMethods = $this->orderMethodService->active($data);
 
-        return success(true, __('order::message.order_methods_fetched'), $orderMethods);
+        return success(true, __('order::message.order_method.fetched'), $orderMethods);
     }
 }

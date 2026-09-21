@@ -15,11 +15,11 @@ class StoreDeliveryScheduleResource extends JsonResource
         return [
             'id' => $this->id,
             'day' => $this->day,
-            'day_name' => __('store::general.days.'.$this->day),
+            'title' => __('common::general.days.'.$this->day),
             'times' => $this->times ? $this->times->map(fn ($time) => [
                 'id' => $time->id,
-                'from' => substr($time->from, 0, 5),
-                'to' => substr($time->to, 0, 5),
+                'from' => $time->from,
+                'to' => $time->to,
             ]) : [],
         ];
     }

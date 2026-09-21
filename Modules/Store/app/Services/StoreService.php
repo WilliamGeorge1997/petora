@@ -38,14 +38,12 @@ class StoreService
     public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
-
         return getCaseCollection($query, $data);
     }
 
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->active()->with($relations);
-
+        $query = $this->model::query()->active()->filter($data)->with($relations);
         return getCaseCollection($query, $data, $columns);
     }
 
@@ -56,14 +54,11 @@ class StoreService
             if ($dto->image) {
                 $data['image'] = $this->uploadImage($dto->image, 'store');
             }
-
             /** @var Store $store */
             $store = $this->model::create($data);
-
             if (! empty($dto->workingHours)) {
                 $this->syncWorkingHours($store, $dto->workingHours);
             }
-
             return $store;
         });
     }

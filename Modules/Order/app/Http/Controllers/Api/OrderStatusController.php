@@ -16,6 +16,6 @@ class OrderStatusController extends Controller
         $data = $request->merge(['pagination_type' => 'cursor'])->all();
         $orderStatuses = $this->orderStatusService->active($data);
 
-        return success(true, __('order::message.order_statuses_fetched'), $orderStatuses);
+        return success(true, __('order::message.order_status.fetched'), $orderStatuses);
     }
 }

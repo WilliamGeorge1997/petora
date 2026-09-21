@@ -54,9 +54,12 @@ class Doctor extends Model
 
     public function scopeFilter(Builder $query, array $filters)
     {
-        $query->when($filters['name'] ?? null, function ($query, $name) {
-            $query->whereJsonContainsLocales('name', ['en', 'ar'], "%{$name}%", 'LIKE');
+        $query->when($filters['clinic_id'] ?? null, function ($query, $clinicId) {
+            $query->where('clinic_id', $clinicId);
         })
+            ->when($filters['name'] ?? null, function ($query, $name) {
+                $query->whereJsonContainsLocales('name', ['en', 'ar'], "%{$name}%", 'LIKE');
+            })
             ->when(isset($filters['is_active']) && $filters['is_active'] !== '', function ($query) use ($filters) {
                 $query->where('is_active', (bool) $filters['is_active']);
             });
@@ -70,7 +73,7 @@ class Doctor extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/doctor/'.$value);
+            return asset('storage/uploads/doctor/' . $value);
         }
 
         return $value;

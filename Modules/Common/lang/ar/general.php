@@ -28,6 +28,11 @@ return [
     'import' => 'استيراد',
     'create' => 'إنشاء',
     'update' => 'تعديل',
+    'general_settings' => 'الإعدادات العامة',
+    'financial_settings' => 'المالية والتوصيل',
+    'social_settings' => 'روابط التواصل الاجتماعي',
+    'policies_settings' => 'الصفحات والسياسات',
+    'other_settings' => 'إعدادات أخرى',
     'days' => [
         'saturday' => 'السبت',
         'sunday' => 'الأحد',
@@ -38,3 +43,4 @@ return [
         'friday' => 'الجمعة',
     ],
 ];
+

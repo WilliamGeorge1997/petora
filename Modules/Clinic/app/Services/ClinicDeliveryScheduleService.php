@@ -6,9 +6,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Modules\Clinic\DTOs\ClinicDeliveryScheduleDto;
 use Modules\Clinic\Models\Clinic;
 use Modules\Clinic\Models\ClinicDeliverySchedule;
+use Modules\Clinic\Models\ClinicDeliveryScheduleTime;
 
 class ClinicDeliveryScheduleService
 {
@@ -19,7 +21,6 @@ class ClinicDeliveryScheduleService
         $query = $this->model::query()->with($relations)
             ->filter($data)
             ->latest('id');
-
         return getCaseCollection($query, $data);
     }
 
@@ -36,28 +37,24 @@ class ClinicDeliveryScheduleService
     public function findBy(string $column, mixed $value, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->with($relations)->where($column, $value);
-
         return getCaseCollection($query, $data);
     }
 
     public function getSchedulesForClinic(Clinic|int $clinicOrId): Collection
     {
         $clinicId = $clinicOrId instanceof Clinic ? $clinicOrId->id : (int) $clinicOrId;
-
         return $this->model::query()->where('clinic_id', $clinicId)->with('times')->get();
     }
 
     public function save(Clinic|int $clinicOrId, ClinicDeliveryScheduleDto $dto): ClinicDeliverySchedule
     {
         $clinicId = $clinicOrId instanceof Clinic ? $clinicOrId->id : (int) $clinicOrId;
-
         return DB::transaction(function () use ($clinicId, $dto) {
             /** @var ClinicDeliverySchedule $schedule */
             $schedule = $this->model::create([
                 'clinic_id' => $clinicId,
                 'day' => $dto->day,
             ]);
-
             if (! empty($dto->times)) {
                 $this->syncTimes($schedule, $dto->times);
             }
@@ -69,14 +66,11 @@ class ClinicDeliveryScheduleService
     public function update(int|ClinicDeliverySchedule $scheduleOrId, ClinicDeliveryScheduleDto $dto): ClinicDeliverySchedule
     {
         $schedule = $this->resolveModel($scheduleOrId);
-
         return DB::transaction(function () use ($schedule, $dto) {
             $schedule->update($dto->toArray());
-
             if (! empty($dto->times)) {
                 $this->syncTimes($schedule, $dto->times);
             }
-
             return $schedule;
         });
     }
@@ -84,12 +78,10 @@ class ClinicDeliveryScheduleService
     public function syncTimes(ClinicDeliverySchedule $schedule, array $times): void
     {
         $keptIds = [];
-
         foreach ($times as $item) {
             if (empty($item['from']) || empty($item['to'])) {
                 continue;
             }
-
             if (! empty($item['id'])) {
                 $schedule->times()->where('id', $item['id'])->update([
                     'from' => $item['from'],
@@ -104,14 +96,23 @@ class ClinicDeliveryScheduleService
                 $keptIds[] = $created->id;
             }
         }
-
         $schedule->times()->whereNotIn('id', $keptIds)->delete();
+    }
+
+    public function getTimes(int $scheduleTimeId, int $clinicId): array
+    {
+        $scheduleTime = ClinicDeliveryScheduleTime::findOrFail($scheduleTimeId);
+        if ($scheduleTime->schedule->clinic_id !== $clinicId) {
+            throw ValidationException::withMessages([
+                'clinic_delivery_schedule_time_id' => __('order::message.clinic_delivery_schedule_time_id_invalid'),
+            ]);
+        }
+        return ['delivery_time_from' => $scheduleTime->from, 'delivery_time_to' => $scheduleTime->to];
     }
 
     public function delete(int|ClinicDeliverySchedule $scheduleOrId): bool
     {
         $schedule = $this->resolveModel($scheduleOrId);
-
         return (bool) $schedule->delete();
     }
 }

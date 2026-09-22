@@ -1,5 +1,5 @@
 $(function () {
-    var key = ''; // Put your Google Maps API Key here
+    var key = window.googleMapKey;
     var locale = $('html').attr('lang') || 'ar';
     var url = 'https://maps.googleapis.com/maps/api/js?libraries=places&language=' + locale + (key ? '&key=' + key : '');
 

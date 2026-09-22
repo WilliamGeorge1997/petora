@@ -519,6 +519,10 @@
     <script src="{{ asset('admin/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ asset('admin/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
     <script>
+        window.googleMapKey = "{{ config('app.google_map_key', '') }}";
+    </script>
+    <script src="{{ asset('admin/js/scripts/maps/google-map-picker.js') }}"></script>
+    <script>
         $(document).ready(function() {
             var select = $('.select2');
             if (select.length) {

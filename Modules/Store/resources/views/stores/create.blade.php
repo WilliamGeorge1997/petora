@@ -276,14 +276,13 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label
-                                        class="col-form-label">{{ __('common::general.location_on_map') ?? 'الموقع على الخريطة' }}</label>
+                                    <label class="col-form-label">{{ __('common::general.location_on_map') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group mb-1">
                                         <span class="input-group-text"><i data-feather="search"></i></span>
                                         <input type="text" id="map-search" class="form-control"
-                                            placeholder="{{ __('common::general.search_location') ?? 'ابحث عن موقع أو عنوان...' }}" />
+                                            placeholder="{{ __('common::general.search_location') }}" />
                                     </div>
                                     <div id="google-map-picker" class="map-picker-container rounded border"
                                         data-google-map-picker data-lat-input="#latitude" data-lng-input="#longitude"
@@ -297,13 +296,13 @@
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="latitude">{{ __('store::attribute.latitude') ?? 'خط العرض' }}</label>
+                                        for="latitude">{{ __('store::attribute.latitude') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <input type="text" id="latitude" class="form-control" name="latitude"
-                                            placeholder="{{ __('store::attribute.latitude') ?? 'خط العرض' }}"
+                                            placeholder="{{ __('store::attribute.latitude') }}"
                                             value="{{ old('latitude') }}" readonly />
                                     </div>
                                     @error('latitude')
@@ -318,13 +317,13 @@
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
                                     <label class="col-form-label"
-                                        for="longitude">{{ __('store::attribute.longitude') ?? 'خط الطول' }}</label>
+                                        for="longitude">{{ __('store::attribute.longitude') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="map-pin"></i></span>
                                         <input type="text" id="longitude" class="form-control" name="longitude"
-                                            placeholder="{{ __('store::attribute.longitude') ?? 'خط الطول' }}"
+                                            placeholder="{{ __('store::attribute.longitude') }}"
                                             value="{{ old('longitude') }}" readonly />
                                     </div>
                                     @error('longitude')
@@ -345,15 +344,21 @@
                                 <div class="col-sm-9">
                                     <div class="working-hours-repeater">
                                         <div data-repeater-list="working_hours">
-                                            @if(!empty($initialWorkingHours))
-                                                @foreach($initialWorkingHours as $index => $item)
+                                            @if (!empty($initialWorkingHours))
+                                                @foreach ($initialWorkingHours as $index => $item)
                                                     <div data-repeater-item class="row mb-1 align-items-center">
                                                         <div class="col-md-3 col-12 mb-50">
-                                                            <label class="form-label"><small>{{ __('store::general.day') }}</small></label>
-                                                            <select class="form-select @error("working_hours.$index.day") is-invalid @enderror" name="day" required>
-                                                                <option value="" disabled {{ empty($item['day']) ? 'selected' : '' }}>{{ __('store::general.select_day') }}</option>
+                                                            <label
+                                                                class="form-label"><small>{{ __('store::general.day') }}</small></label>
+                                                            <select
+                                                                class="form-select @error("working_hours.$index.day") is-invalid @enderror"
+                                                                name="day" required>
+                                                                <option value="" disabled
+                                                                    {{ empty($item['day']) ? 'selected' : '' }}>
+                                                                    {{ __('store::general.select_day') }}</option>
                                                                 @foreach ($days as $dayKey => $dayLabel)
-                                                                    <option value="{{ $dayKey }}" {{ ($item['day'] ?? '') === $dayKey ? 'selected' : '' }}>
+                                                                    <option value="{{ $dayKey }}"
+                                                                        {{ ($item['day'] ?? '') === $dayKey ? 'selected' : '' }}>
                                                                         {{ $dayLabel }}
                                                                     </option>
                                                                 @endforeach
@@ -365,10 +370,16 @@
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
-                                                            <label class="form-label"><small>{{ __('store::general.from') }}</small></label>
-                                                            <div class="input-group input-group-merge @error("working_hours.$index.from") is-invalid @enderror">
-                                                                <span class="input-group-text"><i data-feather="clock"></i></span>
-                                                                <input type="time" name="from" class="form-control time-input @error("working_hours.$index.from") is-invalid @enderror" value="{{ $item['from'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
+                                                            <label
+                                                                class="form-label"><small>{{ __('store::general.from') }}</small></label>
+                                                            <div
+                                                                class="input-group input-group-merge @error("working_hours.$index.from") is-invalid @enderror">
+                                                                <span class="input-group-text"><i
+                                                                        data-feather="clock"></i></span>
+                                                                <input type="time" name="from"
+                                                                    class="form-control time-input @error("working_hours.$index.from") is-invalid @enderror"
+                                                                    value="{{ $item['from'] ?? '' }}"
+                                                                    {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
                                                             @error("working_hours.$index.from")
                                                                 <div class="invalid-feedback d-block">
@@ -377,10 +388,16 @@
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-3 col-6 mb-50">
-                                                            <label class="form-label"><small>{{ __('store::general.to') }}</small></label>
-                                                            <div class="input-group input-group-merge @error("working_hours.$index.to") is-invalid @enderror">
-                                                                <span class="input-group-text"><i data-feather="clock"></i></span>
-                                                                <input type="time" name="to" class="form-control time-input @error("working_hours.$index.to") is-invalid @enderror" value="{{ $item['to'] ?? '' }}" {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
+                                                            <label
+                                                                class="form-label"><small>{{ __('store::general.to') }}</small></label>
+                                                            <div
+                                                                class="input-group input-group-merge @error("working_hours.$index.to") is-invalid @enderror">
+                                                                <span class="input-group-text"><i
+                                                                        data-feather="clock"></i></span>
+                                                                <input type="time" name="to"
+                                                                    class="form-control time-input @error("working_hours.$index.to") is-invalid @enderror"
+                                                                    value="{{ $item['to'] ?? '' }}"
+                                                                    {{ !empty($item['is_open_24_hours']) ? 'disabled' : '' }} />
                                                             </div>
                                                             @error("working_hours.$index.to")
                                                                 <div class="invalid-feedback d-block">
@@ -390,8 +407,12 @@
                                                         </div>
                                                         <div class="col-md-2 col-8 mb-50">
                                                             <div class="form-check mt-2">
-                                                                <input type="checkbox" name="is_open_24_hours" value="1" class="form-check-input open-24-hours-check" {{ !empty($item['is_open_24_hours']) ? 'checked' : '' }} />
-                                                                <label class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
+                                                                <input type="checkbox" name="is_open_24_hours"
+                                                                    value="1"
+                                                                    class="form-check-input open-24-hours-check"
+                                                                    {{ !empty($item['is_open_24_hours']) ? 'checked' : '' }} />
+                                                                <label
+                                                                    class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
                                                             </div>
                                                             @error("working_hours.$index.is_open_24_hours")
                                                                 <div class="invalid-feedback d-block">
@@ -400,7 +421,9 @@
                                                             @enderror
                                                         </div>
                                                         <div class="col-md-1 col-4 mb-50 text-end pt-2">
-                                                            <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
+                                                            <button type="button" class="btn btn-outline-danger btn-icon"
+                                                                data-repeater-delete
+                                                                title="{{ __('common::general.delete') }}">
                                                                 <i data-feather="trash-2"></i>
                                                             </button>
                                                         </div>
@@ -409,36 +432,49 @@
                                             @else
                                                 <div data-repeater-item class="row mb-1 align-items-center">
                                                     <div class="col-md-3 col-12 mb-50">
-                                                        <label class="form-label"><small>{{ __('store::general.day') }}</small></label>
+                                                        <label
+                                                            class="form-label"><small>{{ __('store::general.day') }}</small></label>
                                                         <select class="form-select" name="day">
-                                                            <option value="" disabled selected>{{ __('store::general.select_day') }}</option>
+                                                            <option value="" disabled selected>
+                                                                {{ __('store::general.select_day') }}</option>
                                                             @foreach ($days as $dayKey => $dayLabel)
-                                                                <option value="{{ $dayKey }}">{{ $dayLabel }}</option>
+                                                                <option value="{{ $dayKey }}">{{ $dayLabel }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-6 mb-50">
-                                                        <label class="form-label"><small>{{ __('store::general.from') }}</small></label>
+                                                        <label
+                                                            class="form-label"><small>{{ __('store::general.from') }}</small></label>
                                                         <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i data-feather="clock"></i></span>
-                                                            <input type="time" name="from" class="form-control time-input" value="09:00" />
+                                                            <span class="input-group-text"><i
+                                                                    data-feather="clock"></i></span>
+                                                            <input type="time" name="from"
+                                                                class="form-control time-input" value="09:00" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3 col-6 mb-50">
-                                                        <label class="form-label"><small>{{ __('store::general.to') }}</small></label>
+                                                        <label
+                                                            class="form-label"><small>{{ __('store::general.to') }}</small></label>
                                                         <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i data-feather="clock"></i></span>
-                                                            <input type="time" name="to" class="form-control time-input" value="17:00" />
+                                                            <span class="input-group-text"><i
+                                                                    data-feather="clock"></i></span>
+                                                            <input type="time" name="to"
+                                                                class="form-control time-input" value="17:00" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2 col-8 mb-50">
                                                         <div class="form-check mt-2">
-                                                            <input type="checkbox" name="is_open_24_hours" value="1" class="form-check-input open-24-hours-check" />
-                                                            <label class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
+                                                            <input type="checkbox" name="is_open_24_hours" value="1"
+                                                                class="form-check-input open-24-hours-check" />
+                                                            <label
+                                                                class="form-check-label"><small>{{ __('store::general.open_24_hours') }}</small></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-1 col-4 mb-50 text-end pt-2">
-                                                        <button type="button" class="btn btn-outline-danger btn-icon" data-repeater-delete title="{{ __('common::general.delete') }}">
+                                                        <button type="button" class="btn btn-outline-danger btn-icon"
+                                                            data-repeater-delete
+                                                            title="{{ __('common::general.delete') }}">
                                                             <i data-feather="trash-2"></i>
                                                         </button>
                                                     </div>
@@ -448,8 +484,10 @@
 
                                         <div class="row">
                                             <div class="col-12">
-                                                <button type="button" class="btn btn-sm btn-outline-primary" data-repeater-create>
-                                                    <i data-feather="plus" class="me-50"></i> {{ __('store::general.add_working_hours') }}
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                    data-repeater-create>
+                                                    <i data-feather="plus" class="me-50"></i>
+                                                    {{ __('store::general.add_working_hours') }}
                                                 </button>
                                             </div>
                                         </div>
@@ -489,6 +527,10 @@
     <script src="{{ asset('admin/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ asset('admin/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
     <script>
+        window.googleMapKey = "{{ config('app.google_map_key', '') }}";
+    </script>
+    <script src="{{ asset('admin/js/scripts/maps/google-map-picker.js') }}"></script>
+    <script>
         $(document).ready(function() {
             var select = $('.select2');
             if (select.length) {
@@ -503,21 +545,24 @@
 
             // Working Hours Repeater
             $('.working-hours-repeater').repeater({
-                show: function () {
+                show: function() {
                     $(this).slideDown();
                     $(this).find('.time-input').prop('disabled', false);
                     $(this).find('.open-24-hours-check').prop('checked', false);
                     if (feather) {
-                        feather.replace({ width: 14, height: 14 });
+                        feather.replace({
+                            width: 14,
+                            height: 14
+                        });
                     }
                 },
-                hide: function (deleteElement) {
+                hide: function(deleteElement) {
                     $(this).slideUp(deleteElement);
                 },
                 isFirstItemUndeletable: false
             });
 
-            $(document).on('change', '.open-24-hours-check', function () {
+            $(document).on('change', '.open-24-hours-check', function() {
                 var isChecked = $(this).is(':checked');
                 var $row = $(this).closest('[data-repeater-item]');
                 var $timeInputs = $row.find('.time-input');

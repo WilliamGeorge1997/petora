@@ -381,7 +381,9 @@
                                                         <div class="col-md-3 col-12 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('store::general.day') }}</small></label>
-                                                            <select class="form-select @error("working_hours.$index.day") is-invalid @enderror" name="day" required>
+                                                            <select
+                                                                class="form-select @error("working_hours.$index.day") is-invalid @enderror"
+                                                                name="day" required>
                                                                 <option value="" disabled
                                                                     {{ empty($item['day']) ? 'selected' : '' }}>
                                                                     {{ __('store::general.select_day') }}</option>
@@ -401,7 +403,8 @@
                                                         <div class="col-md-3 col-6 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('store::general.from') }}</small></label>
-                                                            <div class="input-group input-group-merge @error("working_hours.$index.from") is-invalid @enderror">
+                                                            <div
+                                                                class="input-group input-group-merge @error("working_hours.$index.from") is-invalid @enderror">
                                                                 <span class="input-group-text"><i
                                                                         data-feather="clock"></i></span>
                                                                 <input type="time" name="from"
@@ -418,7 +421,8 @@
                                                         <div class="col-md-3 col-6 mb-50">
                                                             <label
                                                                 class="form-label"><small>{{ __('store::general.to') }}</small></label>
-                                                            <div class="input-group input-group-merge @error("working_hours.$index.to") is-invalid @enderror">
+                                                            <div
+                                                                class="input-group input-group-merge @error("working_hours.$index.to") is-invalid @enderror">
                                                                 <span class="input-group-text"><i
                                                                         data-feather="clock"></i></span>
                                                                 <input type="time" name="to"
@@ -553,6 +557,10 @@
 @section('js')
     <script src="{{ asset('admin/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ asset('admin/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
+    <script>
+        window.googleMapKey = "{{ config('app.google_map_key', '') }}";
+    </script>
+    <script src="{{ asset('admin/js/scripts/maps/google-map-picker.js') }}"></script>
     <script>
         $(document).ready(function() {
             var select = $('.select2');

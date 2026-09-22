@@ -12,7 +12,6 @@
 <script src="{{ asset('admin/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('admin/js/scripts/button/button-submit-loading.js') }}"></script>
 <script src="{{ asset('admin/js/scripts/forms/form-select-loader.js') }}"></script>
-<script src="{{ asset('admin/js/scripts/maps/google-map-picker.js') }}"></script>
 <!-- END: Theme JS-->
 
 <script>

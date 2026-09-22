@@ -50,7 +50,8 @@
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="phone"></i></span>
                                         <input type="text" class="form-control" name="phone" id="phone" required
-                                            placeholder="{{ __('driver::attribute.phone') }}" value="{{ old('phone') }}" />
+                                            placeholder="{{ __('driver::attribute.phone') }}"
+                                            value="{{ old('phone') }}" />
                                     </div>
                                     @error('phone')
                                         <p class="text-danger">{{ $message }}</p>
@@ -63,7 +64,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="password">{{ __('driver::attribute.password') }}</label>
+                                    <label class="col-form-label"
+                                        for="password">{{ __('driver::attribute.password') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
@@ -82,13 +84,15 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="license_id">{{ __('driver::attribute.license_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="license_id">{{ __('driver::attribute.license_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="credit-card"></i></span>
                                         <input type="text" class="form-control" name="license_id" id="license_id"
-                                            placeholder="{{ __('driver::attribute.license_id') }}" value="{{ old('license_id') }}" />
+                                            placeholder="{{ __('driver::attribute.license_id') }}"
+                                            value="{{ old('license_id') }}" />
                                     </div>
                                     @error('license_id')
                                         <p class="text-danger">{{ $message }}</p>
@@ -101,14 +105,17 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="locale">{{ __('driver::attribute.locale') }}</label>
+                                    <label class="col-form-label"
+                                        for="locale">{{ __('driver::attribute.locale') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="globe"></i></span>
                                         <select class="form-select" name="locale" id="locale" required>
-                                            <option value="en" {{ old('locale') == 'en' ? 'selected' : '' }}>English</option>
-                                            <option value="ar" {{ old('locale') == 'ar' ? 'selected' : '' }}>العربية</option>
+                                            <option value="en" {{ old('locale') == 'en' ? 'selected' : '' }}>English
+                                            </option>
+                                            <option value="ar" {{ old('locale') == 'ar' ? 'selected' : '' }}>العربية
+                                            </option>
                                         </select>
                                     </div>
                                     @error('locale')
@@ -134,21 +141,31 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label">{{ __('driver::attribute.affiliation') ?? 'الجهة التابعة' }}</label>
+                                    <label
+                                        class="col-form-label">{{ __('driver::attribute.affiliation') ?? 'الجهة التابعة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="d-flex flex-wrap gap-2 mt-50">
                                         <div class="form-check me-2">
-                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_none" value="none" {{ $selectedType === 'none' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="entity_type_none">{{ __('driver::attribute.none') ?? 'لا يوجد' }}</label>
+                                            <input class="form-check-input entity-type-radio" type="radio"
+                                                name="entity_type" id="entity_type_none" value="none"
+                                                {{ $selectedType === 'none' ? 'checked' : '' }}>
+                                            <label class="form-check-label"
+                                                for="entity_type_none">{{ __('driver::attribute.none') ?? 'لا يوجد' }}</label>
                                         </div>
                                         <div class="form-check me-2">
-                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_store" value="store" {{ $selectedType === 'store' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="entity_type_store">{{ __('driver::attribute.store_id') }}</label>
+                                            <input class="form-check-input entity-type-radio" type="radio"
+                                                name="entity_type" id="entity_type_store" value="store"
+                                                {{ $selectedType === 'store' ? 'checked' : '' }}>
+                                            <label class="form-check-label"
+                                                for="entity_type_store">{{ __('driver::attribute.store_id') }}</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_clinic" value="clinic" {{ $selectedType === 'clinic' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="entity_type_clinic">{{ __('driver::attribute.clinic_id') }}</label>
+                                            <input class="form-check-input entity-type-radio" type="radio"
+                                                name="entity_type" id="entity_type_clinic" value="clinic"
+                                                {{ $selectedType === 'clinic' ? 'checked' : '' }}>
+                                            <label class="form-check-label"
+                                                for="entity_type_clinic">{{ __('driver::attribute.clinic_id') }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -156,16 +173,19 @@
                         </div>
 
                         {{-- Store --}}
-                        <div class="col-12" id="store_wrapper" style="{{ $selectedType === 'store' ? '' : 'display: none;' }}">
+                        <div class="col-12" id="store_wrapper"
+                            style="{{ $selectedType === 'store' ? '' : 'display: none;' }}">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="store_id">{{ __('driver::attribute.store_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="store_id">{{ __('driver::attribute.store_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="store_id" id="store_id">
                                         <option value="">{{ __('driver::attribute.select_store') }}</option>
                                         @foreach ($viewModel->stores() as $store)
-                                            <option value="{{ $store->id }}" {{ old('store_id') == $store->id ? 'selected' : '' }}>
+                                            <option value="{{ $store->id }}"
+                                                {{ old('store_id') == $store->id ? 'selected' : '' }}>
                                                 {{ $store->getTranslation('title', $locale) }}
                                             </option>
                                         @endforeach
@@ -178,16 +198,19 @@
                         </div>
 
                         {{-- Clinic --}}
-                        <div class="col-12" id="clinic_wrapper" style="{{ $selectedType === 'clinic' ? '' : 'display: none;' }}">
+                        <div class="col-12" id="clinic_wrapper"
+                            style="{{ $selectedType === 'clinic' ? '' : 'display: none;' }}">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="clinic_id">{{ __('driver::attribute.clinic_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="clinic_id">{{ __('driver::attribute.clinic_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="clinic_id" id="clinic_id">
                                         <option value="">{{ __('driver::attribute.select_clinic') }}</option>
                                         @foreach ($viewModel->clinics() as $clinic)
-                                            <option value="{{ $clinic->id }}" {{ old('clinic_id') == $clinic->id ? 'selected' : '' }}>
+                                            <option value="{{ $clinic->id }}"
+                                                {{ old('clinic_id') == $clinic->id ? 'selected' : '' }}>
                                                 {{ $clinic->getTranslation('title', $locale) }}
                                             </option>
                                         @endforeach
@@ -203,7 +226,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="country_id">{{ __('driver::attribute.country_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="country_id">{{ __('driver::attribute.country_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="country_id" id="country_id"
@@ -211,7 +235,8 @@
                                         data-ajax-target="#city_id" data-ajax-child="#zone_id">
                                         <option value="">{{ __('driver::attribute.select_country') }}</option>
                                         @foreach ($viewModel->countries() as $country)
-                                            <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                            <option value="{{ $country->id }}"
+                                                {{ old('country_id') == $country->id ? 'selected' : '' }}>
                                                 {{ $country->getTranslation('title', $locale) }}
                                             </option>
                                         @endforeach
@@ -227,7 +252,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="city_id">{{ __('driver::attribute.city_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="city_id">{{ __('driver::attribute.city_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="city_id" id="city_id" disabled
@@ -246,7 +272,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="zone_id">{{ __('driver::attribute.zone_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="zone_id">{{ __('driver::attribute.zone_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="zone_id" id="zone_id" disabled>
@@ -325,12 +352,14 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="image">{{ __('driver::attribute.image') }}</label>
+                                    <label class="col-form-label"
+                                        for="image">{{ __('driver::attribute.image') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="image"></i></span>
-                                        <input type="file" id="image" class="form-control" name="image" accept="image/*" />
+                                        <input type="file" id="image" class="form-control" name="image"
+                                            accept="image/*" />
                                     </div>
                                     @error('image')
                                         <p class="text-danger">{{ $message }}</p>
@@ -343,12 +372,14 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="is_available">{{ __('driver::attribute.is_available') }}</label>
+                                    <label class="col-form-label"
+                                        for="is_available">{{ __('driver::attribute.is_available') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="form-check form-switch">
-                                        <input type="checkbox" class="form-check-input" name="is_available" id="is_available"
-                                            value="1" {{ old('is_available') ? 'checked' : '' }} />
+                                        <input type="checkbox" class="form-check-input" name="is_available"
+                                            id="is_available" value="1"
+                                            {{ old('is_available') ? 'checked' : '' }} />
                                     </div>
                                 </div>
                             </div>
@@ -358,7 +389,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="is_active">{{ __('driver::attribute.is_active') }}</label>
+                                    <label class="col-form-label"
+                                        for="is_active">{{ __('driver::attribute.is_active') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="form-check form-switch">
@@ -371,7 +403,8 @@
 
                         {{-- Buttons --}}
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary me-1">{{ __('driver::general.create') }}</button>
+                            <button type="submit"
+                                class="btn btn-primary me-1">{{ __('driver::general.create') }}</button>
                             <a href="{{ route('admin.driver.index') }}"
                                 class="btn btn-outline-secondary">{{ __('driver::general.cancel') }}</a>
                         </div>
@@ -385,6 +418,10 @@
 @section('js')
     <script src="{{ asset('admin/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ asset('admin/js/scripts/forms/form-select2.js') }}"></script>
+    <script>
+        window.googleMapKey = "{{ config('app.google_map_key', '') }}";
+    </script>
+    <script src="{{ asset('admin/js/scripts/maps/google-map-picker.js') }}"></script>
     <script>
         $(document).ready(function() {
             function toggleAffiliation(type, resetValue = true) {

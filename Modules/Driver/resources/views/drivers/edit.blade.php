@@ -66,7 +66,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="password">{{ __('driver::attribute.password') }}</label>
+                                    <label class="col-form-label"
+                                        for="password">{{ __('driver::attribute.password') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
@@ -85,7 +86,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="license_id">{{ __('driver::attribute.license_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="license_id">{{ __('driver::attribute.license_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
@@ -105,14 +107,19 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="locale">{{ __('driver::attribute.locale') }}</label>
+                                    <label class="col-form-label"
+                                        for="locale">{{ __('driver::attribute.locale') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="globe"></i></span>
                                         <select class="form-select" name="locale" id="locale" required>
-                                            <option value="en" {{ old('locale', $driver->locale) == 'en' ? 'selected' : '' }}>English</option>
-                                            <option value="ar" {{ old('locale', $driver->locale) == 'ar' ? 'selected' : '' }}>العربية</option>
+                                            <option value="en"
+                                                {{ old('locale', $driver->locale) == 'en' ? 'selected' : '' }}>English
+                                            </option>
+                                            <option value="ar"
+                                                {{ old('locale', $driver->locale) == 'ar' ? 'selected' : '' }}>العربية
+                                            </option>
                                         </select>
                                     </div>
                                     @error('locale')
@@ -138,21 +145,31 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label">{{ __('driver::attribute.affiliation') ?? 'الجهة التابعة' }}</label>
+                                    <label
+                                        class="col-form-label">{{ __('driver::attribute.affiliation') ?? 'الجهة التابعة' }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="d-flex flex-wrap gap-2 mt-50">
                                         <div class="form-check me-2">
-                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_none" value="none" {{ $selectedType === 'none' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="entity_type_none">{{ __('driver::attribute.none') ?? 'لا يوجد' }}</label>
+                                            <input class="form-check-input entity-type-radio" type="radio"
+                                                name="entity_type" id="entity_type_none" value="none"
+                                                {{ $selectedType === 'none' ? 'checked' : '' }}>
+                                            <label class="form-check-label"
+                                                for="entity_type_none">{{ __('driver::attribute.none') ?? 'لا يوجد' }}</label>
                                         </div>
                                         <div class="form-check me-2">
-                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_store" value="store" {{ $selectedType === 'store' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="entity_type_store">{{ __('driver::attribute.store_id') }}</label>
+                                            <input class="form-check-input entity-type-radio" type="radio"
+                                                name="entity_type" id="entity_type_store" value="store"
+                                                {{ $selectedType === 'store' ? 'checked' : '' }}>
+                                            <label class="form-check-label"
+                                                for="entity_type_store">{{ __('driver::attribute.store_id') }}</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input entity-type-radio" type="radio" name="entity_type" id="entity_type_clinic" value="clinic" {{ $selectedType === 'clinic' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="entity_type_clinic">{{ __('driver::attribute.clinic_id') }}</label>
+                                            <input class="form-check-input entity-type-radio" type="radio"
+                                                name="entity_type" id="entity_type_clinic" value="clinic"
+                                                {{ $selectedType === 'clinic' ? 'checked' : '' }}>
+                                            <label class="form-check-label"
+                                                for="entity_type_clinic">{{ __('driver::attribute.clinic_id') }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -160,10 +177,12 @@
                         </div>
 
                         {{-- Store --}}
-                        <div class="col-12" id="store_wrapper" style="{{ $selectedType === 'store' ? '' : 'display: none;' }}">
+                        <div class="col-12" id="store_wrapper"
+                            style="{{ $selectedType === 'store' ? '' : 'display: none;' }}">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="store_id">{{ __('driver::attribute.store_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="store_id">{{ __('driver::attribute.store_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="store_id" id="store_id">
@@ -183,10 +202,12 @@
                         </div>
 
                         {{-- Clinic --}}
-                        <div class="col-12" id="clinic_wrapper" style="{{ $selectedType === 'clinic' ? '' : 'display: none;' }}">
+                        <div class="col-12" id="clinic_wrapper"
+                            style="{{ $selectedType === 'clinic' ? '' : 'display: none;' }}">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="clinic_id">{{ __('driver::attribute.clinic_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="clinic_id">{{ __('driver::attribute.clinic_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="clinic_id" id="clinic_id">
@@ -209,7 +230,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="country_id">{{ __('driver::attribute.country_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="country_id">{{ __('driver::attribute.country_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="country_id" id="country_id"
@@ -234,7 +256,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="city_id">{{ __('driver::attribute.city_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="city_id">{{ __('driver::attribute.city_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="city_id" id="city_id"
@@ -259,7 +282,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="zone_id">{{ __('driver::attribute.zone_id') }}</label>
+                                    <label class="col-form-label"
+                                        for="zone_id">{{ __('driver::attribute.zone_id') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-select select2" name="zone_id" id="zone_id">
@@ -344,18 +368,21 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="image">{{ __('driver::attribute.image') }}</label>
+                                    <label class="col-form-label"
+                                        for="image">{{ __('driver::attribute.image') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     @if ($driver->image)
                                         <div class="mb-1">
                                             <img src="{{ $driver->image }}" alt="{{ $driver->name }}"
-                                                class="rounded border" width="80" height="80" style="object-fit: cover;">
+                                                class="rounded border" width="80" height="80"
+                                                style="object-fit: cover;">
                                         </div>
                                     @endif
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i data-feather="image"></i></span>
-                                        <input type="file" id="image" class="form-control" name="image" accept="image/*" />
+                                        <input type="file" id="image" class="form-control" name="image"
+                                            accept="image/*" />
                                     </div>
                                     @error('image')
                                         <p class="text-danger">{{ $message }}</p>
@@ -368,12 +395,14 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="is_available">{{ __('driver::attribute.is_available') }}</label>
+                                    <label class="col-form-label"
+                                        for="is_available">{{ __('driver::attribute.is_available') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="form-check form-switch">
-                                        <input type="checkbox" class="form-check-input" name="is_available" id="is_available"
-                                            value="1" {{ old('is_available', $driver->is_available) ? 'checked' : '' }} />
+                                        <input type="checkbox" class="form-check-input" name="is_available"
+                                            id="is_available" value="1"
+                                            {{ old('is_available', $driver->is_available) ? 'checked' : '' }} />
                                     </div>
                                 </div>
                             </div>
@@ -383,7 +412,8 @@
                         <div class="col-12">
                             <div class="mb-1 row">
                                 <div class="col-sm-3 text-center">
-                                    <label class="col-form-label" for="is_active">{{ __('driver::attribute.is_active') }}</label>
+                                    <label class="col-form-label"
+                                        for="is_active">{{ __('driver::attribute.is_active') }}</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="form-check form-switch">
@@ -410,6 +440,10 @@
 @section('js')
     <script src="{{ asset('admin/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ asset('admin/js/scripts/forms/form-select2.js') }}"></script>
+    <script>
+        window.googleMapKey = "{{ config('app.google_map_key', '') }}";
+    </script>
+    <script src="{{ asset('admin/js/scripts/maps/google-map-picker.js') }}"></script>
     <script>
         $(document).ready(function() {
             function toggleAffiliation(type, resetValue = true) {

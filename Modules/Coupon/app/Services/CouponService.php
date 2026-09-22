@@ -29,9 +29,9 @@ class CouponService
         return $this->model::with($relations)->findOrFail($id);
     }
 
-    public function findByCode(string $code, array $relations = []): Coupon
+    public function findByCode(string $code, array $relations = []): null|Coupon
     {
-        return $this->model::with($relations)->where('code', $code)->firstOrFail();
+        return $this->model::with($relations)->where('code', $code)->first();
     }
 
     protected function resolveModel(int|Coupon $couponOrId): Coupon
@@ -75,6 +75,13 @@ class CouponService
         }
 
         $coupon = $this->findByCode($code);
+
+
+        if(!$coupon){
+            throw ValidationException::withMessages([
+                'coupon' => __('coupon::message.not_found'),
+            ]);
+        }
 
         if ($coupon->counter >= $coupon->num_of_uses) {
             throw ValidationException::withMessages([

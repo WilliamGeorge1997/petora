@@ -3,6 +3,7 @@
 namespace Modules\Booking\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Booking\DTOs\BookingDto;
@@ -10,6 +11,7 @@ use Modules\Booking\Http\Requests\BookingRequest;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Services\BookingService;
 
+#[Middleware('auth:client')]
 class BookingController extends Controller
 {
     public function __construct(private BookingService $bookingService) {}
@@ -33,10 +35,7 @@ class BookingController extends Controller
         $dto = BookingDto::fromRequest($request);
         $booking = $this->bookingService->save($dto);
 
-        return success(true, __('booking::message.booking.created'), [
-            'booking_no' => $booking->booking_no,
-            'id' => $booking->id,
-        ]);
+        return success(true, __('booking::message.booking.created'), $booking);
     }
 
     public function show(int $booking_id): JsonResponse

@@ -9,18 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Product\Models\Product;
+
 use Modules\Product\Services\ProductService;
 use Modules\Store\DTOs\StoreProductDto;
 use Modules\Store\Http\Requests\StoreProductRequest;
 use Modules\Store\Models\Store;
-use Modules\Store\Services\StoreProductService;
+use Modules\Product\Services\SellerProductService;
 
 #[Middleware('auth:admin')]
 #[Middleware('permission:Edit-store')]
 class StoreProductController extends Controller
 {
-    public function __construct(private StoreProductService $storeProductService) {}
+    public function __construct(private SellerProductService $sellerProductService) {}
 
     public function index(Request $request, Store $store)
     {
@@ -29,9 +29,9 @@ class StoreProductController extends Controller
         $relations = [
             'images',
             'category',
-            'sellerImages' => fn($q) => $q->where('product_sellers.store_id', $store->id),
+            'sellerImages' => fn($q) => $q->where('seller_product.store_id', $store->id),
         ];
-        $products = $this->storeProductService->products($store, $data, $relations);
+        $products = $this->sellerProductService->findAllBySeller($store, $data, $relations);
         if ($request->ajax()) {
             return success(true, __('product::message.fetched'), $products->items());
         }
@@ -57,7 +57,7 @@ class StoreProductController extends Controller
     public function importAll(Store $store)
     {
         Gate::authorize('update', $store);
-        $this->storeProductService->importAllProducts($store);
+        $this->sellerProductService->importAllToSeller($store);
         return back()->with('success', __('common::message.imported_successfully'));
     }
 
@@ -65,7 +65,7 @@ class StoreProductController extends Controller
     {
         Gate::authorize('update', $store);
         $product = app(ProductService::class)->findById($product_id, ['images', 'category']);
-        $sellerProduct = $this->storeProductService->findProductSeller($store, $product_id, ['images']);
+        $sellerProduct = $this->sellerProductService->findByConditions(['store_id' => $store->id, 'product_id' => $product_id], [], ['images'])->first();
         return view('store::products.edit', compact('store', 'product', 'sellerProduct'));
     }
 
@@ -73,14 +73,16 @@ class StoreProductController extends Controller
     {
         Gate::authorize('update', $store);
         $dto = StoreProductDto::fromRequest($request);
-        $this->storeProductService->updateProductSeller($store, $product_id, $dto);
-        return redirect()->route('admin.store.products.index', $store->id)->with('success', __('common::message.updated_successfully'));
+        $sellerProduct = $this->sellerProductService->findByConditions(['store_id' => $store->id, 'product_id' => $product_id])->first();
+        $this->sellerProductService->update($sellerProduct, $dto->toArray(), $dto->images);
+        return to_route('admin.store.products.index', $store->id)->with('success', __('common::message.updated_successfully'));
     }
 
-    public function activate(Store $store, Product $product)
+    public function activate(Store $store, int $product_id)
     {
         Gate::authorize('update', $store);
-        $sellerProduct = $this->storeProductService->activate($store, $product);
+        $sellerProduct = $this->sellerProductService->findByConditions(['store_id' => $store->id, 'product_id' => $product_id])->first();
+        $sellerProduct = $this->sellerProductService->activate($sellerProduct);
         return success(
             true,
             $sellerProduct->is_active ? __('store::message.activated') : __('store::message.deactivated'),
@@ -88,17 +90,17 @@ class StoreProductController extends Controller
         );
     }
 
-    public function destroy(Store $store, Product $product)
+    public function destroy(Store $store, int $product_id)
     {
         Gate::authorize('update', $store);
-        $this->storeProductService->detachProduct($store, $product);
+        $this->sellerProductService->detach(['store_id' => $store->id, 'product_id' => $product_id]);
         return success(true, __('product::message.deleted'));
     }
 
-    public function destroyImage(Store $store, int $product_id, int $image_id)
+    public function destroyImage(Store $store, int $image_id)
     {
         Gate::authorize('update', $store);
-        $this->storeProductService->deleteProductSellerImage($image_id);
+        $this->sellerProductService->deleteImage($image_id);
         return success(true, __('product::message.deleted'));
     }
 }

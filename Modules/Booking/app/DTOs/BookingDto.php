@@ -11,7 +11,8 @@ readonly class BookingDto
     public function __construct(
         public int $clientId,
         public int $petId,
-        public int $clinicServiceId,
+        public int $clinicId,
+        public int $serviceId,
         public int $clinicServiceScheduleTimeId,
         public int $paymentMethodId,
         public string $bookingDate,
@@ -22,9 +23,10 @@ readonly class BookingDto
     public static function fromRequest(BookingRequest $request): self
     {
         return new self(
-            clientId: auth('client')->id() ?? (int) $request->validated('client_id'),
+            clientId: auth('client')->id(),
             petId: (int) $request->validated('pet_id'),
-            clinicServiceId: (int) $request->validated('clinic_service_id'),
+            clinicId: (int) $request->validated('clinic_id'),
+            serviceId: (int) $request->validated('service_id'),
             clinicServiceScheduleTimeId: (int) $request->validated('clinic_service_schedule_time_id'),
             paymentMethodId: (int) $request->validated('payment_method_id'),
             bookingDate: $request->validated('booking_date'),
@@ -38,7 +40,8 @@ readonly class BookingDto
         $data = [
             'client_id' => $this->clientId,
             'pet_id' => $this->petId,
-            'clinic_service_id' => $this->clinicServiceId,
+            'clinic_id' => $this->clinicId,
+            'service_id' => $this->serviceId,
             'clinic_service_schedule_time_id' => $this->clinicServiceScheduleTimeId,
             'payment_method_id' => $this->paymentMethodId,
             'booking_date' => $this->bookingDate,

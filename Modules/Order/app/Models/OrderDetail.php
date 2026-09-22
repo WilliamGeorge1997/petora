@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Product\Models\Product;
+use Modules\Product\Models\SellerProduct;
 
 class OrderDetail extends Model
 {
@@ -14,6 +15,7 @@ class OrderDetail extends Model
     protected $fillable = [
         'order_id',
         'product_id',
+        'seller_product_id',
         'price',
         'quantity',
         'total',
@@ -41,5 +43,10 @@ class OrderDetail extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function sellerProduct(): BelongsTo
+    {
+        return $this->belongsTo(SellerProduct::class);
     }
 }

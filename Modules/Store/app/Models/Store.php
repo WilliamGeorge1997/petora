@@ -13,7 +13,7 @@ use Modules\Country\Models\City;
 use Modules\Country\Models\Country;
 use Modules\Country\Models\Zone;
 use Modules\Product\Models\Product;
-use Modules\Product\Models\ProductSeller;
+use Modules\Product\Models\SellerProduct;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
@@ -125,8 +125,8 @@ class Store extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_sellers', 'store_id', 'product_id')
-            ->using(ProductSeller::class)
+        return $this->belongsToMany(Product::class, 'seller_product', 'store_id', 'product_id')
+            ->using(SellerProduct::class)
             ->withPivot(['id', 'title', 'description', 'price', 'is_active'])
             ->withTimestamps();
     }

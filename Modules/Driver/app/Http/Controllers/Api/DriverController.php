@@ -184,7 +184,7 @@ class DriverController extends Controller
     {
         $data = $this->orderService->driverStatistics(
             driverId: auth('driver')->id(),
-            fromDate: today()->toDateString(),
+            fromDate: today()->subDays(6)->toDateString(),
             toDate: today()->toDateString()
         );
 

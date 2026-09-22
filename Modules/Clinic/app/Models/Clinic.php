@@ -13,7 +13,7 @@ use Modules\Country\Models\Country;
 use Modules\Country\Models\Zone;
 use Modules\Doctor\Models\Doctor;
 use Modules\Product\Models\Product;
-use Modules\Product\Models\ProductSeller;
+use Modules\Product\Models\SellerProduct;
 use Modules\Service\Models\ClinicService;
 use Modules\Service\Models\Service;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
@@ -129,8 +129,8 @@ class Clinic extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_sellers', 'clinic_id', 'product_id')
-            ->using(ProductSeller::class)
+        return $this->belongsToMany(Product::class, 'seller_product', 'clinic_id', 'product_id')
+            ->using(SellerProduct::class)
             ->withPivot(['id', 'title', 'description', 'price', 'is_active'])
             ->withTimestamps();
     }

@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Modules\Order\Models\Order;
 use Modules\Product\Models\Product;
+use Modules\Product\Models\SellerProduct;
 return new class extends Migration
 {
     /**
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('quantity');
             $table->decimal('total', 10, 2)->unsigned();
             $table->string('note')->nullable();
+            $table->foreignIdFor(SellerProduct::class)->index()->constrained()->restrictOnDelete();
             $table->timestamps();
         });
     }

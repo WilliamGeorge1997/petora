@@ -9,6 +9,7 @@ use Illuminate\Pagination\CursorPaginator;
 use Modules\Category\DTOs\CategoryDto;
 use Modules\Category\Models\Category;
 use Modules\Common\Helpers\UploaderHelper;
+use Modules\Order\Enums\SellerType;
 
 class CategoryService
 {
@@ -94,13 +95,13 @@ class CategoryService
     // For API
     public function categoriesHaveProducts(string $sellerType, int $sellerId, $data = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $type = $sellerType == 'store' ? 'stores' : 'clinics';
+        $type = $sellerType == SellerType::Store->value ? 'stores' : 'clinics';
         $query = $this->model::query()->active()->latest('id')
             ->whereHas('products', function ($q) use ($type, $sellerId) {
                 $q->active()
                     ->whereHas($type, function ($sq) use ($type, $sellerId) {
                         $sq->where("$type.id", $sellerId)
-                            ->where('product_sellers.is_active', true);
+                            ->where('seller_product.is_active', true);
                     });
             });
 

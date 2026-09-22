@@ -13,6 +13,7 @@ use Modules\Client\Models\Client;
 use Modules\Client\Services\AddressService;
 use Modules\Clinic\Services\ClinicDeliveryScheduleService;
 use Modules\Clinic\Services\ClinicService;
+use Modules\Clinic\Services\ClinicServiceScheduleTimeService;
 use Modules\Country\Services\ZoneService;
 use Modules\Coupon\Enums\CouponDiscountOn;
 use Modules\Coupon\Models\Coupon;
@@ -175,17 +176,11 @@ class OrderService
         $order = DB::transaction(function () use ($order, $newStatus, $actor, $notes, $driverId) {
             $data = ['order_status_id' => $newStatus->value];
             if (!is_null($driverId)) $data['driver_id'] = $driverId;
-
-            // 1. Update order
             $order->update($data);
-
-            // 2. Synchronous Audit Trail
             app(OrderHistoryService::class)->save($order, $newStatus->value, $actor->getKey(), $actor->getMorphClass(), $notes);
-
             return $order;
         });
 
-        // 3. Dispatch event for notifications & external services
         broadcast(new OrderStatusChanged($order))->toOthers();
 
         return $order;
@@ -198,11 +193,17 @@ class OrderService
         $requestedItems = collect($dto->items)->keyBy('product_id');
         return $products->map(function ($product) use ($requestedItems, $seller) {
             $requestedItem = $requestedItems[$product->id];
+            
+            $sellerData = $seller['type'] === SellerType::Store
+                ? $product->stores->first()
+                : $product->clinics->first();
+
             return [
-                'product_id' => $product->id,
-                'quantity'   => $requestedItem['quantity'],
-                'price'      => $this->getProductPrice($product, $seller),
-                'note'       => $requestedItem['note'] ?? null,
+                'product_id'        => $product->id,
+                'seller_product_id' => $sellerData?->pivot?->id,
+                'quantity'          => $requestedItem['quantity'],
+                'price'             => $this->getProductPrice($product, $seller),
+                'note'              => $requestedItem['note'] ?? null,
             ];
         });
     }
@@ -348,14 +349,15 @@ class OrderService
         $now = now();
         $insertData = $details->map(function ($detail) use ($order, $now) {
             return [
-                'order_id'   => $order->id,
-                'product_id' => $detail['product_id'],
-                'total'      => $detail['price'] * $detail['quantity'],
-                'price'      => $detail['price'],
-                'quantity'   => $detail['quantity'],
-                'note'       => @$detail['note'],
-                'created_at' => $now,
-                'updated_at' => $now,
+                'order_id'          => $order->id,
+                'product_id'        => $detail['product_id'],
+                'seller_product_id' => $detail['seller_product_id'],
+                'total'             => $detail['price'] * $detail['quantity'],
+                'price'             => $detail['price'],
+                'quantity'          => $detail['quantity'],
+                'note'              => @$detail['note'],
+                'created_at'        => $now,
+                'updated_at'        => $now,
             ];
         })->toArray();
 

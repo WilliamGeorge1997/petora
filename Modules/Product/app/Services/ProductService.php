@@ -47,6 +47,14 @@ class ProductService
         return getCaseCollection($query, $data, $columns);
     }
 
+    public function activeExcept(array $excludedIds, array $columns = ['*']): Collection
+    {
+        return $this->model::query()
+            ->active()
+            ->whereNotIn('id', $excludedIds)
+            ->get($columns);
+    }
+
     public function save(ProductDto $dto): Product
     {
         $product = $this->model::create($dto->toArray());
@@ -100,12 +108,12 @@ class ProductService
     // For API
     public function byCategoryAndSeller(int $categoryId, string $sellerType, int $sellerId, array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $type = $sellerType == 'store' ? 'stores' : 'clinics';
+        $type = $sellerType == SellerType::Store->value ? 'stores' : 'clinics';
         $query = $this->model::query()->with($relations)->active()->latest('id')
             ->where('category_id', $categoryId)
             ->withWhereHas($type, function ($q) use ($type, $sellerId) {
                 $q->where("$type.id", $sellerId)
-                    ->where('product_sellers.is_active', true);
+                    ->where('seller_product.is_active', true);
             });
 
         return getCaseCollection($query, $data, $columns);

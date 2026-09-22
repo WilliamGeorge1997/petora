@@ -28,6 +28,7 @@ class ClinicServiceScheduleService
         return $this->model::with($relations)->findOrFail($id);
     }
 
+
     protected function resolveModel(int|ClinicServiceSchedule $scheduleOrId): ClinicServiceSchedule
     {
         return $scheduleOrId instanceof ClinicServiceSchedule ? $scheduleOrId : $this->findById($scheduleOrId);

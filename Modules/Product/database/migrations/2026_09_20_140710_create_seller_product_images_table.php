@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Modules\Product\Models\ProductSeller;
+use Modules\Product\Models\SellerProduct;
 
 return new class extends Migration
 {
@@ -12,11 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_seller_images', function (Blueprint $table) {
+        Schema::create('seller_product_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ProductSeller::class, 'product_seller_id')
+            $table->foreignIdFor(SellerProduct::class)
                 ->index()
-                ->constrained('product_sellers')
+                ->constrained()
                 ->cascadeOnDelete();
             $table->string('image');
             $table->timestamps();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_seller_images');
+        Schema::dropIfExists('seller_product_images');
     }
 };

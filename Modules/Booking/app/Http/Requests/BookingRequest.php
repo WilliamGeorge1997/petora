@@ -12,11 +12,11 @@ class BookingRequest extends FormRequest
      */
     public function rules(): array
     {
-        $clientId = auth('client')->id() ?? $this->input('client_id');
+        $clientId = auth('client')->id();
 
         return [
-            'client_id' => [auth('client')->check() ? 'nullable' : 'required', 'integer', 'exists:clients,id'],
-            'clinic_service_id' => ['required', 'integer', 'exists:clinic_services,id'],
+            'clinic_id' => ['required', 'integer', 'exists:clinics,id'],
+            'service_id' => ['required', 'integer', 'exists:services,id'],
             'clinic_service_schedule_time_id' => ['required', 'integer', 'exists:clinic_service_schedule_times,id'],
             'pet_id' => ['required', 'integer', 'exists:pets,id' . ($clientId ? ',client_id,' . $clientId : '')],
             'booking_date' => ['required', 'date', 'after_or_equal:today'],
@@ -38,8 +38,8 @@ class BookingRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'client_id' => __('booking::attribute.client_id'),
-            'clinic_service_id' => __('booking::attribute.clinic_service_id'),
+            'clinic_id' => __('booking::attribute.clinic_id'),
+            'service_id' => __('booking::attribute.service_id'),
             'clinic_service_schedule_time_id' => __('booking::attribute.clinic_service_schedule_time_id'),
             'pet_id' => __('booking::attribute.pet_id'),
             'booking_date' => __('booking::attribute.booking_date'),
@@ -53,11 +53,11 @@ class BookingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'client_id.required' => __('booking::message.client_id_required'),
-            'client_id.exists' => __('booking::message.client_id_exists'),
-
-            'clinic_service_id.required' => __('booking::message.clinic_service_id_required'),
-            'clinic_service_id.exists' => __('booking::message.clinic_service_id_exists'),
+            'clinic_id.required' => __('booking::message.clinic_id_required'),
+            'clinic_id.exists' => __('booking::message.clinic_id_exists'),
+            
+            'service_id.required' => __('booking::message.service_id_required'),
+            'service_id.exists' => __('booking::message.service_id_exists'),
 
             'clinic_service_schedule_time_id.required' => __('booking::message.clinic_service_schedule_time_id_required'),
             'clinic_service_schedule_time_id.exists' => __('booking::message.clinic_service_schedule_time_id_exists'),

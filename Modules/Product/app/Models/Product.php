@@ -84,16 +84,16 @@ class Product extends Model
 
     public function stores(): BelongsToMany
     {
-        return $this->belongsToMany(Store::class, 'product_sellers', 'product_id', 'store_id')
-            ->using(ProductSeller::class)
+        return $this->belongsToMany(Store::class, 'seller_product')
+            ->using(SellerProduct::class)
             ->withPivot(['id', 'title', 'description', 'price', 'is_active'])
             ->withTimestamps();
     }
 
     public function clinics(): BelongsToMany
     {
-        return $this->belongsToMany(Clinic::class, 'product_sellers', 'product_id', 'clinic_id')
-            ->using(ProductSeller::class)
+        return $this->belongsToMany(Clinic::class, 'seller_product')
+            ->using(SellerProduct::class)
             ->withPivot(['id', 'title', 'description', 'price', 'is_active'])
             ->withTimestamps();
     }
@@ -101,10 +101,10 @@ class Product extends Model
     public function sellerImages(): HasManyThrough
     {
         return $this->hasManyThrough(
-            ProductSellerImage::class,
-            ProductSeller::class,
+            SellerProductImage::class,
+            SellerProduct::class,
             'product_id',
-            'product_seller_id',
+            'seller_product_id',
             'id',
             'id'
         );

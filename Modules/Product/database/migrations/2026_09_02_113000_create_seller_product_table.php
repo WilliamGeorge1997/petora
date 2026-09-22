@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_sellers', function (Blueprint $table) {
+        Schema::create('seller_product', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class)->index()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Store::class)->nullable()->index()->constrained()->cascadeOnDelete();
@@ -31,7 +31,7 @@ return new class extends Migration
         });
 
         DB::statement('
-            ALTER TABLE product_sellers
+            ALTER TABLE seller_product
             ADD CONSTRAINT seller_exclusive_check
             CHECK (
                 (store_id IS NOT NULL AND clinic_id IS NULL)
@@ -46,10 +46,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_sellers');
+        Schema::dropIfExists('seller_product');
         DB::statement('
-            ALTER TABLE product_sellers
-            DROP CONSTRAINT check_seller_exclusive
+            ALTER TABLE seller_product
+            DROP CONSTRAINT seller_exclusive_check
         ');
     }
 };

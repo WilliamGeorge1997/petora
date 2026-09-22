@@ -9,11 +9,9 @@ use Modules\Clinic\Models\Clinic;
 use Modules\Store\Models\Store;
 use Spatie\Translatable\HasTranslations;
 
-class ProductSeller extends Pivot
+class SellerProduct extends Pivot
 {
     use HasTranslations;
-
-    protected $table = 'product_sellers';
 
     protected $fillable = [
         'product_id',
@@ -41,7 +39,7 @@ class ProductSeller extends Pivot
     // Relations
     public function images(): HasMany
     {
-        return $this->hasMany(ProductSellerImage::class, 'product_seller_id');
+        return $this->hasMany(SellerProductImage::class, 'seller_product_id');
     }
 
     public function product(): BelongsTo

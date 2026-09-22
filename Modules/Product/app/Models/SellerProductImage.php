@@ -6,18 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProductSellerImage extends Model
+class SellerProductImage extends Model
 {
     use HasFactory;
 
-    protected $table = 'product_seller_images';
-
     protected $fillable = [
-        'product_seller_id',
+        'seller_product_id',
         'image',
     ];
 
-    protected $hidden = ['product_seller_id'];
+    protected $hidden = ['seller_product_id'];
 
     // Date serialization
     protected function serializeDate(\DateTimeInterface $date)
@@ -33,15 +31,15 @@ class ProductSellerImage extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/product_sellers/'.$value);
+            return asset('storage/uploads/seller_products/'.$value);
         }
 
         return $value;
     }
 
     // Relations
-    public function productSeller(): BelongsTo
+    public function sellerProduct(): BelongsTo
     {
-        return $this->belongsTo(ProductSeller::class, 'product_seller_id');
+        return $this->belongsTo(SellerProduct::class);
     }
 }

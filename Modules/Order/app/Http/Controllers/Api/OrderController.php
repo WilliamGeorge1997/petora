@@ -14,7 +14,6 @@ use Modules\Order\Models\Order;
 use Modules\Order\Services\OrderHistoryService;
 use Modules\Order\Services\OrderService;
 use Modules\Order\Transformers\HistoryResource;
-use Psy\Readline\Interactive\Input\History;
 
 #[Middleware('auth:client')]
 class OrderController extends Controller
@@ -70,13 +69,6 @@ class OrderController extends Controller
         $dto = OrderDto::fromRequest($request);
         $order = $this->orderService->update($order, $dto);
         return success(true, __('order::message.order.updated'), $order);
-    }
-
-    public function destroy(Order $order)
-    {
-        Gate::authorize('delete', $order);
-        $this->orderService->delete($order);
-        return success(true, __('order::message.order.deleted'));
     }
 
     public function cancel(Request $request, Order $order)

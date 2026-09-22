@@ -32,5 +32,6 @@ Route::prefix('driver')->group(function () {
     Route::post('saveLocation', [DriverController::class, 'saveLocation']);
 
     Route::post('lang/change', [DriverController::class, 'changeLocale']);
-});
 
+    Route::get('statics', [DriverController::class, 'statics']);
+});

@@ -50,14 +50,13 @@ class ServiceController extends Controller
 
     public function edit(Service $service)
     {
-        Gate::authorize('update', $service);
-
+        // Gate::authorize('update', $service);
         return view('service::services.edit', compact('service'));
     }
 
     public function update(ServiceRequest $request, Service $service)
     {
-        Gate::authorize('update', $service);
+        // Gate::authorize('update', $service);
         $dto = ServiceDto::fromRequest($request);
         $this->serviceService->update($service, $dto);
 

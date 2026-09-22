@@ -9,4 +9,5 @@ return [
     'client_limit' => 'You have reached the usage limit for this coupon.',
     'invalid_date' => 'This coupon is not valid on today\'s date.',
     'invalid_time' => 'This coupon is not valid at the current time.',
+    'not_found'    => 'Coupon not found or invalid.',
 ];

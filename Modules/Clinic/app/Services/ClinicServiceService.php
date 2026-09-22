@@ -5,6 +5,8 @@ namespace Modules\Clinic\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
+use Modules\Booking\Enums\BookingStatus;
+use Modules\Booking\Models\Booking;
 use Modules\Clinic\DTOs\ClinicServiceDto;
 use Modules\Clinic\Models\Clinic;
 use Modules\Service\Models\ClinicService;
@@ -34,9 +36,15 @@ class ClinicServiceService
         return $clinicServiceOrId instanceof ClinicService ? $clinicServiceOrId : $this->findById($clinicServiceOrId);
     }
 
-    public function findBy(string $column, mixed $value, array $data, array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
+    public function findBy(string|array $column, mixed $value = null, array $data = [], array $relations = []): LengthAwarePaginator|CursorPaginator|Collection
     {
-        $query = $this->model::query()->with($relations)->where($column, $value);
+        $query = $this->model::query()->with($relations);
+
+        if (is_array($column)) {
+            $query->where($column);
+        } else {
+            $query->where($column, $value);
+        }
 
         return getCaseCollection($query, $data);
     }

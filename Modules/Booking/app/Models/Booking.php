@@ -15,6 +15,7 @@ use Modules\Order\Models\PaymentMethod;
 use Modules\Pet\Models\Pet;
 use Modules\Service\Models\ClinicService;
 use Modules\Service\Models\ClinicServiceScheduleTime;
+use Modules\Service\Models\Service;
 
 class Booking extends Model
 {
@@ -31,6 +32,7 @@ class Booking extends Model
         'client_id',
         'pet_id',
         'clinic_id',
+        'service_id',
         'clinic_service_id',
         'clinic_service_schedule_time_id',
         'coupon_id',
@@ -45,7 +47,19 @@ class Booking extends Model
         'tax' => 'decimal:2',
         'total' => 'decimal:2',
         'discount_type' => 'integer',
-        'booking_date' => 'date',
+        'booking_date' => 'datetime:Y-m-d',
+    ];
+
+    protected $hidden = [
+        'client_id',
+        'pet_id',
+        'clinic_id',
+        'service_id',
+        'clinic_service_id',
+        'clinic_service_schedule_time_id',
+        'coupon_id',
+        'payment_method_id',
+        'booking_status_id',
     ];
 
     // Date serialization
@@ -104,6 +118,11 @@ class Booking extends Model
     public function clinic(): BelongsTo
     {
         return $this->belongsTo(Clinic::class);
+    }
+
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
     }
 
     public function clinicService(): BelongsTo

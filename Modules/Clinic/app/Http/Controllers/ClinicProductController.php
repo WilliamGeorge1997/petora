@@ -12,15 +12,15 @@ use Maatwebsite\Excel\Facades\Excel;
 use Modules\Clinic\DTOs\ClinicProductDto;
 use Modules\Clinic\Http\Requests\ClinicProductRequest;
 use Modules\Clinic\Models\Clinic;
-use Modules\Clinic\Services\ClinicProductService;
-use Modules\Product\Models\Product;
+use Modules\Product\Services\SellerProductService;
+
 use Modules\Product\Services\ProductService;
 
 #[Middleware('auth:admin')]
 #[Middleware('permission:Edit-clinic')]
 class ClinicProductController extends Controller
 {
-    public function __construct(private ClinicProductService $clinicProductService) {}
+    public function __construct(private SellerProductService $sellerProductService) {}
 
     public function index(Request $request, Clinic $clinic)
     {
@@ -30,9 +30,9 @@ class ClinicProductController extends Controller
         $relations = [
             'images',
             'category',
-            'sellerImages' => fn($q) => $q->where('product_sellers.clinic_id', $clinic->id),
+            'sellerImages' => fn($q) => $q->where('seller_product.clinic_id', $clinic->id),
         ];
-        $products = $this->clinicProductService->products($clinic, $data, $relations);
+        $products = $this->sellerProductService->findAllBySeller($clinic, $data, $relations);
         if ($request->ajax()) {
             return success(true, __('product::message.fetched'), $products->items());
         }
@@ -63,7 +63,7 @@ class ClinicProductController extends Controller
     public function importAll(Clinic $clinic)
     {
         Gate::authorize('update', $clinic);
-        $this->clinicProductService->importAllProducts($clinic);
+        $this->sellerProductService->importAllToSeller($clinic);
 
         return back()->with('success', __('common::message.imported_successfully'));
     }
@@ -73,7 +73,7 @@ class ClinicProductController extends Controller
         Gate::authorize('update', $clinic);
 
         $product = app(ProductService::class)->findById($product_id, ['images', 'category']);
-        $sellerProduct = $this->clinicProductService->findProductSeller($clinic, $product_id, ['images']);
+        $sellerProduct = $this->sellerProductService->findByConditions(['clinic_id' => $clinic->id, 'product_id' => $product_id], [], ['images'])->first();
 
         return view('clinic::products.edit', compact('clinic', 'product', 'sellerProduct'));
     }
@@ -83,16 +83,18 @@ class ClinicProductController extends Controller
         Gate::authorize('update', $clinic);
 
         $dto = ClinicProductDto::fromRequest($request);
-        $this->clinicProductService->updateProductSeller($clinic, $product_id, $dto);
+        $sellerProduct = $this->sellerProductService->findByConditions(['clinic_id' => $clinic->id, 'product_id' => $product_id])->first();
+        $this->sellerProductService->update($sellerProduct, $dto->toArray(), $dto->images);
 
-        return redirect()->route('admin.clinic.products.index', $clinic->id)->with('success', __('common::message.updated_successfully'));
+        return to_route('admin.clinic.products.index', $clinic->id)->with('success', __('common::message.updated_successfully'));
     }
 
-    public function activate(Clinic $clinic, Product $product)
+    public function activate(Clinic $clinic, int $product_id)
     {
         Gate::authorize('update', $clinic);
 
-        $sellerProduct = $this->clinicProductService->activate($clinic, $product);
+        $sellerProduct = $this->sellerProductService->findByConditions(['clinic_id' => $clinic->id, 'product_id' => $product_id])->first();
+        $sellerProduct = $this->sellerProductService->activate($sellerProduct);
 
         return success(
             true,
@@ -101,18 +103,18 @@ class ClinicProductController extends Controller
         );
     }
 
-    public function destroy(Clinic $clinic, Product $product)
+    public function destroy(Clinic $clinic, int $product_id)
     {
         Gate::authorize('update', $clinic);
-        $this->clinicProductService->detachProduct($clinic, $product);
+        $this->sellerProductService->detach(['clinic_id' => $clinic->id, 'product_id' => $product_id]);
 
         return success(true, __('product::message.deleted'));
     }
 
-    public function destroyImage(Clinic $clinic, int $product_id, int $image_id)
+    public function destroyImage(Clinic $clinic, int $image_id)
     {
         Gate::authorize('update', $clinic);
-        $this->clinicProductService->deleteProductSellerImage($image_id);
+        $this->sellerProductService->deleteImage($image_id);
 
         return success(true, __('product::message.deleted'));
     }

@@ -11,6 +11,7 @@ use Modules\Order\Models\PaymentMethod;
 use Modules\Pet\Models\Pet;
 use Modules\Service\Models\ClinicService;
 use Modules\Service\Models\ClinicServiceScheduleTime;
+use Modules\Service\Models\Service;
 
 return new class extends Migration
 {
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->foreignIdFor(Client::class)->index()->constrained()->restrictOnDelete();
             $table->foreignIdFor(Pet::class)->index()->constrained()->restrictOnDelete();
             $table->foreignIdFor(Clinic::class)->index()->constrained()->restrictOnDelete();
+            $table->foreignIdFor(Service::class)->index()->constrained()->restrictOnDelete();
             $table->foreignIdFor(ClinicService::class)->index()->constrained()->restrictOnDelete();
             $table->foreignIdFor(ClinicServiceScheduleTime::class)->index()->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(Coupon::class)->nullable()->index()->constrained()->nullOnDelete();
@@ -38,8 +40,6 @@ return new class extends Migration
             $table->foreignIdFor(BookingStatus::class)->index()->nullable()->constrained()->restrictOnDelete();
             $table->string('notes')->nullable();
             $table->timestamps();
-
-            $table->index(['clinic_service_schedule_time_id', 'booking_date', 'booking_status_id'], 'bookings_slot_date_status_index');
         });
     }
 

@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\Category\Models\Category;
+use Modules\Client\Models\Favourite;
 use Modules\Clinic\Models\Clinic;
 use Modules\Store\Models\Store;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
@@ -82,6 +84,11 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
+    public function firstImage(): HasOne
+    {
+        return $this->hasOne(ProductImage::class)->oldest('id');
+    }
+
     public function stores(): BelongsToMany
     {
         return $this->belongsToMany(Store::class, 'seller_product')
@@ -109,5 +116,9 @@ class Product extends Model
             'id'
         );
     }
-}
 
+    public function favourites(): HasMany
+    {
+        return $this->hasMany(Favourite::class);
+    }
+}

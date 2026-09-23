@@ -22,6 +22,12 @@ class OrderDetail extends Model
         'note',
     ];
 
+    protected $hidden = [
+        'order_id',
+        'product_id',
+        'seller_product_id',
+    ];
+
     protected $casts = [
         'price' => 'decimal:2',
         'total' => 'decimal:2',

@@ -87,8 +87,11 @@ class BookingService
         $coupon = app(CouponService::class)->checkCoupon($dto->coupon, $dto->clientId);
         if (!empty($coupon)) $data['coupon_id'] = $coupon->id;
 
-        $data = array_merge($data, $this->prepareBookingDetails($dto, $clinicService));
-        $data = array_merge($data, $this->calcBookingDetails((float) $clinicService->price, $coupon));
+        $data = array_merge(
+            $data,
+            $this->prepareBookingDetails($dto, $clinicService),
+            $this->calcBookingDetails((float) $clinicService->price, $coupon)
+        );
 
         $booking = DB::transaction(function () use ($data) {
             $booking = $this->model::create($data);

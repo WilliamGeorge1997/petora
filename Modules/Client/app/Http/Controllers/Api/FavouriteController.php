@@ -18,11 +18,18 @@ class FavouriteController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $data = $request->merge(['pagination_type' => 'cursor'])->all();
+        $data = $request->merge([
+            'pagination_type' => 'cursor',
+            'paginated' => $request->input('paginted') ?: 50
+        ])->all();
 
-        $relations = ['product.images', 'store', 'clinic'];
+        $relations = [
+            'sellerProduct.product.images',
+            'sellerProduct.images',
+            'sellerProduct.clinic',
+            'sellerProduct.store',
+        ];
         $favourites = $this->favouriteService->clientFavourites((int) auth('client')->id(), $data, $relations);
-
         return success(true, __('client::message.favourite.fetched'), paginatedResource($favourites, FavouriteResource::class));
     }
 
@@ -30,11 +37,6 @@ class FavouriteController extends Controller
     {
         $dto = FavouriteDto::fromRequest($request);
         $result = $this->favouriteService->toggle($dto);
-
-        $favouriteData = $result['favourite']
-            ? new FavouriteResource($result['favourite'])
-            : null;
-
-        return success(true, $result['message'], $favouriteData);
+        return success(true, $result['message']);
     }
 }

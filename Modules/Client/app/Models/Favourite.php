@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Clinic\Models\Clinic;
 use Modules\Product\Models\Product;
+use Modules\Product\Models\SellerProduct;
 use Modules\Store\Models\Store;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
@@ -22,8 +23,9 @@ class Favourite extends Model
     protected $fillable = [
         'client_id',
         'product_id',
-        'store_id',
         'clinic_id',
+        'store_id',
+        'seller_product_id',
     ];
 
     // Activity log options
@@ -54,13 +56,18 @@ class Favourite extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function clinic(): BelongsTo
+    {
+        return $this->belongsTo(Clinic::class);
+    }
+
     public function store(): BelongsTo
     {
         return $this->belongsTo(Store::class);
     }
 
-    public function clinic(): BelongsTo
+    public function sellerProduct(): BelongsTo
     {
-        return $this->belongsTo(Clinic::class);
+        return $this->belongsTo(SellerProduct::class, 'seller_product_id');
     }
 }

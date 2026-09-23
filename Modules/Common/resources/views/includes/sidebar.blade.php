@@ -137,6 +137,31 @@
                 </li>
             @endcanany
 
+            @canany(['Index-order'])
+                <li
+                    class="nav-item {{ Route::is('admin.order.*') ? 'sidebar-group-active open' : '' }}">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather="shopping-cart"></i>
+                        <span class="menu-title text-truncate">{{ __('order::general.orders') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li class="nav-item {{ Route::is('admin.order.live*') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('admin.order.live') }}">
+                                <i data-feather="activity"></i>
+                                <span class="menu-item text-truncate">{{ __('order::general.live_orders', ['default' => 'Live Orders']) }}</span>
+                                <span class="badge rounded-pill badge-light-danger ms-auto me-1 font-small-1">Live</span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ Route::is('admin.order.index') ? 'active' : '' }}">
+                            <a class="d-flex align-items-center" href="{{ route('admin.order.index') }}">
+                                <i data-feather="list"></i>
+                                <span class="menu-item text-truncate">{{ __('order::general.all_orders', ['default' => 'All Orders']) }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcanany
+
             @canany(['Index-clinic', 'Index-service', 'Index-doctor'])
                 <li
                     class="nav-item {{ Route::is('admin.clinic.*', 'admin.doctor.*', 'admin.service.*') ? 'sidebar-group-active open' : '' }}">

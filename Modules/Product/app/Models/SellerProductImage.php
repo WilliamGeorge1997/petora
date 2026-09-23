@@ -31,7 +31,7 @@ class SellerProductImage extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/seller_products/'.$value);
+            return asset('storage/uploads/seller_product/'.$value);
         }
 
         return $value;

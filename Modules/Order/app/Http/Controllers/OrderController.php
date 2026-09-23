@@ -41,6 +41,36 @@ class OrderController extends Controller
         return view('order::orders.index', compact('orders', 'totalCount', 'sentCount', 'doneCount', 'cancelCount', 'viewModel'));
     }
 
+    public function live(Request $request): View
+    {
+        $relations = ['store', 'clinic', 'paymentMethod', 'orderStatus', 'orderMethod', 'client', 'driver', 'details.product'];
+        $data = $request->merge([
+            'order_status_ids' => [
+                OrderStatusEnum::Sent->value,
+                OrderStatusEnum::AcceptedAndPreparing->value,
+                OrderStatusEnum::DeliverToDriver->value,
+                OrderStatusEnum::OnTheWay->value,
+                OrderStatusEnum::RefusedByDriver->value,
+            ],
+            'paginated' => 100,
+        ])->all();
+
+        $orders = $this->orderService->findAll($relations, $data);
+        $selectedOrder = null;
+        $viewModel = new OrderViewModel;
+
+        return view('order::live.index', compact('orders', 'selectedOrder', 'viewModel'));
+    }
+
+    public function liveDetail(int $order_id): View
+    {
+        $relations = ['store', 'clinic', 'paymentMethod', 'orderStatus', 'orderMethod', 'client', 'driver', 'details.product'];
+        $order = $this->orderService->findById($order_id, $relations);
+        $viewModel = new OrderViewModel;
+
+        return view('order::live.partials.detail', compact('order', 'viewModel'));
+    }
+
     public function edit(int $order_id): View
     {
         $relations = ['orderStatus', 'driver', 'client', 'paymentMethod', 'orderMethod', 'store', 'clinic'];
@@ -50,10 +80,20 @@ class OrderController extends Controller
         return view('order::orders.edit', compact('order', 'viewModel'));
     }
 
-    public function update(OrderUpdateRequest $request, Order $order): RedirectResponse
+    public function update(OrderUpdateRequest $request, Order $order): RedirectResponse|JsonResponse
     {
         $dto = OrderUpdateDto::fromRequest($request);
-        $this->orderService->update($order, $dto);
+        $order = $this->orderService->changeStatusTo(
+            $order,
+            OrderStatusEnum::from($dto->orderStatusId),
+            auth('admin')->user(),
+            $dto->driverId,
+            $dto->notes
+        );
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return success(true, __('order::message.updated'), $order);
+        }
 
         return to_route('admin.order.index')->with('success', __('order::message.updated'));
     }

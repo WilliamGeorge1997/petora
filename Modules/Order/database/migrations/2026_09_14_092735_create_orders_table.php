@@ -51,8 +51,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::statement('
-            ALTER TABLE orders ADD CONSTRAINT orders_seller_exclusive_check CHECK (
+        DB::statement('ALTER TABLE orders ADD CONSTRAINT orders_seller_exclusive_check CHECK (
                 (
                     store_id IS NOT NULL 
                     AND clinic_id IS NULL 

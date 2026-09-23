@@ -2,6 +2,7 @@
 
 namespace Modules\Order\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -84,6 +85,7 @@ class Order extends Model
     {
         return $query
             ->when($filters['order_no'] ?? null, function (Builder $query, $orderNo) {
+                $orderNo = str_starts_with((string) $orderNo, 'ORD-') ? $orderNo : 'ORD-' . $orderNo;
                 $query->where('order_no', $orderNo);
             })
             ->when($filters['client_id'] ?? null, function (Builder $query, $clientId) {
@@ -105,16 +107,22 @@ class Order extends Model
                 $query->whereIn('order_status_id', (array) $statusIds);
             })
             ->when($filters['delivery_date_from'] ?? null, function (Builder $query, $dateFrom) {
-                $query->whereDate('delivery_date', '>=', $dateFrom);
+                $query->where('delivery_date', '>=', Carbon::parse($dateFrom)->startOfDay());
             })
             ->when($filters['delivery_date_to'] ?? null, function (Builder $query, $dateTo) {
-                $query->whereDate('delivery_date', '<=', $dateTo);
+                $query->where('delivery_date', '<=', Carbon::parse($dateTo)->endOfDay());
             })
             ->when($filters['from'] ?? null, function (Builder $query, $from) {
-                $query->whereDate('created_at', '>=', $from);
+                $query->where('created_at', '>=', Carbon::parse($from)->startOfDay());
             })
             ->when($filters['to'] ?? null, function (Builder $query, $to) {
-                $query->whereDate('created_at', '<=', $to);
+                $query->where('created_at', '<=', Carbon::parse($to)->endOfDay());
+            })
+            ->when($filters['date'] ?? null, function (Builder $query, $date) {
+                $query->whereBetween('created_at', [
+                    Carbon::parse($date)->startOfDay(),
+                    Carbon::parse($date)->endOfDay(),
+                ]);
             });
     }
 
@@ -210,5 +218,9 @@ class Order extends Model
     public function histories(): HasMany
     {
         return $this->hasMany(OrderHistory::class);
+    }
+    public function lastHistory()
+    {
+        return $this->hasOne(OrderHistory::class)->latest();
     }
 }

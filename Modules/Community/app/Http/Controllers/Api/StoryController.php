@@ -25,9 +25,11 @@ class StoryController extends Controller
 
     public function index(Request $request)
     {
-        $data = $request->merge(['pagination_type' => 'cursor'])->all();
+        $data = $request->merge([
+            'pagination_type' => 'cursor',
+            'paginated' => $request->input('paginated') ?: 50
+        ])->all();
         $clients = $this->storyService->feed($data);
-
         return success(true, __('community::message.story.fetched'), paginatedResource($clients, StoryFeedResource::class));
     }
 
@@ -35,17 +37,16 @@ class StoryController extends Controller
     {
         $data = $request->merge([
             'pagination_type' => 'cursor',
+            'paginated' => $request->input('paginated') ?: 50,
             'client_id' => $client_id,
         ])->all();
         $stories = $this->storyService->active($data, counts: $this->storyService->storyCounts());
-
         return success(true, __('community::message.story.fetched'), paginatedResource($stories, StoryResource::class));
     }
 
     public function show(int $story_id)
     {
         $story = $this->storyService->findById($story_id, ['client'], $this->storyService->storyCounts());
-
         return success(true, __('community::message.story.fetched'), new StoryResource($story));
     }
 
@@ -53,7 +54,6 @@ class StoryController extends Controller
     {
         $data = StoryDto::fromRequest($request);
         $story = $this->storyService->save($data);
-
         return success(true, __('community::message.story.created'), new StoryResource($story->load('client')));
     }
 
@@ -61,7 +61,6 @@ class StoryController extends Controller
     {
         Gate::authorize('delete', $story);
         $this->storyService->delete($story);
-
         return success(true, __('community::message.story.deleted'));
     }
 }

@@ -18,7 +18,6 @@ class ClinicServiceController extends Controller
     {
         $clinicService = $this->clinicServiceService->findById($clinic_service_id, ['service', 'schedules.times']);
         $availability  = $this->scheduleTimeService->availability($clinicService);
-
         return success(true, __('clinic::message.service.fetched'),
             (new ClinicServiceResource($clinicService))->additional($availability)
         );

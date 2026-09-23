@@ -109,11 +109,22 @@ class ProductService
     public function byCategoryAndSeller(int $categoryId, string $sellerType, int $sellerId, array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $type = $sellerType == SellerType::Store->value ? 'stores' : 'clinics';
+        $sellerColumn = $sellerType == SellerType::Store->value ? 'store_id' : 'clinic_id';
+        $clientId = auth('client')->id();
+
         $query = $this->model::query()->with($relations)->active()->latest('id')
             ->where('category_id', $categoryId)
             ->withWhereHas($type, function ($q) use ($type, $sellerId) {
                 $q->where("$type.id", $sellerId)
                     ->where('seller_product.is_active', true);
+            })
+            ->when($clientId, function ($q) use ($clientId, $sellerColumn, $sellerId) {
+                $q->withCount([
+                    'favourites as is_favourited' => function ($fq) use ($clientId, $sellerColumn, $sellerId) {
+                        $fq->where('client_id', $clientId)
+                            ->where($sellerColumn, $sellerId);
+                    },
+                ]);
             });
 
         return getCaseCollection($query, $data, $columns);

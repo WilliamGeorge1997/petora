@@ -49,6 +49,20 @@ class SellerProductService
         return getCaseCollection($query, $data);
     }
 
+    public function findBySellerAndProduct(int $productId, ?int $storeId = null, ?int $clinicId = null, array $relations = []): ?SellerProduct
+    {
+        return $this->model::query()
+            ->with($relations)
+            ->where('product_id', $productId)
+            ->when($storeId, function ($query) use ($storeId) {
+                $query->where('store_id', $storeId);
+            })
+            ->when($clinicId, function ($query) use ($clinicId) {
+                $query->where('clinic_id', $clinicId);
+            })
+            ->first();
+    }
+
     public function active(array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|Collection
     {
         $query = $this->model::query()->active()->with($relations);
@@ -65,7 +79,7 @@ class SellerProductService
             if (! empty($images)) {
                 foreach ($images as $image) {
                     $sellerProduct->images()->create([
-                        'image' => $this->uploadImage($image, 'seller_products'),
+                        'image' => $this->uploadImage($image, 'seller_product'),
                     ]);
                 }
             }
@@ -84,7 +98,7 @@ class SellerProductService
             if (! empty($images)) {
                 foreach ($images as $image) {
                     $sellerProduct->images()->create([
-                        'image' => $this->uploadImage($image, 'seller_products'),
+                        'image' => $this->uploadImage($image, 'seller_product'),
                     ]);
                 }
             }
@@ -100,7 +114,7 @@ class SellerProductService
         return DB::transaction(function () use ($sellerProduct) {
             foreach ($sellerProduct->images as $img) {
                 if ($img->getRawOriginal('image')) {
-                    $this->deleteImage($img->getRawOriginal('image'), 'seller_products');
+                    $this->deleteImage($img->getRawOriginal('image'), 'seller_product');
                 }
                 $img->delete();
             }
@@ -121,7 +135,7 @@ class SellerProductService
     {
         $image = SellerProductImage::findOrFail($imageId);
         if ($image->getRawOriginal('image')) {
-            $this->deleteImage($image->getRawOriginal('image'), 'seller_products');
+            $this->deleteImage($image->getRawOriginal('image'), 'seller_product');
         }
 
         return $image->delete();

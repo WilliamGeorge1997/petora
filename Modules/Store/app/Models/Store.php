@@ -37,6 +37,13 @@ class Store extends Model
         'longitude',
     ];
 
+    protected $hidden = [
+        'company_id',
+        'country_id',
+        'city_id',
+        'zone_id',
+    ];
+
     public array $translatable = ['title', 'description', 'address'];
 
     protected $casts = [

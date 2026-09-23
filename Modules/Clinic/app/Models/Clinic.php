@@ -41,6 +41,12 @@ class Clinic extends Model
         'longitude',
     ];
 
+    protected $hidden = [
+        'country_id',
+        'city_id',
+        'zone_id',
+    ];
+
     public array $translatable = ['title', 'description', 'address'];
 
     protected $casts = [
@@ -100,7 +106,7 @@ class Clinic extends Model
                 return $value;
             }
 
-            return asset('storage/uploads/clinic/'.$value);
+            return asset('storage/uploads/clinic/' . $value);
         }
 
         return $value;

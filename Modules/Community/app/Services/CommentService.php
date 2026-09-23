@@ -53,7 +53,6 @@ class CommentService
     public function save(Post $post, CommentDto $dto): Comment
     {
         $data = array_merge($dto->toArray(), ['post_id' => $post->id]);
-
         return $this->model::create($data);
     }
 

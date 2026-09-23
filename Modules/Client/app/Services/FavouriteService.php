@@ -4,9 +4,11 @@ namespace Modules\Client\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\CursorPaginator;
 use Modules\Client\DTOs\FavouriteDto;
 use Modules\Client\Models\Favourite;
+use Modules\Product\Services\SellerProductService;
 
 class FavouriteService
 {
@@ -73,12 +75,19 @@ class FavouriteService
 
     public function toggle(FavouriteDto $dto): array
     {
-        $existing = $this->findBy([
-            'client_id' => $dto->clientId,
-            'product_id' => $dto->productId,
-            'store_id' => $dto->storeId,
-            'clinic_id' => $dto->clinicId,
-        ]);
+        $sellerProduct = app(SellerProductService::class)->findBySellerAndProduct(
+            $dto->productId,
+            $dto->storeId,
+            $dto->clinicId
+        );
+
+        if (! $sellerProduct) {
+            throw new ModelNotFoundException(__('product::message.not_found'));
+        }
+
+        $existing = $this->model::where('client_id', $dto->clientId)
+            ->where('seller_product_id', $sellerProduct->id)
+            ->first();
 
         if ($existing) {
             $existing->delete();
@@ -90,7 +99,11 @@ class FavouriteService
             ];
         }
 
-        $favourite = $this->save($dto);
+        $data = $dto->toArray();
+        $data['seller_product_id'] = $sellerProduct->id;
+        
+        $favourite = $this->model::create($data);
+
 
         return [
             'action' => 'added',

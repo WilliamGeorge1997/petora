@@ -188,7 +188,7 @@ if (! function_exists('calculateDistance')) {
 if (! function_exists('generateSerial')) {
     function generateSerial(string $model, string $prefix): string
     {
-        $todayCount = $model::whereDate('created_at', Carbon::today())->count() + 1;
+        $todayCount = $model::where('created_at', '>=', Carbon::today())->count() + 1;
 
         return $prefix
             . '-'

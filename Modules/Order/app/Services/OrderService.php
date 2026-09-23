@@ -52,7 +52,16 @@ class OrderService
     {
         return $this->model::with($relations)->findOrFail($id);
     }
+    
+    public function findBy(string $column, mixed $value, array $data = [], array $relations = [], array $columns = ['*']): LengthAwarePaginator|CursorPaginator|EloquentCollection
+    {
+        $query = $this->model::with($relations)
+            ->where($column, $value)
+            ->filter($data)
+            ->latest('id');
 
+        return getCaseCollection($query, $data, $columns);
+    }
     protected function resolveModel(int|Order $orderOrId): Order
     {
         return $orderOrId instanceof Order ? $orderOrId : $this->findById($orderOrId);
@@ -115,18 +124,6 @@ class OrderService
     }
 
 
-    public function findBy($key, $value, array $relations = [], $paginate = null)
-    {
-        if ($paginate ?? null) {
-            return Order::withCount('rate')->latest()->with($relations)->where($key, $value)->when(request('status') ?? null, function ($q) {
-                return $q->whereIn('order_status_id', request('status'));
-            })->paginate($paginate);
-        }
-        return Order::withCount('rate')->latest()->with($relations)->where($key, $value)->when(request('status') ?? null, function ($q) {
-            return $q->whereIn('order_status_id', request('status'));
-        })->get();
-    }
-
     public function save(OrderDto $dto): Order
     {
         $data = $dto->toArray();
@@ -136,8 +133,11 @@ class OrderService
         if (!empty($coupon)) $data['coupon_id'] = $coupon->id;
 
         $items = $this->prepareOrderDetails($dto, $seller);
-        $data = array_merge($data, $this->calcOrderDetails($items, $coupon, $seller, $dto->addressId));
-        $data = array_merge($data, $this->prepareOrderTimes($seller));
+        $data = array_merge(
+            $data,
+            $this->calcOrderDetails($items, $coupon, $seller, $dto->addressId),
+            $this->prepareOrderTimes($seller)
+        );
 
         $order =  DB::transaction(function () use ($data, $items) {
             $order = Order::create($data);
@@ -193,7 +193,7 @@ class OrderService
         $requestedItems = collect($dto->items)->keyBy('product_id');
         return $products->map(function ($product) use ($requestedItems, $seller) {
             $requestedItem = $requestedItems[$product->id];
-            
+
             $sellerData = $seller['type'] === SellerType::Store
                 ? $product->stores->first()
                 : $product->clinics->first();

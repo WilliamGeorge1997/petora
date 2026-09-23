@@ -10,4 +10,5 @@ Route::get('order-methods', [OrderMethodController::class, 'index']);
 Route::get('payment-methods', [PaymentMethodController::class, 'index']);
 Route::get('order-statuses', [OrderStatusController::class, 'index']);
 
-Route::resource('orders', OrderController::class)->only(['index', 'store']);
+Route::apiResource('orders', OrderController::class)->except(['update', 'destroy']);
+Route::post('orders/{order}/cancel', [OrderController::class, 'cancel']);

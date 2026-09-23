@@ -2,10 +2,12 @@
 
 return [
     'order' => [
-        'fetched' => 'Order fetched successfully.',
+        'fetched' => 'Orders fetched successfully.',
         'created' => 'Order created successfully.',
         'updated' => 'Order updated successfully.',
         'deleted' => 'Order deleted successfully.',
+        'cancelled' => 'Order cancelled successfully.',
+        'cannot_cancel' => 'Order cannot be cancelled at this stage.',
     ],
     'order_method' => [
         'fetched' => 'Order methods fetched successfully.',

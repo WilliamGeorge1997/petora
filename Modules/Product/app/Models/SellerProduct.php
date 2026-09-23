@@ -4,6 +4,7 @@ namespace Modules\Product\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Modules\Clinic\Models\Clinic;
 use Modules\Store\Models\Store;
@@ -12,6 +13,8 @@ use Spatie\Translatable\HasTranslations;
 class SellerProduct extends Pivot
 {
     use HasTranslations;
+
+    protected $table = 'seller_product';
 
     protected $fillable = [
         'product_id',
@@ -40,6 +43,11 @@ class SellerProduct extends Pivot
     public function images(): HasMany
     {
         return $this->hasMany(SellerProductImage::class, 'seller_product_id');
+    }
+
+    public function firstImage(): HasOne
+    {
+        return $this->hasOne(SellerProductImage::class, 'seller_product_id')->oldest('id');
     }
 
     public function product(): BelongsTo

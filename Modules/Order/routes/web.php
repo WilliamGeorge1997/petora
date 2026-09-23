@@ -16,6 +16,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('order-statuses/{order_status}/activate', [OrderStatusController::class, 'activate'])->name('order_status.activate');
     Route::resource('order-statuses', OrderStatusController::class)->names('order_status')->except(['show']);
 
+    Route::get('orders/live', [OrderController::class, 'live'])->name('order.live');
+    Route::get('orders/live/{order_id}', [OrderController::class, 'liveDetail'])->name('order.live.detail');
     Route::get('orders/{order_id}/edit', [OrderController::class, 'edit'])->name('order.edit');
     Route::resource('orders', OrderController::class)->names('order')->except(['create', 'store', 'show', 'edit']);
 });

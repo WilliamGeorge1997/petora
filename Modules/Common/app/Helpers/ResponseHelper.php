@@ -198,3 +198,4 @@ if (! function_exists('generateSerial')) {
             . str_pad($todayCount, 4, '0', STR_PAD_LEFT);
     }
 }
+

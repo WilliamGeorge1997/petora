@@ -50,6 +50,11 @@ class Driver extends Authenticatable
 
     protected $hidden = [
         'password',
+        'store_id',
+        'clinic_id',
+        'country_id',
+        'city_id',
+        'zone_id',
     ];
 
     // Activity log options
@@ -126,7 +131,7 @@ class Driver extends Authenticatable
                 return $value;
             }
 
-            return asset('storage/uploads/driver/'.$value);
+            return asset('storage/uploads/driver/' . $value);
         }
 
         return $value;

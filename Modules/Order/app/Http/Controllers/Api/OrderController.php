@@ -45,6 +45,9 @@ class OrderController extends Controller
         $order = $this->orderService->findById($order_id);
         Gate::authorize('view', $order);
         $order->load([
+            'address.country',
+            'address.zone',
+            'address.city',
             'orderStatus',
             'paymentMethod',
             'orderMethod',
@@ -52,6 +55,7 @@ class OrderController extends Controller
             'details.sellerProduct.images',
             'histories.status:id,title',
             'coupon:id,code,type,value,limit,discount_on',
+            'driver:id,name,phone,license_id,image,latitude,longitude',
             'store:id,title,description,address,phone,image,latitude,longitude',
             'clinic:id,title,description,address,phone,image,latitude,longitude',
         ]);

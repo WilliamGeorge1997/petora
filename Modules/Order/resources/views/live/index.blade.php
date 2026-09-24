@@ -60,6 +60,21 @@
         border: 2px solid #7367f0 !important;
         background-color: #fcfcff;
     }
+    .order-stream-scroll {
+        padding: 6px 8px 8px 8px;
+    }
+    .btn-close-detail {
+        background-color: #ea5455 !important;
+        border-color: #ea5455 !important;
+        color: #fff !important;
+        transition: all 0.15s ease-in-out;
+    }
+    .btn-close-detail:hover {
+        background-color: #d63031 !important;
+        border-color: #d63031 !important;
+        color: #fff !important;
+        box-shadow: 0 8px 25px -8px #ea5455 !important;
+    }
     @media (min-width: 992px) {
         #live-orders-grid {
             align-items: stretch;
@@ -93,14 +108,21 @@
             min-height: 0 !important;
             overflow-y: auto !important;
             overflow-anchor: none;
-            padding-right: 4px;
+            padding: 6px 8px 8px 8px !important;
         }
         .order-workspace-empty {
             min-height: 520px;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex !important;
+            flex-direction: column !important;
+            flex-grow: 1 !important;
+        }
+        .order-workspace-empty .card-body {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 100% !important;
         }
     }
     .order-stream-scroll::-webkit-scrollbar {
@@ -230,10 +252,10 @@
         @if(isset($selectedOrder) && $selectedOrder)
             @include('order::live.partials.detail', ['order' => $selectedOrder, 'viewModel' => $viewModel ?? null])
         @else
-            <div class="card shadow-sm border-0 order-workspace-empty">
-                <div class="card-body text-center py-5 text-muted">
-                    <h5 class="fw-bold text-dark">{{ __('order::general.no_order_selected', ['default' => 'No Order Selected']) }}</h5>
-                    <p class="mb-0">{{ __('order::general.select_order_prompt', ['default' => 'Click any order card from the left feed to view order details.']) }}</p>
+            <div class="card shadow-sm border-0 order-workspace-empty flex-grow-1">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center p-3 p-md-5 text-muted">
+                    <h5 class="fw-bold text-dark mb-1">{{ __('order::general.no_order_selected', ['default' => 'No Order Selected']) }}</h5>
+                    <p class="mb-0 text-muted">{{ __('order::general.select_order_prompt', ['default' => 'Click any order card from the left feed to view order details.']) }}</p>
                 </div>
             </div>
         @endif
@@ -421,10 +443,10 @@
     function closeOrderDetail() {
         document.querySelectorAll('.order-card').forEach(c => c.classList.remove('active-card'));
         const emptyHtml = `
-            <div class="card shadow-sm border-0 order-workspace-empty">
-                <div class="card-body text-center py-5 text-muted">
-                    <h5 class="fw-bold text-dark">{{ __('order::general.no_order_selected', ['default' => 'No Order Selected']) }}</h5>
-                    <p class="mb-0">{{ __('order::general.select_order_prompt', ['default' => 'Click any order card from the left feed to view order details.']) }}</p>
+            <div class="card shadow-sm border-0 order-workspace-empty flex-grow-1">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center p-3 p-md-5 text-muted">
+                    <h5 class="fw-bold text-dark mb-1">{{ __('order::general.no_order_selected', ['default' => 'No Order Selected']) }}</h5>
+                    <p class="mb-0 text-muted">{{ __('order::general.select_order_prompt', ['default' => 'Click any order card from the left feed to view order details.']) }}</p>
                 </div>
             </div>
         `;

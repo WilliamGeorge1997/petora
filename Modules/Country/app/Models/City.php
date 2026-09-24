@@ -27,6 +27,10 @@ class City extends Model
         'is_active' => 'boolean',
     ];
 
+    protected $hidden = [
+        'country_id'
+    ];
+
     // Activity log options
     public function getActivitylogOptions(): LogOptions
     {

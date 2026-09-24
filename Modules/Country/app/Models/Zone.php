@@ -27,6 +27,10 @@ class Zone extends Model
         'is_active' => 'boolean',
     ];
 
+    protected $hidden = [
+        'city_id',
+    ];
+
     // Activity log options
     public function getActivitylogOptions(): LogOptions
     {

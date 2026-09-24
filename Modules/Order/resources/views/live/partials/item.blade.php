@@ -12,6 +12,7 @@
     $clientName = $order->client?->name ?? __('order::general.guest_client', ['default' => 'Client']);
     $sellerTitle = $order->store?->title ?? $order->clinic?->title ?? null;
     $isSelected = $isSelected ?? false;
+    $currency = config('currency.symbols.' . app()->getLocale(), config('currency.default', 'EGP'));
 @endphp
 
 <div class="card order-card mb-2 shadow-sm rounded-3 {{ $isSelected ? 'active-card' : '' }}" 
@@ -21,8 +22,8 @@
      onclick="selectOrderCard({{ $order->id }})">
     <div class="card-body p-2">
         <div class="d-flex justify-content-between align-items-center mb-1">
-            <span class="fw-bold text-primary fs-5">#{{ $order->order_no }}</span>
-            <span class="fw-bolder text-dark fs-5">${{ number_format((float) $order->total, 2) }}</span>
+            <span class="fw-bolder text-primary fs-5 text-nowrap" dir="ltr" style="unicode-bidi: isolate;">#{{ $order->order_no }}</span>
+            <span class="fw-bolder text-dark fs-5">{{ number_format((float) $order->total, 2) }} <small class="text-muted font-small-2">{{ $currency }}</small></span>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-1">
@@ -42,23 +43,12 @@
             </div>
         @endif
 
-        <div class="d-flex justify-content-between align-items-center pt-1 border-top">
-            <span class="text-muted font-small-2">
-                {{ $order->created_at ? $order->created_at->format('h:i A') : '' }}
-            </span>
-
-            {{-- Live ticking timer badge --}}
-            <span class="live-timer-badge badge badge-light-success font-small-2 d-flex align-items-center gap-1"
-                  data-created-at="{{ $order->created_at ? $order->created_at->toIso8601String() : now()->toIso8601String() }}">
-                <i data-feather="clock" class="font-small-1"></i>
-                <span class="timer-text">0m 00s</span>
-            </span>
-
-            @if($order->driver)
+        @if($order->driver)
+            <div class="d-flex justify-content-between align-items-center pt-1 border-top">
                 <span class="font-small-2 text-primary fw-semibold" title="{{ $order->driver->name }}">
-                    <i data-feather="truck" class="me-1 font-small-1"></i>{{ Str::limit($order->driver->name, 12) }}
+                    <i data-feather="truck" class="me-1 font-small-1"></i>{{ Str::limit($order->driver->name, 20) }}
                 </span>
-            @endif
-        </div>
+            </div>
+        @endif
     </div>
 </div>

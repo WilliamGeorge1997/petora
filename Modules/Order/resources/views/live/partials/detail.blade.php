@@ -20,6 +20,9 @@
         6 => ['id' => 3, 'title' => 'Re-assign Driver', 'class' => 'btn-warning', 'icon' => 'refresh-cw'],
         default => null,
     };
+
+    // Currency from config
+    $currency = config('currency.symbols.' . app()->getLocale(), config('currency.default', 'EGP'));
 @endphp
 
 <!-- Mobile Back Button (< 992px) -->
@@ -32,10 +35,10 @@
 <!-- Order Header Card -->
 <div class="card shadow-sm border-0 mb-0">
     <div class="card-body p-2 p-md-3">
-        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2 pb-2 border-bottom">
-            <div>
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2 pb-2 border-bottom">
+            <div class="flex-grow-1">
                 <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                    <h3 class="fw-bolder mb-0 text-primary">Order #{{ $order->order_no }}</h3>
+                    <h3 class="fw-bolder mb-0 text-primary text-nowrap" dir="ltr" style="unicode-bidi: isolate;">#{{ $order->order_no }}</h3>
                     <span class="badge {{ $statusClass }} fs-6">
                         {{ $order->orderStatus?->title ?? 'Status ' . $order->order_status_id }}
                     </span>
@@ -54,20 +57,10 @@
                 </div>
             </div>
 
-            <div class="d-flex align-items-center gap-1">
-                <!-- Live Timer Badge (Super Admin) -->
-                <div class="text-end">
-                    <span class="text-muted font-small-2 d-block">{{ __('order::general.time_elapsed', ['default' => 'Time Elapsed']) }}:</span>
-                    <span class="badge badge-light-warning fs-5 fw-bold px-2 py-1 live-timer-badge d-inline-flex align-items-center" 
-                          data-created-at="{{ $order->created_at ? $order->created_at->toIso8601String() : now()->toIso8601String() }}">
-                        <i data-feather="clock" class="me-1 font-small-3"></i>
-                        <span class="timer-text detail-timer-text">0m 00s</span>
-                    </span>
-                </div>
-
-                <!-- Close Details Button -->
+            <div class="flex-shrink-0 ms-2">
+                <!-- Close Details Button (Always pinned top-end) -->
                 <button type="button" 
-                        class="btn btn-sm btn-icon btn-outline-danger ms-1" 
+                        class="btn btn-sm btn-icon btn-danger btn-close-detail text-white shadow-sm" 
                         onclick="closeOrderDetail()" 
                         title="{{ __('order::general.close', ['default' => 'Close']) }}">
                     <i data-feather="x"></i>
@@ -222,7 +215,7 @@
                         <h6 class="mb-0 fw-bold text-dark">
                             <i data-feather="shopping-bag" class="me-1"></i>Order Items ({{ $order->details?->count() ?? 0 }})
                         </h6>
-                        <span class="badge badge-light-primary">Total: ${{ number_format((float) $order->total, 2) }}</span>
+                        <span class="badge badge-light-primary">{{ __('order::general.total', ['default' => 'Total']) }}: {{ number_format((float) $order->total, 2) }} {{ $currency }}</span>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -245,8 +238,8 @@
                                                 @endif
                                             </td>
                                             <td class="text-center fw-bold">{{ $detail->quantity }}</td>
-                                            <td class="text-end">${{ number_format((float) $detail->price, 2) }}</td>
-                                            <td class="text-end fw-bold">${{ number_format((float) ($detail->price * $detail->quantity), 2) }}</td>
+                                            <td class="text-end">{{ number_format((float) $detail->price, 2) }} {{ $currency }}</td>
+                                            <td class="text-end fw-bold">{{ number_format((float) ($detail->price * $detail->quantity), 2) }} {{ $currency }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -260,22 +253,22 @@
                         <!-- Price Breakdown Summary -->
                         <div class="p-2 bg-light border-top font-small-3">
                             <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted">Subtotal:</span>
-                                <span class="fw-semibold text-dark">${{ number_format((float) $order->subtotal, 2) }}</span>
+                                <span class="text-muted">{{ __('order::general.subtotal', ['default' => 'Subtotal']) }}:</span>
+                                <span class="fw-semibold text-dark">{{ number_format((float) $order->subtotal, 2) }} {{ $currency }}</span>
                             </div>
                             <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted">Delivery Fee:</span>
-                                <span class="fw-semibold text-dark">${{ number_format((float) $order->delivery_fee, 2) }}</span>
+                                <span class="text-muted">{{ __('order::general.delivery_fee', ['default' => 'Delivery Fee']) }}:</span>
+                                <span class="fw-semibold text-dark">{{ number_format((float) $order->delivery_fee, 2) }} {{ $currency }}</span>
                             </div>
                             @if($order->discount > 0)
                                 <div class="d-flex justify-content-between mb-1">
-                                    <span class="text-muted">Discount:</span>
-                                    <span class="text-success fw-semibold">-${{ number_format((float) $order->discount, 2) }}</span>
+                                    <span class="text-muted">{{ __('order::general.discount', ['default' => 'Discount']) }}:</span>
+                                    <span class="text-success fw-semibold">-{{ number_format((float) $order->discount, 2) }} {{ $currency }}</span>
                                 </div>
                             @endif
                             <div class="d-flex justify-content-between pt-1 border-top">
-                                <span class="fw-bold fs-6 text-dark">Grand Total:</span>
-                                <span class="fw-bolder fs-5 text-primary">${{ number_format((float) $order->total, 2) }}</span>
+                                <span class="fw-bold fs-6 text-dark">{{ __('order::general.total', ['default' => 'Grand Total']) }}:</span>
+                                <span class="fw-bolder fs-5 text-primary">{{ number_format((float) $order->total, 2) }} {{ $currency }}</span>
                             </div>
                         </div>
                     </div>

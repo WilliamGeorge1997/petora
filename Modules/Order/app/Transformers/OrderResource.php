@@ -56,6 +56,7 @@ class OrderResource extends JsonResource
             'details' => OrderDetailResource::collection($this->whenLoaded('details')),
             'last_history' => new HistoryResource($this->whenLoaded('lastHistory')),
             'histories' => HistoryResource::collection($this->whenLoaded('histories')),
+            'driver' => $this->whenLoaded('driver'),
         ];
     }
 }

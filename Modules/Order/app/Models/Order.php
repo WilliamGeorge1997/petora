@@ -219,6 +219,7 @@ class Order extends Model
     {
         return $this->hasMany(OrderHistory::class);
     }
+    
     public function lastHistory()
     {
         return $this->hasOne(OrderHistory::class)->latest();

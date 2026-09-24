@@ -7,26 +7,26 @@
 
 @section('content')
 <!-- Top Control Bar -->
-<div class="card mb-2 shadow-sm border-0">
-    <div class="card-body p-2 d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <div class="d-flex align-items-center gap-2">
-            <span class="live-pulse me-1"></span>
+<div class="card mb-2 shadow-sm border-0 d-none d-lg-block">
+    <div class="card-body p-1 p-sm-2 d-flex flex-wrap justify-content-between align-items-center gap-1 gap-sm-2">
+        <div class="d-flex align-items-center gap-1">
+            <span class="live-pulse me-50"></span>
             <div>
-                <h4 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
+                <h4 class="mb-0 fw-bold text-dark fs-5 fs-sm-4 d-flex align-items-center gap-1">
                     <span>{{ __('order::general.live.title') }}</span>
                 </h4>
-                <small class="text-muted">{{ __('order::general.live.subtitle') }}</small>
+                <small class="text-muted font-small-2">{{ __('order::general.live.subtitle') }}</small>
             </div>
         </div>
         
-        <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="d-flex align-items-center gap-1 flex-wrap">
             <button id="sound-btn" 
                     type="button" 
-                    class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center gap-1 px-2" 
+                    class="btn btn-sm btn-outline-primary d-inline-flex align-items-center justify-content-center gap-50 px-1 py-50" 
                     onclick="toggleSound()">
-                <span id="icon-sound-on"><i data-feather="volume-2"></i></span>
-                <span id="icon-sound-off" class="d-none"><i data-feather="volume-x"></i></span>
-                <span id="sound-text">{{ __('order::general.live.notify_on') }}</span>
+                <span id="icon-sound-on"><i data-feather="volume-2" class="font-small-3"></i></span>
+                <span id="icon-sound-off" class="d-none"><i data-feather="volume-x" class="font-small-3"></i></span>
+                <span id="sound-text" class="font-small-2">{{ __('order::general.live.notify_on') }}</span>
             </button>
         </div>
     </div>
@@ -35,25 +35,38 @@
 <!-- Main Split Grid -->
 <div class="row g-2 align-items-stretch" id="live-orders-grid">
     <!-- LEFT PANE: Live Stream Feed (35% Desktop / 100% Mobile) -->
-    <div id="orders-list-pane" class="col-12 col-lg-4 col-xl-4 d-flex flex-column mb-2">
-        <div class="card shadow-sm border-0 order-feed-card flex-grow-1 d-flex flex-column h-100 mb-0">
-            <div class="card-body p-2 d-flex flex-column flex-grow-1 h-100">
-                <!-- Search Input -->
-                <div class="input-group input-group-merge mb-2 flex-shrink-0">
-                    <span class="input-group-text"><i data-feather="search"></i></span>
-                    <input type="text" id="order-search" class="form-control" placeholder="{{ __('order::general.live.search') }}" onkeyup="filterOrdersList()">
-                </div>
+    <div id="orders-list-pane" class="col-12 col-lg-4 col-xl-4 {{ (isset($selectedOrder) && $selectedOrder) ? 'd-none' : 'd-flex' }} d-lg-flex flex-column mb-1 mb-lg-2">
+        <div class="card shadow-sm border-0 order-feed-card flex-grow-1 d-flex flex-column mb-0">
+            <div class="card-body p-1 p-lg-2 d-flex flex-column flex-grow-1 h-100">
+                <!-- Unified Filter Row (Single row on mobile, stacked on desktop) -->
+                <div class="d-flex flex-row flex-lg-column align-items-center align-items-lg-stretch gap-50 gap-lg-1 mb-1 flex-shrink-0">
+                    <!-- Search Input (takes remaining ~54% width on mobile) -->
+                    <div class="input-group input-group-merge flex-grow-1" style="min-width: 0;">
+                        <span class="input-group-text px-50 py-25 px-lg-1 py-lg-50"><i data-feather="search" class="font-small-3"></i></span>
+                        <input type="text" id="order-search" class="form-control form-control-sm px-50 px-lg-1" placeholder="{{ __('order::general.live.search') }}" onkeyup="filterOrdersList()">
+                    </div>
 
-                <!-- Status Filter Dropdown (Vuexy native form-select) -->
-                <div class="mb-2 flex-shrink-0">
-                    <select class="form-select" id="live-status-filter" onchange="filterOrdersList()">
-                        <option value="all" selected>{{ __('common::general.all') }}</option>
-                        <option value="{{ OrderStatus::Sent->value }}">{{ OrderStatus::Sent->label() }}</option>
-                        <option value="{{ OrderStatus::AcceptedAndPreparing->value }}">{{ OrderStatus::AcceptedAndPreparing->label() }}</option>
-                        <option value="{{ OrderStatus::DeliverToDriver->value }}">{{ OrderStatus::DeliverToDriver->label() }}</option>
-                        <option value="{{ OrderStatus::OnTheWay->value }}">{{ OrderStatus::OnTheWay->label() }}</option>
-                        <option value="{{ OrderStatus::RefusedByDriver->value }}">{{ OrderStatus::RefusedByDriver->label() }}</option>
-                    </select>
+                    <!-- Status Filter Dropdown (compact ~36% width on mobile) -->
+                    <div class="flex-shrink-0 order-status-filter-wrapper">
+                        <select class="form-select form-select-sm text-truncate px-50 px-lg-1" id="live-status-filter" onchange="filterOrdersList()">
+                            <option value="all" selected>{{ __('common::general.all') }}</option>
+                            <option value="{{ OrderStatus::Sent->value }}">{{ OrderStatus::Sent->label() }}</option>
+                            <option value="{{ OrderStatus::AcceptedAndPreparing->value }}">{{ OrderStatus::AcceptedAndPreparing->label() }}</option>
+                            <option value="{{ OrderStatus::DeliverToDriver->value }}">{{ OrderStatus::DeliverToDriver->label() }}</option>
+                            <option value="{{ OrderStatus::OnTheWay->value }}">{{ OrderStatus::OnTheWay->label() }}</option>
+                            <option value="{{ OrderStatus::RefusedByDriver->value }}">{{ OrderStatus::RefusedByDriver->label() }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Sound Toggle Icon Button (mobile only, d-lg-none, ~10% width) -->
+                    <button id="sound-btn-mobile" 
+                            type="button" 
+                            class="btn btn-sm btn-outline-primary d-inline-flex d-lg-none align-items-center justify-content-center p-50 flex-shrink-0" 
+                            title="{{ __('order::general.live.notify_on') }}"
+                            onclick="toggleSound()">
+                        <span id="icon-sound-on-mobile"><i data-feather="volume-2" class="font-small-3"></i></span>
+                        <span id="icon-sound-off-mobile" class="d-none"><i data-feather="volume-x" class="font-small-3"></i></span>
+                    </button>
                 </div>
 
                 <!-- Order Cards Stream -->
@@ -72,11 +85,11 @@
     </div>
 
     <!-- RIGHT PANE: Active Workspace (65% Desktop / 100% Mobile) -->
-    <div id="order-workspace-pane" class="col-12 col-lg-8 col-xl-8 d-flex flex-column mb-2">
+    <div id="order-workspace-pane" class="col-12 col-lg-8 col-xl-8 {{ (isset($selectedOrder) && $selectedOrder) ? 'd-flex' : 'd-none' }} d-lg-flex flex-column mb-1 mb-lg-2">
         @if(isset($selectedOrder) && $selectedOrder)
             @include('order::live.partials.detail', ['order' => $selectedOrder, 'viewModel' => $viewModel ?? null])
         @else
-            <div class="card shadow-sm border-0 order-workspace-card order-workspace-empty flex-grow-1 d-flex flex-column h-100 mb-0">
+            <div class="card shadow-sm border-0 order-workspace-card order-workspace-empty flex-grow-1 d-flex flex-column mb-0">
                 <div class="card-body d-flex flex-column align-items-center justify-content-center text-center p-3 p-md-5 text-muted">
                     <h5 class="fw-bold text-dark mb-1">{{ __('order::general.live.no_selected') }}</h5>
                     <p class="mb-0 text-muted">{{ __('order::general.live.select_prompt') }}</p>
@@ -112,8 +125,16 @@
 
         // Mobile responsive: toggle from list view to workspace view
         if (window.innerWidth < 992) {
-            document.getElementById('orders-list-pane').classList.add('d-none');
-            document.getElementById('order-workspace-pane').classList.remove('d-none');
+            const listPane = document.getElementById('orders-list-pane');
+            if (listPane) {
+                listPane.classList.add('d-none', 'd-lg-flex');
+                listPane.classList.remove('d-flex');
+            }
+            const wsPane = document.getElementById('order-workspace-pane');
+            if (wsPane) {
+                wsPane.classList.remove('d-none');
+                wsPane.classList.add('d-flex', 'd-lg-flex');
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -227,8 +248,16 @@
 
     // Mobile Back Button
     function showMobileOrdersList() {
-        document.getElementById('orders-list-pane').classList.remove('d-none');
-        document.getElementById('order-workspace-pane').classList.add('d-none');
+        const listPane = document.getElementById('orders-list-pane');
+        if (listPane) {
+            listPane.classList.remove('d-none');
+            listPane.classList.add('d-flex', 'd-lg-flex');
+        }
+        const wsPane = document.getElementById('order-workspace-pane');
+        if (wsPane) {
+            wsPane.classList.add('d-none', 'd-lg-flex');
+            wsPane.classList.remove('d-flex');
+        }
     }
 
     // Close Details Panel
@@ -247,7 +276,53 @@
 
         if (window.innerWidth < 992) {
             showMobileOrdersList();
+        } else {
+            const listPane = document.getElementById('orders-list-pane');
+            if (listPane) {
+                listPane.classList.remove('d-none');
+                listPane.classList.add('d-flex', 'd-lg-flex');
+            }
+            const wsPane = document.getElementById('order-workspace-pane');
+            if (wsPane) {
+                wsPane.classList.remove('d-none');
+                wsPane.classList.add('d-flex', 'd-lg-flex');
+            }
         }
+    }
+
+    // Responsive Viewport Breakpoint Synchronization (Desktop >= 992px vs Mobile < 992px)
+    const desktopBreakpoint = window.matchMedia('(min-width: 992px)');
+    function syncPanesOnBreakpoint(e) {
+        const listPane = document.getElementById('orders-list-pane');
+        const wsPane = document.getElementById('order-workspace-pane');
+        if (!listPane || !wsPane) return;
+
+        if (e.matches) {
+            // >= 992px Desktop: ALWAYS display both panes side-by-side
+            listPane.classList.remove('d-none');
+            listPane.classList.add('d-flex', 'd-lg-flex');
+            wsPane.classList.remove('d-none');
+            wsPane.classList.add('d-flex', 'd-lg-flex');
+        } else {
+            // < 992px Mobile: Single pane mode depending on whether an order is active
+            const hasActiveOrder = document.querySelector('.order-card.active-card') !== null;
+            if (hasActiveOrder) {
+                listPane.classList.add('d-none', 'd-lg-flex');
+                listPane.classList.remove('d-flex');
+                wsPane.classList.remove('d-none');
+                wsPane.classList.add('d-flex', 'd-lg-flex');
+            } else {
+                listPane.classList.remove('d-none');
+                listPane.classList.add('d-flex', 'd-lg-flex');
+                wsPane.classList.add('d-none', 'd-lg-flex');
+                wsPane.classList.remove('d-flex');
+            }
+        }
+    }
+    if (desktopBreakpoint.addEventListener) {
+        desktopBreakpoint.addEventListener('change', syncPanesOnBreakpoint);
+    } else if (desktopBreakpoint.addListener) {
+        desktopBreakpoint.addListener(syncPanesOnBreakpoint);
     }
 
     // Search filter in feed
@@ -337,9 +412,23 @@
             btn.classList.toggle('btn-outline-secondary', !soundEnabled);
         }
 
+        const btnMobile = document.getElementById('sound-btn-mobile');
+        const iconOnMobile = document.getElementById('icon-sound-on-mobile');
+        const iconOffMobile = document.getElementById('icon-sound-off-mobile');
+
+        if (btnMobile) {
+            btnMobile.classList.toggle('btn-outline-primary', soundEnabled);
+            btnMobile.classList.toggle('btn-outline-secondary', !soundEnabled);
+        }
+
         if (iconOn && iconOff) {
             iconOn.classList.toggle('d-none', !soundEnabled);
             iconOff.classList.toggle('d-none', soundEnabled);
+        }
+
+        if (iconOnMobile && iconOffMobile) {
+            iconOnMobile.classList.toggle('d-none', !soundEnabled);
+            iconOffMobile.classList.toggle('d-none', soundEnabled);
         }
     }
 

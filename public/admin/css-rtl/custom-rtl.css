@@ -543,6 +543,27 @@ textarea.form-control {
     min-height: calc(100vh - 165px);
     height: 100% !important;
   }
+  .order-status-filter-wrapper {
+    width: 100%;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .order-feed-card,
+  .order-workspace-card,
+  .order-workspace-empty {
+    height: calc(100vh - 125px) !important;
+    height: calc(100dvh - 125px) !important;
+    min-height: calc(100vh - 125px) !important;
+  }
+  .order-status-filter-wrapper {
+    width: 36%;
+    min-width: 110px;
+  }
+}
+
+.sticky-mobile-back-btn {
+  z-index: 1050;
 }
 
 /* Visual Progress Stepper */

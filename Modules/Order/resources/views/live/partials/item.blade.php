@@ -7,16 +7,16 @@
      onclick="selectOrderCard({{ $order->id }})">
     <div class="card-body p-2 d-flex flex-column justify-content-between h-100">
         <!-- Row 1: Order # & Status with space between -->
-        <div class="d-flex justify-content-between align-items-center mb-1">
-            <span class="fw-bolder text-primary fs-5 text-nowrap" dir="ltr">{{ $order->order_no }}</span>
-            <span class="badge badge-light-{{ $order->status_color }}">
+        <div class="d-flex justify-content-between align-items-center gap-1 mb-1 flex-wrap">
+            <span class="fw-bolder text-primary font-medium-1 text-nowrap" dir="ltr">{{ $order->order_no }}</span>
+            <span class="badge badge-light-{{ $order->status_color }} font-small-2 py-25 px-50 text-truncate">
                 {{ $order->orderStatus?->title ?? 'Status ' . $order->order_status_id }}
             </span>
         </div>
 
         <!-- Row 2: Price & Payment Method Icon -->
         <div class="d-flex justify-content-between align-items-center mb-1 pb-1 border-bottom">
-            <span class="fw-bolder text-dark fs-5">{{ number_format((float) $order->total, 2) }} <small class="text-muted font-small-2">{{ config('currency.symbols.' . app()->getLocale(), 'EGP') }}</small></span>
+            <span class="fw-bolder text-dark font-medium-1">{{ number_format((float) $order->total, 2) }} <small class="text-muted font-small-2">{{ config('currency.symbols.' . app()->getLocale(), 'EGP') }}</small></span>
             @if((int) $order->payment_method_id === PaymentMethod::CashOnDelivery->value)
                 <i data-feather="dollar-sign" class="font-medium-3 text-success flex-shrink-0" title="{{ $order->paymentMethod?->title ?? __('order::payment_method.cash_on_delivery') }}" data-bs-toggle="tooltip"></i>
             @else

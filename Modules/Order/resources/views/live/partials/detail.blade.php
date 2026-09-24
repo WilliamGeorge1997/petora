@@ -14,16 +14,19 @@
     ][$order->order_status_id] ?? 0;
 @endphp
 
-{{-- Mobile Back Button (< 992px) --}}
-<button class="btn btn-outline-secondary mb-2 d-lg-none w-100 d-flex align-items-center justify-content-center gap-1 py-1"
-        onclick="showMobileOrdersList()">
-    <i data-feather="arrow-left"></i>
-    <span class="fw-bold">{{ __('order::general.back_to_orders') }}</span>
-</button>
+{{-- Sticky Floating Mobile Back Button (< 992px) --}}
+<div class="position-fixed bottom-0 start-50 translate-middle-x mb-2 d-lg-none sticky-mobile-back-btn">
+    <button type="button" 
+            class="btn btn-danger btn-lg shadow-lg rounded-pill px-3 py-1 d-flex align-items-center justify-content-center gap-1 text-nowrap fw-bolder" 
+            onclick="showMobileOrdersList()">
+        <i data-feather="{{ app()->getLocale() === 'ar' ? 'arrow-right' : 'arrow-left' }}"></i>
+        <span>{{ __('order::general.back_to_orders') }}</span>
+    </button>
+</div>
 
 {{-- Order Header Card --}}
-<div class="card shadow-sm border-0 mb-0 order-workspace-card d-flex flex-column h-100">
-    <div class="card-body p-2">
+<div class="card shadow-sm border-0 mb-0 order-workspace-card d-flex flex-column">
+    <div class="card-body p-2 pb-5 pb-lg-2">
 
         {{-- Header: order # + status + payment + date (no store) --}}
         <div class="d-flex justify-content-between align-items-start gap-2 mb-2 pb-1 border-bottom">
@@ -137,7 +140,7 @@
                             1
                         @endif
                     </div>
-                    <div class="font-small-2 fw-bold mt-1">{{ OrderStatus::Sent->label() }}</div>
+                    <div class="font-small-1 fw-bold mt-50 lh-1">{{ OrderStatus::Sent->label() }}</div>
                 </div>
 
                 @php
@@ -153,7 +156,7 @@
                             2
                         @endif
                     </div>
-                    <div class="font-small-2 fw-bold mt-1 {{ $order->order_status_id == $s2 ? 'text-primary' : '' }}">{{ OrderStatus::AcceptedAndPreparing->label() }}</div>
+                    <div class="font-small-1 fw-bold mt-50 lh-1 {{ $order->order_status_id == $s2 ? 'text-primary' : '' }}">{{ OrderStatus::AcceptedAndPreparing->label() }}</div>
                 </div>
 
                 @php
@@ -172,7 +175,7 @@
                             3
                         @endif
                     </div>
-                    <div class="font-small-2 fw-semibold mt-1">{{ OrderStatus::DeliverToDriver->label() }}</div>
+                    <div class="font-small-1 fw-semibold mt-50 lh-1">{{ OrderStatus::DeliverToDriver->label() }}</div>
                 </div>
 
                 @php
@@ -188,7 +191,7 @@
                             4
                         @endif
                     </div>
-                    <div class="font-small-2 fw-semibold mt-1">{{ OrderStatus::OnTheWay->label() }}</div>
+                    <div class="font-small-1 fw-semibold mt-50 lh-1">{{ OrderStatus::OnTheWay->label() }}</div>
                 </div>
 
                 @php
@@ -204,7 +207,7 @@
                             5
                         @endif
                     </div>
-                    <div class="font-small-2 fw-semibold mt-1">{{ OrderStatus::Done->label() }}</div>
+                    <div class="font-small-1 fw-semibold mt-50 lh-1">{{ OrderStatus::Done->label() }}</div>
                 </div>
 
             </div>

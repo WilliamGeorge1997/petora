@@ -49,4 +49,30 @@ enum OrderStatus: int
         }
         return $options;
     }
+
+    /**
+     * Get the semantic color name for this status.
+     */
+    public function color(): string
+    {
+        return match ($this) {
+            self::Sent => 'primary',
+            self::AcceptedAndPreparing => 'warning',
+            self::DeliverToDriver => 'info',
+            self::OnTheWay, self::Done => 'success',
+            self::RefusedByDriver, self::Fail, self::Cancelled => 'danger',
+        };
+    }
+
+    /**
+     * Get the semantic color for a status ID or instance.
+     */
+    public static function colorFor(int|self|null $status): string
+    {
+        if ($status instanceof self) {
+            return $status->color();
+        }
+
+        return self::tryFrom((int) $status)?->color() ?? 'secondary';
+    }
 }

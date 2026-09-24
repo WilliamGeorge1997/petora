@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Modules\Admin\Models\Admin;
 use Modules\Order\DTOs\OrderUpdateDto;
 use Modules\Order\Enums\OrderStatus as OrderStatusEnum;
 use Modules\Order\Http\Requests\OrderUpdateRequest;
@@ -64,7 +65,7 @@ class OrderController extends Controller
 
     public function liveDetail(int $order_id): View
     {
-        $relations = ['store', 'clinic', 'paymentMethod', 'orderStatus', 'orderMethod', 'client', 'driver', 'details.product'];
+        $relations = ['store', 'clinic', 'paymentMethod', 'orderStatus', 'orderMethod', 'client', 'driver', 'details.product', 'histories'];
         $order = $this->orderService->findById($order_id, $relations);
         $viewModel = new OrderViewModel;
 
@@ -82,11 +83,13 @@ class OrderController extends Controller
 
     public function update(OrderUpdateRequest $request, Order $order): RedirectResponse|JsonResponse
     {
+         /** @var Admin $admin */
+        $admin = auth('admin')->user();
         $dto = OrderUpdateDto::fromRequest($request);
         $order = $this->orderService->changeStatusTo(
             $order,
             OrderStatusEnum::from($dto->orderStatusId),
-            auth('admin')->user(),
+            $admin,
             $dto->driverId,
             $dto->notes
         );

@@ -5,6 +5,7 @@ namespace Modules\Order\Enums;
 enum OrderMethod: int
 {
     case HomeDelivery = 1;
+    case ReceiveFromBranch = 2;
 
     /**
      * Get the human-readable label for the order method.
@@ -13,6 +14,7 @@ enum OrderMethod: int
     {
         return match ($this) {
             self::HomeDelivery => __('order::order_method.home_delivery'),
+            self::ReceiveFromBranch => __('order::order_method.receive_from_branch'),
         };
     }
 

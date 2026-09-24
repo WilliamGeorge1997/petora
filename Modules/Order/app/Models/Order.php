@@ -18,6 +18,7 @@ use Modules\Coupon\Models\Coupon;
 use Modules\Driver\Models\Driver;
 use Modules\Store\Models\Store;
 use Modules\Store\Models\StoreDeliveryScheduleTime;
+use Modules\Order\Enums\OrderStatus as OrderStatusEnum;
 
 class Order extends Model
 {
@@ -219,9 +220,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderHistory::class);
     }
-    
+
     public function lastHistory()
     {
         return $this->hasOne(OrderHistory::class)->latest();
+    }
+
+    public function getStatusColorAttribute(): string
+    {
+        return OrderStatusEnum::colorFor($this->order_status_id);
     }
 }

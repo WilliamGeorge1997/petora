@@ -3,6 +3,7 @@
 return [
     'index' => 'Drivers',
     'drivers' => 'Drivers',
+    'driver' => 'Driver',
     'create' => 'Create New Driver',
     'create_driver' => 'Create New Driver',
     'edit' => 'Edit Driver Details',
